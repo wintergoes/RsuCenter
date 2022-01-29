@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cyupdate extends Model
+class DeviceLog extends Model
 {
     function getTable() {
-        return "cyupdate";
+        return "devicelogs";
     }
 }
