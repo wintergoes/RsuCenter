@@ -22,3 +22,4 @@ Route::any("/getbsmlog", "ApiV1Controller@getBsmLog");
 Route::get("/importlog", "ApiV1Controller@importLog");
 Route::get("/importbsmlog", "ApiV1Controller@importBsmLog");
 Route::any("getserverconfig", "ApiV1Controller@getServerConfig");
+Route::any("/checkupdate", "ApiV1Controller@checkUpdate");

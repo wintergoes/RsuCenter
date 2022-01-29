@@ -103,4 +103,19 @@ class ApiV1Controller extends Controller
         
         return json_encode($arr);
     }
+    
+    function checkUpdate(Request $request){
+        $newapkfile = "update/rsu_rc_1_0_11.apk";
+        $newversionname = "1.0.11";
+        $newversioncode = 12;
+        
+        $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
+            "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
+            "modifyContent"=>"1. fix ...",
+            "downloadUrl"=>"http://114.116.195.168/" . $newapkfile,
+            "apkSize"=>  filesize($newapkfile) / 1024,
+            "apkMd5"=>  md5_file($newapkfile));
+        
+        return json_encode($arr);
+    }
 }
