@@ -15,12 +15,17 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('username');
+            $table->string('uemail')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });
+        
+        $insertstr = 'insert into users (username, ';
+        $insertstr .= 'uemail,  password, created_at) values (?, ?, ?, NOW() )';
+        
+        DB::insert($insertstr, ['admin', '',  bcrypt('admin')]);          
     }
 
     /**

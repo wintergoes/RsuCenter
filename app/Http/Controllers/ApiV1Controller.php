@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 
 use App\DeviceLog;
 use App\BsmLog;
+use App\User;
+
+use Auth;
 
 define("ret_success", 1);
 define("ret_error", -1);
+define("ret_invalid_auth", -2);
 
 class ApiV1Controller extends Controller
 {
@@ -20,11 +24,16 @@ class ApiV1Controller extends Controller
         
         $logs = DeviceLog::orderBy("id", "desc")
                 ->where("devicecode", $request->devicecode)
-                ->limit(100);
+                ->limit(1000);
         
-        if($request->has("maxid")){
+        if($request->has("maxid") && $request->maxid != "-1"){
             $logs = $logs->where("id", ">", $request->maxid);
         }
+        
+        if($request->has("minid") && $request->minid != "-1"){
+            $logs = $logs->where("id", "<", $request->minid);
+        }
+        
         $logs = $logs->get();
         
         $arr = array("retcode"=>ret_success, "count"=>count($logs), "logs"=>$logs);
@@ -117,5 +126,24 @@ class ApiV1Controller extends Controller
             "apkMd5"=>  md5_file($newapkfile));
         
         return json_encode($arr);
+    }
+    
+    function clientLogin(Request $request){
+        if(Auth::once(['username' => $request->username, 'password' => $request->password])){
+            $users = User::where('username', $request->username)
+                     ->get();
+
+            if(count($users) > 0){
+                $user = $users[0];
+                $arr = array ('retcode'=>ret_success, 'data'=>$user);
+                return json_encode($arr);
+            }else{
+                 $arr = array ('retcode'=>ret_invalid_auth);
+                 return json_encode($arr);
+            }
+        }else{
+            $arr = array ('retcode'=>ret_invalid_auth);
+            return json_encode($arr);
+        }        
     }
 }
