@@ -12,6 +12,19 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
+Auth::routes();
+
+//*******************************管理员相关**********************************************
+Route::get('/users', 'UserController@index');
+Route::get('/adduser', 'UserController@addUser');
+Route::post('/addusersave', 'UserController@addUserSave');
+Route::get('/edituser', 'UserController@editUser');
+Route::post('/editusersave', 'UserController@editUserSave');
+Route::get('/deleteuser', 'UserController@deleteUser');
+Route::get('/resetpassword', 'UserController@resetPassword');
+Route::post('/resetpasssave', 'UserController@resetPassSave');
+
+Route::get('/home', 'HomeController@index');
