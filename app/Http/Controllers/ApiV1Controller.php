@@ -41,7 +41,27 @@ class ApiV1Controller extends Controller
     }
     
     function getBsmLog(Request $request){
+        if(!$request->has("devicecode")){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
         
+        $logs = BsmLog::orderBy("id", "desc")
+                ->where("devicecode", $request->devicecode)
+                ->limit(1000);
+        
+        if($request->has("maxid") && $request->maxid != "-1"){
+            $logs = $logs->where("id", ">", $request->maxid);
+        }
+        
+        if($request->has("minid") && $request->minid != "-1"){
+            $logs = $logs->where("id", "<", $request->minid);
+        }
+        
+        $logs = $logs->get();
+        
+        $arr = array("retcode"=>ret_success, "count"=>count($logs), "logs"=>$logs);
+        return json_encode($arr);        
     }
 
     function importLog(Request $request){
@@ -78,26 +98,63 @@ class ApiV1Controller extends Controller
     
     function readLog($path, $logfile, $dcode){
         $file = fopen($path, "r");
-//        $user=array();
-//        $i=0;
+
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){
             $newlog = new DeviceLog();
             $newlog->logfile = $logfile;
             $newlog->devicecode = $dcode;
             $newlog->logcontent = trim(fgets($file));
-            $newlog->save();            
-//            $user[$i]= trim(fgets($file));//fgets()函数从文件指针中读取一行
-//            $i++;
+            $newlog->save(); 
         }
         fclose($file);
-//        $user=array_filter($user);
-//        return $user;
     }    
 
     function importBsmLog(Request $request){
+        $path = "/var/www/bsmlog/";
+        $opendir = opendir($path);
         
+        while ($file = readdir($opendir)){
+            if($file != '.' && $file != '..'){
+                $secondpath = $path.'/'.$file;
+                if(is_dir($secondpath)){
+                    $dcode = $file;
+                    $seconddir = opendir($secondpath);
+                    while($secondfile = readdir($seconddir)){
+                        if($secondfile != '.' && $secondfile != '..'){
+                            $thirdpath = $secondpath . "/" . $secondfile;
+                            if(!is_dir($thirdpath)){
+                                $chkfileimported = BsmLog::where("logfile", $secondfile)
+                                        ->where("devicecode", $dcode)
+                                        ->limit(1)
+                                        ->get();
+                                if(count($chkfileimported) > 0){
+                                    continue;
+                                } else {
+                                    $this->readBsmLog($thirdpath, $secondfile, $dcode);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }        
+        closedir($opendir);        
     }    
+    
+    function readBsmLog($path, $logfile, $dcode){
+        $file = fopen($path, "r");
+
+        //输出文本中所有的行，直到文件结束为止。
+        while(! feof($file)){
+            $newlog = new BsmLog();
+            $newlog->logfile = $logfile;
+            $newlog->devicecode = $dcode;
+            $newlog->logcontent = trim(fgets($file));
+            $newlog->save(); 
+        }
+        fclose($file);
+    }     
     
     function getServerConfig(Request $request){
         //读取.init文件
@@ -114,17 +171,17 @@ class ApiV1Controller extends Controller
     }
     
     function checkUpdate(Request $request){
-        $newapkfile = "update/rsu_rc_1_0_11.apk";
-        $newversionname = "1.0.11";
-        $newversioncode = 12;
-        
+        $newapkfile = "update/rsu_rc_release_1.0.1_vc3.apk";
+        $newversionname = "1.0.1";
+        $newversioncode = 3;
+
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
-            "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
-            "modifyContent"=>"1. fix ...",
+            "versionCode"=>$newversioncode, "versionName"=>$newversionname,
+            "modifyContent"=>"1. 红绿灯设置增加当前时间；\r\n2. 完善Bsm日志功能；",
             "downloadUrl"=>"http://114.116.195.168/" . $newapkfile,
             "apkSize"=>  filesize($newapkfile) / 1024,
             "apkMd5"=>  md5_file($newapkfile));
-        
+
         return json_encode($arr);
     }
     
