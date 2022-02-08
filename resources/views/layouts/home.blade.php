@@ -46,9 +46,9 @@ $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
 
 $l2_users = in_array($currentpath, array("users", "adduser", "edituser"));
-$l2_communities = in_array($currentpath, array("communities", "addcommunity", "editcommunity"));
-$l2_streets = in_array($currentpath, array('streets', 'addstreet', 'editstreet'));
-$l1_settings = $l2_users || $l2_communities || $l2_streets;
+$l2_devicelogs = in_array($currentpath, array("devicelogs"));
+$l2_bsmlogs = in_array($currentpath, array('bsmlogs'));
+$l1_settings = $l2_users || $l2_devicelogs || $l2_bsmlogs;
 ?>            
         
         <header class="am-topbar am-topbar-inverse admin-header">
@@ -114,7 +114,18 @@ $l1_settings = $l2_users || $l2_communities || $l2_streets;
                                         <span>人员管理</span>
                                     </a>
                                 </li>
-                                    
+                                <li>
+                                    <a href="devicelogs"{!! $l2_devicelogs ? "class='active'" : "" !!}>
+                                        <i class="am-icon-angle-right" ></i>
+                                        <span>日志查看</span>
+                                    </a>
+                                </li>   
+                                <li>
+                                    <a href="bsmlogs"{!! $l2_bsmlogs ? "class='active'" : "" !!}>
+                                        <i class="am-icon-angle-right" ></i>
+                                        <span>Bsm日志</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>                          
                         
