@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\DeviceLog;
 use App\BsmLog;
 use App\User;
+use App\Device;
 
 use Auth;
 
@@ -22,8 +23,19 @@ class ApiV1Controller extends Controller
             return json_encode($arr);
         }
         
+        $devices = Device::where("devicecode", $request->devicecode)
+                ->select("id")
+                ->get();
+        
+        if(count($devices) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"设备不存在！");
+            return json_encode($arr);
+        }
+        
+        $deviceid = $devices[0]->id;
+        
         $logs = DeviceLog::orderBy("id", "desc")
-                ->where("devicecode", $request->devicecode)
+                ->where("deviceid", $deviceid)
                 ->limit(1000);
         
         if($request->has("maxid") && $request->maxid != "-1"){
@@ -46,8 +58,19 @@ class ApiV1Controller extends Controller
             return json_encode($arr);
         }
         
+        $devices = Device::where("devicecode", $request->devicecode)
+                ->select("id")
+                ->get();
+        
+        if(count($devices) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"设备不存在！");
+            return json_encode($arr);
+        }
+        
+        $deviceid = $devices[0]->id;        
+        
         $logs = BsmLog::orderBy("id", "desc")
-                ->where("devicecode", $request->devicecode)
+                ->where("deviceid", $deviceid)
                 ->limit(1000);
         
         if($request->has("maxid") && $request->maxid != "-1"){
@@ -73,19 +96,33 @@ class ApiV1Controller extends Controller
                 $secondpath = $path.'/'.$file;
                 if(is_dir($secondpath)){
                     $dcode = $file;
+                    
+                    $deviceid = 0;
+                    $devices = Device::where("devicecode", $dcode)
+                            ->select("id")
+                            ->get();
+                    if(count($devices) > 0){
+                        $deviceid = $devices[0]->id;
+                    } else {
+                        $newdevice = new Device();
+                        $newdevice->devicecode = $dcode;
+                        $newdevice->save();
+                        
+                        $deviceid = $newdevice->id;
+                    }
                     $seconddir = opendir($secondpath);
                     while($secondfile = readdir($seconddir)){
                         if($secondfile != '.' && $secondfile != '..'){
                             $thirdpath = $secondpath . "/" . $secondfile;
                             if(!is_dir($thirdpath)){
                                 $chkfileimported = DeviceLog::where("logfile", $secondfile)
-                                        ->where("devicecode", $dcode)
+                                        ->where("deviceid", $deviceid)
                                         ->limit(1)
                                         ->get();
                                 if(count($chkfileimported) > 0){
                                     continue;
                                 } else {
-                                    $this->readLog($thirdpath, $secondfile, $dcode);
+                                    $this->readLog($thirdpath, $secondfile, $deviceid);
                                 }
                             }
                         }
@@ -96,14 +133,14 @@ class ApiV1Controller extends Controller
         closedir($opendir);
     }
     
-    function readLog($path, $logfile, $dcode){
+    function readLog($path, $logfile, $did){
         $file = fopen($path, "r");
 
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){
             $newlog = new DeviceLog();
             $newlog->logfile = $logfile;
-            $newlog->devicecode = $dcode;
+            $newlog->deviceid = $did;
             $newlog->logcontent = trim(fgets($file));
             $newlog->save(); 
         }
@@ -119,19 +156,33 @@ class ApiV1Controller extends Controller
                 $secondpath = $path.'/'.$file;
                 if(is_dir($secondpath)){
                     $dcode = $file;
+                    
+                    $deviceid = 0;
+                    $devices = Device::where("devicecode", $dcode)
+                            ->select("id")
+                            ->get();
+                    if(count($devices) > 0){
+                        $deviceid = $devices[0]->id;
+                    } else {
+                        $newdevice = new Device();
+                        $newdevice->devicecode = $dcode;
+                        $newdevice->save();
+                        
+                        $deviceid = $newdevice->id;
+                    }                    
                     $seconddir = opendir($secondpath);
                     while($secondfile = readdir($seconddir)){
                         if($secondfile != '.' && $secondfile != '..'){
                             $thirdpath = $secondpath . "/" . $secondfile;
                             if(!is_dir($thirdpath)){
                                 $chkfileimported = BsmLog::where("logfile", $secondfile)
-                                        ->where("devicecode", $dcode)
+                                        ->where("deviceid", $deviceid)
                                         ->limit(1)
                                         ->get();
                                 if(count($chkfileimported) > 0){
                                     continue;
                                 } else {
-                                    $this->readBsmLog($thirdpath, $secondfile, $dcode);
+                                    $this->readBsmLog($thirdpath, $secondfile, $deviceid);
                                 }
                             }
                         }
@@ -142,19 +193,19 @@ class ApiV1Controller extends Controller
         closedir($opendir);        
     }    
     
-    function readBsmLog($path, $logfile, $dcode){
+    function readBsmLog($path, $logfile, $did){
         $file = fopen($path, "r");
 
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){
             $newlog = new BsmLog();
             $newlog->logfile = $logfile;
-            $newlog->devicecode = $dcode;
+            $newlog->deviceid = $did;
             $newlog->logcontent = trim(fgets($file));
             $newlog->save(); 
         }
         fclose($file);
-    }     
+    }
     
     function getServerConfig(Request $request){
         //读取.init文件

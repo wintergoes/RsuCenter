@@ -15,12 +15,12 @@ class CreateTblbsmlogsTable extends Migration
     {
         Schema::create('bsmlogs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("devicecode", 20);            
+            $table->integer("deviceid")->default(0);
             $table->string("logfile", 50);
             $table->string("logcontent", 500);            
             $table->timestamps();
             
-            $table->index(["devicecode", "logfile"]);
+            $table->index(["deviceid", "logfile"]);
         });
     }
 

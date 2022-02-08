@@ -12,11 +12,6 @@
     }
 </script>
 
-
-
-<div class="tpl-content-page-title">
-    用户管理
-</div>
 <div class="tpl-portlet-components">
     <div class="portlet-title">
         <div class="caption font-green bold">

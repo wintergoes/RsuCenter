@@ -3,9 +3,7 @@
 @section('content')
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
-<div class="tpl-content-page-title">
-    日志查看
-</div>
+
 <div class="tpl-portlet-components">
     <div class="portlet-title">
         <div class="caption font-green bold">
@@ -23,9 +21,17 @@
                     <td class="search_td">日期 自</td>
                     <td class="search_td"><input name="fromdate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">至</td>
-                    <td class="search_td"><input name="todate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchtodate}}"/></td>    
+                    <td class="search_td"><input name="todate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchtodate}}"/></td>
+                    <td class="search_td">关键字</td>
+                    <td class="search_td"><input name="keyword" size="12" value="{{$searchkeyword}}"/></td>                    
                     <td class="search_td">设备编号</td>
-                    <td class="search_td"><input name="devicecode" size="12" value="{{$searchdevicecode}}"/></td>                    
+                    <td class="search_td">
+                        <select name="devicecode" style="width: 120px">
+                            @foreach($devices as $device)
+                            <option value="{{$device->id}}" {{$searchdevicecode == $device->id ? "selected" : ""}}>{{$device->devicecode}}</option>
+                            @endforeach
+                        </select>                        
+                    </td>                    
                     <td class="search_td"><button type="submit">查询</button></td>
                 </tr>
             </table>
@@ -34,15 +40,20 @@
         
         <div class="am-g">
             <div class="am-u-sm-12">
-                <textarea rows="20" style="width: 100%">@foreach($devicelogs as $dlog){{$dlog->logcontent . "\r"}}@endforeach</textarea>
+                <textarea rows="20" wrap="off" style="width: 100%">@foreach($devicelogs as $dlog){{$dlog->logcontent . "\r"}}@endforeach</textarea>
+            </div>
+            
+            <div>
+                {{ $devicelogs->appends(["fromdate"=>$searchfromdate, "todate"=>$searchtodate, 
+                        "devicecode"=>$searchdevicecode, "keyword"=>$searchkeyword])->links() }}                
             </div>
         </div>
-        <br/><br/>
+        <br/>
         <table class="am-table am-table-striped am-table-hover table-main" >
                 <tbody><?php $lfcount = 0 ?>
                     <tr>
                         @foreach($logfiles as $logfile)
-                        <td>{{$logfile->logfile}} <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicecode}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a></td>
+                        <td>{{$logfile->logfile}} <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a></td>
 
                         <?php $lfcount++ ?>
                         {!!$lfcount % 5 == 0 ? "</tr><tr>" : ""!!}
