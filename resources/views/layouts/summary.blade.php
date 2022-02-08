@@ -3,13 +3,11 @@
 @section('content')
 
 
-<div class="tpl-content-page-title">
-    首页
-</div>
+
 <div class="tpl-portlet-components">
     <div class="portlet-title">
         <div class="caption font-green bold">
-            <span class="am-icon-pencil-square-o"></span> 
+            <span class="am-icon-home">首页</span> 
         </div>
     </div>
 
