@@ -136,16 +136,35 @@ class ApiV1Controller extends Controller
     function readLog($path, $logfile, $did){
         $file = fopen($path, "r");
 
+        $time = $this->filename2Time($logfile);
+        
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){
             $newlog = new DeviceLog();
             $newlog->logfile = $logfile;
             $newlog->deviceid = $did;
-            $newlog->logcontent = trim(fgets($file));
+            $newlog->logcontent = trim(fgets($file));  
+            $newlog->created_at = $time;
             $newlog->save(); 
         }
         fclose($file);
-    }    
+    }
+    
+    function filename2Time($logfile){
+        $tmpfilename = str_replace(".log", "", $logfile);
+        if(strpos($tmpfilename,'_') !== false){
+            $strs = explode("_", $tmpfilename);
+            if(count($strs) >= 6){
+                $time = strtotime($strs[0] . "-" . $strs[1] . "-" . $strs[2] . " " . $strs[3] . ":" . $strs[4] . ":" . $strs[5]);
+            } else {
+                $time = time();
+            }
+        } else{
+            $time = time();
+        }
+        echo $logfile . "+++++" . date("Y-m-d H:i:s", $time);
+        return $time;        
+    }
 
     function importBsmLog(Request $request){
         $path = "/var/www/bsmlog/";
@@ -222,13 +241,13 @@ class ApiV1Controller extends Controller
     }
     
     function checkUpdate(Request $request){
-        $newapkfile = "update/rsu_rc_release_1.0.1_vc3.apk";
-        $newversionname = "1.0.1";
-        $newversioncode = 3;
+        $newapkfile = "update/rsu_rc_release_1.0.3_vc5.apk";
+        $newversionname = "1.0.3";
+        $newversioncode = 5;
 
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
             "versionCode"=>$newversioncode, "versionName"=>$newversionname,
-            "modifyContent"=>"1. 红绿灯设置增加当前时间；\r\n2. 完善Bsm日志功能；",
+            "modifyContent"=>"1. Bug修复；",
             "downloadUrl"=>"http://114.116.195.168/" . $newapkfile,
             "apkSize"=>  filesize($newapkfile) / 1024,
             "apkMd5"=>  md5_file($newapkfile));
@@ -253,5 +272,88 @@ class ApiV1Controller extends Controller
             $arr = array ('retcode'=>ret_invalid_auth);
             return json_encode($arr);
         }        
+    }
+    
+    function logs(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',time());
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate . " 23:59:59";
+        }
+        
+        $searchdevice = "";
+        if($request->has("devicecode")){
+            $searchdevice = $request->devicecode;
+        }
+
+        $searchfile = "";
+        if($request->has("logfile")){
+            $searchfile = $request->logfile;
+        }
+        
+        $searchlogtype = "";
+        if($request->has("logtype")){
+            $searchlogtype = $request->logtype;
+        }
+        
+        $searchkeyword = "";
+        if($request->has("keyword")){
+            $searchkeyword = $request->keyword;
+        }
+        
+        $logtable = "";
+        if($searchlogtype == "1"){
+            $logtable = "bsmlogs.";
+            $devicelogs = BsmLog::orderby("bsmlogs.created_at", "desc");
+        } else {
+            $logtable = "devicelogs.";
+            $devicelogs = DeviceLog::orderby("devicelogs.created_at", "desc");
+        }
+        
+        $devicelogs = $devicelogs->select($logtable . "id", $logtable . "logcontent")
+                ->leftjoin("devices as d", "d.id", "=", $logtable . "deviceid");
+//                ->limit(10000);
+        
+        if($searchfromdate != ""){
+            $devicelogs = $devicelogs->where($logtable . "created_at", ">=", $searchfromdate);
+        }
+        
+        if($searchtodate != ""){
+            $devicelogs = $devicelogs->where($logtable . "created_at", "<=", $searchtodate);            
+        }
+        
+        if($searchfile != ""){
+            $devicelogs = $devicelogs->where($logtable . "logfile", $searchfile);
+        }
+        
+        if($searchkeyword != ""){
+            $devicelogs = $devicelogs->where($logtable . "logcontent", "like", "%" . $searchkeyword . "%");
+        }
+        
+        if($searchdevice != ""){
+            $devicelogs = $devicelogs->where("d.devicecode", $searchdevice);
+        } else {
+            $devicelogs = $devicelogs->where("deviceid", -1);          
+        }
+        
+        $devicelogs = $devicelogs->paginate(10000);
+
+        
+        return view("/mobile/logs", [
+            "devicelogs"=>$devicelogs,
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate,
+            "searchkeyword"=>$searchkeyword,
+            "searchdevicecode"=>$searchdevice,
+            "searchlogtype"=>$searchlogtype,
+        ]);        
     }
 }
