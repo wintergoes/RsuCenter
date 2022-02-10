@@ -92,7 +92,7 @@ class ApiV1Controller extends Controller
         $opendir = opendir($path);
         
         while ($file = readdir($opendir)){
-            if($file != '.' && $file != '..'){
+            if($file != '.' && $file != '..' && $file != 'testbsmlog' && $file != 'testlog'){
                 $secondpath = $path.'/'.$file;
                 if(is_dir($secondpath)){
                     $dcode = $file;
@@ -171,7 +171,7 @@ class ApiV1Controller extends Controller
         $opendir = opendir($path);
         
         while ($file = readdir($opendir)){
-            if($file != '.' && $file != '..'){
+            if($file != '.' && $file != '..' && $file != 'testbsmlog' && $file != 'testlog'){
                 $secondpath = $path.'/'.$file;
                 if(is_dir($secondpath)){
                     $dcode = $file;
@@ -355,5 +355,31 @@ class ApiV1Controller extends Controller
             "searchdevicecode"=>$searchdevice,
             "searchlogtype"=>$searchlogtype,
         ]);        
+    }
+    
+    function resetPassword(Request $request){
+        if(!$request->has("newpassword")){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
+        
+        if(Auth::once(['username' => $request->username, 'password' => $request->password])){
+            $users = User::where('username', $request->username)
+                     ->get();
+
+            if(count($users) > 0){
+                $user = $users[0];
+                $user->password = bcrypt($request->newpassword);
+                $user->save();
+                $arr = array ('retcode'=>ret_success, 'data'=>$user);
+                return json_encode($arr);
+            }else{
+                 $arr = array ('retcode'=>ret_invalid_auth);
+                 return json_encode($arr);
+            }            
+        }else{
+            $arr = array ('retcode'=>ret_invalid_auth);
+            return json_encode($arr);
+        } 
     }
 }
