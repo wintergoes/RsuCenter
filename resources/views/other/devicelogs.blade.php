@@ -55,7 +55,7 @@
                 <tbody><?php $lfcount = 0 ?>
                     <tr>
                         @foreach($logfiles as $logfile)
-                        <td>{{$logfile->logfile}} <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a></td>
+                        <td>{{$logfile->logfile}} <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a></td>
 
                         <?php $lfcount++ ?>
                         {!!$lfcount % 5 == 0 ? "</tr><tr>" : ""!!}

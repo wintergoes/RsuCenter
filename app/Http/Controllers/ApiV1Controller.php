@@ -9,6 +9,7 @@ use App\BsmLog;
 use App\User;
 use App\Device;
 
+use DB;
 use Auth;
 
 define("ret_success", 1);
@@ -24,7 +25,7 @@ class ApiV1Controller extends Controller
         }
         
         $devices = Device::where("devicecode", $request->devicecode)
-                ->orderBy("lineno", "desc")
+                
                 ->select("id")
                 ->get();
         
@@ -36,6 +37,7 @@ class ApiV1Controller extends Controller
         $deviceid = $devices[0]->id;
         
         $logs = DeviceLog::orderBy("id", "desc")
+		->orderBy("lineno", "desc")
                 ->where("deviceid", $deviceid)
                 ->limit(1000);
         
@@ -60,7 +62,7 @@ class ApiV1Controller extends Controller
         }
         
         $devices = Device::where("devicecode", $request->devicecode)
-                ->orderBy("lineno", "desc")
+		->orderBy("lineno", "desc")
                 ->select("id")
                 ->get();
         
@@ -72,7 +74,7 @@ class ApiV1Controller extends Controller
         $deviceid = $devices[0]->id;        
         
         $logs = BsmLog::orderBy("created_at", "desc")
-                ->orderBy("lineno", "desc")
+		->orderBy("lineno", "desc")
                 ->where("deviceid", $deviceid)
                 ->limit(1000);
         
@@ -118,7 +120,6 @@ class ApiV1Controller extends Controller
                         if(substr($secondfile, 0, strlen(".swp")) === ".swp"){
                             continue;
                         }
-                        
                         if($secondfile != '.' && $secondfile != '..'){
                             $thirdpath = $secondpath . "/" . $secondfile;
                             if(!is_dir($thirdpath)){
@@ -142,20 +143,20 @@ class ApiV1Controller extends Controller
     
     function readLog($path, $logfile, $did){
         $file = fopen($path, "r");
+	$allowed = array("\x9", /* , ... */);
 
-        $time = $this->filename2Time($logfile);
-        
+	$time = $this->filename2Time($logfile);
         $lineno = 0;
         //输出文本中所有的行，直到文件结束为止。
-        while(! feof($file)){
+        while(! feof($file)){  
             $linestr = trim(fgets($file));
             $newlinestr = "";
             for($i=0; $i < strlen($linestr); $i++) {
                 // check if current char is printable
-                if(ctype_print($linestr[$i])) {
+                if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
                     $newlinestr = $newlinestr . $linestr[$i];
                 } else {
-                    $newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
+			$newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
                 }   
             } 
 //            echo $linestr . "<br>";
@@ -174,8 +175,8 @@ class ApiV1Controller extends Controller
             }
         }
         fclose($file);
-    }
-    
+    }   
+
     function filename2Time($logfile){
         $tmpfilename = str_replace(".log", "", $logfile);
         if(strpos($tmpfilename,'_') !== false){
@@ -188,7 +189,7 @@ class ApiV1Controller extends Controller
         } else{
             $time = time();
         }
-        echo $logfile . "+++++" . date("Y-m-d H:i:s", $time);
+        //echo $logfile . "+++++" . date("Y-m-d h:i:s", $time) . "++++" . time();
         return $time;        
     }
     
@@ -198,6 +199,7 @@ class ApiV1Controller extends Controller
             $strs = explode("_", $tmpfilename);
             if(count($strs) >= 6){
                 $time = strtotime("20" . $strs[0] . "-" . $strs[1] . "-" . $strs[2] . " " . $strs[3] . ":" . $strs[4] . ":" . $strs[5]);
+	//	echo "<br/>" .$time . "-----<br/>";
             } else {
                 $time = time();
             }
@@ -206,7 +208,7 @@ class ApiV1Controller extends Controller
         }
         echo $logfile . "+++++" . date("Y-m-d H:i:s", $time);
         return $time;        
-    }    
+    } 
 
     function importBsmLog(Request $request){
         $path = "/var/www/bsmlog/";
@@ -260,18 +262,19 @@ class ApiV1Controller extends Controller
     
     function readBsmLog($path, $logfile, $did){
         $file = fopen($path, "r");
-        $allowed = array("\x9", /* , ... */);
-        $time = $this->bsmFilename2Time($logfile);
+	$allowed = array("\x9", /* , ... */);
+
+	$time = $this->bsmFilename2Time($logfile);
 
         $lineno = 0;
         //输出文本中所有的行，直到文件结束为止。
-        while(! feof($file)){
+        while(! feof($file)){  
             $lineno = $lineno + 1;
             $linestr = trim(fgets($file));
             $newlinestr = "";
             for($i=0; $i < strlen($linestr); $i++) {
                 // check if current char is printable
-                if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
+		if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
                     $newlinestr = $newlinestr . $linestr[$i];
                 } else {
                     $newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
@@ -283,12 +286,13 @@ class ApiV1Controller extends Controller
             $newlog->lineno = $lineno;
             $newlog->deviceid = $did;
             $newlog->logcontent = $newlinestr;
-            $newlog->created_at = $time;
-            $newlog->save(); 
+		$newlog->created_at = $time;
+            $newlog->save();  
         }
         fclose($file);
-    }
-    
+    }    
+
+
     function getServerConfig(Request $request){
         //读取.init文件
         $config_file_path = '/var/www/rsu_config.ini';
@@ -298,11 +302,11 @@ class ApiV1Controller extends Controller
         $config_info = parse_ini_file($config_file_path);
         $monitorurl = array_key_exists("monitor_url", $config_info) ? $config_info["monitor_url"] : "";
         $monitoru = array_key_exists("monitor_u", $config_info) ? $config_info["monitor_u"] : ""; 
-        $monitorp = array_key_exists("monitor_p", $config_info) ? $config_info["monitor_p"] : "";
-        
+        $monitorp = array_key_exists("monitor_p", $config_info) ? $config_info["monitor_p"] : "";       
+ 
         $arr = array("retcode"=>ret_success, "monitorurl"=>$monitorurl,
-            "monitoru"=>$monitoru, "monitorp"=>$monitorp);
-        
+            "monitoru"=>$monitoru, "monitorp"=>$monitorp);       
+ 
         return json_encode($arr);
     }
     
@@ -310,14 +314,14 @@ class ApiV1Controller extends Controller
         $newapkfile = "update/rsu_rc_release_1.0.5_vc7.apk";
         $newversionname = "1.0.5";
         $newversioncode = 7;
-
+        
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
-            "versionCode"=>$newversioncode, "versionName"=>$newversionname,
+            "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
             "modifyContent"=>"1. Bug修复；",
             "downloadUrl"=>"http://114.116.195.168/" . $newapkfile,
             "apkSize"=>  filesize($newapkfile) / 1024,
             "apkMd5"=>  md5_file($newapkfile));
-
+        
         return json_encode($arr);
     }
     
@@ -339,7 +343,7 @@ class ApiV1Controller extends Controller
             return json_encode($arr);
         }        
     }
-    
+
     function logs(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
@@ -379,11 +383,11 @@ class ApiV1Controller extends Controller
         if($searchlogtype == "1"){
             $logtable = "bsmlogs.";
             $devicelogs = BsmLog::orderby("bsmlogs.created_at", "desc")
-                    ->orderBy("bsmlogs.lineno", "desc");
+			->orderBy("bsmlogs.lineno", "desc");
         } else {
             $logtable = "devicelogs.";
             $devicelogs = DeviceLog::orderby("devicelogs.created_at", "desc")
-                     ->orderby("devicelogs.lineno", "desc");
+			->orderby("devicelogs.lineno", "desc");
         }
         
         $devicelogs = $devicelogs->select($logtable . "id", $logtable . "logcontent")
@@ -421,16 +425,16 @@ class ApiV1Controller extends Controller
             "searchtodate"=>$searchtodate,
             "searchkeyword"=>$searchkeyword,
             "searchdevicecode"=>$searchdevice,
-            "searchlogtype"=>$searchlogtype,
-        ]);        
+		"searchlogtype"=>$searchlogtype,
+        ]);   
     }
-    
+
     function resetPassword(Request $request){
         if(!$request->has("newpassword")){
             $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
             return json_encode($arr);
-        }
-        
+        } 
+
         if(Auth::once(['username' => $request->username, 'password' => $request->password])){
             $users = User::where('username', $request->username)
                      ->get();

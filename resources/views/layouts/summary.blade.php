@@ -17,7 +17,7 @@
             <td style="text-align: center;  display: table-cell; vertical-align: middle; font-size: 21px; color: orangered; padding-bottom: 100px;">
                 <img src="images/welcome_login.jpg" height="200px"/>
                 <br/>
-                欢迎登录app后台管理程序！
+                欢迎使用RSU管理后台！
             </td>
         </tr>
     </table>
