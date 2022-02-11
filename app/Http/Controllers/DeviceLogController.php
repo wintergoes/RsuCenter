@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\DeviceLog;
 use App\Device;
+use App\BsmLog;
 
 use DB;
 
@@ -15,6 +16,11 @@ class DeviceLogController extends Controller
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
+        }
+        
+        $logtype = $request->logtype;
+        if($logtype == ""){
+            $logtype = "0";
         }
 
         if($searchfromdate == ""){
@@ -41,33 +47,46 @@ class DeviceLogController extends Controller
             $searchkeyword = $request->keyword;
         }
         
-        $logfiles = DB::table('devicelogs')->select("devicelogs.logfile")
-                ->distinct()
-                ->leftjoin("devices as d", "d.id", "=", "devicelogs.deviceid")
+        $logtable = "";
+        if($logtype == "1"){
+            $logtable = "bsmlogs.";
+            $logfiles = DB::table('bsmlogs')->select($logtable . "logfile");
+            $devicelogs = BsmLog::orderby($logtable . "created_at", "desc");            
+        } else {
+            $logtable = "devicelogs.";
+            $logfiles = DB::table('devicelogs')->select($logtable . "logfile");
+            $devicelogs = DeviceLog::orderby($logtable . "created_at", "desc");
+        }        
+        
+        
+        $logfiles = $logfiles->distinct()
+                ->orderBy($logtable . "logfile", "desc")
+                ->leftjoin("devices as d", "d.id", "=", $logtable . "deviceid")
                 ->limit(100);
         
-        $devicelogs = DeviceLog::orderby("devicelogs.id", "desc")
-                ->select("devicelogs.id", "devicelogs.logcontent")
-                ->leftjoin("devices as d", "d.id", "=", "devicelogs.deviceid");
+        
+        $devicelogs = $devicelogs->orderBy($logtable . "lineno", "desc")
+                ->select($logtable . "id", $logtable . "logcontent")
+                ->leftjoin("devices as d", "d.id", "=", $logtable . "deviceid");
 //                ->limit(10000);
         
         if($searchfromdate != ""){
-            $logfiles = $logfiles->where("devicelogs.created_at", ">=", $searchfromdate);
-            $devicelogs = $devicelogs->where("devicelogs.created_at", ">=", $searchfromdate);
+            $logfiles = $logfiles->where($logtable . "created_at", ">=", $searchfromdate);
+            $devicelogs = $devicelogs->where($logtable . "created_at", ">=", $searchfromdate);
         }
         
         if($searchtodate != ""){
-            $logfiles = $logfiles->where("devicelogs.created_at", "<=", $searchtodate);
-            $devicelogs = $devicelogs->where("devicelogs.created_at", "<=", $searchtodate);            
+            $logfiles = $logfiles->where($logtable . "created_at", "<=", $searchtodate);
+            $devicelogs = $devicelogs->where($logtable . "created_at", "<=", $searchtodate);            
         }
         
         if($searchfile != ""){
-            $devicelogs = $devicelogs->where("devicelogs.logfile", $searchfile);
+            $devicelogs = $devicelogs->where($logtable . "logfile", $searchfile);
         }
         
         if($searchkeyword != ""){
-            $devicelogs = $devicelogs->where("devicelogs.logcontent", "like", "%" . $searchkeyword . "%");
-            $logfiles = $logfiles->where("devicelogs.logcontent", "like", "%" . $searchkeyword . "%");
+            $devicelogs = $devicelogs->where($logtable . "logcontent", "like", "%" . $searchkeyword . "%");
+            $logfiles = $logfiles->where($logtable . "logcontent", "like", "%" . $searchkeyword . "%");
         }
         
         if($searchdevice != ""){
@@ -102,6 +121,7 @@ class DeviceLogController extends Controller
             "searchkeyword"=>$searchkeyword,
             "searchdevicecode"=>$searchdevice,
             "searchdevicename"=>$searchdevicename,
+            "logtype"=>$logtype
         ]);
     }
     

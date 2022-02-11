@@ -16,6 +16,7 @@
        
         <form id="form1" method="get" >
             <input type="hidden" name="_token" value="ZaVg5KCerjuZCgDytKghF6Jc2kLHYSyMRo4MCXTB">
+            <input type="hidden" name="logtype" value="{{$logtype}}" />
             <table style="font-size: 12px; margin-left: 15px;  text-align: center;" >
                 <tr>                   
                     <td class="search_td">日期 自</td>
@@ -45,7 +46,8 @@
             
             <div>
                 {{ $devicelogs->appends(["fromdate"=>$searchfromdate, "todate"=>$searchtodate, 
-                        "devicecode"=>$searchdevicecode, "keyword"=>$searchkeyword])->links() }}                
+                        "devicecode"=>$searchdevicecode, "keyword"=>$searchkeyword,
+                    "logtype"=>$logtype])->links() }}                
             </div>
         </div>
         <br/>

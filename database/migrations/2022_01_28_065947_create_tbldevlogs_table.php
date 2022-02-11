@@ -17,10 +17,11 @@ class CreateTbldevlogsTable extends Migration
             $table->increments('id');
             $table->integer("deviceid")->default(0);
             $table->string("logfile", 50);
+            $table->integer("lineno")->default(0);
             $table->string("logcontent", 500);
             $table->timestamps();
             
-            $table->index(["deviceid", "logfile"]);
+            $table->index(["deviceid", "logfile", "lineno"]);
         });
     }
 

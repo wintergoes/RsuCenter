@@ -24,6 +24,7 @@ class ApiV1Controller extends Controller
         }
         
         $devices = Device::where("devicecode", $request->devicecode)
+                ->orderBy("lineno", "desc")
                 ->select("id")
                 ->get();
         
@@ -59,6 +60,7 @@ class ApiV1Controller extends Controller
         }
         
         $devices = Device::where("devicecode", $request->devicecode)
+                ->orderBy("lineno", "desc")
                 ->select("id")
                 ->get();
         
@@ -69,7 +71,8 @@ class ApiV1Controller extends Controller
         
         $deviceid = $devices[0]->id;        
         
-        $logs = BsmLog::orderBy("id", "desc")
+        $logs = BsmLog::orderBy("created_at", "desc")
+                ->orderBy("lineno", "desc")
                 ->where("deviceid", $deviceid)
                 ->limit(1000);
         
@@ -112,6 +115,10 @@ class ApiV1Controller extends Controller
                     }
                     $seconddir = opendir($secondpath);
                     while($secondfile = readdir($seconddir)){
+                        if(substr($secondfile, 0, strlen(".swp")) === ".swp"){
+                            continue;
+                        }
+                        
                         if($secondfile != '.' && $secondfile != '..'){
                             $thirdpath = $secondpath . "/" . $secondfile;
                             if(!is_dir($thirdpath)){
@@ -138,14 +145,33 @@ class ApiV1Controller extends Controller
 
         $time = $this->filename2Time($logfile);
         
+        $lineno = 0;
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){
-            $newlog = new DeviceLog();
-            $newlog->logfile = $logfile;
-            $newlog->deviceid = $did;
-            $newlog->logcontent = trim(fgets($file));  
-            $newlog->created_at = $time;
-            $newlog->save(); 
+            $linestr = trim(fgets($file));
+            $newlinestr = "";
+            for($i=0; $i < strlen($linestr); $i++) {
+                // check if current char is printable
+                if(ctype_print($linestr[$i])) {
+                    $newlinestr = $newlinestr . $linestr[$i];
+                } else {
+                    $newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
+                }   
+            } 
+//            echo $linestr . "<br>";
+//            echo $newlinestr . "<br><br>";
+            $lineno = $lineno + 1;
+            try{
+                $newlog = new DeviceLog();
+                $newlog->logfile = $logfile;
+                $newlog->lineno = $lineno;
+                $newlog->deviceid = $did;
+                $newlog->logcontent = $newlinestr;
+                $newlog->created_at = $time;
+                $newlog->save(); 
+            } catch (Exception $e){
+                print $e->getMessage();
+            }
         }
         fclose($file);
     }
@@ -165,6 +191,22 @@ class ApiV1Controller extends Controller
         echo $logfile . "+++++" . date("Y-m-d H:i:s", $time);
         return $time;        
     }
+    
+    function bsmFilename2Time($logfile){
+        $tmpfilename = str_replace(".log", "", $logfile);
+        if(strpos($tmpfilename,'_') !== false){
+            $strs = explode("_", $tmpfilename);
+            if(count($strs) >= 6){
+                $time = strtotime("20" . $strs[0] . "-" . $strs[1] . "-" . $strs[2] . " " . $strs[3] . ":" . $strs[4] . ":" . $strs[5]);
+            } else {
+                $time = time();
+            }
+        } else{
+            $time = time();
+        }
+        echo $logfile . "+++++" . date("Y-m-d H:i:s", $time);
+        return $time;        
+    }    
 
     function importBsmLog(Request $request){
         $path = "/var/www/bsmlog/";
@@ -191,6 +233,10 @@ class ApiV1Controller extends Controller
                     }                    
                     $seconddir = opendir($secondpath);
                     while($secondfile = readdir($seconddir)){
+                        if(substr($secondfile, 0, strlen(".swp")) === ".swp"){
+                            continue;
+                        }
+                        
                         if($secondfile != '.' && $secondfile != '..'){
                             $thirdpath = $secondpath . "/" . $secondfile;
                             if(!is_dir($thirdpath)){
@@ -214,13 +260,30 @@ class ApiV1Controller extends Controller
     
     function readBsmLog($path, $logfile, $did){
         $file = fopen($path, "r");
+        $allowed = array("\x9", /* , ... */);
+        $time = $this->bsmFilename2Time($logfile);
 
+        $lineno = 0;
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){
+            $lineno = $lineno + 1;
+            $linestr = trim(fgets($file));
+            $newlinestr = "";
+            for($i=0; $i < strlen($linestr); $i++) {
+                // check if current char is printable
+                if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
+                    $newlinestr = $newlinestr . $linestr[$i];
+                } else {
+                    $newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
+                }   
+            }             
+            
             $newlog = new BsmLog();
             $newlog->logfile = $logfile;
+            $newlog->lineno = $lineno;
             $newlog->deviceid = $did;
-            $newlog->logcontent = trim(fgets($file));
+            $newlog->logcontent = $newlinestr;
+            $newlog->created_at = $time;
             $newlog->save(); 
         }
         fclose($file);
@@ -233,17 +296,20 @@ class ApiV1Controller extends Controller
         //说明 db.init 必须是规则
         //属性=属性值 可以多行
         $config_info = parse_ini_file($config_file_path);
-        $monitorurl = $config_info["monitor_url"];
+        $monitorurl = array_key_exists("monitor_url", $config_info) ? $config_info["monitor_url"] : "";
+        $monitoru = array_key_exists("monitor_u", $config_info) ? $config_info["monitor_u"] : ""; 
+        $monitorp = array_key_exists("monitor_p", $config_info) ? $config_info["monitor_p"] : "";
         
-        $arr = array("retcode"=>ret_success, "monitorurl"=>$monitorurl);
+        $arr = array("retcode"=>ret_success, "monitorurl"=>$monitorurl,
+            "monitoru"=>$monitoru, "monitorp"=>$monitorp);
         
         return json_encode($arr);
     }
     
     function checkUpdate(Request $request){
-        $newapkfile = "update/rsu_rc_release_1.0.3_vc5.apk";
-        $newversionname = "1.0.3";
-        $newversioncode = 5;
+        $newapkfile = "update/rsu_rc_release_1.0.5_vc7.apk";
+        $newversionname = "1.0.5";
+        $newversioncode = 7;
 
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
             "versionCode"=>$newversioncode, "versionName"=>$newversionname,
@@ -312,10 +378,12 @@ class ApiV1Controller extends Controller
         $logtable = "";
         if($searchlogtype == "1"){
             $logtable = "bsmlogs.";
-            $devicelogs = BsmLog::orderby("bsmlogs.created_at", "desc");
+            $devicelogs = BsmLog::orderby("bsmlogs.created_at", "desc")
+                    ->orderBy("bsmlogs.lineno", "desc");
         } else {
             $logtable = "devicelogs.";
-            $devicelogs = DeviceLog::orderby("devicelogs.created_at", "desc");
+            $devicelogs = DeviceLog::orderby("devicelogs.created_at", "desc")
+                     ->orderby("devicelogs.lineno", "desc");
         }
         
         $devicelogs = $devicelogs->select($logtable . "id", $logtable . "logcontent")

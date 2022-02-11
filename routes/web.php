@@ -30,6 +30,6 @@ Route::post('/resetpasssave', 'UserController@resetPassSave');
 Route::get("/devicelogs", "DeviceLogController@index");
 Route::get("/dllogfile", "DeviceLogController@dlLogFile");
 
-Route::get("/bsmlogs", "BsmLogController@index");
+Route::get("/bsmlogs", "DeviceLogController@index");
 
 Route::get('/home', 'HomeController@index');

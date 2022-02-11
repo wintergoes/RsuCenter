@@ -120,6 +120,12 @@ $l1_settings = $l2_users || $l2_devicelogs || $l2_bsmlogs;
                                         <span>日志查看</span>
                                     </a>
                                 </li>   
+                                <li>
+                                    <a href="bsmlogs?logtype=1"{!! $l2_bsmlogs ? "class='active'" : "" !!}>
+                                        <i class="am-icon-angle-right" ></i>
+                                        <span>Bsm日志</span>
+                                    </a>
+                                </li>                                 
                             </ul>
                         </li>                          
                         
