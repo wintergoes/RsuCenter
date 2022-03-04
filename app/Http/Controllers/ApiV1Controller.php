@@ -311,9 +311,9 @@ class ApiV1Controller extends Controller
     }
     
     function checkUpdate(Request $request){
-        $newapkfile = "update/rsu_rc_release_1.0.5_vc7.apk";
-        $newversionname = "1.0.5";
-        $newversioncode = 7;
+        $newapkfile = "update/rsu_rc_release_1.0.6_vc8.apk";
+        $newversionname = "1.0.6";
+        $newversioncode = 8;
         
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
             "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
