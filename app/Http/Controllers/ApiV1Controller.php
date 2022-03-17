@@ -150,28 +150,32 @@ class ApiV1Controller extends Controller
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){  
             $linestr = trim(fgets($file));
+            if($linestr == ""){
+                continue;
+            }
+            
+//            $newlinestr = $linestr;            
+            
             $newlinestr = "";
             for($i=0; $i < strlen($linestr); $i++) {
                 // check if current char is printable
                 if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
                     $newlinestr = $newlinestr . $linestr[$i];
                 } else {
-			$newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
+                    $newlinestr = $newlinestr . "0x" . strtoupper(dechex(ord($linestr[$i]))) ;
                 }   
             } 
-//            echo $linestr . "<br>";
-//            echo $newlinestr . "<br><br>";
-            $lineno = $lineno + 1;
-            try{
+
+            for($i = 0; $i <= strlen($newlinestr) / 3000; $i++){
+                $innerlinestr = substr($newlinestr, $i * 3000, 3000);
                 $newlog = new DeviceLog();
                 $newlog->logfile = $logfile;
                 $newlog->lineno = $lineno;
                 $newlog->deviceid = $did;
-                $newlog->logcontent = $newlinestr;
+                $newlog->logcontent = $innerlinestr;
                 $newlog->created_at = $time;
                 $newlog->save(); 
-            } catch (Exception $e){
-                print $e->getMessage();
+                $lineno = $lineno + 1;
             }
         }
         fclose($file);
@@ -191,23 +195,6 @@ class ApiV1Controller extends Controller
         }
         //echo $logfile . "+++++" . date("Y-m-d h:i:s", $time) . "++++" . time();
         return $time;        
-    }
-    
-    function bsmFilename2Time($logfile){
-        $tmpfilename = str_replace(".log", "", $logfile);
-        if(strpos($tmpfilename,'_') !== false){
-            $strs = explode("_", $tmpfilename);
-            if(count($strs) >= 6){
-                $time = strtotime("20" . $strs[0] . "-" . $strs[1] . "-" . $strs[2] . " " . $strs[3] . ":" . $strs[4] . ":" . $strs[5]);
-	//	echo "<br/>" .$time . "-----<br/>";
-            } else {
-                $time = time();
-            }
-        } else{
-            $time = time();
-        }
-        echo $logfile . "+++++" . date("Y-m-d H:i:s", $time);
-        return $time;        
     } 
 
     function importBsmLog(Request $request){
@@ -215,7 +202,7 @@ class ApiV1Controller extends Controller
         $opendir = opendir($path);
         
         while ($file = readdir($opendir)){
-            if($file != '.' && $file != '..' && $file != 'testbsmlog' && $file != 'testlog'){
+            if($file != '.' && $file != '..' && $file != 'testbsmlog' && $file != 'testlog' && $file != 'bakBSM'){
                 $secondpath = $path.'/'.$file;
                 if(is_dir($secondpath)){
                     $dcode = $file;
@@ -264,30 +251,39 @@ class ApiV1Controller extends Controller
         $file = fopen($path, "r");
 	$allowed = array("\x9", /* , ... */);
 
-	$time = $this->bsmFilename2Time($logfile);
+	$time = $this->filename2Time($logfile);
 
-        $lineno = 0;
+        $lineno = 1;
         //输出文本中所有的行，直到文件结束为止。
-        while(! feof($file)){  
-            $lineno = $lineno + 1;
+        while(! feof($file)){              
             $linestr = trim(fgets($file));
+            if($linestr == ""){
+                continue;
+            }
+           
+//            $newlinestr = $linestr;
+            
             $newlinestr = "";
             for($i=0; $i < strlen($linestr); $i++) {
                 // check if current char is printable
 		if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
                     $newlinestr = $newlinestr . $linestr[$i];
                 } else {
-                    $newlinestr = $newlinestr . " 0x" . strtoupper(dechex(ord($linestr[$i]))) . " ";
+                    $newlinestr = $newlinestr . "0x" . strtoupper(dechex(ord($linestr[$i]))) ;
                 }   
-            }             
+            }
             
-            $newlog = new BsmLog();
-            $newlog->logfile = $logfile;
-            $newlog->lineno = $lineno;
-            $newlog->deviceid = $did;
-            $newlog->logcontent = $newlinestr;
-		$newlog->created_at = $time;
-            $newlog->save();  
+            for($i = 0; $i <= strlen($newlinestr) / 3000; $i++){
+                $innerlinestr = substr($newlinestr, $i * 3000, 3000);
+                $newlog = new BsmLog();
+                $newlog->logfile = $logfile;
+                $newlog->lineno = $lineno;
+                $newlog->deviceid = $did;
+                $newlog->logcontent = $innerlinestr;
+                $newlog->created_at = $time;
+                $newlog->save();  
+                $lineno = $lineno + 1;                
+            }
         }
         fclose($file);
     }    
