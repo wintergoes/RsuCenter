@@ -23,8 +23,7 @@
                     <td class="search_td"><input name="fromdate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">至</td>
                     <td class="search_td"><input name="todate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchtodate}}"/></td>
-                    <td class="search_td">关键字</td>
-                    <td class="search_td"><input name="keyword" size="12" value="{{$searchkeyword}}"/></td>                    
+                  
                     <td class="search_td">设备编号</td>
                     <td class="search_td">
                         <select name="devicecode" style="width: 120px">
@@ -37,20 +36,7 @@
                 </tr>
             </table>
         </form>        
-                
-        
-        <div class="am-g">
-            <div class="am-u-sm-12">
-                <textarea rows="20" wrap="off" style="width: 100%">@foreach($devicelogs as $dlog){{$dlog->logcontent . "\r"}}@endforeach</textarea>
-            </div>
-            
-            <div>
-                {{ $devicelogs->appends(["fromdate"=>$searchfromdate, "todate"=>$searchtodate, 
-                        "devicecode"=>$searchdevicecode, "keyword"=>$searchkeyword,
-                    "logtype"=>$logtype])->links() }}                
-            </div>
-        </div>
-        <br/>
+
         <table class="am-table am-table-striped am-table-hover table-main" >
                 <tbody><?php $lfcount = 0 ?>
                     <tr>

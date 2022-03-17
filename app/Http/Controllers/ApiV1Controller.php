@@ -142,10 +142,19 @@ class ApiV1Controller extends Controller
     }
     
     function readLog($path, $logfile, $did){
-        $file = fopen($path, "r");
-	$allowed = array("\x9", /* , ... */);
-
 	$time = $this->filename2Time($logfile);
+        
+        $newlog = new DeviceLog();
+        $newlog->logfile = $logfile;
+        $newlog->lineno = 0;
+        $newlog->deviceid = $did;
+        $newlog->logcontent = "";
+        $newlog->created_at = $time;
+        $newlog->save();        
+                
+        $file = fopen($path, "r");
+	$allowed = array("\x9", /* , ... */);                
+                
         $lineno = 0;
         //输出文本中所有的行，直到文件结束为止。
         while(! feof($file)){  
@@ -248,44 +257,54 @@ class ApiV1Controller extends Controller
     }    
     
     function readBsmLog($path, $logfile, $did){
-        $file = fopen($path, "r");
-	$allowed = array("\x9", /* , ... */);
-
-	$time = $this->filename2Time($logfile);
-
-        $lineno = 1;
-        //输出文本中所有的行，直到文件结束为止。
-        while(! feof($file)){              
-            $linestr = trim(fgets($file));
-            if($linestr == ""){
-                continue;
-            }
-           
-//            $newlinestr = $linestr;
-            
-            $newlinestr = "";
-            for($i=0; $i < strlen($linestr); $i++) {
-                // check if current char is printable
-		if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
-                    $newlinestr = $newlinestr . $linestr[$i];
-                } else {
-                    $newlinestr = $newlinestr . "0x" . strtoupper(dechex(ord($linestr[$i]))) ;
-                }   
-            }
-            
-            for($i = 0; $i <= strlen($newlinestr) / 3000; $i++){
-                $innerlinestr = substr($newlinestr, $i * 3000, 3000);
-                $newlog = new BsmLog();
-                $newlog->logfile = $logfile;
-                $newlog->lineno = $lineno;
-                $newlog->deviceid = $did;
-                $newlog->logcontent = $innerlinestr;
-                $newlog->created_at = $time;
-                $newlog->save();  
-                $lineno = $lineno + 1;                
-            }
-        }
-        fclose($file);
+        $time = $this->filename2Time($logfile);        
+        
+        $newlog = new BsmLog();
+        $newlog->logfile = $logfile;
+        $newlog->lineno = 0;
+        $newlog->deviceid = $did;
+        $newlog->logcontent = "";
+        $newlog->created_at = $time;
+        $newlog->save();  
+                
+//        $file = fopen($path, "r");
+//	$allowed = array("\x9", /* , ... */);
+//
+//	
+//
+//        $lineno = 1;
+//        //输出文本中所有的行，直到文件结束为止。
+//        while(! feof($file)){              
+//            $linestr = trim(fgets($file));
+//            if($linestr == ""){
+//                continue;
+//            }
+//           
+////            $newlinestr = $linestr;
+//            
+//            $newlinestr = "";
+//            for($i=0; $i < strlen($linestr); $i++) {
+//                // check if current char is printable
+//		if(ctype_print($linestr[$i]) || in_array($linestr[$i], $allowed)) {
+//                    $newlinestr = $newlinestr . $linestr[$i];
+//                } else {
+//                    $newlinestr = $newlinestr . "0x" . strtoupper(dechex(ord($linestr[$i]))) ;
+//                }   
+//            }
+//            
+//            for($i = 0; $i <= strlen($newlinestr) / 3000; $i++){
+//                $innerlinestr = substr($newlinestr, $i * 3000, 3000);
+//                $newlog = new BsmLog();
+//                $newlog->logfile = $logfile;
+//                $newlog->lineno = $lineno;
+//                $newlog->deviceid = $did;
+//                $newlog->logcontent = $innerlinestr;
+//                $newlog->created_at = $time;
+//                $newlog->save();  
+//                $lineno = $lineno + 1;                
+//            }
+//        }
+//        fclose($file);
     }    
 
 
@@ -378,23 +397,31 @@ class ApiV1Controller extends Controller
         $logtable = "";
         if($searchlogtype == "1"){
             $logtable = "bsmlogs.";
+            $logfiles = DB::table('bsmlogs')->select($logtable . "logfile");
             $devicelogs = BsmLog::orderby("bsmlogs.created_at", "desc")
 			->orderBy("bsmlogs.lineno", "desc");
         } else {
             $logtable = "devicelogs.";
+            $logfiles = DB::table('devicelogs')->select($logtable . "logfile");
             $devicelogs = DeviceLog::orderby("devicelogs.created_at", "desc")
 			->orderby("devicelogs.lineno", "desc");
         }
+        
+        $logfiles = $logfiles->distinct()
+                ->orderBy($logtable . "logfile", "desc")
+                ->leftjoin("devices as d", "d.id", "=", $logtable . "deviceid");        
         
         $devicelogs = $devicelogs->select($logtable . "id", $logtable . "logcontent")
                 ->leftjoin("devices as d", "d.id", "=", $logtable . "deviceid");
 //                ->limit(10000);
         
         if($searchfromdate != ""){
+            $logfiles = $logfiles->where($logtable . "created_at", ">=", $searchfromdate);
             $devicelogs = $devicelogs->where($logtable . "created_at", ">=", $searchfromdate);
         }
         
         if($searchtodate != ""){
+            $logfiles = $logfiles->where($logtable . "created_at", "<=", $searchtodate);
             $devicelogs = $devicelogs->where($logtable . "created_at", "<=", $searchtodate);            
         }
         
@@ -408,12 +435,22 @@ class ApiV1Controller extends Controller
         
         if($searchdevice != ""){
             $devicelogs = $devicelogs->where("d.devicecode", $searchdevice);
+            $logfiles = $logfiles->where("d.devicecode", $searchdevice);
         } else {
-            $devicelogs = $devicelogs->where("deviceid", -1);          
+            $devicelogs = $devicelogs->where("deviceid", -1);  
+            $logfiles = $logfiles->where("deviceid", -1);
         }
         
         $devicelogs = $devicelogs->paginate(10000);
-
+        $logfiles = $logfiles->get();
+        
+        $searchdeviceid = "";
+        $searchdevices = Device::where("devicecode", $searchdevice)
+                ->select("id")
+                ->get();
+        if(count($searchdevices) > 0){
+            $searchdeviceid = $searchdevices[0]->id;
+        }        
         
         return view("/mobile/logs", [
             "devicelogs"=>$devicelogs,
@@ -421,7 +458,10 @@ class ApiV1Controller extends Controller
             "searchtodate"=>$searchtodate,
             "searchkeyword"=>$searchkeyword,
             "searchdevicecode"=>$searchdevice,
-		"searchlogtype"=>$searchlogtype,
+            "searchlogtype"=>$searchlogtype,
+            "logfiles"=>$logfiles,
+            "searchdeviceid"=>$searchdeviceid,
+            "logtype"=>$searchlogtype
         ]);   
     }
 

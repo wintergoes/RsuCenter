@@ -33,24 +33,24 @@
                     <td class="search_td"><input name="fromdate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">至</td>
                     <td class="search_td"><input name="todate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchtodate}}"/></td>
-                    <td class="search_td">关键字</td>
-                    <td class="search_td"><input name="keyword" size="12" value="{{$searchkeyword}}"/></td> 
+
                     <td class="search_td"><button type="submit">查询</button></td>
                 </tr>
             </table>
         </form>        
                 
-        
-        <div class="am-g">
-            <div class="am-u-sm-12">
-                <textarea rows="30" wrap="off" style="width: 100%">@foreach($devicelogs as $dlog){{$dlog->logcontent . "\r"}}@endforeach</textarea>
-            </div>
-            
-            <div>
-                {{ $devicelogs->appends(["fromdate"=>$searchfromdate, "todate"=>$searchtodate, 
-                        "devicecode"=>$searchdevicecode, "keyword"=>$searchkeyword, "logtype"=>$searchlogtype])->links() }}                
-            </div>
-        </div>     
+         <table class="am-table am-table-striped am-table-hover table-main" >
+                <tbody><?php $lfcount = 0 ?>
+                    <tr>
+                        @foreach($logfiles as $logfile)
+                        <td>{{$logfile->logfile}} <a href="../dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicecode}}&deviceid={{$searchdeviceid}}&logtype={{$logtype}}" target="_blank"><img src="../images/dllogfile.png" width="20px" height="20px"></a></td>
+
+                        <?php $lfcount++ ?>
+                        {!!$lfcount % 3 == 0 ? "</tr><tr>" : ""!!}
+                        @endforeach
+                    </tr>           
+                </tbody>
+        </table>             
     </div>
 
 </div>
