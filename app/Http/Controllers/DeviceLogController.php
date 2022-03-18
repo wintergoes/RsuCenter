@@ -24,7 +24,7 @@ class DeviceLogController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',time());
+            $searchfromdate = date('Y-m-d',time()) . " 00:00:00";
         }
 
         $searchtodate = "";
