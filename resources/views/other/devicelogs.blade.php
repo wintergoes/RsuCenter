@@ -20,9 +20,9 @@
             <table style="font-size: 12px; margin-left: 15px;  text-align: center;" >
                 <tr>                   
                     <td class="search_td">日期 自</td>
-                    <td class="search_td"><input name="fromdate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchfromdate}}"/></td>
+                    <td class="search_td"><input name="fromdate" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off" size="16" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">至</td>
-                    <td class="search_td"><input name="todate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchtodate}}"/></td>
+                    <td class="search_td"><input name="todate" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off" size="16" value="{{$searchtodate}}"/></td>
                   
                     <td class="search_td">设备编号</td>
                     <td class="search_td">

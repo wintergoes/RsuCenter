@@ -30,23 +30,23 @@
             <table style="font-size: 12px; margin-left: 15px;  text-align: center;" >
                 <tr> 
                     <td class="search_td">日期 自</td>
-                    <td class="search_td"><input name="fromdate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchfromdate}}"/></td>
+                    <td class="search_td"><input name="fromdate" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off" size="16" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">至</td>
-                    <td class="search_td"><input name="todate" onClick="WdatePicker()" autocomplete="off" size="12" value="{{$searchtodate}}"/></td>
+                    <td class="search_td"><input name="todate" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" autocomplete="off" size="16" value="{{$searchtodate}}"/></td>
 
                     <td class="search_td"><button type="submit">查询</button></td>
                 </tr>
             </table>
         </form>        
                 
-         <table class="am-table am-table-striped am-table-hover table-main" >
+         <table class="am-table am-table-striped am-table-hover table-main" width="100%">
                 <tbody><?php $lfcount = 0 ?>
-                    <tr>
+                    <tr height="28px">
                         @foreach($logfiles as $logfile)
-                        <td>{{$logfile->logfile}} <a href="../dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicecode}}&deviceid={{$searchdeviceid}}&logtype={{$logtype}}" target="_blank"><img src="../images/dllogfile.png" width="20px" height="20px"></a></td>
+                        <td><a href="../dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicecode}}&deviceid={{$searchdeviceid}}&logtype={{$logtype}}" target="_blank">{{$logfile->logfile}} </a></td>
 
                         <?php $lfcount++ ?>
-                        {!!$lfcount % 3 == 0 ? "</tr><tr>" : ""!!}
+                        {!!$lfcount % 3 == 0 ? "</tr><tr height='28px'>" : ""!!}
                         @endforeach
                     </tr>           
                 </tbody>

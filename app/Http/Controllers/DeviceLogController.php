@@ -29,7 +29,7 @@ class DeviceLogController extends Controller
 
         $searchtodate = "";
         if($request->has("todate")){
-            $searchtodate = $request->todate . " 23:59:59";
+            $searchtodate = $request->todate ;
         }
         
         $searchdevice = "";
@@ -124,7 +124,6 @@ class DeviceLogController extends Controller
             "logtype"=>$logtype
         ]);
     }
-
 
     function dlLogFile(Request $request){
         if($request->filename == "" || $request->devicecode == "" || $request->deviceid == ""){

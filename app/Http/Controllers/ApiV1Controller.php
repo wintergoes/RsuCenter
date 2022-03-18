@@ -371,7 +371,7 @@ class ApiV1Controller extends Controller
 
         $searchtodate = "";
         if($request->has("todate")){
-            $searchtodate = $request->todate . " 23:59:59";
+            $searchtodate = $request->todate;
         }
         
         $searchdevice = "";
