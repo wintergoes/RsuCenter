@@ -96,7 +96,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<div class="menu-title">日志管理</div>
 					</a>
 					<ul>
-						<li {!! $l2_devicelogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devicelogs"><i class="bx bx-right-arrow-alt"></i>系统日志</a>
+						<li {!! $l2_devicelogs ? "class='mm-active1 secondlevel'" : "class='secondlevel'" !!}> <a href="devicelogs"><i class="bx bx-right-arrow-alt"></i>系统日志</a>
 						</li>
 						<li {!! $l2_bsmlogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="bsmlogs?logtype=1"><i class="bx bx-right-arrow-alt"></i>BSM日志</a>
 						</li>
@@ -439,7 +439,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
 							<div class="user-info ps-3">
-								<p class="user-name mb-0">Pauline Seitz</p>
+								<p class="user-name mb-0">{{ Auth::user()->username }}</p>
 								<p class="designattion mb-0">Web Designer</p>
 							</div>
 						</a>
@@ -450,14 +450,10 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 							</li>
 							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-dollar-circle'></i><span>Earnings</span></a>
-							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-download'></i><span>Downloads</span></a>
-							</li>
 							<li>
 								<div class="dropdown-divider mb-0"></div>
 							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
+                                                        <li><form method="post" action="/logout" name="formlogout"></form><a class="dropdown-item" href="javascript:document.formlogout.submit();"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
 							</li>
 						</ul>
 					</div>

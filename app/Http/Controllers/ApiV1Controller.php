@@ -490,4 +490,86 @@ class ApiV1Controller extends Controller
             return json_encode($arr);
         } 
     }
+    
+    function dlLogFile(Request $request){
+        if($request->filename == "" || $request->devicecode == "" || $request->deviceid == ""){
+            return "缺少参数！";
+        }
+        
+        $devicecode = $request->devicecode;
+        $deviceid = $request->deviceid;
+        $logfile = $request->filename;
+        $logtype = $request->logtype;
+        
+        $logtypestr = "";
+	$path = "/var/www/"; // 根目录地址
+        if($logtype == "1"){
+            $logtypestr = "_bsm";
+            $path = $path . "bsmlog/" . $devicecode . "/";
+        } else {
+            $path = $path . "log/" . $devicecode . "/";
+        }
+        
+        $path .= $logfile;
+        
+        //echo $path;
+        
+	if (is_file($path)) {
+	    header("Content-Description: File Transfer");
+	    header("Content-Type: application/octet-stream");
+	    header("Content-Disposition: attachment; filename= ".basename($devicecode . $logtypestr . "_" .$logfile)." ");
+	    header("Content-Transfer-Encoding: binary");
+	    header("Connection: Keep-Alive");
+	    header("Expires: 0");
+	    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	    header("Pragma: public");
+	    header("Content-Length: " . filesize($path));
+	    readfile($path);
+	    exit;
+	} else {
+            return "文件不存在！";
+        }
+    }    
+            
+    function dlLogFile_old(Request $request){
+        if($request->filename == "" || $request->devicecode == "" || $request->deviceid == ""){
+            return "缺少参数！";
+        }
+        
+        $devicecode = $request->devicecode;
+        $deviceid = $request->deviceid;
+        $logfile = $request->filename;
+        
+        $exportpath = "reports/" ;
+        if(!is_dir($exportpath)){
+            mkdir($exportpath, 0777, true);
+        }
+
+        $logfilename = $logfile;
+        if(substr($logfile, 0, strlen(".log")) !== ".log"){
+            $logfilename = $logfile . ".log";
+        }     
+        $exportfilename =  iconv("UTF-8", "GBK", $exportpath . $devicecode . "_" . $logfilename);
+
+       	if(file_exists($exportfilename)){
+            return redirect($exportfilename);  
+        }        
+//        $contentssrc .=  "," . "结算ID" . "," . "回收时间" . "\n";
+//        $contents = iconv("UTF-8", "GBK", $contentssrc);
+//        file_put_contents($exportfilename, $contents);
+
+        $logs = DeviceLog::where("logfile", $logfile)
+                ->where("deviceid", $deviceid)
+                ->select("logcontent")
+                ->orderBy("id", "asc")
+                ->get();
+        foreach($logs as $log){
+            $datasrc = $log->logcontent . "\n";
+
+            $contents = iconv("UTF-8", "GBK//IGNORE", $datasrc);
+            file_put_contents($exportfilename, $contents, FILE_APPEND);
+        }
+
+        return redirect($exportfilename);            
+    }    
 }

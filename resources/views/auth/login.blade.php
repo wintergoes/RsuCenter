@@ -63,17 +63,14 @@ function KeyDown()
 			<div class="container-fluid">
 				<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
 					<div class="col mx-auto">
-						<div class="mb-4 text-center">
-							RSU管理后台
-						</div>
 						<div class="card">
 							<div class="card-body">
 								<div class="border p-4 rounded">
 									<div class="text-center">
-										<h3 class="">管理登录</h3>
+										<h3 class="">RSU管理登录</h3>
 										</p>
 									</div>
-									<div class="login-separater text-center mb-4"> <span>OR SIGN IN WITH EMAIL</span>
+									<div class="login-separater text-center mb-4">
 										<hr/>
 									</div>
                 <div class="tip" style="color: red;">
