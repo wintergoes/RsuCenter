@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
@@ -107,74 +106,34 @@ function KeyDown()
 
 
 </form>
+<!--end wrapper-->
+<!-- Bootstrap JS -->
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!--plugins-->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
+<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
+<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+<!--Password show & hide js -->
+<script>
+        $(document).ready(function () {
+                $("#show_hide_password a").on('click', function (event) {
+                        event.preventDefault();
+                        if ($('#show_hide_password input').attr("type") == "text") {
+                                $('#show_hide_password input').attr('type', 'password');
+                                $('#show_hide_password i').addClass("bx-hide");
+                                $('#show_hide_password i').removeClass("bx-show");
+                        } else if ($('#show_hide_password input').attr("type") == "password") {
+                                $('#show_hide_password input').attr('type', 'text');
+                                $('#show_hide_password i').removeClass("bx-hide");
+                                $('#show_hide_password i').addClass("bx-show");
+                        }
+                });
+        });
+</script>
+<!--app JS-->
+<script src="assets/js/app.js"></script>
 
 
-
-
-
-
-
-
-
-    
-    
-    
-<div class="login">
-    <div class="box png">
-        <div class="logo png"></div>
-
-        <div class="input">
-            <div class="log">
-                <div class="name">
-                    <label>用户名</label>
-                    <input id="username" type="username" class="text" name="username" value="{{ old('username') }}" onkeydown="KeyDown()" required autofocus>
-
-                </div>
-                <div class="pwd">
-                    <label>密　码</label>
-                    
-                    <input id="password" type="password" class="text" name="password" required onkeydown="KeyDown()">
-
-                    
-                    <input type="button" class="submit" onclick="login();" tabindex="3" value="登录">
-                    <div class="check"></div>
-                </div>
-                <div class="tip" style="color: red;">
-                    @include('common.errors')   
-                </div>
-            </div>
-        </div>
-	</div>
-    <div class="footer"></div>
-</div>
-
-	<!--end wrapper-->
-	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
-	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<!--Password show & hide js -->
-	<script>
-		$(document).ready(function () {
-			$("#show_hide_password a").on('click', function (event) {
-				event.preventDefault();
-				if ($('#show_hide_password input').attr("type") == "text") {
-					$('#show_hide_password input').attr('type', 'password');
-					$('#show_hide_password i').addClass("bx-hide");
-					$('#show_hide_password i').removeClass("bx-show");
-				} else if ($('#show_hide_password input').attr("type") == "password") {
-					$('#show_hide_password input').attr('type', 'text');
-					$('#show_hide_password i').removeClass("bx-hide");
-					$('#show_hide_password i').addClass("bx-show");
-				}
-			});
-		});
-	</script>
-	<!--app JS-->
-	<script src="assets/js/app.js"></script>
 </body>
-
 </html>

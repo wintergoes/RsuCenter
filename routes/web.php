@@ -11,11 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect('/home');
-});
-
 Auth::routes();
+
+Route::get('/', function () {
+    return redirect("/home");
+});
 
 //*******************************管理员相关**********************************************
 Route::get('/users', 'UserController@index');
