@@ -27,6 +27,14 @@ Route::get('/deleteuser', 'UserController@deleteUser');
 Route::get('/resetpassword', 'UserController@resetPassword');
 Route::post('/resetpasssave', 'UserController@resetPassSave');
 
+//*******************************用户组相关**********************************************
+Route::get('/usergroups', 'UserGroupController@index');
+Route::get('/addusergroup', 'UserGroupController@addUserGroup');
+Route::post('/addusergroupsave', 'UserGroupController@addUserGroupSave');
+Route::get('/editusergroup', 'UserGroupController@editUserGroup');
+Route::post('/editusergroupsave', 'UserGroupController@editUserGroupSave');
+Route::get('/deleteusergroup', 'UserGroupController@deleteUserGroup');
+
 Route::get("/devicelogs", "DeviceLogController@index");
 Route::get("/dllogfile", "ApiV1Controller@dlLogFile");
 Route::any("/logfilecontent", "DeviceLogController@logfileContent");
