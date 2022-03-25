@@ -29,6 +29,7 @@ Route::post('/resetpasssave', 'UserController@resetPassSave');
 
 Route::get("/devicelogs", "DeviceLogController@index");
 Route::get("/dllogfile", "DeviceLogController@dlLogFile");
+Route::any("/logfilecontent", "DeviceLogController@logfileContent");
 
 Route::get("/bsmlogs", "DeviceLogController@index");
 

@@ -16,62 +16,49 @@ function submitData(){
 
 </script>
 
-<div class="tpl-content-page-title">
-    用户管理
-</div>
-<div class="tpl-portlet-components">
-    <div class="portlet-title">
-        <div class="caption font-green bold">
-            <span class="am-icon-pencil-square-o"></span> 
-            @if(isset($user))
-            编辑用户
-            @else
-            添加用户
-            @endif
+@if(isset($user))
+<h5 class="card-title">用户管理 > 编辑用户</h5>
+@else
+<h5 class="card-title">用户管理 > 新增用户</h5>
+@endif
+<hr>
+
+<div class="row">
+    <div class="col col-lg-9 mx-auto">
+
+    @if(isset($user))
+    <form class="form-horizontal" id="form1" method="post" action="/editusersave">
+    @else
+    <form class="form-horizontal" id="form1" method="post" action="/addusersave">
+    @endif
+        {{ csrf_field() }}      
+        <div>
+            <!-- Display Validation Errors -->
+            @include('common.errors')
         </div>
 
-
-    </div>
-    <div class="tpl-block ">
-        <div class="am-g tpl-amazeui-form">
-            <div class="am-u-sm-12 am-u-md-9">
-
+        <div class="row mb-3">
+            <label for="username" class="col-sm-2 col-form-label">登录用户名</label>
+            <div class="col-sm-6">
                 @if(isset($user))
-                <form class="am-form am-form-horizontal" id="form1" method="post" action="/editusersave">
+                <input type="hidden" name="userid" value="{{$user->id}}" />
+                <input type="text" class="form-control" id="username" name="username" value="{{$user->username}}">
                 @else
-                <form class="am-form am-form-horizontal" id="form1" method="post" action="/addusersave">
+                <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名">
                 @endif
-                    {{ csrf_field() }}      
-                    <div class="am-form-group">
-                        <div class="am-u-sm-9 am-u-sm-push-3">
-                            <!-- Display Validation Errors -->
-                            @include('common.errors')
-                        </div>
-                    </div> 
-                    
-                    <div class="am-form-group">
-                        <label for="username" class="am-u-sm-3 am-form-label">登录用户名</label>
-                        <div class="am-u-sm-9">
-                            @if(isset($user))
-                            <input type="hidden" name="userid" value="{{$user->id}}" />
-                            <input type="text" id="username" name="username" value="{{$user->username}}">
-                            @else
-                            <input type="text" id="username" name="username" placeholder="请输入用户名">
-                            @endif
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="am-form-group">
-                        <div class="am-u-sm-9 am-u-sm-push-3">
-                            <button type="button" class="am-btn am-btn-primary" onclick="submitData();">保存修改</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
-    </div>
 
+
+        <div class="row mb-3">
+            <label for="username" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-6" style="text-align: right;">
+                <button type="button" class="btn btn-outline-primary px-5" onclick="submitData();">保存修改</button>
+            </div>
+        </div>
+    </form>
+
+    </<div>
 </div>
 
 @endsection

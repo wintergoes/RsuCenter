@@ -27,7 +27,7 @@ class UserController extends Controller
     public function index(Request $request){
         
         $users = User::orderBy('created_at', 'asc')
-                ->select('users.id',  'users.username')
+                ->select('users.id',  'users.username', 'users.created_at')
                 ->where("users.username", "<>", "admin");
         
         

@@ -2,14 +2,10 @@
 
 @section('content')
 
-
+<h5 class="card-title">首页</h5>
+<hr>
 
 <div class="tpl-portlet-components">
-    <div class="portlet-title">
-        <div class="caption font-green bold">
-            <span class="am-icon-home">首页</span> 
-        </div>
-    </div>
 
 
     <table width="100%" height="600px">

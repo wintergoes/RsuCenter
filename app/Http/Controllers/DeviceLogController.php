@@ -164,6 +164,47 @@ class DeviceLogController extends Controller
             return "文件不存在！";
         }
     }
+        
+    function logfileContent(Request $request){
+        if($request->filename == "" || $request->devicecode == "" || $request->deviceid == ""){
+            return "缺少参数！";
+        }
+        
+        $devicecode = $request->devicecode;
+        $deviceid = $request->deviceid;
+        $logfile = $request->filename;
+        $logtype = $request->logtype;
+        
+        $logtypestr = "";
+	$path = "/var/www/"; // 根目录地址
+        if($logtype == "1"){
+            $logtypestr = "_bsm";
+            $path = $path . "bsmlog/" . $devicecode . "/";
+        } else {
+            $path = $path . "log/" . $devicecode . "/";
+        }
+        
+        $path .= $logfile;
+        
+        //echo $path;
+        
+	if (is_file($path)) {
+            $handle = fopen($path, "r");//读取二进制文件时，需要将第二个参数设置成'rb'
+
+            //通过filesize获得文件大小，将整个文件一下子读到一个字符串中
+            $contents = fread($handle, filesize ($path));
+            fclose($handle);            
+            return view("/other/logcontent", [
+                "logtype"=>$logtype,
+                "logfile"=>$logfile,
+                "logcontent"=>$contents,
+            ]);
+	} else {
+            return view('/other/simplemessage', [
+                'simplemessage'=>"log文件不存在(" . $logfile . "), Log类型：" . $logtype . "！",
+            ]);
+        }
+    }    
             
     function dlLogFile_old(Request $request){
         if($request->filename == "" || $request->devicecode == "" || $request->deviceid == ""){

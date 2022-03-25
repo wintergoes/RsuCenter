@@ -2,34 +2,27 @@
 
 @section('content')
 
-<div class="tpl-content-page-title">
-    提示信息
-</div>
-<div class="tpl-portlet-components">
+<h5 class="card-title">提示信息</h5>
+<hr>
 
-    
-    <div class="tpl-block" >
-
-        <div class="am-g">
-            <div class="am-u-sm-12">
-                <div class="note note-info" style="margin-top: 10px;">
-                    <p><span class="label label-danger">提示:</span> {{$simplemessage}}
-                    </p>
-                </div>       
-            </div>
-            
-            @if(isset($backurl1))
-            <div class="am-u-sm-9 am-u-sm-push-3">
-                <a href="{{$backurl1}}">{{$backtext1}}</a>
-            </div>            
-            @else
-            <div class="am-u-sm-9 am-u-sm-push-3">
-                <button type="button" class="am-btn am-btn-default" onclick="history.back(-1);">返回</button>
-            </div>
-            @endif
+<div class="row">
+    <div class="col col-lg-9 mx-auto">
+        <div class="alert border-0 border-start border-5 border-info alert-dismissible fade show py-2">
+                <div class="d-flex align-items-center">
+                        <div class="font-35 text-info"><i class="bx bx-info-square"></i>
+                        </div>
+                        <div class="row">                        
+                                <div>{{$simplemessage}}</div>
+                        </div>
+                    
+                        @if(isset($backurl1))
+                            <a href="{{$backurl1}}">{{$backtext1}}</a>    
+                        @else
+                            <a href="javascript:history.back(-1);">返回</a>
+                        @endif                    
+                </div>
         </div>
     </div>
-
 </div>
 
 @endsection
