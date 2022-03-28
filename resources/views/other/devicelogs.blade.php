@@ -36,6 +36,10 @@
         </form>    
 </div>
 
+<style>
+a:visited{color: #F03C96;}    
+</style>
+
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         <div class="col-sm-auto">
@@ -43,9 +47,9 @@
                 <tbody><?php $lfcount = 0 ?>
                     <tr>
                         @foreach($logfiles as $logfile)
-                        <td>
-                            <a href="{{$logtype == 0 ? "device" : "bsm"}}logfilecontent?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank">{{$logfile->logfile}}</a> 
-                            <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a>
+                        <td style="font-size: 12px">
+                            <nobr><a href="{{$logtype == 0 ? "device" : "bsm"}}logfilecontent?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank">{{$logfile->logfile}}</a> 
+                            <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a></nobr>
                         </td>
 
                         <?php $lfcount++ ?>
