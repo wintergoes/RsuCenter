@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\User;
+use App\UserGroup;
 
 use DB;
 use Auth;
@@ -19,21 +20,20 @@ require_once "../app/const.php";
 class UserController extends Controller
 {   
     
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
     
     public function index(Request $request){
         
-        $users = User::orderBy('created_at', 'asc')
-                ->select('users.id',  'users.username', 'users.created_at')
-                ->where("users.username", "<>", "admin");
-        
+        $users = User::orderBy('users.created_at', 'asc')
+                ->select('users.id',  'users.username', 'users.realname', 'users.mobile', 'users.created_at',
+                        'ug.groupname')
+                ->where("users.username", "<>", "admin")
+                ->leftjoin("usergroups as ug", "users.usergroup", "=", "ug.id");
         
         $users = $users->get();
   
-
         return view('/basicdata/users', [
             'users' => $users
         ]);
@@ -41,9 +41,12 @@ class UserController extends Controller
     
     
     public function addUser(Request $request){
-
+        $usergroups  = UserGroup::orderBy("id", "desc")
+                ->select("id", "groupname")
+                ->get();
         
         return view('/basicdata/adduser',[
+            "usergroups"=>$usergroups
         ]);
     }
 
@@ -56,6 +59,9 @@ class UserController extends Controller
         $user = new User();
         $user->username = $request->username;
         $user->password = bcrypt('A625KZxh');
+        $user->usergroup = $request->usergroup;
+        $user->realname = $request->realname;
+        $user->mobile = $request->mobile;
         $user->save();
         
         return view('/other/simplemessage', [
@@ -65,13 +71,59 @@ class UserController extends Controller
         ]);
     }
     
+   public function editUser(Request $request){
+       $userid = $request->userid;
+       
+       if($userid == ""){
+           return "缺少参数！";
+       }
+       
+       $users = User::where("id", $userid)
+               ->get();
+       
+       if(count($users) == 0){
+           return "用户不存在！";
+       }
+       
+        $usergroups  = UserGroup::orderBy("id", "desc")
+                ->select("id", "groupname")
+                ->get();
+        
+        return view('/basicdata/adduser',[
+            "usergroups"=>$usergroups,
+            "user"=>$users[0]
+        ]);
+    }
+
+    
+    public function editUserSave(Request $request){
+       $userid = $request->userid;
+       
+       if($userid == ""){
+           return "缺少参数！";
+       }
+       
+       $users = User::where("id", $userid)
+               ->get();
+       
+       if(count($users) == 0){
+           return "用户不存在！";
+       }
+        
+        $user = $users[0];
+        $user->usergroup = $request->usergroup;
+        $user->realname = $request->realname;
+        $user->mobile = $request->mobile;
+        $user->save();
+        
+        return redirect("/users");
+    }    
     
     public function deleteUser(Request $request){
         User::where('id', $request->userid)->delete();
         
         return redirect('/users');
     }
-    
     
     public function resetPassword(Request $request){
         $message = "";

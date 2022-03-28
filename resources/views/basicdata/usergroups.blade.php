@@ -17,19 +17,19 @@
 
 <div class="mb-lg-3">
     <div class="col-sm-12 col-md-12">
-        <a href="addusergroup"><button type="button" class="btn btn-outline-success px-5 radius-30">新增用户组</button></a>
+        <a href="addusergroup"><button type="button" class="btn btn-outline-success px-2 radius-6">新增用户组</button></a>
     </div>
 </div>
 
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
+        @if (count($usergroups) > 0)
         <div class="col-sm-auto">
-            @if (count($usergroups) > 0)
             <table class="table mb-0 table-hover table-bordered" >
                 <thead>
                     <tr role="row">
                         <th >ID</th>
-                        <th  style="width: 300px;">用户名</th>
+                        <th  style="width: 300px;">用户组名</th>
                         <th >创建日期</th>
                         <th>操作</th>
                     </tr>
@@ -41,30 +41,26 @@
                         <td>{{$group->groupname}}</td>
                         <td >{{$group->created_at}}</td>
                         <td>
-                            <div class="am-btn-toolbar">
-                                <div class="am-btn-group am-btn-group-xs">
-                                    <button class="btn btn-outline-secondary px-1 radius-6" onclick="confirmDelete({{$group->id}});"><span class="am-icon-trash-o"></span> 删除</button>
-                                </div>
+                            <div class="dropdown">
+                                    <button class="btn btn-light border-dark border-1 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
+                                    <ul class="dropdown-menu" style="margin: 0px;">
+                                                <li><a class="dropdown-item" href="editusergroup?groupid={{$group->id}}">编辑</a></li>
+                                                <li><a class="dropdown-item" href="javascript:confirmDelete({{$group->id}});">删除</a></li>
+                                    </ul>
                             </div>
                         </td>
                     </tr>
                     @endforeach                            
                 </tbody>
             </table>
-            @else
-            <div class="alert border-0 border-start border-5 border-warning alert-dismissible fade show py-2">
-                    <div class="d-flex align-items-center">
-                            <div class="font-35 text-warning"><i class="bx bx-info-circle"></i>
-                            </div>
-                            <div class="ms-3">
-                                    <h6 class="mb-0 text-warning">提示</h6>
-                                    <div>暂时还没有用户组。</div>
-                            </div>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>                    
-            @endif
         </div>
+        @else
+        <div class="col-sm-12">
+        <div class="p-4 border border-1 border-warning text-center rounded bg-light">
+                <div class="text-info">用户组列表为空！</div>
+        </div>
+        </div>
+        @endif        
     </div>
 </div>
  

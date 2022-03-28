@@ -35,10 +35,14 @@ Route::get('/editusergroup', 'UserGroupController@editUserGroup');
 Route::post('/editusergroupsave', 'UserGroupController@editUserGroupSave');
 Route::get('/deleteusergroup', 'UserGroupController@deleteUserGroup');
 
+//*******************************设备管理**********************************************
+Route::any('/devices', 'DeviceController@index');
+Route::any('/deletedevice', 'DeviceController@deleteDevice');
+
 Route::get("/devicelogs", "DeviceLogController@index");
 Route::get("/dllogfile", "ApiV1Controller@dlLogFile");
-Route::any("/logfilecontent", "DeviceLogController@logfileContent");
-
+Route::any("/devicelogfilecontent", "DeviceLogController@logfileContent");
+Route::any("/bsmlogfilecontent", "DeviceLogController@logfileContent");
 Route::get("/bsmlogs", "DeviceLogController@index");
 
 Route::get('/home', 'HomeController@index');

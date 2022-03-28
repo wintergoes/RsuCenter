@@ -28,7 +28,7 @@
                             @foreach($devices as $device)
                             <option class="form-control" value="{{$device->id}}" {{$searchdevicecode == $device->id ? "selected" : ""}}>{{$device->devicecode}}</option>
                             @endforeach
-                        </select>                        
+                        </select>
                     </td>                    
                     <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
@@ -44,7 +44,7 @@
                     <tr>
                         @foreach($logfiles as $logfile)
                         <td>
-                            <a href="logfilecontent?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank">{{$logfile->logfile}}</a> 
+                            <a href="{{$logtype == 0 ? "device" : "bsm"}}logfilecontent?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank">{{$logfile->logfile}}</a> 
                             <a href="dllogfile?filename={{$logfile->logfile}}&devicecode={{$searchdevicename}}&deviceid={{$searchdevicecode}}&logtype={{$logtype}}" target="_blank"><img src="images/dllogfile.png" width="20px" height="20px"></a>
                         </td>
 
