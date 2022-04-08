@@ -48,7 +48,7 @@
                         <td >{{$user->created_at}}</td>
                         <td>
                              <div class="dropdown">
-                                    <button class="btn btn-light border-dark border-1 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
+                                    <button class="btn btn-light border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                     <ul class="dropdown-menu" style="margin: 0px;">
                                                 <li><a class="dropdown-item" href="edituser?userid={{$user->id}}">编辑</a></li>
                                                 <li><a class="dropdown-item" href="javascript:confirmDelete({{$user->id}});">删除</a></li>

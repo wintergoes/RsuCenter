@@ -510,8 +510,8 @@ progress {
 	flex-shrink: 0;
 	width: 100%;
 	max-width: 100%;
-	padding-right: calc(var(--bs-gutter-x)/ 2);
-	padding-left: calc(var(--bs-gutter-x)/ 2);
+	padding-right: calc(var(--bs-gutter-x)/ 5);
+	padding-left: calc(var(--bs-gutter-x)/ 5);
 	margin-top: var(--bs-gutter-y)
 }
 .col {
@@ -3510,7 +3510,7 @@ textarea.form-control-lg {
 	background-clip: border-box;
 	border: 0 solid transparent;
 	border-radius: .25rem;
-	margin-bottom: 1.5rem;
+	margin-bottom: 1rem;
 	box-shadow: 0 2px 6px 0 rgb(218 218 253 / 65%), 0 2px 6px 0 rgb(206 206 238 / 54%);
 }
 .card>hr {
@@ -5475,6 +5475,9 @@ textarea.form-control-lg {
 }
 .border-light {
 	border-color: #f8f9fa!important
+}
+.border-grey {
+	border-color: #dddeee!important
 }
 .border-dark {
 	border-color: #212529!important
