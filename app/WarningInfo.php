@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ObuDevice extends Model
+class WarningInfo extends Model
 {
     function getTable() {
-        return "obudevices";
+        return "warninginfo";
     }
 }

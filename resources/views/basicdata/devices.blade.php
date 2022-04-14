@@ -24,6 +24,7 @@
                     <tr role="row">
                         <th >ID</th>
                         <th >设备编号</th>
+                        <th >坐标</th>
                         <th >创建日期</th>
                         <th>操作</th>
                     </tr>
@@ -33,6 +34,7 @@
                     <tr>
                         <td>{{$device->id}}</td>
                         <td>{{$device->devicecode}}</td>
+                        <td>{{$device->rsulat}}, {{$device->rsulng}}</td>
                         <td>{{$device->created_at}}</td>
                         <td>
                              <div class="dropdown">
@@ -40,6 +42,7 @@
                                 <ul class="dropdown-menu" style="margin: 0px;">
                                     <li><a class="dropdown-item" href="devicelogs?devicecode={{$device->id}}">系统日志</a></li>
                                     <li><a class="dropdown-item" href="bsmlogs?devicecode={{$device->id}}">BSM日志</a></li>
+                                    <li><a class="dropdown-item" href="editdevice?id={{$device->id}}">编辑</a></li>
                                     <li><a class="dropdown-item" href="javascript:confirmDelete({{$device->id}});">删除</a></li>
                                 </ul>
                             </div>

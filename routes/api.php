@@ -29,3 +29,6 @@ Route::any("/clientlogin", "ApiV1Controller@clientLogin");
 Route::any("/logs", "ApiV1Controller@logs");
 
 Route::any("/resetpassword", "ApiV1Controller@resetPassword");
+
+
+Route::any("/bdmapjs", "ApiV1Controller@bdmapJs");

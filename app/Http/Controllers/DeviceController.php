@@ -13,7 +13,8 @@ class DeviceController extends Controller{
     
     public function index(Request $request){
         $devices = Device::orderBy('devices.created_at', 'asc')
-                ->select('devices.id',  'devices.devicecode', 'devices.created_at');
+                ->select('devices.id',  'devices.devicecode', 'devices.created_at',
+                        'devices.rsulat', 'devices.rsulng');
         
         $devices = $devices->get();
   
@@ -21,6 +22,42 @@ class DeviceController extends Controller{
             'devices' => $devices
         ]);
     }
+    
+    function editRsuDevice(Request $request){
+        if($request->id == ""){
+            return "缺少参数！";
+        }
+        
+        $devices = Device::where("id", $request->id)
+                ->get();
+        
+        if(count($devices) == 0){
+            return "设备不存在！";
+        }
+        
+        return view("/basicdata/adddevice", [
+           "device"=>$devices[0] 
+        ]);
+    }
+    
+    function editRsuDeviceSave(Request $request){
+        if($request->id == ""){
+            return "缺少参数！";
+        }
+        
+        $devices = Device::where("id", $request->id)
+                ->get();
+        
+        if(count($devices) == 0){
+            return "设备不存在！";
+        }
+        
+        $devices[0]->rsulat = $request->rsulat;
+        $devices[0]->rsulng = $request->rsulng;
+        $devices[0]->save();
+        
+        return redirect("/devices");        
+    }    
     
     function deleteDevice(Request $request){
         Device::where('id', $request->deviceid)->delete();

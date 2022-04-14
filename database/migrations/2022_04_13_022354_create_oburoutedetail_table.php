@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateObudeviceTable extends Migration
+class CreateOburoutedetailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateObudeviceTable extends Migration
      */
     public function up()
     {
-        Schema::create('obudevices', function (Blueprint $table) {
+        Schema::create('oburoutedetails', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("obuid", 20)->default("");
-            $table->integer("obustatus")->default(0);
-            $table->double("obulatitude")->default(0);
-            $table->double("obulongtitude")->default(0);
+            $table->integer("routeid");
+            $table->double("lat")->default(0);
+            $table->double("lng")->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateObudeviceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('obudevices');
+        Schema::dropIfExists('oburoutedetails');
     }
 }

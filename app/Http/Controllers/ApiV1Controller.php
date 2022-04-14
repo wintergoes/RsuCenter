@@ -572,4 +572,25 @@ class ApiV1Controller extends Controller
 
         return redirect($exportfilename);            
     }    
+    
+    function bdmapJs(Request $request){
+        //1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
+        $ch = curl_init();
+        //2. 不管是get、post，跳过证书的验证
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $mapjsurl = "https://api.map.baidu.com/api?v=3.0&ak=lKXGBob7gIDaPPzrfc6qtHTBNukNcLzE";
+        if($request->maptype == "webgl"){
+            $mapjsurl .= "&type=webgl";
+        }
+        //3. 设置请求的服务器地址
+        curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+        
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+
+        curl_close($ch);     
+    }
 }

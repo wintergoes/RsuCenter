@@ -23,6 +23,7 @@
 	<link rel="stylesheet" href="assets/css/dark-theme.css" />
 	<link rel="stylesheet" href="assets/css/semi-dark.css" />
 	<link rel="stylesheet" href="assets/css/header-colors.css" />
+        <script src="assets/js/jquery.min.js"></script>
 	<title>RSU管理后台</title>
 </head>
 
@@ -51,7 +52,11 @@ $l2_recyclenews = in_array($currentpath, array("recyclenews", "addnews", "editne
 $l1_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
+$l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo"));
+$l1_road = $l2_warninginfo;
+
 $l2_devices = in_array($currentpath, array("devices"));
+$l2_obudevices = in_array($currentpath, array("obudevices"));
 $l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
 $l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));
 $l2_devicelogs = in_array($currentpath, array("devicelogs", "devicelogfilecontent"));
@@ -83,13 +88,13 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<div class="menu-title">统计分析</div>
 					</a>
 					<ul>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>道路异常信息统计</a></li>
+                                            <li > <a href="warninginfostat"><i class="bx bx-right-arrow-alt" ></i>预警信息统计</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU风险规避统计</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>车辆运行统计</a></li>
 					</ul>
-				</li>                                 
+				</li>
                                 
-				<li>
+				<li {!! $l1_road ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon">
                                                     <i class='bx bx-rocket'></i>
@@ -97,9 +102,9 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<div class="menu-title">道路管理</div>
 					</a>
 					<ul>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>预警信息</a></li>
+                                            <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>预警信息</a></li>
 					</ul>
-				</li>          
+				</li>
                                 
 				<li>
 					<a href="javascript:;" class="has-arrow">
@@ -112,23 +117,6 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU实时图像</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU历史影像</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>人工影像</a></li>
-					</ul>
-				</li>                                   
-
-				<li {!! $l1_settings ? "class='mm-active'" : "" !!}>
-					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon">
-                                                    <i class='bx bx-braille'></i>
-						</div>
-						<div class="menu-title">基础设置</div>
-					</a>
-					<ul>
-                                            <li {!! $l2_usergroups ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="usergroups"><i class="bx bx-right-arrow-alt" ></i>用户组管理</a></li>
-                                            <li {!! $l2_users ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="users"><i class="bx bx-right-arrow-alt" ></i>人员管理</a></li>
-                                            <li {!! $l2_devices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devices"><i class="bx bx-right-arrow-alt"></i>RSU管理</a></li>
-                                            <li > <a href="devices"><i class="bx bx-right-arrow-alt"></i>OBU管理</a></li>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt"></i>车辆管理</a></li>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt"></i>字典管理</a></li>
 					</ul>
 				</li>
                                 
@@ -143,6 +131,23 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						</li>
 						<li {!! $l2_bsmlogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="bsmlogs?logtype=1"><i class="bx bx-right-arrow-alt"></i>BSM日志</a>
 						</li>
+					</ul>
+				</li>
+                                
+				<li {!! $l1_settings ? "class='mm-active'" : "" !!}>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon">
+                                                    <i class='bx bx-braille'></i>
+						</div>
+						<div class="menu-title">基础设置</div>
+					</a>
+					<ul>
+                                            <li {!! $l2_usergroups ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="usergroups"><i class="bx bx-right-arrow-alt" ></i>用户组管理</a></li>
+                                            <li {!! $l2_users ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="users"><i class="bx bx-right-arrow-alt" ></i>人员管理</a></li>
+                                            <li {!! $l2_devices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devices"><i class="bx bx-right-arrow-alt"></i>RSU管理</a></li>
+                                            <li {!! $l2_obudevices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obudevices"><i class="bx bx-right-arrow-alt"></i>OBU管理</a></li>
+                                            <li > <a href="#"><i class="bx bx-right-arrow-alt"></i>车辆管理</a></li>
+                                            <li > <a href="#"><i class="bx bx-right-arrow-alt"></i>字典管理</a></li>
 					</ul>
 				</li>                                
 			</ul>
