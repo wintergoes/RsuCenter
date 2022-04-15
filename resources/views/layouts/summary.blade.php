@@ -99,18 +99,15 @@
                     </div>
                     <div class="d-flex align-items-center ms-auto font-13 gap-2">
                         <span class="border px-1 rounded cursor-pointer">
-                            <i class="bx bxs-circle me-1" style="color: #14abef">
-                            </i>
+                            <img src="images/rsu_device.png" height="15" style="vertical-align: middle;"></img>
                             RSU
                         </span>
                         <span class="border px-1 rounded cursor-pointer">
-                            <i class="bx bxs-circle me-1" style="color: #ffc107">
-                            </i>
+                            <img src="images/obu_vehicle.png" width="25" style="vertical-align: middle;"></img>
                             OBU
                         </span>
                         <span class="border px-1 rounded cursor-pointer">
-                            <i class="bx bxs-circle me-1" style="color: red">
-                            </i>
+                            <img src="images/alertstop.png" width="15" height="15" style="vertical-align: middle;"></img>
                             异常信息
                         </span>
                     </div>
@@ -234,7 +231,10 @@
     map.centerAndZoom(point, 13);                 // 初始化地图，设置中心点坐标和地图级别 
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
     
-var rsuIcon = new BMapGL.Icon("/images/rsu_device.png", new BMapGL.Size(16, 16));    
+var rsuIcon = new BMapGL.Icon("/images/rsu_device.png", new BMapGL.Size(24, 24));
+var obuIcon = new BMapGL.Icon("/images/obu_vehicle.png", new BMapGL.Size(31, 15));
+var alertStartIcon = new BMapGL.Icon("/images/alertstart.png", new BMapGL.Size(24, 24));
+var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
     
 function updateBdMapSummary(){
     $.ajax({
@@ -242,16 +242,75 @@ function updateBdMapSummary(){
         url: "homebdmapsummary",
         dataType: "json",
         success: function (data) {
+            map.clearOverlays();
             for(var i = 0; i < data.rsudevices.length; i++){
                 rsuobj = data.rsudevices[i];
-              
-                var pt = new BMapGL.Point(rsuobj.rsulng, rsuobj.rsulat);
+                
+                let pt = new BMapGL.Point(rsuobj.rsulng, rsuobj.rsulat);
                 var marker = new BMapGL.Marker(pt, {
                     icon: rsuIcon
+                });
+                
+                // 创建信息窗口
+                var opts = {
+                    width: 200,
+                    height: 30,
+                    title: 'RSU'
+                };
+                let infoWindow = new BMapGL.InfoWindow(rsuobj.devicecode, opts);                  
+                
+                marker.addEventListener('click', function () {
+                    map.openInfoWindow(infoWindow, pt); // 开启信息窗口  
+                });
+                // 将标注添加到地图
+                map.addOverlay(marker);
+            }
+            
+            for(var i = 0; i < data.obudevices.length; i++){
+                obuobj = data.obudevices[i];
+              
+                var pt = new BMapGL.Point(obuobj.obulongtitude, obuobj.obulatitude);
+                var marker = new BMapGL.Marker(pt, {
+                    icon: obuIcon
                 });
                 // 将标注添加到地图
                 map.addOverlay(marker);                
             }
+            
+            for(var i = 0; i < data.warnings.length; i++){
+                warnobj = data.warnings[i];
+                
+                let pt = new BMapGL.Point(warnobj.startlng, warnobj.startlat);
+                var marker = new BMapGL.Marker(pt, {
+                    icon: alertStartIcon
+                });
+                
+                // 创建信息窗口
+                var opts = {
+                    width: 200,
+                    height: 30,
+                    title: '预警'
+                };
+                let infoWindow = new BMapGL.InfoWindow(warnobj.winame, opts);                
+                marker.addEventListener('click', function () {
+                    map.openInfoWindow(infoWindow, pt); // 开启信息窗口  
+                });                
+                // 将标注添加到地图
+                map.addOverlay(marker);
+                
+                if(warnobj.startlat !== warnobj.stoplat || warnobj.startlng !== warnobj.stoplng){
+                    let ptstop = new BMapGL.Point(warnobj.stoplng, warnobj.stoplat);
+                    var marker = new BMapGL.Marker(ptstop, {
+                        icon: alertStopIcon
+                    });
+                    
+                    marker.addEventListener('click', function () {
+                        map.openInfoWindow(infoWindow, ptstop); // 开启信息窗口  
+                    });                        
+                    // 将标注添加到地图
+                    map.addOverlay(marker);                    
+                }
+            }            
             setTimeout('updateBdMapSummary()', 10000);    
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
