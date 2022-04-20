@@ -8,13 +8,14 @@ use App\DeviceLog;
 use App\BsmLog;
 use App\User;
 use App\Device;
+use App\UploadFile;
+use App\ObuDevice;
+use App\SysToken;
 
 use DB;
 use Auth;
 
-define("ret_success", 1);
-define("ret_error", -1);
-define("ret_invalid_auth", -2);
+require_once '../app/Constant.php';
 
 class ApiV1Controller extends Controller
 {
@@ -592,5 +593,102 @@ class ApiV1Controller extends Controller
         return $result;
 
         curl_close($ch);     
+    }
+    
+    function uploadFile(Request $request){
+        if(!file_exists(upload_folder)){
+            mkdir(upload_folder, 0777, true);
+        }
+        
+        $base_path = upload_folder;
+        
+        if($request->filetype == upd_file_obu_picture){
+            $base_path .= "obuimages/" ;
+        } else if($request->filetype == upd_file_obu_video){
+            $base_path .= "obuvideos/" ;
+        }
+
+        if(!file_exists($base_path)){
+            mkdir($base_path, 0777, true);
+        }
+        
+        $base_path .=  $request->obuid . "/";
+        if(!file_exists($base_path)){
+            mkdir($base_path, 0777, true);
+        }        
+
+        $target_path = $base_path . $request->filename;
+        //$fileputres = file_put_contents($target_path, $request->file);
+        if(!move_uploaded_file ($_FILES["file"]["tmp_name"], $target_path )){
+            $array = array ("retcode" => ret_upload_error, "retmsg" => "上传失败!", "path"=>$_FILES["file"]["error"]);
+            return json_encode ( $array );
+        };
+        
+        $obuid = "0";
+        if($request->obuid != ""){
+            $obuid = $request->obuid;
+        }
+        
+        $uploader = "0";
+        if($request->uploader != ""){
+            $uploader = $request->uploader;
+        }
+        
+        $updfile = new UploadFile();
+        $updfile->obuid = $obuid;
+        $updfile->uploader = $uploader;
+        $updfile->filetype = $request->filetype;
+        $updfile->filename = $request->filename;
+        $updfile->filesize = $request->filesize;
+        $updfile->filemd5 = $request->filemd5;
+        $updfile->save();
+
+        //echo $request->file;
+
+        $array = array ("retcode" => ret_success, "retmsg" => "上传成功！", "filelocalid"=>$request->filelocalid );
+        return json_encode ( $array );
+    }
+    
+    public static function create_uuid($prefix=""){
+        $chars = md5(uniqid(mt_rand(), true));
+        $uuid = substr ( $chars, 0, 8 )
+            . substr ( $chars, 8, 4 ) 
+            . substr ( $chars, 12, 4 )
+            . substr ( $chars, 16, 4 )
+            . substr ( $chars, 20, 12 );
+        return $prefix.$uuid ;
+    }    
+    
+    function registerObu(Request $request){
+        if($request->localid == ""){
+            $array = array ("retcode" => ret_error, "retmsg" => "缺少参数！" );
+            return json_encode ( $array );
+        }
+        
+        //echo $request->localid;
+        $obus = ObuDevice::where("obulocalid", "=", $request->localid)
+                ->get();
+        
+//        echo count($obus);
+        if(count($obus) > 0){
+            $array = array ("retcode" => ret_error, "retmsg" => "设备已注册！" );
+            return json_encode ( $array );
+        }
+        
+        $obu = new ObuDevice();
+        $obu->obulocalid = $request->localid;
+        $obu->save();
+        
+        $obu->obuid = "OBU" . str_pad($obu->id, 6, "0", STR_PAD_LEFT);
+        $obu->save();
+        
+        $systoken = new SysToken();
+        $systoken->tokentype = token_obu_local;
+        $systoken->relatedid = $obu->id;
+        $systoken->tokenvalue = $this->create_uuid();
+        $systoken->save();
+        
+        $array = array ("retcode" => ret_success, "obu" => $obu, "token"=>$systoken );
+        return json_encode ( $array ); 
     }
 }

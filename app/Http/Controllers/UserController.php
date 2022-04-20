@@ -14,8 +14,6 @@ use DB;
 use Auth;
 use Cache;
 
-require_once "../app/const.php";
-
 
 class UserController extends Controller
 {   

@@ -16,6 +16,7 @@ class CreateObudeviceTable extends Migration
         Schema::create('obudevices', function (Blueprint $table) {
             $table->increments('id');
             $table->string("obuid", 20)->default("");
+            $table->string("obulocalid", 32)->nullable();
             $table->integer("obustatus")->default(0);
             $table->double("obulatitude")->default(0);
             $table->double("obulongtitude")->default(0);

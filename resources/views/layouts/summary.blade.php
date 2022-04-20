@@ -156,66 +156,20 @@
                     </div>
                 </div>
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2">
+                    @foreach($obus as $obu)
                     <div class="col">
                         <div class="">
-                            <img src="images/jzw1.jpg" class="card-img-top" alt="...">
+                            <video autoplay="autoplay" onended="onVideoEnded({{$obu->id}})" id="video{{$obu->id}}" muted="muted" controls class="card-img-top">
+                                <source src="getnewobuvideo?obuid={{$obu->id}}" type="video/mp4">
+                            </video>
                             <div class="card-body text-center">
                                 <p class="card-title">
-                                    OBU0001
+                                    {{$obu->obuid}}
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="">
-                            <img src="images/jzw2.jpg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                                <p class="card-title">
-                                    OBU0002
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="">
-                            <img src="images/jzw3.jpg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                                <p class="card-title">
-                                    OBU0003
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="">
-                            <img src="images/jzw4.jpg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                                <p class="card-title">
-                                    OBU0004
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="">
-                            <img src="images/jzw3.jpg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                                <p class="card-title">
-                                    OBU0005
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="">
-                            <img src="images/jzw4.jpg" class="card-img-top" alt="...">
-                            <div class="card-body text-center">
-                                <p class="card-title">
-                                    OBU0006
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -342,4 +296,12 @@ function updateHomeSummary(){
 updateHomeSummary();
 </script>
 
+
+<script>
+//video视频播放完成的事件
+function onVideoEnded(obuid) {
+    var aud = document.getElementById('video' + obuid);
+    aud.src = "getnewobuvideo?obuid=" + obuid;
+};    
+</script>
 @endsection

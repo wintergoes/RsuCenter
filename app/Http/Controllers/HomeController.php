@@ -19,7 +19,13 @@ class HomeController extends Controller
     }
 
     public function index(){
-        return view('/layouts/summary');
+        $obus = ObuDevice::orderBy("id", "desc")
+                ->limit(6)
+                ->get();
+        
+        return view('/layouts/summary', [
+            "obus"=>$obus
+        ]);
     }
     
     public function dataSummary(Request $request){

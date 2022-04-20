@@ -32,3 +32,11 @@ Route::any("/resetpassword", "ApiV1Controller@resetPassword");
 
 
 Route::any("/bdmapjs", "ApiV1Controller@bdmapJs");
+
+Route::any("/rsumgruploadfile", "ApiV1Controller@uploadFile");
+
+
+
+
+//***************************OBU相关*****************************************
+Route::any("/registerobu", "ApiV1Controller@registerObu");

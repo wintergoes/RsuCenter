@@ -64,3 +64,8 @@ Route::any("/bsmlogfilecontent", "DeviceLogController@logfileContent");
 Route::get("/bsmlogs", "DeviceLogController@index");
 
 Route::get('/home', 'HomeController@index');
+
+
+
+//***************************ManagerApi相关*****************************************
+Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
