@@ -54,4 +54,8 @@ class HomeController extends Controller
             "warnings"=>$warnings);
         return json_encode($arr);
     }
+    
+    function dashboard(Request $request){
+        return view("/layouts/dashboard");
+    }
 }

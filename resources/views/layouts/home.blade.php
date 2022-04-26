@@ -27,7 +27,7 @@
 	<title>RSU管理后台</title>
 </head>
 
-<body>                           
+<body>
 <?php 
 
 $currentpath = Request::path();
@@ -54,6 +54,9 @@ $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo"));
 $l1_road = $l2_warninginfo;
+
+$l2_obuvideos = in_array($currentpath, array("obuvideos"));
+$l1_videos = $l2_obuvideos;
 
 $l2_devices = in_array($currentpath, array("devices"));
 $l2_obudevices = in_array($currentpath, array("obudevices"));
@@ -106,7 +109,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 					</ul>
 				</li>
                                 
-				<li>
+				<li {!! $l1_videos ? "class='mm-active'" : "" !!}>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon">
                                                     <i class='bx bx-video-recording'></i>
@@ -114,8 +117,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<div class="menu-title">影像信息</div>
 					</a>
 					<ul>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU实时图像</a></li>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU历史影像</a></li>
+                                            <li {!! $l2_obuvideos ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obuvideos"><i class="bx bx-right-arrow-alt" ></i>OBU视频</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>人工影像</a></li>
 					</ul>
 				</li>

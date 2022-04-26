@@ -36,7 +36,7 @@ function getPosition(flag){
     @else
     <form class="form-horizontal" id="form1" method="post" action="/adddevicesave">
     @endif
-        {{ csrf_field() }}      
+        {{ csrf_field() }}
         <div>
             <!-- Display Validation Errors -->
             @include('common.errors')

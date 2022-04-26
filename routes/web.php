@@ -43,6 +43,7 @@ Route::any('/deletedevice', 'DeviceController@deleteDevice');
 
 //***************************OBU设备管理****************************************
 Route::any('/obudevices', 'ObuDeviceController@index');
+Route::any('/obuvideos', 'UploadFileController@obuVideos');
 
 //*******************************预警信息***************************************
 Route::any('/warninginfo', "WarningInfoController@index");
@@ -64,8 +65,13 @@ Route::any("/bsmlogfilecontent", "DeviceLogController@logfileContent");
 Route::get("/bsmlogs", "DeviceLogController@index");
 
 Route::get('/home', 'HomeController@index');
-
+Route::get('/dashboard', 'HomeController@dashboard');
 
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
+
+
+Route::any("/mqtttest", function(){
+    return view("/other/mqtttest");
+});
