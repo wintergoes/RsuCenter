@@ -58,7 +58,7 @@ $l1_road = $l2_warninginfo;
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));
 $l1_videos = $l2_obuvideos;
 
-$l2_devices = in_array($currentpath, array("devices"));
+$l2_devices = in_array($currentpath, array("devices", "editdevice", "rsusettings"));
 $l2_obudevices = in_array($currentpath, array("obudevices"));
 $l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
 $l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));

@@ -64,4 +64,20 @@ class DeviceController extends Controller{
         
         return redirect('/devices');        
     }
+    
+    function rsuSettings(Request $request){
+        if($request->id == ""){
+            return "缺少参数！";
+        }
+        
+        $devices = Device::where("id", $request->id)
+                ->get();
+        if(count($devices) == 0){
+            return "设备不存在！";
+        }
+        
+        return view("/basicdata/rsusettings", [
+            "rsudevice"=>$devices[0]
+        ]);
+    }
 }

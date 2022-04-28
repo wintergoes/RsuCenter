@@ -91,7 +91,7 @@ function getPosition(flag){
         </div>
     </form>
 
-    </<div>
+    <div>
 </div>
 
     

@@ -58,7 +58,7 @@ function submitData(){
         </div>
     </form>
 
-    </<div>
+    <div>
 </div>
 
 @endsection

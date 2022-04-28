@@ -37,6 +37,7 @@ Route::get('/deleteusergroup', 'UserGroupController@deleteUserGroup');
 
 //***************************RSU设备管理****************************************
 Route::any('/devices', 'DeviceController@index');
+Route::any('/rsusettings', 'DeviceController@rsuSettings');
 Route::any('/editdevice', 'DeviceController@editRsuDevice');
 Route::any('/editdevicesave', 'DeviceController@editRsuDeviceSave');
 Route::any('/deletedevice', 'DeviceController@deleteDevice');
