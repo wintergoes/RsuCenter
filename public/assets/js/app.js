@@ -114,11 +114,4 @@ $(function() {
       $('html').attr('class', 'color-sidebar sidebarcolor8');
     }
 
-
-
-
-
-
-
-
 });

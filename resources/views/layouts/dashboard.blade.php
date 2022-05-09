@@ -53,6 +53,8 @@
 	<script src="assets/plugins/highchart_10_0_0/modules/exporting.js"></script>
 	<script src="assets/plugins/highchart_10_0_0/modules/export-data.js"></script>
 	<script src="assets/plugins/highchart_10_0_0/modules/accessibility.js"></script>
+        
+	<script src="assets/plugins/chartjs/js/Chart.min.js"></script>   
 	<title>RSU管理后台</title>
         
     <style type="text/css">
@@ -112,7 +114,7 @@
         
         .forecast_tbl{
             background-color: transparent;
-            font-size: 16px;
+            font-size: 15px;
             margin: 12px 0;
             height: 60px;
         }
@@ -126,6 +128,17 @@
             height: 22px;
         }
 
+        .stat_button{
+            float: left;
+            margin-left: 6px;
+            width: 50px;
+            text-align: center;
+            padding-top: 6px;
+            height: 30px;
+            font-size: 12px;
+            background: url('images/dashboard/stat_button_normal.png') no-repeat;
+            background-size: 100% 100%;
+        }
     </style>        
 </head>
 
@@ -157,6 +170,21 @@
             </div>
             <div class="item_sub_div">
                 <div class="item_subtitle">设备状态</div>
+                <div style="margin-top: 20px;">
+                    <canvas id="chart_devices"></canvas>
+                </div>
+                
+                <div style="width: 100%; font-size: 12px; margin-top: 16px;">
+                    <div style="float: left;"><img src="images/dashboard/device_chart_zc.png"></div>
+                    <div style="width: 100px; margin-left: 6px; float: left;">正常设备</div>
+                    <div >70%</div>
+                </div>
+                
+                <div style="width: 100%; font-size: 12px; margin-top: 16px;">
+                    <div style="float: left;"><img src="images/dashboard/device_chart_yc.png"></div>
+                    <div style="width: 100px; margin-left: 6px; float: left;">异常设备</div>
+                    <div >30%</div>
+                </div>                
             </div>
             <div class="item_sub_div">
                 <div class="item_subtitle">设备列表</div>
@@ -205,12 +233,20 @@
             </div>
         </div>
         
-        <div class="item_container" style="width: 430px; height: 194px; 
+        <div class="item_container" style="width: 430px; height: 240px; 
              background: url('images/dashboard/nav_background.png') no-repeat;
                  background-size:100% 100%; ">
             <div >
                 <span>车流量统计</span>
                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
+            </div>
+            <div style="margin-top: 30px; float: left;">
+                <canvas id="chart_veh_flow"></canvas>
+            </div>
+            <div style="width: 20%; position: absolute; right: 1px; margin-top: 30px;">
+                <p class="stat_button">今日</p>
+                <p class="stat_button">7天</p>
+                <p class="stat_button">1个月</p>
             </div>
         </div>
     </div>
@@ -242,7 +278,7 @@
                         <td>23hPa</td>
                     </tr>
                     <tr>
-                        <td>星期四</td>
+                        <td>星期四 <img src="images/dashboard/sunshine.png"></td>
                         <td><img src="images/dashboard/fengli.png"/></td>
                         <td>风力</td>
                         <td>62m/h</td>
@@ -257,13 +293,32 @@
         <div class="item_container" style="width: 430px; height: 439px; 
              background: url('images/dashboard/device_background.png') no-repeat;
                  background-size:100% 100%; ">
-            <div >
+            <div>
                 <span>事件统计</span>
                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
             </div>
             <div class="item_sub_div">
                 <div class="item_subtitle">简要统计</div>
-                <div id="chart_events"></div>
+                <div style=" margin-top: 10px; width: 100%;">
+                    <span class="stat_button">今日</span>
+                    <span class="stat_button">7天</span>
+                    <span class="stat_button">1个月</span>
+                </div>                
+                <div style="margin-top: 60px; background: url('images/dashboard/chart_events_bkg.png') no-repeat; background-size: 100%, 100%;"><canvas id="chart_events"></canvas></div>
+                <div>
+                    <table style="text-align: left;">
+                        <tbody style="background-color: rgba(0, 0, 0, 0);">
+                            <tr>
+                                <td><font color="#2e9fff">⬤</font> 团雾</td>
+                                <td><font color="#2968f6">⬤</font> 雨雪</td>
+                            </tr>
+                            <tr>
+                                <td><font color="#e02e89">⬤</font> 交通事故</td>
+                                <td><font color="#13f9fe">⬤</font> 交通管制</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="item_sub_div">
                 <div class="item_subtitle">事件列表</div>
@@ -324,17 +379,14 @@
                 <div class="item_subtitle">严重拥堵</div>
                <table>
                     <thead>
-                        <td>序号</td>
-                        <td>事件</td>
+                        <td>路段</td>
                         <td>时间</td>
                     </thead>
                     <tr>
-                        <td>001</td>
                         <td>团雾</td>
                         <td>10:30:00</td>                        
                     </tr>
                     <tr>
-                        <td>001</td>
                         <td>交通事故</td>
                         <td>10:30:00</td>                        
                     </tr>
@@ -344,17 +396,14 @@
                 <div class="item_subtitle">中度拥堵</div>
                 <table>
                     <thead>
-                        <td>序号</td>
-                        <td>事件</td>
+                        <td>路段</td>
                         <td>时间</td>
                     </thead>
                     <tr>
-                        <td>001</td>
                         <td>团雾</td>
                         <td>10:30:00</td>                        
                     </tr>
                     <tr>
-                        <td>001</td>
                         <td>交通事故</td>
                         <td>10:30:00</td>                        
                     </tr>
@@ -470,22 +519,35 @@ updateBdMapSummary();
 
 <!--事件统计-->
 <script>
+    function test(){
 	Highcharts.chart('chart_events', {
 		chart: {
                     backgroundColor: 'rgba(0,0,0,0)',
                     type: 'variablepie',
                     styledMode: true,
 		},
+                title:{
+                    text: '',
+                    style: {
+                        display: 'none'
+                    },
+                },
+                subtitle: {
+                    text: '',
+                    style: {
+                        display: 'none'
+                    },
+                },                
 		credits: {
-			enabled: false
+                    enabled: false
 		},
                 legend:{
-                    verticalAlign:'bottom',
+                    verticalAlign:'top',
                 },
                 plotOptions: {
                     variablepie: {
                             dataLabels: {
-                                    enabled: false,
+                                enabled: false,
                             },
                             center: ['50%', '25%'],
                             showInLegend: true
@@ -519,6 +581,146 @@ updateBdMapSummary();
 			}]
 		}]
 	});
+    }
+        
+function showEvents(){        
+    new Chart(document.getElementById("chart_events"), {
+            type: 'polarArea',
+
+            data: {
+                labels: ["团雾", "交通事故", "交通管制", "雨雪"],
+                datasets: [{
+                        label: "",
+                        backgroundColor: ["#2e9fff", "#2968f6", "#e02e89", "#13f9fe"],
+                        data: [1478, 900, 734, 784],
+                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderWidth: 8,
+                        borderAlign: 'inner',
+                }],      
+            },
+            options: {
+                maintainAspectRatio: false,
+                startAngle: 45,
+                title: {
+                        display: false,
+                        text: ''
+                },
+                legend: {
+                    display: false
+                },
+            }
+    });
+}
+showEvents();
+        
+function showVehFlowChar(){
+	// chart 7
+	var ctx = document.getElementById('chart_veh_flow').getContext('2d');
+            var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+              gradientStroke1.addColorStop(0, 'rgba(32, 219, 253, 0.3)');  
+              gradientStroke1.addColorStop(1, 'rgba(32, 219, 253, 0.1)'); 
+
+          var gradientStroke2 = ctx.createLinearGradient(0, 0, 0, 300);
+              gradientStroke2.addColorStop(0, '#20DAFC');  
+              gradientStroke2.addColorStop(1, '#20DAFC'); 
+
+
+          var gradientStroke3 = ctx.createLinearGradient(0, 0, 0, 300);
+              gradientStroke3.addColorStop(0, 'rgba(0, 114, 255, 0.5)');  
+              gradientStroke3.addColorStop(1, 'rgba(0, 200, 255, 0.0)'); 
+
+          var gradientStroke4 = ctx.createLinearGradient(0, 0, 0, 300);
+              gradientStroke4.addColorStop(0, '#0072ff');  
+              gradientStroke4.addColorStop(1, '#00c8ff'); 
+
+
+	var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: ['5.01', '5.02', '5.03', '5.04', '5.05', '5.06', '5.07'],
+                        datasets: [{
+                          label: 'Visits',
+                          data: [6, 20, 14, 12, 17, 8, 10],
+                          backgroundColor: gradientStroke1,
+                          borderColor: gradientStroke2,
+                          pointRadius :"0",
+                          pointHoverRadius:"0",
+                          borderWidth: 3
+                        }]
+		},
+		options: {
+			maintainAspectRatio: false,
+			legend: {
+				display: false,
+				labels: {
+					fontColor: '#585757',
+					boxWidth: 40
+				}
+			},
+			tooltips: {
+				enabled: false
+			},
+			scales: {
+				xAxes: [{
+					ticks: {
+						beginAtZero: true,
+						fontColor: '#fff'
+					},
+					gridLines: {
+						display: true,
+						color: "rgba(60, 60, 60, 0.6)"
+					},
+				}],
+				yAxes: [{
+					ticks: {
+						beginAtZero: true,
+						fontColor: '#fff'
+					},
+					gridLines: {
+						display: true,
+						color: "rgba(60, 60, 60, 0.6)"
+					},
+				}]
+			}
+		}
+	});
+}
+showVehFlowChar();
+
+function showDeviceChart(){
+    var ctx = document.getElementById('chart_devices').getContext('2d');    
+    var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+      gradientStroke1.addColorStop(0, 'rgba(32, 242, 233, 1)');  
+      gradientStroke1.addColorStop(1, 'rgba(41, 150, 246, 1)'); 
+
+    var gradientStroke3 = ctx.createLinearGradient(0, 0, 0, 300);
+      gradientStroke3.addColorStop(0, 'rgba(65, 126, 255, 1)');  
+      gradientStroke3.addColorStop(1, 'rgba(86, 157, 253, 1)');               
+    // chart 6
+    new Chart(document.getElementById("chart_devices"), {
+            type: 'doughnut',
+            data: {
+                    labels: ["正常设备", "异常设备"],
+                    datasets: [{
+                            label: "",
+                            backgroundColor: [gradientStroke1, gradientStroke3],
+                            data: [2478, 5267],
+                            borderColor: 'rgba(0, 0, 0, 0)',
+                    }]
+            },
+            options: {
+                    maintainAspectRatio: false,
+                    title: {
+                            display: false,
+                            text: ''
+                    },
+                    legend: {
+                        display: false,
+                    }
+            }
+    });
+}
+showDeviceChart();
 </script>
 </body>
 
