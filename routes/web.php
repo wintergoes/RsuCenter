@@ -70,6 +70,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('/dashboard', 'HomeController@dashboard');
 Route::any('/dashboardsummary', 'HomeController@dashboardSummary');
 Route::any('/dashboardvehflow', 'HomeController@dashboardVehFlow');
+Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");

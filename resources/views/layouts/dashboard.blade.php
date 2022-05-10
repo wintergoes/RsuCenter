@@ -140,6 +140,18 @@
             background-size: 100% 100%;
         }
         
+        .stat_button_active{
+            float: left;
+            margin-left: 6px;
+            width: 50px;
+            text-align: center;
+            padding-top: 6px;
+            height: 30px;
+            font-size: 12px;
+            background: url('images/dashboard/stat_button_selected.png') no-repeat;
+            background-size: 100% 100%;            
+        }
+        
         #dashboard_title {
             width: 100%; 
             height: 98px; 
@@ -203,7 +215,7 @@
             </div>
             <div class="item_sub_div">
                 <div class="item_subtitle">设备列表</div>
-                <table>
+                <table id='device_table'>
                     <thead>
                         <td>序号</td>
                         <td>设备名称</td>
@@ -259,9 +271,9 @@
                 <canvas id="chart_veh_flow"></canvas>
             </div>
             <div style="width: 20%; position: absolute; right: 1px; margin-top: 30px;">
-                <p class="stat_button" onclick="showVehFlowChart(7);">今日</p>
-                <p class="stat_button" onclick="showVehFlowChart(7);">7天</p>
-                <p class="stat_button" onclick="showVehFlowChart(30);">1个月</p>
+                <p class="stat_button" id='vehflowtoday' onclick="showVehFlowChart(10);">今日</p>
+                <p class="stat_button" id='vehflow7day' onclick="showVehFlowChart(7);">7天</p>
+                <p class="stat_button" id='vehflow30day' onclick="showVehFlowChart(30);">1个月</p>
             </div>
         </div>
     </div>
@@ -292,7 +304,7 @@
                         <td><span id='weekday'>星期四</span> <img src="images/dashboard/sunshine.png"></td>
                         <td><img src="images/dashboard/fengli.png"/></td>
                         <td>风力</td>
-                        <td>62m/h</td>
+                        <td>62Km/h</td>
                         <td><img src="images/dashboard/fengxiang.png"/></td>
                         <td>风向</td>
                         <td>东南</td>
@@ -645,65 +657,69 @@ function showEvents(){
     });
 }
 
-        
+ var vehflowChart;       
 function showVehFlowChart(reqcount){
-	// chart 7
-	var ctx = document.getElementById('chart_veh_flow').getContext('2d');
-            var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
-              gradientStroke1.addColorStop(0, 'rgba(32, 219, 253, 0.3)');  
-              gradientStroke1.addColorStop(1, 'rgba(32, 219, 253, 0.1)'); 
+    $('#vehflowtoday').attr('class', "stat_button");
+    $('#vehflow7day').attr('class', "stat_button");
+    $('#vehflow30day').attr('class', "stat_button");
+    if(reqcount === 10){
+        $('#vehflowtoday').attr('class', "stat_button_active");
+    } else if(reqcount === 7){
+        $('#vehflow7day').attr('class', "stat_button_active");
+    } else {
+        $('#vehflow30day').attr('class', "stat_button_active");
+    }
+    
+    var ctx = document.getElementById('chart_veh_flow').getContext('2d');
+    var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
+      gradientStroke1.addColorStop(0, 'rgba(32, 219, 253, 0.3)');  
+      gradientStroke1.addColorStop(1, 'rgba(32, 219, 253, 0.1)'); 
 
-          var gradientStroke2 = ctx.createLinearGradient(0, 0, 0, 300);
-              gradientStroke2.addColorStop(0, '#20DAFC');  
-              gradientStroke2.addColorStop(1, '#20DAFC'); 
+    var gradientStroke2 = ctx.createLinearGradient(0, 0, 0, 300);
+        gradientStroke2.addColorStop(0, '#20DAFC');  
+        gradientStroke2.addColorStop(1, '#20DAFC'); 
               
-        var chartoptions = {
-                maintainAspectRatio: false,
-                legend: {
-                    display: false,
-                    labels: {
-                        fontColor: '#585757',
-                        boxWidth: 40
-                    }
+    var chartoptions = {
+        maintainAspectRatio: false,
+        legend: {
+            display: false,
+            labels: {
+                fontColor: '#585757',
+                boxWidth: 40
+            }
+        },
+        tooltips: {
+                enabled: false
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    fontColor: '#fff'
                 },
-                tooltips: {
-                        enabled: false
+                gridLines: {
+                    display: true,
+                    color: "rgba(60, 60, 60, 0.6)"
                 },
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            fontColor: '#fff'
-                        },
-                        gridLines: {
-                            display: true,
-                            color: "rgba(60, 60, 60, 0.6)"
-                        },
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            fontColor: '#fff'
-                        },
-                        gridLines: {
-                            display: true,
-                            color: "rgba(60, 60, 60, 0.6)"
-                        },
-                    }]
-                }
-            };
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    fontColor: '#fff'
+                },
+                gridLines: {
+                    display: true,
+                    color: "rgba(60, 60, 60, 0.6)"
+                },
+            }]
+        }
+    };
 
     $.getJSON("dashboardvehflow?reqcount=" + reqcount,function(data){
         var clabels = [];
             var cvalues = [];
 
-            for(var i=0;i<data["vehflow"].length;i++)
-            {
-//                        var arr ={
-//                                        "x" : data["vehflow"][i]["date"],
-//                                        "y" : data["vehflow"][i]["value"]
-//                                    }
-//                        bData.push(arr);
+            for(var i=0;i<data["vehflow"].length;i++){
                clabels.push(data["vehflow"][i]["date"]);
                cvalues.push(data["vehflow"][i]["value"]);
             }
@@ -718,32 +734,39 @@ function showVehFlowChart(reqcount){
                    pointHoverRadius:"0",
                    borderWidth: 3                            
                }]
-               };
-       var myBubbleChart = new Chart(ctx, {
+            };
+        if(vehflowChart){
+            vehflowChart.destroy();
+        }
+        vehflowChart = new Chart(ctx, {
            type: "line",
            data: data1,
            options: chartoptions
        });
    });
-//
-//	var myChart = new Chart(ctx, {
-//            type: 'line',
-//            data: {
-//                labels: ['5.01', '5.02', '5.03', '5.04', '5.05', '5.06', '5.07'],
-//                datasets: [{
-//                  label: 'Visits',
-//                  data: [6, 20, 14, 12, 17, 8, 10],
-//                  backgroundColor: gradientStroke1,
-//                  borderColor: gradientStroke2,
-//                  pointRadius :"0",
-//                  pointHoverRadius:"0",
-//                  borderWidth: 3
-//                }]
-//            },
-
-//	});
 }
 
+function showDeviceStatus(){
+   $.getJSON("dashboarddevices",function(data){
+        var tbl = document.getElementById("device_table");
+        var rows = tbl.rows; //获取表格的行数
+
+        for (var i = rows.length - 1; i > 0 ; i--) {
+            tbl.deleteRow(i);    
+        }
+        
+        for(var i=0;i<data["devices"].length;i++){
+            var tr=tbl.insertRow(tbl.rows.length);
+        		//添加单元格
+            var cell0=tr.insertCell(0);
+            cell0.innerHTML = i+1;
+            var cell1=tr.insertCell(1);
+            cell1.innerHTML=data["devices"][i]["devicecode"];
+            var cell2=tr.insertCell(2);
+            cell2.innerHTML="正常"; 
+        }
+   });    
+}
 
 function showDeviceChart(){
     var ctx = document.getElementById('chart_devices').getContext('2d');    
@@ -763,7 +786,8 @@ function showDeviceChart(){
                             label: "",
                             backgroundColor: [gradientStroke1, gradientStroke3],
                             data: [2478, 5267],
-                            borderColor: 'rgba(0, 0, 0, 0)',
+                            borderColor: 'rgba(255, 255, 255, 0.3)',
+                            hoverBackgroundColor: [gradientStroke1, gradientStroke3],
                     }]
             },
             options: {
@@ -825,7 +849,7 @@ function showDate() {
     $('#datespan').text(str);
 } 
 
-
+showDeviceStatus();
 updateBdMapSummary();
 showEvents();
 showDeviceChart();

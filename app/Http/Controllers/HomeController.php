@@ -84,5 +84,12 @@ class HomeController extends Controller
         
         $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
         return json_encode($arr_vehflows);
-    }    
+    }
+    
+    function dashboardDevices(Request $request){
+        $devices = DB::select("select id, devicecode,1 as dtype from devices union all select id,obuid,2 as dtype from obudevices;");
+        
+        $arr = array("retcode"=>ret_success, "devices"=>$devices);
+        return json_encode($arr);
+    }
 }
