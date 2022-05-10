@@ -221,6 +221,7 @@
                         <td>设备名称</td>
                         <td>状态</td>
                     </thead>
+                    <tbody id='device_table_body'>
                     <tr>
                         <td>001</td>
                         <td>RSU0001</td>
@@ -256,6 +257,7 @@
                         <td>RSU0001</td>
                         <td>正常</td>                        
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -756,7 +758,7 @@ function showDeviceStatus(){
         }
         
         for(var i=0;i<data["devices"].length;i++){
-            var tr=tbl.insertRow(tbl.rows.length);
+            var tr=document.createElement("tr");
         		//添加单元格
             var cell0=tr.insertCell(0);
             cell0.innerHTML = i+1;
@@ -764,6 +766,7 @@ function showDeviceStatus(){
             cell1.innerHTML=data["devices"][i]["devicecode"];
             var cell2=tr.insertCell(2);
             cell2.innerHTML="正常"; 
+            document.getElementById("device_table_body").appendChild(tr);
         }
    });    
 }
