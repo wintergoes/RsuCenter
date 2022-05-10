@@ -59,6 +59,7 @@ Route::any('/warninginfostat', "WarningInfoController@warningInfoStat");
 Route::any('/homedatasummary', 'HomeController@dataSummary');
 Route::any('/homebdmapsummary', 'HomeController@bdmapSummary');
 
+
 Route::get("/devicelogs", "DeviceLogController@index");
 Route::get("/dllogfile", "ApiV1Controller@dlLogFile");
 Route::any("/devicelogfilecontent", "DeviceLogController@logfileContent");
@@ -67,7 +68,8 @@ Route::get("/bsmlogs", "DeviceLogController@index");
 
 Route::get('/home', 'HomeController@index');
 Route::get('/dashboard', 'HomeController@dashboard');
-
+Route::any('/dashboardsummary', 'HomeController@dashboardSummary');
+Route::any('/dashboardvehflow', 'HomeController@dashboardVehFlow');
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");

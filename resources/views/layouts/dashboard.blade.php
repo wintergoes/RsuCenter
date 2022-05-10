@@ -139,19 +139,34 @@
             background: url('images/dashboard/stat_button_normal.png') no-repeat;
             background-size: 100% 100%;
         }
+        
+        #dashboard_title {
+            width: 100%; 
+            height: 98px; 
+            z-index: 2; 
+            position: absolute;
+            font-size: 36px; 
+            color: white; 
+            text-align: center; 
+            background: url('images/dashboard/title_background.png') no-repeat center; 
+    
+            padding-top: 12px;
+        }
+        
     </style>        
 </head>
 
 <body style="width: 100%; height: 100%">
-<div style="position:relative;width: 100%; height: 100%">
-<div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
-<div style="width: 100%; height: 98px; z-index: 2; position: absolute;
-     font-size: 36px; color: white; text-align: center; background: url('images/dashboard/title_background.png') no-repeat; 
-     background-size:100% 100%; padding-top: 12px; font-family: 微软雅黑;">智能云控平台</div>
-<div style="width: 100%; height: 100%;  position: absolute; opacity: 0.5;">
-    <img style="width: 100%; height: 100%;" src="images/dashboard/background.png"/></div>
+<div id='dashboard_left' style="position:relative;width: 84%; height: 100%; float: left;">
+    <div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
+    <div id="dashboard_title">
+        <img src="images/dashboard/dashboard_title.png">
+    </div>
+    <div id="mask_layer" style="width: 100%; height: 100%;  position: absolute; opacity: 0.5;">
+        <img style="width: 100%; height: 100%;" src="images/dashboard/background.png"/>
+    </div>
 
-    <div style='z-index: 2; position: absolute; left: 6px; top: 80px;'>
+    <div style='z-index: 10; position: absolute; left: 0px; top: 80px;'>
         <div class="item_container" style="width: 430px; height: 160px; 
              background: url('images/dashboard/nav_background.png') no-repeat;
                  background-size:100% 100%; ">
@@ -161,7 +176,7 @@
             </div>
         </div>
         
-        <div class="item_container" style="width: 430px; height: 439px; 
+        <div class="item_container" style="width: 430px; height: 410px; 
              background: url('images/dashboard/device_background.png') no-repeat;
                  background-size:100% 100%; ">
             <div >
@@ -244,15 +259,15 @@
                 <canvas id="chart_veh_flow"></canvas>
             </div>
             <div style="width: 20%; position: absolute; right: 1px; margin-top: 30px;">
-                <p class="stat_button">今日</p>
-                <p class="stat_button">7天</p>
-                <p class="stat_button">1个月</p>
+                <p class="stat_button" onclick="showVehFlowChart(7);">今日</p>
+                <p class="stat_button" onclick="showVehFlowChart(7);">7天</p>
+                <p class="stat_button" onclick="showVehFlowChart(30);">1个月</p>
             </div>
         </div>
     </div>
 
 
-    <div style='z-index: 2; position: absolute; right: 6px; top: 80px;'>
+    <div style='z-index: 10; position: absolute; right: 0px; top: 80px;'>
         <div class="item_container" style="width: 430px; height: 160px; 
              background: url('images/dashboard/nav_background.png') no-repeat;
                  background-size:100% 100%; ">
@@ -261,15 +276,11 @@
                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
             </div>
             
-<!--            <div style="float:left; width: 18%">
-                <div>2022/05/05</div>
-                <div>星期四</div>                
-            </div>-->
             
             <div >
                 <table class="forecast_tbl">
                     <tr>
-                        <td>2022/05/05</td>                       
+                        <td><span id='datespan'></span></td>                       
                         <td><img src="images/dashboard/wendu.png"/></td>
                         <td>湿度</td>
                         <td>30</td>
@@ -278,7 +289,7 @@
                         <td>23hPa</td>
                     </tr>
                     <tr>
-                        <td>星期四 <img src="images/dashboard/sunshine.png"></td>
+                        <td><span id='weekday'>星期四</span> <img src="images/dashboard/sunshine.png"></td>
                         <td><img src="images/dashboard/fengli.png"/></td>
                         <td>风力</td>
                         <td>62m/h</td>
@@ -290,7 +301,7 @@
             </div>
         </div>
         
-        <div class="item_container" style="width: 430px; height: 439px; 
+        <div class="item_container" style="width: 430px; height: 410px; 
              background: url('images/dashboard/device_background.png') no-repeat;
                  background-size:100% 100%; ">
             <div>
@@ -304,7 +315,7 @@
                     <span class="stat_button">7天</span>
                     <span class="stat_button">1个月</span>
                 </div>                
-                <div style="margin-top: 60px; background: url('images/dashboard/chart_events_bkg.png') no-repeat; background-size: 100%, 100%;"><canvas id="chart_events"></canvas></div>
+                <div style="margin-top: 60px; background: url('images/dashboard/chart_events_bkg1.png') no-repeat; background-size: 100%, 100%;"><canvas id="chart_events"></canvas></div>
                 <div>
                     <table style="text-align: left;">
                         <tbody style="background-color: rgba(0, 0, 0, 0);">
@@ -412,7 +423,25 @@
         </div>
     </div>
 </div>
-    
+
+<div id="obu_videos" style="width: 240px; height: 100%; position: absolute; right: 0px; padding: 16px;
+     background-color: #04090B; font-size: 12px; ">
+                @foreach($obus as $obu)
+                <div >
+                    <div style="background: url('images/dashboard/video_background.png') no-repeat; 
+                         background-size: 100% 100%; height: 135px; padding: 6px;">
+                    <video autoplay="autoplay" onended="onVideoEnded({{$obu->id}})" id="video{{$obu->id}}" muted="muted" controls class="card-img-top">
+                        <source src="getnewobuvideo?obuid={{$obu->id}}" type="video/mp4">
+                    </div>
+                    </video>
+                        <div class=" text-center" style="padding: 3px;">
+                        <p class="card-title">
+                            {{$obu->obuid}}
+                        </p>
+                    </div>
+                </div>
+                @endforeach        
+</div>
 <script>
 var map = new BMapGL.Map("bdmap_container", {
    coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
@@ -513,7 +542,7 @@ function updateBdMapSummary(){
         }
     });
 }
-updateBdMapSummary();
+
 </script>
 
 
@@ -586,19 +615,23 @@ updateBdMapSummary();
 function showEvents(){        
     new Chart(document.getElementById("chart_events"), {
             type: 'polarArea',
-
             data: {
                 labels: ["团雾", "交通事故", "交通管制", "雨雪"],
                 datasets: [{
                         label: "",
                         backgroundColor: ["#2e9fff", "#2968f6", "#e02e89", "#13f9fe"],
                         data: [1478, 900, 734, 784],
-                        borderColor: 'rgba(0, 0, 0, 0.1)',
+                        borderColor: 'rgba(0, 0, 0, 0)',
                         borderWidth: 8,
                         borderAlign: 'inner',
-                }],      
+                        
+                }],
+
+                scaleFontColor : "red",
+                scaleLineColor: "red",
+                scaleLineWidth: 8, 
             },
-            options: {
+            options: {               
                 maintainAspectRatio: false,
                 startAngle: 45,
                 title: {
@@ -611,9 +644,9 @@ function showEvents(){
             }
     });
 }
-showEvents();
+
         
-function showVehFlowChar(){
+function showVehFlowChart(reqcount){
 	// chart 7
 	var ctx = document.getElementById('chart_veh_flow').getContext('2d');
             var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
@@ -623,69 +656,94 @@ function showVehFlowChar(){
           var gradientStroke2 = ctx.createLinearGradient(0, 0, 0, 300);
               gradientStroke2.addColorStop(0, '#20DAFC');  
               gradientStroke2.addColorStop(1, '#20DAFC'); 
+              
+        var chartoptions = {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false,
+                    labels: {
+                        fontColor: '#585757',
+                        boxWidth: 40
+                    }
+                },
+                tooltips: {
+                        enabled: false
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: '#fff'
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(60, 60, 60, 0.6)"
+                        },
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: '#fff'
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(60, 60, 60, 0.6)"
+                        },
+                    }]
+                }
+            };
 
+    $.getJSON("dashboardvehflow?reqcount=" + reqcount,function(data){
+        var clabels = [];
+            var cvalues = [];
 
-          var gradientStroke3 = ctx.createLinearGradient(0, 0, 0, 300);
-              gradientStroke3.addColorStop(0, 'rgba(0, 114, 255, 0.5)');  
-              gradientStroke3.addColorStop(1, 'rgba(0, 200, 255, 0.0)'); 
+            for(var i=0;i<data["vehflow"].length;i++)
+            {
+//                        var arr ={
+//                                        "x" : data["vehflow"][i]["date"],
+//                                        "y" : data["vehflow"][i]["value"]
+//                                    }
+//                        bData.push(arr);
+               clabels.push(data["vehflow"][i]["date"]);
+               cvalues.push(data["vehflow"][i]["value"]);
+            }
 
-          var gradientStroke4 = ctx.createLinearGradient(0, 0, 0, 300);
-              gradientStroke4.addColorStop(0, '#0072ff');  
-              gradientStroke4.addColorStop(1, '#00c8ff'); 
+            const data1 = {
+                labels: clabels,
+               datasets: [{
+                   data: cvalues,
+                   backgroundColor: gradientStroke1,
+                   borderColor: gradientStroke2, 
+                   pointRadius :"0",
+                   pointHoverRadius:"0",
+                   borderWidth: 3                            
+               }]
+               };
+       var myBubbleChart = new Chart(ctx, {
+           type: "line",
+           data: data1,
+           options: chartoptions
+       });
+   });
+//
+//	var myChart = new Chart(ctx, {
+//            type: 'line',
+//            data: {
+//                labels: ['5.01', '5.02', '5.03', '5.04', '5.05', '5.06', '5.07'],
+//                datasets: [{
+//                  label: 'Visits',
+//                  data: [6, 20, 14, 12, 17, 8, 10],
+//                  backgroundColor: gradientStroke1,
+//                  borderColor: gradientStroke2,
+//                  pointRadius :"0",
+//                  pointHoverRadius:"0",
+//                  borderWidth: 3
+//                }]
+//            },
 
-
-	var myChart = new Chart(ctx, {
-		type: 'line',
-		data: {
-			labels: ['5.01', '5.02', '5.03', '5.04', '5.05', '5.06', '5.07'],
-                        datasets: [{
-                          label: 'Visits',
-                          data: [6, 20, 14, 12, 17, 8, 10],
-                          backgroundColor: gradientStroke1,
-                          borderColor: gradientStroke2,
-                          pointRadius :"0",
-                          pointHoverRadius:"0",
-                          borderWidth: 3
-                        }]
-		},
-		options: {
-			maintainAspectRatio: false,
-			legend: {
-				display: false,
-				labels: {
-					fontColor: '#585757',
-					boxWidth: 40
-				}
-			},
-			tooltips: {
-				enabled: false
-			},
-			scales: {
-				xAxes: [{
-					ticks: {
-						beginAtZero: true,
-						fontColor: '#fff'
-					},
-					gridLines: {
-						display: true,
-						color: "rgba(60, 60, 60, 0.6)"
-					},
-				}],
-				yAxes: [{
-					ticks: {
-						beginAtZero: true,
-						fontColor: '#fff'
-					},
-					gridLines: {
-						display: true,
-						color: "rgba(60, 60, 60, 0.6)"
-					},
-				}]
-			}
-		}
-	});
+//	});
 }
-showVehFlowChar();
+
 
 function showDeviceChart(){
     var ctx = document.getElementById('chart_devices').getContext('2d');    
@@ -720,7 +778,60 @@ function showDeviceChart(){
             }
     });
 }
+
+
+
+$(window).on('resize',function(){
+    resizePage();
+    //alert(window.innerWidth);
+});
+
+function resizePage(){
+    if(window.innerWidth < 1400){
+        $("#dashboard_left").width(window.innerWidth);
+        $("#obu_videos").css('display', 'none');
+    } else {
+        $("#dashboard_left").width(window.innerWidth - $("#obu_videos").width() - 32);
+        $("#obu_videos").css('display', '');
+    }
+}
+
+resizePage();
+//alert($("#obu_videos").attr('display'));
+</script>
+
+<script>
+//video视频播放完成的事件
+function onVideoEnded(obuid) {
+    var aud = document.getElementById('video' + obuid);
+    aud.src = "getnewobuvideo?obuid=" + obuid;
+};    
+
+
+function getWeekDay() { 
+    var myDate= new Date(); 
+    var str = ''; 
+     
+    var Week = ['日','一','二','三','四','五','六']; 
+    str += ' 星期' + Week[myDate.getDay()]; 
+    
+    $('#weekday').text(str);
+} 
+
+function showDate() { 
+    var myDate= new Date(); 
+    var str = myDate.toLocaleDateString(); 
+    
+    $('#datespan').text(str);
+} 
+
+
+updateBdMapSummary();
+showEvents();
 showDeviceChart();
+showVehFlowChart(7);
+getWeekDay();
+showDate();
 </script>
 </body>
 

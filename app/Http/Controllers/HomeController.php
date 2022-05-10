@@ -56,6 +56,33 @@ class HomeController extends Controller
     }
     
     function dashboard(Request $request){
-        return view("/layouts/dashboard");
+        $obus = ObuDevice::orderBy("id", "desc")
+            ->limit(6)
+            ->get();
+        
+        return view("/layouts/dashboard", [
+            'obus'=>$obus
+        ]);
     }
+    
+    function dashboardSummary(Request $request){
+        
+    }
+    
+    function dashboardVehFlow(Request $request){
+        $reqcount = $request->reqcount;
+        if($reqcount == ""){
+            $reqcount = 7;
+        }
+        
+        $arr = array();
+        for($i = 1; $i <= $reqcount; $i++){
+            $str = "05.".$i;
+            $arrinner = array("date"=>$str, "value"=>rand(100, 10000));
+            array_push($arr, $arrinner);
+        }
+        
+        $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
+        return json_encode($arr_vehflows);
+    }    
 }
