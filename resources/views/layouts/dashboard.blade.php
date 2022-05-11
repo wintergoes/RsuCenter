@@ -850,8 +850,17 @@ function showDate() {
     var str = myDate.toLocaleDateString(); 
     
     $('#datespan').text(str);
-} 
+}
 
+function hideBd(){
+    var el = [],
+    _el = document.getElementsByClassName('anchorBL');
+    for (var i=0; i<_el.length; i++ ) {
+        _el[i].style.display = "none";
+    }    
+}
+
+hideBd();
 showDeviceStatus();
 updateBdMapSummary();
 showEvents();
