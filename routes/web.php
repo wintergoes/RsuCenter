@@ -75,6 +75,11 @@ Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
 
+//***************************测试相关*****************************************
+Route::any("importgps2directiondatasave", "test\Gps2DirctionController@importDataSave");
+Route::any("importgps2directiondata", "test\Gps2DirctionController@importData");
+Route::any("showgps2directiondata", "test\Gps2DirctionController@showData");
+Route::any("deletegps2directiondata", "test\Gps2DirctionController@deleteData");
 
 Route::any("/mqtttest", function(){
     return view("/other/mqtttest");
