@@ -40,53 +40,102 @@ function submitData(){
 
         <div class="row mb-3">
             <label for="latlng1" class="col-sm-2 col-form-label">坐标1</label>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 @if(isset($coord))
                 <input type="text" class="form-control" id="latlng1" name="latlng1" onchange="showRoadOnMap();" value="{{$coord->lat1}},{{$coord->lng1}}">
                 @else
                 <input type="text" class="form-control" id="latlng1" name="latlng1" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
             </div>
-        </div>
-        
-        <div class="row mb-3">
-            <label for="latlng2" class="col-sm-2 col-form-label">坐标2</label>
-            <div class="col-sm-6">
+            
+            <label for="latlng2" class="col-sm-1 col-form-label">坐标2</label>
+            <div class="col-sm-3">
                 @if(isset($coord))
                 <input type="text" class="form-control" id="latlng2" name="latlng2" onchange="showRoadOnMap();" value="{{$coord->lat2}},{{$coord->lng2}}">
                 @else
                 <input type="text" class="form-control" id="latlng2" name="latlng2" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
-            </div>
+            </div>            
         </div>
+        
 
         <div class="row mb-3">
             <label for="latlng3" class="col-sm-2 col-form-label">坐标3</label>
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 @if(isset($coord))
                 <input type="text" class="form-control" id="latlng3" name="latlng3" onchange="showRoadOnMap();" value="{{$coord->lat3}},{{$coord->lng3}}">
                 @else
                 <input type="text" class="form-control" id="latlng3" name="latlng3" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
             </div>
-        </div>
-
-        <div class="row mb-3">
-            <label for="latlng4" class="col-sm-2 col-form-label">坐标4</label>
-            <div class="col-sm-6">
+            
+            <label for="latlng4" class="col-sm-1 col-form-label">坐标4</label>
+            <div class="col-sm-3">
                 @if(isset($coord))
                 <input type="text" class="form-control" id="latlng4" name="latlng4" onchange="showRoadOnMap();" value="{{$coord->lat4}},{{$coord->lng4}}">
                 @else
                 <input type="text" class="form-control" id="latlng4" name="latlng4" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
-            </div>
+            </div>            
         </div>
         
         <div class="row mb-3">
-            <label for="" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-6" style="text-align: right;">
-                <button type="button" class="btn btn-outline-primary px-2" onclick="submitData();">保存修改</button>
+            <label for="maxlat" class="col-sm-2 col-form-label">maxlat</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="maxlat" name="maxlat" value="{{$coord->maxlat}}">
+                @else
+                <input type="text" class="form-control" id="maxlat" name="maxlat" value="" placeholder="">
+                @endif
             </div>
+            
+            <label for="maxlng" class="col-sm-1 col-form-label">maxlng</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="maxlng" name="maxlng" value="{{$coord->maxlng}}">
+                @else
+                <input type="text" class="form-control" id="maxlng" name="maxlng" value="" placeholder="">
+                @endif
+            </div>            
+        </div>
+
+        <div class="row mb-3">
+            <label for="minlat" class="col-sm-2 col-form-label">minlat</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="minlat" name="minlat" value="{{$coord->minlat}}">
+                @else
+                <input type="text" class="form-control" id="minlat" name="minlat" value="" placeholder="">
+                @endif
+            </div>
+            
+            <label for="minlng" class="col-sm-1 col-form-label">minlng</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="minlng" name="minlng" value="{{$coord->minlng}}">
+                @else
+                <input type="text" class="form-control" id="minlng" name="minlng" value="" placeholder="">
+                @endif
+            </div>            
+        </div>
+        
+        <div class="row mb-3">
+            <label for="angle" class="col-sm-2 col-form-label">与正北方向夹角</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="angle" name="angle" value="{{$coord->angle}}">
+                @else
+                <input type="text" class="form-control" id="angle" name="angle" value="" placeholder="">
+                @endif
+            </div>
+        </div>         
+        
+        <div class="row mb-3">
+            <label for="" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-7" style="text-align: right;">
+                <button type="button" class="btn btn-outline-primary px-2" onclick="submitData();">保存修改</button>
+                <button type="button" class="btn btn-outline-primary px-2" onclick="submitData();">保存并新增</button>
+            </div>           
         </div>
         
         <div class="row mb-3" style="height: 500px;" id="bdmap_row">
@@ -97,7 +146,20 @@ function submitData(){
     <div>
 </div>
 
-    
+<div class="alert border-0 border-start border-5 border-info alert-dismissible fade show py-2">
+        <div class="d-flex align-items-center">
+                <div class="font-35 text-info"><i class="bx bx-info-square"></i>
+                </div>
+            <div class="ms-3" style="display: block;">
+                        <h6 class="mb-0 text-info">说明</h6>
+                </div>
+
+        </div>
+            <div>
+                        <p>1. 一共需要取四个点，四个点要按顺时针的方向取。</p>
+                        <p>2. 第一个点到第二个点的指向代表道路运行方向。</p>                
+            </div>    
+</div>    
 <script>
     var map = new BMapGL.Map("bdmap_container", {
        coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
@@ -119,123 +181,167 @@ function showRoadOnMap(){
         return;
     }
     
+    var str1 = $("#latlng1").val().replace("，", ",");
+    var str2 = $("#latlng2").val().replace("，", ",");
+    var str3 = $("#latlng3").val().replace("，", ",");
+    var str4 = $("#latlng4").val().replace("，", ",");
+    
+    if(!str1.includes(',') || !str2.includes(',') || !str3.includes(',') || !str4.includes(',')){
+        alert("输入数据格式不正确。");
+        return;
+    }
+    
+    //alert(str1 + "     " + str2 + "    " + str3 + "   " + str4);
+    
 //    alert("add");
-    var latlng1 = $("#latlng1").val().split(",");
-    var latlng2 = $("#latlng2").val().split(",");
-    var latlng3 = $("#latlng3").val().split(",");
-    var latlng4 = $("#latlng4").val().split(",");
+    var latlng1 = str1.split(",");
+    var latlng2 = str2.split(",");
+    var latlng3 = str3.split(",");
+    var latlng4 = str4.split(",");
     
-    var latlng1 = gcj02tobd09(latlng1[1], latlng1[0]);
-    var latlng2 = gcj02tobd09(latlng2[1], latlng2[0]);
-    var latlng3 = gcj02tobd09(latlng3[1], latlng3[0]);
-    var latlng4 = gcj02tobd09(latlng4[1], latlng4[0]);
+    var islatlng = true;
+    if(latlng1[0] > 60){ //经度在前
+        islatlng = false;
+    }
     
-    var point = new BMapGL.Point(latlng1[0], latlng1[1]);  // 创建点坐标  
-    map.centerAndZoom(point, 18);                 // 初始化地图，设置中心点坐标和地图级别 
-    var polygon = new BMapGL.Polygon([
-            new BMapGL.Point(latlng1[0], latlng1[1]),
-            new BMapGL.Point(latlng2[0], latlng2[1]),
-            new BMapGL.Point(latlng3[0], latlng3[1]),
-            new BMapGL.Point(latlng4[0], latlng4[1])
-        ], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});
+    if(islatlng){
+        latlng1 = latlng2lnglat(latlng1[0], latlng1[1]);
+        latlng2 = latlng2lnglat(latlng2[0], latlng2[1]);
+        latlng3 = latlng2lnglat(latlng3[0], latlng3[1]);
+        latlng4 = latlng2lnglat(latlng4[0], latlng4[1]);
+    }
+    
+    //经过gcj02tobd09的转换后，都变成lng, lat的格式了
+    islatlng = false;
+    
+//    alert(latlng1[1] + "    " + latlng2[1] + "   " + latlng3[1] + "   " + latlng4[1]);
+    var maxlat = Math.max(latlng1[1], latlng2[1], latlng3[1], latlng4[1]);
+    var minlat = Math.min(latlng1[1], latlng2[1], latlng3[1], latlng4[1]);
+    var maxlng = Math.max(latlng1[0], latlng2[0], latlng3[0], latlng4[0]);
+    var minlng = Math.min(latlng1[0], latlng2[0], latlng3[0], latlng4[0]);    
+    
+    $("#maxlat").val(maxlat.toFixed(6));
+    $("#maxlng").val(maxlng.toFixed(6));
+    $("#minlat").val(minlat.toFixed(6));
+    $("#minlng").val(minlng.toFixed(6));
+    
+    var angle = 0;
+    if(islatlng){
+//        if(latlng2[1] < latlng1[1]){
+//            angle = 180;
+//        }
+//        
+//        angle = angle + Math.atan((latlng2[0] - latlng1[0])/ (latlng2[1] - latlng1[1]));
+    } else {             
+        lngdistance = getDistances(latlng2[1], latlng2[0], latlng2[1], latlng1[0]);
+        latdistance = getDistances(latlng1[1], latlng1[0], latlng2[1], latlng1[0]);
+        //alert(lngdistance.distance + "  " + latdistance.distance);
+        angle = angle + Math.atan(lngdistance.distance / latdistance.distance);
+        
+        if(latlng2[0] > latlng1[0]){
+            if(latlng2[1] < latlng1[1]){
+                angle = angle + Math.PI / 2;
+            }
+        } else {
+            if(latlng2[1] < latlng1[1]){
+                angle = angle + Math.PI;
+            } else {
+                angle = Math.PI * 2 - angle ;
+            }
+        }
+    }
+    angle = angle * 180 / Math.PI;
+    $('#angle').val(angle.toFixed(2));
+    
+    var points = [];
+    points.push(new BMapGL.Point(latlng1[0], latlng1[1]));
+    points.push(new BMapGL.Point(latlng2[0], latlng2[1]));
+    points.push(new BMapGL.Point(latlng3[0], latlng3[1]));
+    points.push(new BMapGL.Point(latlng4[0], latlng4[1]));
+    
+    var pointsmax = [];
+    pointsmax.push(new BMapGL.Point(maxlng, maxlat));
+    pointsmax.push(new BMapGL.Point(minlng, maxlat));
+    pointsmax.push(new BMapGL.Point(minlng, minlat));
+    pointsmax.push(new BMapGL.Point(maxlng, minlat));
+    
     map.clearOverlays();
-    map.addOverlay(polygon);    
-} 
-
-
-
-//定义一些常量
-var x_PI = 3.14159265358979324 * 3000.0 / 180.0;
-var PI = 3.1415926535897932384626;
-var a = 6378245.0;
-var ee = 0.00669342162296594323;
-/**
- * 百度坐标系 (BD-09) 与 火星坐标系 (GCJ-02)的转换
- * 即 百度 转 谷歌、高德
- */
-function bd09togcj02(bd_lon, bd_lat) {
-  var x_pi = 3.14159265358979324 * 3000.0 / 180.0;
-  var x = bd_lon - 0.0065;
-  var y = bd_lat - 0.006;
-  var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * x_pi);
-  var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * x_pi);
-  var gg_lng = z * Math.cos(theta);
-  var gg_lat = z * Math.sin(theta);
-  return [gg_lng, gg_lat]
-}
-/**
- * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换
- * 即谷歌、高德 转 百度
- */
-function gcj02tobd09(lng, lat) {
-  var z = Math.sqrt(lng * lng + lat * lat) + 0.00002 * Math.sin(lat * x_PI);
-  var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * x_PI);
-  var bd_lng = z * Math.cos(theta) + 0.0065;
-  var bd_lat = z * Math.sin(theta) + 0.006;
-  return [bd_lng, bd_lat]
-}
-/**
- * WGS84转GCj02
- */
-function wgs84togcj02(lng, lat) {
-  if (out_of_china(lng, lat)) {
-    return [lng, lat]
-  }
-  else {
-    var dlat = transformlat(lng - 105.0, lat - 35.0);
-    var dlng = transformlng(lng - 105.0, lat - 35.0);
-    var radlat = lat / 180.0 * PI;
-    var magic = Math.sin(radlat);
-    magic = 1 - ee * magic * magic;
-    var sqrtmagic = Math.sqrt(magic);
-    dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
-    dlng = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
-    var mglat = lat + dlat;
-    var mglng = lng + dlng;
-    return [mglng, mglat]
-  }
-}
-/**
- * GCJ02 转换为 WGS84
- */
-function gcj02towgs84(lng, lat) {
-  if (out_of_china(lng, lat)) {
-    return [lng, lat]
-  }
-  else {
-    var dlat = transformlat(lng - 105.0, lat - 35.0);
-    var dlng = transformlng(lng - 105.0, lat - 35.0);
-    var radlat = lat / 180.0 * PI;
-    var magic = Math.sin(radlat);
-    magic = 1 - ee * magic * magic;
-    var sqrtmagic = Math.sqrt(magic);
-    dlat = (dlat * 180.0) / ((a * (1 - ee)) / (magic * sqrtmagic) * PI);
-    dlng = (dlng * 180.0) / (a / sqrtmagic * Math.cos(radlat) * PI);
-    mglat = lat + dlat;
-    mglng = lng + dlng;
-    return [lng * 2 - mglng, lat * 2 - mglat]
-  }
-}
-function transformlat(lng, lat) {
-  var ret = -100.0 + 2.0 * lng + 3.0 * lat + 0.2 * lat * lat + 0.1 * lng * lat + 0.2 * Math.sqrt(Math.abs(lng));
-  ret += (20.0 * Math.sin(6.0 * lng * PI) + 20.0 * Math.sin(2.0 * lng * PI)) * 2.0 / 3.0;
-  ret += (20.0 * Math.sin(lat * PI) + 40.0 * Math.sin(lat / 3.0 * PI)) * 2.0 / 3.0;
-  ret += (160.0 * Math.sin(lat / 12.0 * PI) + 320 * Math.sin(lat * PI / 30.0)) * 2.0 / 3.0;
-  return ret
-}
-function transformlng(lng, lat) {
-  var ret = 300.0 + lng + 2.0 * lat + 0.1 * lng * lng + 0.1 * lng * lat + 0.1 * Math.sqrt(Math.abs(lng));
-  ret += (20.0 * Math.sin(6.0 * lng * PI) + 20.0 * Math.sin(2.0 * lng * PI)) * 2.0 / 3.0;
-  ret += (20.0 * Math.sin(lng * PI) + 40.0 * Math.sin(lng / 3.0 * PI)) * 2.0 / 3.0;
-  ret += (150.0 * Math.sin(lng / 12.0 * PI) + 300.0 * Math.sin(lng / 30.0 * PI)) * 2.0 / 3.0;
-  return ret
-}
-/**
- * 判断是否在国内，不在国内则不做偏移
- */
-function out_of_china(lng, lat) {
-  return (lng < 72.004 || lng > 137.8347) || ((lat < 0.8293 || lat > 55.8271) || false);
+    var convertor = new BMapGL.Convertor();
+    convertor.translate(points, COORDINATES_GCJ02, COORDINATES_BD09, translateCallback, 100);    
+    convertor.translate(pointsmax, COORDINATES_GCJ02, COORDINATES_BD09, translateCallbackMax, 100);    
 }
 
+    //坐标转换完之后的回调函数
+    translateCallback = function (data){
+      if(data.status === 0 && data.points.length >= 4) {
+        var point = new BMapGL.Point(data.points[0].lng, data.points[0].lat);  // 创建点坐标  
+        map.centerAndZoom(point, 18);                 // 初始化地图，设置中心点坐标和地图级别           
+        var polygon = new BMapGL.Polygon([
+                new BMapGL.Point(data.points[0].lng, data.points[0].lat),
+                new BMapGL.Point(data.points[1].lng, data.points[1].lat),
+                new BMapGL.Point(data.points[2].lng, data.points[2].lat),
+                new BMapGL.Point(data.points[3].lng, data.points[3].lat)
+            ], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});   
+        map.addOverlay(polygon);
+      }
+    }       
+
+    translateCallbackMax = function (data){
+      if(data.status === 0 && data.points.length >= 4) {
+        var polygonMax = new BMapGL.Polygon([
+                new BMapGL.Point(data.points[0].lng, data.points[0].lat),
+                new BMapGL.Point(data.points[1].lng, data.points[1].lat),
+                new BMapGL.Point(data.points[2].lng, data.points[2].lat),
+                new BMapGL.Point(data.points[3].lng, data.points[3].lat)
+            ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});   
+        map.addOverlay(polygonMax);
+      }
+    }
+
+function latlng2lnglat(lat, lng){
+    return [lng, lat];
+}
+
+function rad(d) {
+    return d * Math.PI / 180.0;
+}
+
+// 根据经纬度计算距离，参数分别为第一点的纬度，经度；第二点的纬度，经度
+function getDistances(lat1, lng1, lat2, lng2) {
+
+    var radLat1 = rad(lat1);
+    var radLat2 = rad(lat2);
+    var a = radLat1 - radLat2;
+    var b = rad(lng1) - rad(lng2);
+    var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) +
+        Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(b / 2), 2)));
+    s = s * 6378.137; // EARTH_RADIUS;
+    // 输出为公里
+    s = Math.round(s * 10000) / 10000;
+
+    var distance = s;
+    var distance_str = "";
+
+    if (parseInt(distance) >= 1) {
+        // distance_str = distance.toFixed(1) + "km";
+        distance_str = distance.toFixed(2) + "km";
+    } else {
+        // distance_str = distance * 1000 + "m";
+        distance_str = (distance * 1000).toFixed(2) + "m";
+    }
+
+    //s=s.toFixed(4);
+
+    // console.info('距离是', s);
+    // console.info('距离是', distance_str);
+    // return s;
+    
+    //小小修改，这里返回对象
+    let objData = {
+        distance: distance,
+        distance_str: distance_str
+    }
+    return objData;
+}
 </script>    
 @endsection

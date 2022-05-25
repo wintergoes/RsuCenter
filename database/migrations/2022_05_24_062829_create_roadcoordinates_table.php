@@ -15,6 +15,7 @@ class CreateRoadcoordinatesTable extends Migration
     {
         Schema::create('roadcoordinates', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer("coordtype");
             $table->double("lat1");
             $table->double("lng1");
             $table->double("lat2");
