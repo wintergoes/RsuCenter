@@ -45,6 +45,7 @@ Route::any('/deletedevice', 'DeviceController@deleteDevice');
 //***************************OBU设备管理****************************************
 Route::any('/obudevices', 'ObuDeviceController@index');
 Route::any('/obuvideos', 'UploadFileController@obuVideos');
+Route::any('/deleteobudevice', 'ObuDeviceController@deleteObuDevice');
 
 //*******************************预警信息***************************************
 Route::any('/warninginfo', "WarningInfoController@index");

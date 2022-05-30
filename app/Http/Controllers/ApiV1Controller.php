@@ -327,13 +327,21 @@ class ApiV1Controller extends Controller
     }
     
     function checkUpdate(Request $request){
-        $newapkfile = "update/rsu_rc_release_1.0.7_vc9.apk";
-        $newversionname = "1.0.7";
-        $newversioncode = 9;
+        if($request->appKey == "cn.chibc.v2xapp"){
+            $newapkfile = "update/v2xapp/v2x_release_1.0_vc1.apk";
+            $newversionname = "1.0.1";
+            $newversioncode = 2;
+            $modifycontent = "1. Bug修复；";
+        } else {
+            $newapkfile = "update/rsu_rc_release_1.0.7_vc9.apk";
+            $newversionname = "1.0.7";
+            $newversioncode = 9;
+            $modifycontent = "1. Bug修复；";
+        }
         
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
             "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
-            "modifyContent"=>"1. Bug修复；",
+            "modifyContent"=>$modifycontent,
             "downloadUrl"=>"http://114.116.195.168/" . $newapkfile,
             "apkSize"=>  filesize($newapkfile) / 1024,
             "apkMd5"=>  md5_file($newapkfile));

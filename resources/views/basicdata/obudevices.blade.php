@@ -24,6 +24,7 @@
                     <tr role="row">
                         <th >ID</th>
                         <th >OBUID</th>
+                        <th >硬件标识</th>
                         <th >状态</th>
                         <th >最后坐标</th>
                         <th >创建日期</th>
@@ -35,6 +36,7 @@
                     <tr>
                         <td >{{$obu->id}}</td>
                         <td>{{$obu->obuid}}</td>
+                        <td>{{$obu->obulocalid}}</td>
                         <td>{{$obu->obustatus}}</td>
                         <td>{{$obu->obulatitude}}, {{$obu->obulongtitude}}</td>
                         <td >{{$obu->created_at}}</td>
