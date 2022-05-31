@@ -21,7 +21,7 @@ class ManagerApiController extends Controller
         
         $updfiles = UploadFile::where("obuid", $request->obuid)
                 ->where("filetype", upd_file_obu_video)
-                ->where("medialen", ">", 3000) //只要大于5秒的视频
+                ->where("medialen", ">", 3000) //只要大于3秒的视频
                 ->orderBy("id", "desc")
                 ->limit(1)
                 ->get();

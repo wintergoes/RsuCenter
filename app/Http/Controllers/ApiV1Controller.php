@@ -650,6 +650,9 @@ class ApiV1Controller extends Controller
         $updfile->filesize = $request->filesize;
         $updfile->filemd5 = $request->filemd5;
         $updfile->medialen = $request->medialen;
+        if($request->createtime != ""){
+            $updfile->created_at = $request->createtime;
+        }
         $updfile->save();
 
         //echo $request->file;
