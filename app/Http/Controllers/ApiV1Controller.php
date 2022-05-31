@@ -649,6 +649,7 @@ class ApiV1Controller extends Controller
         $updfile->filename = $request->filename;
         $updfile->filesize = $request->filesize;
         $updfile->filemd5 = $request->filemd5;
+        $updfile->medialen = $request->medialen;
         $updfile->save();
 
         //echo $request->file;

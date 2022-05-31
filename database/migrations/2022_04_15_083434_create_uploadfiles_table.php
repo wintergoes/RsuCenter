@@ -20,6 +20,7 @@ class CreateUploadfilesTable extends Migration
             $table->integer("filetype")->default(0);
             $table->string("filename", 100)->default("");
             $table->integer("filesize")->default(0)->nullable();
+            $table->bigInteger("medialen")->default(0)->nullable();
             $table->string("filemd5", 32)->default("")->nullable();
             $table->string("fileremark", 100)->default("")->nullable();
             $table->timestamps();
