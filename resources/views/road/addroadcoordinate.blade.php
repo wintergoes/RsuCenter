@@ -288,13 +288,22 @@ function showRoadOnMap(){
 
     translateCallbackMax = function (data){
       if(data.status === 0 && data.points.length >= 4) {
-        var polygonMax = new BMapGL.Polygon([
+            var polyline = new BMapGL.Polyline([
+                new BMapGL.Point(data.points[0].lng, data.points[0].lat),
+                new BMapGL.Point(data.points[2].lng, data.points[2].lat),                
+                new BMapGL.Point(data.points[1].lng, data.points[1].lat),
+                new BMapGL.Point(data.points[3].lng, data.points[3].lat)
+                    ], {strokeColor:"gray", strokeWeight:2, strokeOpacity:0.5});
+            map.addOverlay(polyline);           
+          
+            var polygonMax = new BMapGL.Polygon([
                 new BMapGL.Point(data.points[0].lng, data.points[0].lat),
                 new BMapGL.Point(data.points[1].lng, data.points[1].lat),
                 new BMapGL.Point(data.points[2].lng, data.points[2].lat),
                 new BMapGL.Point(data.points[3].lng, data.points[3].lat)
             ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});   
-        map.addOverlay(polygonMax);
+                      
+            map.addOverlay(polygonMax);
       }
     }
 

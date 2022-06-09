@@ -8,6 +8,10 @@ use App\RoadCoordinate;
 
 class RoadCoordinateController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }    
+    
     function index(Request $request){
         $coordinates = RoadCoordinate::orderBy("id", "desc")
                 ->paginate(50);
