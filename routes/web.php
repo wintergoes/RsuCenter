@@ -56,6 +56,14 @@ Route::any('/editwarninginfosave', "WarningInfoController@editWarningInfoSave");
 Route::any('/deletewarninginfo', "WarningInfoController@deleteWarningInfo");
 Route::any('/warninginfostat', "WarningInfoController@warningInfoStat");
 
+//*******************************道路管理***************************************
+Route::any("/roads", "RoadController@index");
+Route::any("/addroad", "RoadController@addRoad");
+Route::any("/addroadsave", "RoadController@addRoadSave");
+Route::any("/editroad", "RoadController@editRoad");
+Route::any("/editroadsave", "RoadController@editRoadSave");
+Route::any("/deleteroad", "RoadController@deleteRoad");
+
 //*******************************道路坐标***************************************
 Route::any("/roadcoordinates", "RoadCoordinateController@index");
 Route::any("/addroadcoordinate", "RoadCoordinateController@addRoadCoordinate");

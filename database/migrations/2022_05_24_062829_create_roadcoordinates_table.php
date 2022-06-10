@@ -16,6 +16,9 @@ class CreateRoadcoordinatesTable extends Migration
         Schema::create('roadcoordinates', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("coordtype");
+            $table->integer("roadid");
+            $table->tinyInteger("laneno")->default(0);
+            $table->tinyInteger("lanetype")->default(0);
             $table->double("lat1");
             $table->double("lng1");
             $table->double("lat2");
@@ -30,6 +33,8 @@ class CreateRoadcoordinatesTable extends Migration
             $table->double("minlng");
             $table->double("angle");
             $table->timestamps();
+            
+            $table-index(["roadid", "laneno", "lanetype"]);
         });
     }
 

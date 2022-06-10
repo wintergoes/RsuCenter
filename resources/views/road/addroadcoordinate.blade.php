@@ -120,6 +120,30 @@ function submitData(){
         </div>
         
         <div class="row mb-3">
+            <label for="lanetype" class="col-sm-1 col-form-label">类型</label>
+            <div class="col-sm-3">
+                <select name="lanetype" class="form-select"  >
+                    @if(isset($coord))
+                    <option class="form-control" value="0" {{$coord->lanetype == 0 ? "selected" : ""}}>全车道</option>
+                    <option class="form-control" value="1" {{$coord->lanetype == 1 ? "selected" : ""}}>具体车道</option>
+                    @else
+                    <option class="form-control" value="0" >全车道</option>
+                    <option class="form-control" value="1" >具体车道</option>
+                    @endif
+                </select>
+            </div>   
+            
+            <label for="laneno" class="col-sm-2 col-form-label">车道号</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="laneno" name="laneno" value="{{$coord->laneno}}">
+                @else
+                <input type="text" class="form-control" id="laneno" name="laneno" value="" placeholder="">
+                @endif
+            </div>            
+        </div>        
+        
+        <div class="row mb-3">
             <label for="angle" class="col-sm-2 col-form-label">与正北方向夹角</label>
             <div class="col-sm-3">
                 @if(isset($coord))

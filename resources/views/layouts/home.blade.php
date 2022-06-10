@@ -53,7 +53,8 @@ $l1_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo"));
-$l1_road = $l2_warninginfo;
+$l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave"));
+$l1_road = $l2_warninginfo | $l2_road;
 
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));
 $l1_videos = $l2_obuvideos;
@@ -105,6 +106,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<div class="menu-title">道路管理</div>
 					</a>
 					<ul>
+                                            <li {!! $l2_road ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="roads"><i class="bx bx-right-arrow-alt" ></i>路段管理</a></li>
                                             <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>预警信息</a></li>
 					</ul>
 				</li>
