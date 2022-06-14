@@ -17,106 +17,19 @@ function submitData(){
 
 </script>
 
-@if(isset($device))
-<h5 class="card-title">道路管理 > 编辑路段</h5>
-@else
-<h5 class="card-title">道路管理 > 新增路段</h5>
-@endif
+
+<h5 class="card-title">道路管理 > 导入路段 [{{$road->roadname}}]</h5>
 <hr>
 
 <div class="row">
     <div class="col col-lg-9 mx-auto">
 
-    @if(isset($device))
-    <form class="form-horizontal" id="form1" method="post" action="/editroadcoordinatesave">
-    @else
-    <form class="form-horizontal" id="form1" method="post" action="/addroadcoordinatesave">
-    @endif
+    <form class="form-horizontal" id="form1" method="post" action="/importroadcoordinatesave">
+        <input type="hidden" name="roadid" id="roadid" value="{{$road->id}}"/>
         {{ csrf_field() }}
         <div>
             <!-- Display Validation Errors -->
             @include('common.errors')
-        </div>
-
-        <div class="row mb-3">
-            <label for="latlng1" class="col-sm-2 col-form-label">坐标1</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="latlng1" name="latlng1" onchange="showRoadOnMap();" value="{{$coord->lat1}},{{$coord->lng1}}">
-                @else
-                <input type="text" class="form-control" id="latlng1" name="latlng1" onchange="showRoadOnMap();" value="" placeholder="">
-                @endif
-            </div>
-            
-            <label for="latlng2" class="col-sm-1 col-form-label">坐标2</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="latlng2" name="latlng2" onchange="showRoadOnMap();" value="{{$coord->lat2}},{{$coord->lng2}}">
-                @else
-                <input type="text" class="form-control" id="latlng2" name="latlng2" onchange="showRoadOnMap();" value="" placeholder="">
-                @endif
-            </div>            
-        </div>
-        
-
-        <div class="row mb-3">
-            <label for="latlng3" class="col-sm-2 col-form-label">坐标3</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="latlng3" name="latlng3" onchange="showRoadOnMap();" value="{{$coord->lat3}},{{$coord->lng3}}">
-                @else
-                <input type="text" class="form-control" id="latlng3" name="latlng3" onchange="showRoadOnMap();" value="" placeholder="">
-                @endif
-            </div>
-            
-            <label for="latlng4" class="col-sm-1 col-form-label">坐标4</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="latlng4" name="latlng4" onchange="showRoadOnMap();" value="{{$coord->lat4}},{{$coord->lng4}}">
-                @else
-                <input type="text" class="form-control" id="latlng4" name="latlng4" onchange="showRoadOnMap();" value="" placeholder="">
-                @endif
-            </div>            
-        </div>
-        
-        <div class="row mb-3">
-            <label for="maxlat" class="col-sm-2 col-form-label">maxlat</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="maxlat" name="maxlat" value="{{$coord->maxlat}}">
-                @else
-                <input type="text" class="form-control" id="maxlat" name="maxlat" value="" placeholder="">
-                @endif
-            </div>
-            
-            <label for="maxlng" class="col-sm-1 col-form-label">maxlng</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="maxlng" name="maxlng" value="{{$coord->maxlng}}">
-                @else
-                <input type="text" class="form-control" id="maxlng" name="maxlng" value="" placeholder="">
-                @endif
-            </div>            
-        </div>
-
-        <div class="row mb-3">
-            <label for="minlat" class="col-sm-2 col-form-label">minlat</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="minlat" name="minlat" value="{{$coord->minlat}}">
-                @else
-                <input type="text" class="form-control" id="minlat" name="minlat" value="" placeholder="">
-                @endif
-            </div>
-            
-            <label for="minlng" class="col-sm-1 col-form-label">minlng</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="minlng" name="minlng" value="{{$coord->minlng}}">
-                @else
-                <input type="text" class="form-control" id="minlng" name="minlng" value="" placeholder="">
-                @endif
-            </div>            
         </div>
         
         <div class="row mb-3">
@@ -131,7 +44,7 @@ function submitData(){
                     <option class="form-control" value="1" >具体车道</option>
                     @endif
                 </select>
-            </div>   
+            </div>
             
             <label for="laneno" class="col-sm-1 col-form-label">车道号</label>
             <div class="col-sm-3">
@@ -140,25 +53,21 @@ function submitData(){
                 @else
                 <input type="text" class="form-control" id="laneno" name="laneno" value="" placeholder="">
                 @endif
-            </div>            
-        </div>        
+            </div>
+        </div>
         
         <div class="row mb-3">
-            <label for="angle" class="col-sm-2 col-form-label">与正北方向夹角</label>
-            <div class="col-sm-3">
-                @if(isset($coord))
-                <input type="text" class="form-control" id="angle" name="angle" value="{{$coord->angle}}">
-                @else
-                <input type="text" class="form-control" id="angle" name="angle" value="" placeholder="">
-                @endif
+            <label for="lanetype" class="col-sm-2 col-form-label">数据</label>
+            <div class="col-sm-7">
+                <textarea style="width: 100%;" rows="20" id="gpsdata" name="gpsdata"></textarea>
             </div>
-        </div>         
+        </div>        
         
         <div class="row mb-3">
             <label for="" class="col-sm-2 col-form-label"></label>
             <div class="col-sm-7" style="text-align: right;">
+                <button type="button" class="btn btn-outline-primary px-2" onclick="showGpsData();">显示数据</button>
                 <button type="button" class="btn btn-outline-primary px-2" onclick="submitData();">保存修改</button>
-                <button type="button" class="btn btn-outline-primary px-2" onclick="submitData();">保存并新增</button>
             </div>           
         </div>
         
@@ -192,6 +101,10 @@ function submitData(){
     var point = new BMapGL.Point(120.315719,36.179238);  // 创建点坐标  
     map.centerAndZoom(point, 18);                 // 初始化地图，设置中心点坐标和地图级别 
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    
+function showGpsData(){
+    
+}    
     
 function showRoadOnMap(){
 //    alert($("#latlng1").val());

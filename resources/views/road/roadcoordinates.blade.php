@@ -3,9 +3,13 @@
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>
 
+<h5 class="card-title">路段坐标维护 [{{$road->roadname}}]</h5>
+<hr>
+
 <div class="mb-lg-3">
     <div class="col-sm-12 col-md-12">
         <a href="addroadcoordinate?roadid={{$roadid}}"><button type="button" class="btn btn-outline-success px-2 radius-6">新增路段</button></a>
+        <a href="importroadcoordinate?roadid={{$roadid}}"><button type="button" class="btn btn-outline-success px-2 radius-6">导入路段</button></a>
     </div>
 </div>
 
