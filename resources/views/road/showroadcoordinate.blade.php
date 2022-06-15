@@ -33,6 +33,7 @@ map.centerAndZoom(point, 13);                 // 初始化地图，设置中心�
 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 var polygons = new Map();
 var bdlabels = new Map();
+var bdmakers = new Map();
 
 var rsuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(16, 16));
 @if(count($coords) > 0)
@@ -98,9 +99,9 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         var marker = new BMapGL.Marker(pt, {
             icon: rsuIcon
         });
-
         // 将标注添加到地图
-        map.addOverlay(marker);        
+        map.addOverlay(marker);  
+        bdmakers.set(id, marker);
         
 //        var polygonmax = new BMapGL.Polygon([
 //                new BMapGL.Point(maxlng, maxlat),
@@ -144,33 +145,43 @@ function showInfoWindow(lng, lat, id){
     map.openInfoWindow(infoWindow, pt); // 开启信息窗口    
 }
 
-function deleteOverlay(id){   
-    map.removeOverlay(polygons.get(id));
-    map.removeOverlay(bdlabels.get(id));
-    map.closeInfoWindow();
-    
+function deleteOverlay(id){       
     $.ajax({
         type: "GET",
         url: "deleteroadcoordinate?coordid=" + id,
         dataType: "html",
         success: function (data) {   
-            //alert("删除成功！"); 
+            map.removeOverlay(polygons.get(id));
+            map.removeOverlay(bdlabels.get(id));
+            map.removeOverlay(bdmakers.get(id));
+            map.closeInfoWindow();
+            
+            Lobibox.notify('success', {
+                        pauseDelayOnHover: true,
+                        size: 'mini',
+                        rounded: true,
+                        icon: 'bx bx-check-circle',
+                        delayIndicator: false,
+                        continueDelayOnInactiveTab: false,
+                        position: 'top right',
+                        msg: '删除成功！'
+            });                 
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            //alert("删除失败！"); 
+            Lobibox.notify('error', {
+                                    pauseDelayOnHover: true,
+                                    size: 'mini',
+                                    rounded: true,
+                                    icon: 'bx bx-check-circle',
+                                    delayIndicator: false,
+                                    continueDelayOnInactiveTab: false,
+                                    position: 'top right',
+                                    msg: '删除失败！'
+                            });  
         }
     });  
     
-	Lobibox.notify('success', {
-		pauseDelayOnHover: true,
-		size: 'mini',
-		rounded: true,
-		icon: 'bx bx-check-circle',
-		delayIndicator: false,
-		continueDelayOnInactiveTab: false,
-		position: 'top right',
-		msg: '删除成功！'
-	});    
+       
 }
 </script>    
 @endsection
