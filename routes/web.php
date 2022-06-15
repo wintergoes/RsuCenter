@@ -73,7 +73,7 @@ Route::any("/importroadcoordinatesave", "RoadCoordinateController@importRoadCoor
 Route::any("/showroadcoordinate", "RoadCoordinateController@showRoadCoordinate");
 Route::any("/editroadcoordinate", "RoadCoordinateController@editRoadCoordinate");
 Route::any("/editroadcoordinatesave", "RoadCoordinateController@editRoadCoordinate");
-Route::any("/deleteroadcoordinatesave", "RoadCoordinateController@deleteRoadCoordinate");
+Route::any("/deleteroadcoordinate", "RoadCoordinateController@deleteRoadCoordinate");
 
 //*******************************Apis***************************************
 Route::any('/homedatasummary', 'HomeController@dataSummary');

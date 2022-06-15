@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\RoadCoordinate;
 use App\Road;
 
+use DB;
+
 class RoadCoordinateController extends Controller
 {
     public function __construct(){
@@ -45,15 +47,36 @@ class RoadCoordinateController extends Controller
     }
 
     function editRoadCoordinate(Request $request){
+        if($request->coordid == ""){
+            return "缺少参数！";
+        }
         
+        $coordid = $request->coordid;
+        
+        $coords = RoadCoordinate::where("id", $coordid)
+                ->get();
+        
+        if(count($coords) == 0){
+            return "信息不存在！";
+        }
+        
+        return view("/road/addroadcoordinate", [
+            "coord"=>$coords[0]
+        ]);
     }
 
     function editRoadCoordinateSave(Request $request){
         
     }    
     
-    function DeleteRoadCoordinate(Request $request){
+    function deleteRoadCoordinate(Request $request){
+        if($request->coordid == ""){
+            return "缺少参数！";
+        }
+
+        RoadCoordinate::where("id", $request->coordid)->delete();
         
+        return "删除成功！";
     }
     
     function importRoadCoordinate(Request $request){
@@ -129,48 +152,48 @@ class RoadCoordinateController extends Controller
                 $latdistance = $distanceM * sin($a) * $latunit;
                 $lngdistance = $distanceM * cos($a) * $lngunit;
                 
-                $p1lng = $lastlng + $lngdistance; $p1lat = $lastlat + $latdistance;
-                $p2lng = $lastlng - $lngdistance; $p2lat = $lastlat - $latdistance;
-                $p3lng = $lng - $lngdistance; $p3lat = $lat - $latdistance;
-                $p4lng = $lng + $lngdistance; $p4lat = $lat + $latdistance;
+                $p4lng = $lastlng + $lngdistance; $p4lat = $lastlat + $latdistance;
+                $p1lng = $lastlng - $lngdistance; $p1lat = $lastlat - $latdistance;
+                $p2lng = $lng - $lngdistance; $p2lat = $lat - $latdistance;
+                $p3lng = $lng + $lngdistance; $p3lat = $lat + $latdistance;
             } else if($lat < $lastlat && $lng < $lastlng){
                 $a = atan($latcha / $lngcha) ;
                 $angle = 0 - (90 + $a * (180 / pi()));
                 $lngdistance = $distanceM * sin($a) * $lngunit;
                 $latdistance = $distanceM * cos($a) * $latunit;
                 
-                $p1lng = $lastlng - $lngdistance; $p1lat = $lastlat + $latdistance;
-                $p2lng = $lastlng + $lngdistance; $p2lat = $lastlat - $latdistance;
-                $p3lng = $lng + $lngdistance; $p3lat = $lat - $latdistance;
-                $p4lng = $lng - $lngdistance; $p4lat = $lat + $latdistance;                
+                $p4lng = $lastlng - $lngdistance; $p4lat = $lastlat + $latdistance;
+                $p1lng = $lastlng + $lngdistance; $p1lat = $lastlat - $latdistance;
+                $p2lng = $lng + $lngdistance; $p2lat = $lat - $latdistance;
+                $p3lng = $lng - $lngdistance; $p3lat = $lat + $latdistance;                
             } else if($lat < $lastlat && $lng > $lastlng){
                 $a = atan($lngcha / $latcha) ;
                 $angle = 180 + $a * (180 / pi());
                 $latdistance = $distanceM * sin($a) * $latunit;
                 $lngdistance = $distanceM * cos($a) * $lngunit;
                 
-                $p1lng = $lastlng - $lngdistance; $p1lat = $lastlat - $latdistance;
-                $p2lng = $lastlng + $lngdistance; $p2lat = $lastlat + $latdistance;
-                $p3lng = $lng + $lngdistance; $p3lat = $lat + $latdistance;
-                $p4lng = $lng - $lngdistance; $p4lat = $lat - $latdistance;                
+                $p4lng = $lastlng - $lngdistance; $p4lat = $lastlat - $latdistance;
+                $p1lng = $lastlng + $lngdistance; $p1lat = $lastlat + $latdistance;
+                $p2lng = $lng + $lngdistance; $p2lat = $lat + $latdistance;
+                $p3lng = $lng - $lngdistance; $p3lat = $lat - $latdistance;                
             } else if($lat > $lastlat && $lng > $lastlng){
                 $a = atan($latcha / $lngcha);
                 $angle = 90 + $a * (180 / pi());
                 $lngdistance = $distanceM * sin($a) * $lngunit;
                 $latdistance = $distanceM * cos($a) * $latunit;
                 
-                $p1lng = $lastlng + $lngdistance; $p1lat = $lastlat - $latdistance;
-                $p2lng = $lastlng - $lngdistance; $p2lat = $lastlat + $latdistance;
-                $p3lng = $lng - $lngdistance; $p3lat = $lat + $latdistance;
-                $p4lng = $lng + $lngdistance; $p4lat = $lat - $latdistance;                
+                $p4lng = $lastlng + $lngdistance; $p4lat = $lastlat - $latdistance;
+                $p1lng = $lastlng - $lngdistance; $p1lat = $lastlat + $latdistance;
+                $p2lng = $lng - $lngdistance; $p2lat = $lat + $latdistance;
+                $p3lng = $lng + $lngdistance; $p3lat = $lat - $latdistance;                
             }
             
             if($lat == $lastlat){
                 $latdistance = $distanceM * $latunit;
-                $p1lng = $lastlng; $p1lat = $lastlat - $latdistance;
-                $p2lng = $lastlng; $p2lat = $lastlat + $latdistance; 
-                $p3lng = $lng; $p3lat = $lat + $latdistance;
-                $p4lng = $lng; $p4lat = $lat - $latdistance;
+                $p4lng = $lastlng; $p4lat = $lastlat - $latdistance;
+                $p1lng = $lastlng; $p1lat = $lastlat + $latdistance; 
+                $p2lng = $lng; $p2lat = $lat + $latdistance;
+                $p3lng = $lng; $p3lat = $lat - $latdistance;
                 
                 if($lng > $lastlng){
                     $angle = 90;
@@ -181,10 +204,10 @@ class RoadCoordinateController extends Controller
             
             if($lng == $lastlng){
                 $lngdistance = $distanceM * $lngunit;
-                $p1lng = $lastlng + $lngdistance; $p1lat = $lastlat;
-                $p2lng = $lastlng - $lngdistance; $p2lat = $lastlat;
-                $p3lng = $lng - $lngdistance; $p3lat = $lat;
-                $p4lng = $lng + $lngdistance; $p4lat = $lat;
+                $p4lng = $lastlng + $lngdistance; $p4lat = $lastlat;
+                $p1lng = $lastlng - $lngdistance; $p1lat = $lastlat;
+                $p2lng = $lng - $lngdistance; $p2lat = $lat;
+                $p3lng = $lng + $lngdistance; $p3lat = $lat;
                 
                 if($lat > $lastlat){
                     $angle = 0;
@@ -237,12 +260,20 @@ class RoadCoordinateController extends Controller
         
         $roadid = $request->roadid;
         
+        $roads = Road::where("id", $roadid)
+                ->get();
+        
+        if(count($roads) == 0){
+            return "道路信息不存在！";
+        }        
+        
         $coords = RoadCoordinate::where("roadid", $roadid)
                 ->orderBy("id", "desc")
                 ->get();
         
         return view("/road/showroadcoordinate", [
-            "coords"=>$coords
+            "coords"=>$coords,
+            "road"=>$roads[0]
         ]);
     }
 }

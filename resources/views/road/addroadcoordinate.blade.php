@@ -17,17 +17,17 @@ function submitData(){
 
 </script>
 
-@if(isset($device))
-<h5 class="card-title">道路管理 > 编辑路段</h5>
+@if(isset($coord))
+<h5 class="card-title">道路管理 > 编辑坐标</h5>
 @else
-<h5 class="card-title">道路管理 > 新增路段</h5>
+<h5 class="card-title">道路管理 > 新增坐标</h5>
 @endif
 <hr>
 
 <div class="row">
     <div class="col col-lg-9 mx-auto">
 
-    @if(isset($device))
+    @if(isset($coord))
     <form class="form-horizontal" id="form1" method="post" action="/editroadcoordinatesave">
     @else
     <form class="form-horizontal" id="form1" method="post" action="/addroadcoordinatesave">
@@ -192,7 +192,8 @@ function submitData(){
     var point = new BMapGL.Point(120.315719,36.179238);  // 创建点坐标  
     map.centerAndZoom(point, 18);                 // 初始化地图，设置中心点坐标和地图级别 
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-    
+ 
+ 
 function showRoadOnMap(){
 //    alert($("#latlng1").val());
 //    alert($("#latlng2").val());
@@ -291,8 +292,8 @@ function showRoadOnMap(){
     
     map.clearOverlays();
     var convertor = new BMapGL.Convertor();
-    convertor.translate(points, COORDINATES_GCJ02, COORDINATES_BD09, translateCallback, 100);    
-    convertor.translate(pointsmax, COORDINATES_GCJ02, COORDINATES_BD09, translateCallbackMax, 100);    
+    convertor.translate(points, COORDINATES_WGS84, COORDINATES_BD09, translateCallback, 100);    
+    convertor.translate(pointsmax, COORDINATES_WGS84, COORDINATES_BD09, translateCallbackMax, 100);    
 }
 
     //坐标转换完之后的回调函数
@@ -376,5 +377,7 @@ function getDistances(lat1, lng1, lat2, lng2) {
     }
     return objData;
 }
+
+showRoadOnMap();
 </script>    
 @endsection

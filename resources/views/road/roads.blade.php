@@ -42,7 +42,7 @@
                              <div class="dropdown">
                                 <button class="btn btn-light border-dark border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                 <ul class="dropdown-menu" style="margin: 0px;">
-                                    <li><a class="dropdown-item" href="roadcoordinates?roadid={{$road->id}}">道路坐标维护</a></li>
+                                    <li><a class="dropdown-item" href="showroadcoordinate?roadid={{$road->id}}">道路坐标维护</a></li>
                                     <li><a class="dropdown-item" href="editroad?roaid={{$road->id}}">编辑</a></li>
                                     <li><a class="dropdown-item" href="javascript:confirmDelete({{$road->id}});">删除</a></li>
                                 </ul>
