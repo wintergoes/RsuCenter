@@ -11,6 +11,9 @@ use App\Device;
 use App\UploadFile;
 use App\ObuDevice;
 use App\SysToken;
+use App\Road;
+use App\RoadCoordinate;
+use App\RoadLink;
 
 use DB;
 use Auth;
@@ -702,5 +705,35 @@ class ApiV1Controller extends Controller
         
         $array = array ("retcode" => ret_success, "obu" => $obu, "token"=>$systoken );
         return json_encode ( $array ); 
+    }
+    
+    function obuApiAuth(Request $request){
+        return true;
+    }
+    
+    function getRoadInfo(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }
+        
+        $roads = Road::orderBy("id", "asc")
+                ->select("id", "roadname", "remark")
+                ->get();
+        
+        $roadcoords = RoadCoordinate::orderBy("id", "asc")
+                ->select("id", "coordtype", "roadid", "laneno", "lanetype", 
+                        "lat1", "lng1", "lat2", "lng2", "lat3", "lng3", "lat4", "lng4",
+                        "maxlat", "maxlng", "minlat", "minlng", "lat", "lng",
+                        "angle")
+                ->get();
+        
+        $roadlinks = RoadLink::orderBy("id", "asc")
+               ->select("id", "roadid", "rcid", "linkroadid", "linkrcid", "linktype") 
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "roads"=>$roads, "roadcoords"=>$roadcoords, 
+            "roadlinks"=>$roadlinks);
+        return json_encode($arr);
     }
 }

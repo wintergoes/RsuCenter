@@ -106,6 +106,8 @@ class RoadCoordinateController extends Controller
         $distanceR = $request->rightwidth;  //坐标点右侧路的宽度，米
         
         $latunit = 1/110000; // 每米对应的纬度值 
+        $radianToAngle = 180 / pi(); //弧度转角度
+        $angleToRadian = pi() / 180; //角度转弧度
         
         $lastlat = 0; $lastlng = 0;
         for($i = 1; $i < count($drow); $i++){
@@ -142,15 +144,15 @@ class RoadCoordinateController extends Controller
             }
             
             $angle = 0;
-            $lngunit = 1/(110000 * cos($lat * pi() / 180)); //每米对应的经度值
+            $lngunit = 1/(110000 * cos($lat * $angleToRadian)); //每米对应的经度值
             
-            $lngcha = abs($lng - $lastlng) * cos($lat * pi() / 180);
+            $lngcha = abs($lng - $lastlng) * cos($lat * $angleToRadian);
             $latcha = abs($lat - $lastlat);
             
             $a = 0;
             if($lat > $lastlat && $lng < $lastlng ){
                 $a = atan($lngcha / $latcha) ;
-                $angle = 360 - $a * (180 / pi());
+                $angle = 360 - $a * $radianToAngle;
                 $latdistanceL = $distanceL * sin($a) * $latunit;
                 $lngdistanceL = $distanceL * cos($a) * $lngunit;
                 $latdistanceR = $distanceR * sin($a) * $latunit;
@@ -162,7 +164,7 @@ class RoadCoordinateController extends Controller
                 $p4lng = $lastlng + $lngdistanceR; $p4lat = $lastlat + $latdistanceR;                
             } else if($lat < $lastlat && $lng < $lastlng){
                 $a = atan($latcha / $lngcha) ;
-                $angle = 270 - $a * (180 / pi());
+                $angle = 270 - $a * $radianToAngle;
                 $lngdistanceL = $distanceL * sin($a) * $lngunit;
                 $latdistanceL = $distanceL * cos($a) * $latunit;
                 $lngdistanceR = $distanceL * sin($a) * $lngunit;
@@ -174,7 +176,7 @@ class RoadCoordinateController extends Controller
                 $p4lng = $lastlng - $lngdistanceR; $p4lat = $lastlat + $latdistanceR;
             } else if($lat < $lastlat && $lng > $lastlng){
                 $a = atan($lngcha / $latcha) ;
-                $angle = 180 - $a * (180 / pi());
+                $angle = 180 - $a * $radianToAngle;
                 $latdistanceL = $distanceL * sin($a) * $latunit;
                 $lngdistanceL = $distanceL * cos($a) * $lngunit;
                 $latdistanceR = $distanceR * sin($a) * $latunit;
@@ -186,7 +188,7 @@ class RoadCoordinateController extends Controller
                 $p4lng = $lastlng - $lngdistanceR; $p4lat = $lastlat - $latdistanceR;
             } else if($lat > $lastlat && $lng > $lastlng){
                 $a = atan($latcha / $lngcha);
-                $angle = 90 - $a * (180 / pi());
+                $angle = 90 - $a * $radianToAngle;
                 $lngdistanceL = $distanceL * sin($a) * $lngunit;
                 $latdistanceL = $distanceL * cos($a) * $latunit;
                 $lngdistanceR = $distanceR * sin($a) * $lngunit;

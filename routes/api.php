@@ -40,3 +40,4 @@ Route::any("/rsumgruploadfile", "ApiV1Controller@uploadFile");
 
 //***************************OBU相关*****************************************
 Route::any("/registerobu", "ApiV1Controller@registerObu");
+Route::any("/getroadinfo", 'ApiV1Controller@getRoadInfo');
