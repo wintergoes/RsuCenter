@@ -257,6 +257,7 @@ class RoadCoordinateController extends Controller
             $roadcoord->angle1 = $a ;
             $roadcoord->lat = $lat;
             $roadcoord->lng = $lng;
+            $roadcoord->distance = $this->getDistance($lastlat, $lastlng, $lat, $lng) * 1000;
             $roadcoord->save();
             
             //echo $p1lng . "," . $p1lat . ";" . $p2lng . "," . $p2lat . ";" . $p3lng . "," . $p3lat . ";" . $p4lng . "," . $p4lat . "<br/>";
@@ -272,6 +273,28 @@ class RoadCoordinateController extends Controller
         }
         
         return "导入成功！<a href='showroadcoordinate?roadid=" . $roadid . "'>点击在地图中查看</a>";
+    }
+    
+    /**
+     * @param $lat1
+     * @param $lng1
+     * @param $lat2
+     * @param $lng2
+     * @return int
+     */
+    function getDistance($lat1, $lng1, $lat2, $lng2){
+        // 将角度转为狐度 
+        $radLat1 = deg2rad($lat1);// deg2rad()函数将角度转换为弧度
+        $radLat2 = deg2rad($lat2);
+        $radLng1 = deg2rad($lng1);
+        $radLng2 = deg2rad($lng2);
+
+        $a = $radLat1 - $radLat2;
+        $b = $radLng1 - $radLng2;
+
+        $s = 2 * asin(sqrt(pow(sin($a / 2), 2)+cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6378.137;
+
+        return $s;
     }    
     
     function showRoadCoordinate(Request $request){

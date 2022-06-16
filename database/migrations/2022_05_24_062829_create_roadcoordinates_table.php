@@ -32,6 +32,7 @@ class CreateRoadcoordinatesTable extends Migration
             $table->double("maxlng");
             $table->double("minlng");
             $table->double("angle");
+            $table->double("distance");
             $table->timestamps();
             
             $table-index(["roadid", "laneno", "lanetype"]);
