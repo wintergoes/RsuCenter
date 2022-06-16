@@ -15,6 +15,26 @@
     </div>
 </div>
 
+<div class="row mb-0">
+        <form id="form1" class="form-horizontal" method="get" >
+            {{ csrf_field() }} 
+            <table style="font-size: 12px; text-align: center;" >
+                <tr>                   
+                    <td class="search_td">
+                        <input type="text" class="form-control" id="inputcoord" placeholder="经度,纬度">
+                    </td>                    
+                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="showInputCoord();" class="btn btn-outline-secondary px-1 radius-6">定位点</button></td>
+                    
+                    <td class="search_td">&nbsp;&nbsp;拾取坐标</td>
+                    <td class="search_td">
+                        <input type="text" class="form-control" id="outputcoord" placeholder="">
+                    </td>                    
+                    
+                </tr>
+            </table>
+        </form>
+</div>
+
 <table class="table mb-0 table-borderless " style="width: 100%;">
     <tr>
         <td valign="top">
@@ -34,6 +54,16 @@ map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 var polygons = new Map();
 var bdlabels = new Map();
 var bdmakers = new Map();
+
+var tmplng;
+var tmplat;
+map.addEventListener("rightclick", function(e){
+    tmplng = e.latlng.lng;//经度
+    tmplat = e.latlng.lat;//维度
+//    alert(tmplng + " " + tmplng);
+    
+    document.getElementById('outputcoord').value = tmplng.toFixed(6) + "," + tmplat.toFixed(6);
+});
 
 var rsuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(16, 16));
 @if(count($coords) > 0)
@@ -75,7 +105,7 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         map.addOverlay(polygon);
         polygons.set(id, polygon);
         
-        var content = angle;
+        var content = id;
         var label = new BMapGL.Label(content, {       // 创建文本标注
             position: point,                          // 设置标注的地理位置
             offset: new BMapGL.Size(0, 0)           // 设置标注的偏移量
@@ -182,6 +212,19 @@ function deleteOverlay(id){
     });  
     
        
+}
+
+function showInputCoord(){
+    var inputcoord = $("#inputcoord").val();
+    var latlng = inputcoord.split(",");
+    var point = new BMapGL.Point(latlng[0], latlng[1]);  // 创建点坐标  
+    map.centerAndZoom(point);
+    
+    var inputmarker = new BMapGL.Marker(point, {
+            
+    });
+    // 将标注添加到地图
+    map.addOverlay(inputmarker);
 }
 </script>    
 @endsection

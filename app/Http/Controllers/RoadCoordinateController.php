@@ -264,14 +264,14 @@ class RoadCoordinateController extends Controller
 //                    $p1lng, $p1lat, $p2lng, $p2lat, $p3lng, $p3lat, $p4lng, $p4lat,
 //                    $lat, $lng, $lastlat, $lastlng, $angle));
             
-            print(sprintf("%.6f,%.6f;  %.6f<br/>", 
-                    $latcha, $lngcha, $p2lng));            
+//            print(sprintf("%.6f,%.6f;  %.6f<br/>", 
+//                    $latcha, $lngcha, $p2lng));            
             
             $lastlat = $lat;
             $lastlng = $lng;
         }
         
-        return "导入成功！";
+        return "导入成功！<a href='showroadcoordinate?roadid=" . $roadid . "'>点击在地图中查看</a>";
     }    
     
     function showRoadCoordinate(Request $request){

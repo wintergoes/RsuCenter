@@ -717,19 +717,44 @@ class ApiV1Controller extends Controller
             return json_encode($arr);
         }
         
+        $maxroadid = 0;
+        $maxrcid = 0;
+        $maxroadlinkid = 0;
+        
+        if($request->maxroadid != ""){
+            $maxroadid = $request->maxroadid;
+        }
+        
+        if($request->maxrcid != ""){
+            $maxrcid = $request->maxrcid;
+        }
+        
+        if($request->maxroadlinkid != ""){
+            $maxroadlinkid = $request->maxroadlinkid;
+        }
+        
         $roads = Road::orderBy("id", "asc")
+                ->where("id", ">", $maxroadid)
+                ->where("published", 1)
                 ->select("id", "roadname", "remark")
                 ->get();
         
-        $roadcoords = RoadCoordinate::orderBy("id", "asc")
-                ->select("id", "coordtype", "roadid", "laneno", "lanetype", 
-                        "lat1", "lng1", "lat2", "lng2", "lat3", "lng3", "lat4", "lng4",
-                        "maxlat", "maxlng", "minlat", "minlng", "lat", "lng",
-                        "angle")
+        $roadcoords = RoadCoordinate::orderBy("roadcoordinates.id", "asc")
+                ->where("roadcoordinates.id", ">", $maxrcid)
+                ->where("r.published", 1)
+                ->select("roadcoordinates.id", "roadcoordinates.coordtype", "roadcoordinates.roadid", "roadcoordinates.laneno", "roadcoordinates.lanetype", 
+                        "roadcoordinates.lat1", "roadcoordinates.lng1", "roadcoordinates.lat2", "roadcoordinates.lng2", 
+                        "roadcoordinates.lat3", "roadcoordinates.lng3", "roadcoordinates.lat4", "roadcoordinates.lng4",
+                        "roadcoordinates.maxlat", "roadcoordinates.maxlng", "roadcoordinates.minlat", "roadcoordinates.minlng", "roadcoordinates.lat", "roadcoordinates.lng",
+                        "roadcoordinates.angle")
+                ->leftjoin("roads as r", "r.id", "=", "roadcoordinates.roadid")
                 ->get();
         
-        $roadlinks = RoadLink::orderBy("id", "asc")
-               ->select("id", "roadid", "rcid", "linkroadid", "linkrcid", "linktype") 
+        $roadlinks = RoadLink::orderBy("roadlinks.id", "asc")
+                ->where("roadlinks.id", ">", $maxroadlinkid)
+                ->where("r.published", 1)
+                ->select("roadlinks.id", "roadlinks.roadid", "roadlinks.rcid", "roadlinks.linkroadid", "roadlinks.linkrcid", "roadlinks.linktype") 
+                ->leftjoin("roads as r", "r.id", "=", "roadlinks.roadid")
                 ->get();
         
         $arr = array("retcode"=>ret_success, "roads"=>$roads, "roadcoords"=>$roadcoords, 

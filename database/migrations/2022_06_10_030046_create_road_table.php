@@ -17,6 +17,7 @@ class CreateRoadTable extends Migration
             $table->increments('id');
             $table->string("roadname", 50);
             $table->string("remark", 500);
+            $table->tinyInteger("published")->default(0);
             $table->timestamps();
             
             $table->index(["roadname"]);

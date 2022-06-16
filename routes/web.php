@@ -63,6 +63,8 @@ Route::any("/addroadsave", "RoadController@addRoadSave");
 Route::any("/editroad", "RoadController@editRoad");
 Route::any("/editroadsave", "RoadController@editRoadSave");
 Route::any("/deleteroad", "RoadController@deleteRoad");
+Route::any("/publishroad", "RoadController@publishRoad");
+Route::any("/unpublishroad", "RoadController@unpublishRoad");
 
 //*******************************道路坐标***************************************
 Route::any("/roadcoordinates", "RoadCoordinateController@index");

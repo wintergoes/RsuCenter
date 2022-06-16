@@ -28,6 +28,7 @@
             <table class="table mb-0 table-hover table-bordered" >
                 <thead>
                     <tr role="row">
+                        <th >ID</th>
                         <th >名称</th>
                         <th >备注</th>
                         <th>操作</th>
@@ -36,6 +37,7 @@
                 <tbody>
                     @foreach($roads as $road)
                     <tr>
+                        <td>{{$road->id}}</td>
                         <td>{{$road->roadname}}</td>
                         <td>{{$road->remark == "" ? "-" : $road->remark}}</td>
                         <td>
@@ -43,6 +45,11 @@
                                 <button class="btn btn-light border-dark border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                 <ul class="dropdown-menu" style="margin: 0px;">
                                     <li><a class="dropdown-item" href="showroadcoordinate?roadid={{$road->id}}">道路坐标维护</a></li>
+                                    @if($road->published == 1)
+                                    <li><a class="dropdown-item" href="unpublishroad?roadid={{$road->id}}">取消发布</a></li>
+                                    @else
+                                    <li><a class="dropdown-item" href="publishroad?roadid={{$road->id}}">发布</a></li>
+                                    @endif
                                     <li><a class="dropdown-item" href="editroad?roaid={{$road->id}}">编辑</a></li>
                                     <li><a class="dropdown-item" href="javascript:confirmDelete({{$road->id}});">删除</a></li>
                                 </ul>

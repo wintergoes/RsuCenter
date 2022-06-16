@@ -60,6 +60,30 @@ class RoadController extends Controller
         }
         
         DB::delete("delete from roads where id=" . $request->roadid);
+        DB::delete("delete from roadcoordinates where roadid=" . $request->roadid);
+        DB::delete("delete from roadlinks where roadid=" . $request->roadid);
+        DB::delete("delete from roadlinks where linkroadid=" . $request->roadid);
+        
         return redirect("/roads");
     }
+    
+    function unpublishRoad(Request $request){
+        if($request->roadid == ""){
+            return "缺少参数！";
+        }
+        
+        DB::update("update roads set published=0 where id=" . $request->roadid);
+        
+        return "取消发布成功！";       
+    }
+    
+    function publishRoad(Request $request){
+        if($request->roadid == ""){
+            return "缺少参数！";
+        }
+        
+        DB::update("update roads set published=1 where id=" . $request->roadid);
+        
+        return "发布成功！";
+    }    
 }

@@ -33,7 +33,7 @@
                     <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
             </table>
-        </form>    
+        </form>
 </div>
 
 <style>
