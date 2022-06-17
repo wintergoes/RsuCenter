@@ -22,14 +22,27 @@
                 <tr>                   
                     <td class="search_td">
                         <input type="text" class="form-control" id="inputcoord" placeholder="经度,纬度">
-                    </td>                    
+                    </td> 
+                    <td class="search_td">
+                        <select id="inputcoord_sys" class="form-control">
+                            <option value="0">WGS84</option>
+                            <option value="1">BD0911</option>
+                        </select>
+                    </td> 
                     <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="showInputCoord();" class="btn btn-outline-secondary px-1 radius-6">定位点</button></td>
                     
-                    <td class="search_td">&nbsp;&nbsp;拾取坐标</td>
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拾取坐标</td>
                     <td class="search_td">
                         <input type="text" class="form-control" id="outputcoord" placeholder="">
-                    </td>                    
+                    </td>
                     
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地图类型</td>
+                    <td class="search_td">
+                        <select id="bdmap_type" class="form-control" onchange="onBdmapChange(this);">
+                            <option value="0">街道地图</option>
+                            <option value="1">卫星地图</option>
+                        </select>
+                    </td>                    
                 </tr>
             </table>
         </form>
@@ -51,6 +64,8 @@ var map = new BMapGL.Map("bdmap_container", {
 var point = new BMapGL.Point(116.296286, 39.984241);  // 创建点坐标  
 map.centerAndZoom(point, 13);                 // 初始化地图，设置中心点坐标和地图级别 
 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+
 var polygons = new Map();
 var bdlabels = new Map();
 var bdmakers = new Map();
@@ -166,10 +181,11 @@ function showInfoWindow(lng, lat, id){
     var pt = new BMapGL.Point(lng, lat);   
     var opts = {
         width: 200,
-        height: 60,
+        height: 80,
         title: '坐标信息'
     };
-    var infoText = "<a target='_blank' href='editroadcoordinate?coordid=" + id + "'>编辑坐标</a><br/>" + 
+    var infoText = lng.toFixed(6) + "," + lat.toFixed(6) + "<br/>" +
+            "<a target='_blank' href='editroadcoordinate?coordid=" + id + "'>编辑坐标</a><br/>" + 
             "<a  onclick='deleteOverlay(" + id + ");'>删除坐标</a>"; // 
     let infoWindow = new BMapGL.InfoWindow(infoText, opts);                  
     map.openInfoWindow(infoWindow, pt); // 开启信息窗口    
@@ -210,21 +226,43 @@ function deleteOverlay(id){
                             });  
         }
     });  
-    
-       
 }
 
 function showInputCoord(){
     var inputcoord = $("#inputcoord").val();
     var latlng = inputcoord.split(",");
-    var point = new BMapGL.Point(latlng[0], latlng[1]);  // 创建点坐标  
-    map.centerAndZoom(point);
+    var point = new BMapGL.Point(latlng[0], latlng[1]);  // 创建点坐标 
     
-    var inputmarker = new BMapGL.Marker(point, {
-            
-    });
-    // 将标注添加到地图
-    map.addOverlay(inputmarker);
+    //坐标转换完之后的回调函数
+    dwTranslateCallback = function (data){
+      if(data.status === 0) {
+        var pointConvert = new BMapGL.Point(data.points[0].lng, data.points[0].lat);  // 创建点坐标  
+        map.centerAndZoom(pointConvert, 18);                 // 初始化地图，设置中心点坐标和地图级别           
+        var inputmarker = new BMapGL.Marker(pointConvert, {});
+        // 将标注添加到地图
+        map.addOverlay(inputmarker)  
+      }
+    }       
+    
+    if($("#inputcoord_sys").val() === "0"){
+        var points = [];
+        points.push(point);
+        var convertor = new BMapGL.Convertor();
+        convertor.translate(points, COORDINATES_WGS84, COORDINATES_BD09, dwTranslateCallback, 100);    
+    } else {
+        map.centerAndZoom(point);
+        var inputmarker = new BMapGL.Marker(point, {});
+        // 将标注添加到地图
+        map.addOverlay(inputmarker)        
+    }
+}
+
+function onBdmapChange(obj){
+    if($(obj).val() === "0"){
+        map.setMapType(BMAP_NORMAL_MAP ); 
+    } else {
+        map.setMapType(BMAP_SATELLITE_MAP  ); 
+    }
 }
 </script>    
 @endsection

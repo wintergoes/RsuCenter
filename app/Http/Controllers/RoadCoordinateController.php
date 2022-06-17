@@ -132,6 +132,10 @@ class RoadCoordinateController extends Controller
             
             $lat = $cols[1];
             $lng = $cols[0];
+            $altitude = 0;
+            if(count($cols) > 2){
+                $altitude = $cols[2];
+            }
             
             if($lastlat == 0 || $lastlng == 0 || $lat == 0 || $lng == 0){
                 $lastlat = $lat;
@@ -167,8 +171,8 @@ class RoadCoordinateController extends Controller
                 $angle = 270 - $a * $radianToAngle;
                 $lngdistanceL = $distanceL * sin($a) * $lngunit;
                 $latdistanceL = $distanceL * cos($a) * $latunit;
-                $lngdistanceR = $distanceL * sin($a) * $lngunit;
-                $latdistanceR = $distanceL * cos($a) * $latunit;                
+                $lngdistanceR = $distanceR * sin($a) * $lngunit;
+                $latdistanceR = $distanceR * cos($a) * $latunit;                
                 
                 $p1lng = $lastlng + $lngdistanceL; $p1lat = $lastlat - $latdistanceL;
                 $p2lng = $lng + $lngdistanceL; $p2lat = $lat - $latdistanceL;
@@ -257,6 +261,7 @@ class RoadCoordinateController extends Controller
             $roadcoord->angle1 = $a ;
             $roadcoord->lat = $lat;
             $roadcoord->lng = $lng;
+            $roadcoord->altitude = $altitude;
             $roadcoord->distance = $this->getDistance($lastlat, $lastlng, $lat, $lng) * 1000;
             $roadcoord->save();
             

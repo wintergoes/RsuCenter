@@ -32,6 +32,10 @@ class CreateRoadcoordinatesTable extends Migration
             $table->double("maxlng");
             $table->double("minlng");
             $table->double("angle");
+            $table->double("angle1");
+            $table->double("lng");
+            $table->double("lat");            
+            $table->double("altitude");            
             $table->double("distance");
             $table->timestamps();
             
