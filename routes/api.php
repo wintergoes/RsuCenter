@@ -35,7 +35,7 @@ Route::any("/bdmapjs", "ApiV1Controller@bdmapJs");
 
 Route::any("/rsumgruploadfile", "ApiV1Controller@uploadFile");
 
-
+Route::any("/getmanagers", 'ApiV1Controller@getManagers');
 
 
 //***************************OBU相关*****************************************

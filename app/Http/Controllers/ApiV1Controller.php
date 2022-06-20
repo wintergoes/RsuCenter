@@ -711,6 +711,27 @@ class ApiV1Controller extends Controller
         return true;
     }
     
+    function getManagers(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }        
+        
+        $users = User::orderBy("users.id", "desc")
+                ->select("users.id", "users.username", "users.realname")
+                ->leftjoin("usergroups as ug", "users.usergroup", "=", "ug.id")
+                ->where("users.username", "<>", "admin");
+        if($request->usergroupname != ""){
+            $users = $users->where("ug.groupname", $request->usergroupname);
+        } else {
+            
+        }
+        $users = $users->get();
+        
+        $arr = array("retcode"=>ret_success, "users"=>$users);
+        return json_encode($arr);
+    }
+    
     function getRoadInfo(Request $request){
         if($this->obuApiAuth($request) === false){
             $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
