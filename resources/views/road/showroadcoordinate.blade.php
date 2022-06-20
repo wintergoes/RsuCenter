@@ -36,6 +36,12 @@
                     <td class="search_td">
                         <input type="text" class="form-control" id="outputcoord" placeholder="">
                     </td>
+                    <td class="search_td">
+                        <select id="getcoord_sys" class="form-control">
+                            <option value="0">WGS84</option>
+                            <option value="1" selected>BD0911</option>
+                        </select>
+                    </td>
                     
                     <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地图类型</td>
                     <td class="search_td">
@@ -66,19 +72,30 @@ var point = new BMapGL.Point(116.296286, 39.984241);  // 创建点坐标
 map.centerAndZoom(point, 13);                 // 初始化地图，设置中心点坐标和地图级别 
 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
-
 var polygons = new Map();
 var bdlabels = new Map();
 var bdmakers = new Map();
 
 var tmplng;
 var tmplat;
+var getcoordMarker;
 map.addEventListener("rightclick", function(e){
     tmplng = e.latlng.lng;//经度
     tmplat = e.latlng.lat;//维度
 //    alert(tmplng + " " + tmplng);
-    
-    document.getElementById('outputcoord').value = tmplng.toFixed(6) + "," + tmplat.toFixed(6);
+    var pt = new BMapGL.Point(tmplng, tmplat);
+    map.removeOverlay(getcoordMarker);
+    getcoordMarker = new BMapGL.Marker(pt, {});
+    // 将标注添加到地图
+    map.addOverlay(getcoordMarker); 
+
+    if($("#getcoord_sys").val() === "0"){
+        var latlng = coordtransform.bd09togcj02(tmplng, tmplat);
+        latlng = coordtransform.gcj02towgs84(latlng[0], latlng[1]);
+        document.getElementById('outputcoord').value = latlng[0].toFixed(6) + "," + latlng[1].toFixed(6); 
+    } else {
+        document.getElementById('outputcoord').value = tmplng.toFixed(6) + "," + tmplat.toFixed(6);        
+    }    
 });
 
 var rsuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(16, 16));
@@ -166,7 +183,6 @@ translateCallback = function (data){
     }
   }
 }
-
 
 function addPoint(lat, lng){
     let pt = new BMapGL.Point(lng, lat);

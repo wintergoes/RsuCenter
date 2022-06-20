@@ -2,7 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs"></script>
-
+<script type="text/javascript" src="js/coordtransform.js"></script>
 
 <script>
 function submitData(){
@@ -26,6 +26,8 @@ function getPosition(flag){
     getPosFlag = flag;
     document.getElementById("bdmap_row").style.visibility = 'visible';
     document.getElementById("bdmap_row").style.display = '';
+    document.getElementById("bdmap_ctrl_row").style.visibility = 'visible';
+    document.getElementById("bdmap_ctrl_row").style.display = '';    
 }
 </script>
 
@@ -84,6 +86,35 @@ function getPosition(flag){
                 <input type="button" class="form-control" onclick="getPosition(0);" value="拾取"></button>
             </div>            
         </div>
+        
+        @if(isset($winfo))
+        <div class="row mb-3"  id="startExtraInfo">
+            <label for="realname" class="col-sm-2 col-form-label"></label>
+            @if(count($roadsStart) == 0)
+            <div class="col-sm-5" id="startExtraInfoContent"><font color="red">此坐标没有在任何路段上。</font></div>
+            @else
+            <div class="col-sm-5" id="startExtraInfoContent">
+                <ul>
+                    @foreach($roadsStart as $road)
+                    <li>{{$road->roadname}}
+                    @if($road->lanetype == 0)
+                    ，全车道
+                    @else
+                    ，{{$road->laneno}}车道
+                    @endif
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>      
+        @else
+        <div class="row mb-3" style="visibility: hidden; display: none;" id="startExtraInfo">
+            <label for="realname" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-5" id="startExtraInfoContent">
+            </div>
+        </div>           
+        @endif
 
         <div class="row mb-3">
             <label for="mobile" class="col-sm-2 col-form-label">终止坐标</label>
@@ -108,19 +139,56 @@ function getPosition(flag){
             </div>             
         </div>   
         
+        @if(isset($winfo))
+       <div class="row mb-3"  id="endExtraInfo">
+            <label for="realname" class="col-sm-2 col-form-label"></label>
+            @if(count($roadsEnd) == 0)
+            <div class="col-sm-5" id="endExtraInfoContent"><font color="red">此坐标没有在任何路段上。</font></div>
+            @else
+            <div class="col-sm-5" id="endExtraInfoContent">
+                <ul>
+                    @foreach($roadsEnd as $road)
+                    <li>{{$road->roadname}}
+                    @if($road->lanetype == 0)
+                    ，全车道
+                    @else
+                    ，{{$road->laneno}}车道
+                    @endif
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>   
+        @else
+        <div class="row mb-3" style="visibility: hidden; display: none;" id="endExtraInfo">
+            <label for="realname" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-5" id="endExtraInfoContent">
+            </div>
+        </div>        
+        @endif        
+        
         <div class="row mb-3">
             <label for="wistatus" class="col-sm-2 col-form-label">状态</label>
             <div class="col-sm-2">
-                <select name="wistatus" class="form-select"  >
-                    <option class="form-control" value="1" {{$winfo->wistatus == 1 ? "selected" : ""}}>有效</option>
-                    <option class="form-control" value="0" {{$winfo->wistatus == 0 ? "selected" : ""}}>无效</option>
+                <select name="wistatus" class="form-select">
+                    <option class="form-control" value="1" {{isset($winfo) && $winfo->wistatus == 1 ? "selected" : ""}}>有效</option>
+                    <option class="form-control" value="0" {{isset($winfo) && $winfo->wistatus == 0 ? "selected" : ""}}>无效</option>
                 </select>
             </div>           
         </div>
         
+        <div class="row mb-3" style="visibility: hidden; display: none;" id="bdmap_ctrl_row">
+            <div >
+                <select id="bdmap_type" onchange="onBdmapChange(this);">
+                    <option value="0">街道地图</option>
+                    <option value="1">卫星地图</option>
+                </select>                
+            </div>            
+        </div>
+        
         <div class="row mb-3" style="visibility: hidden; height: 500px; display: none;" id="bdmap_row">
-            <div class="col-sm-12" id="bdmap_container">
-            </div>           
+            <div class="col-sm-12" id="bdmap_container"></div>           
         </div>         
 
         <div class="row mb-3">
@@ -150,7 +218,11 @@ var tmplat;
 map.addEventListener("rightclick", function(e){
     tmplng = e.point.lng;//经度
     tmplat = e.point.lat;//维度
-    //alert(tmplng + " " + tmplng);
+    
+    var latlng = coordtransform.bd09togcj02(tmplng, tmplat);
+    latlng = coordtransform.gcj02towgs84(latlng[0], latlng[1]);
+    tmplng = latlng[0];
+    tmplat = latlng[1];
     
     if(getPosFlag === 0){
         document.getElementById('startlat').value = tmplat.toFixed(6);
@@ -161,13 +233,54 @@ map.addEventListener("rightclick", function(e){
     }
     
     document.getElementById("bdmap_row").style.visibility = 'hidden';
-    document.getElementById("bdmap_row").style.display = 'none';    
+    document.getElementById("bdmap_row").style.display = 'none'; 
+    document.getElementById("bdmap_ctrl_row").style.visibility = 'hidden';
+    document.getElementById("bdmap_ctrl_row").style.display = 'none'; 
 
-    if(e.overlay){//判断右键单击的是否是marker    
-
-    }else{
-        //RightClickMap(s,w);//右键单击map出现右键菜单事件
-    }
+    $.ajax({
+        type: "GET",
+        url: "getroadsbycoord?lat=" + latlng[1] + "&lng=" + latlng[0] + "&extrainfo=" + getPosFlag,
+        dataType: "json",
+        success: function (data) { 
+            var addHtml = "";
+            if(data.roads.length === 0){
+                addHtml = "<font color='red'>此坐标未在任何路段上。</font>";
+            } else {
+                addHtml = "<div>此坐标可能在以下路段上：</div><ul>";
+                for(i = 0; i < data.roads.length; i++){
+                    addHtml += "<li>" + data.roads[i].roadname; 
+                    if(data.roads[i].lanetype === 1){
+                        addHtml += "，第" + data.roads[i].laneno + "车道";
+                    } else {
+                        addHtml += "，全车道";
+                    }
+                    addHtml += "</li>";
+                }       
+                addHtml += "</ul>";
+            }                       
+            
+            if(data.extrainfo === "0"){
+                document.getElementById("startExtraInfo").style.visibility = "visible";
+                document.getElementById("startExtraInfo").style.display = "";
+                $("#startExtraInfoContent").html(addHtml);
+            } else {
+                document.getElementById("endExtraInfo").style.visibility = "visible";
+                document.getElementById("endExtraInfo").style.display = "";
+                $("#endExtraInfoContent").html(addHtml);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            
+        }
+    });  
 });
+
+function onBdmapChange(obj){
+    if($(obj).val() === "0"){
+        map.setMapType(BMAP_NORMAL_MAP ); 
+    } else {
+        map.setMapType(BMAP_SATELLITE_MAP  ); 
+    }
+}
 </script>    
 @endsection

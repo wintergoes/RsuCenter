@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\WarningInfo;
 use App\User;
+use App\RoadCoordinate;
+use App\Road;
 
 use Auth;
 use DB;
@@ -68,9 +70,30 @@ class WarningInfoController extends Controller
         if(count($winfos) == 0){
             return "预警信息不存在！";
         }
+        $winfo = $winfos[0];
+        
+        $roadsStart = RoadCoordinate::where("roadcoordinates.minlat", "<", $winfo->startlat)
+                ->where("roadcoordinates.maxlat", ">", $winfo->startlat)
+                ->where("roadcoordinates.minlng", "<", $winfo->startlng)
+                ->where("roadcoordinates.maxlng", ">", $winfo->startlng)               
+                ->select("r.roadname", "roadcoordinates.lanetype", "roadcoordinates.laneno")
+                ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")
+                ->distinct()
+                ->get();        
+        
+        $roadsEnd = RoadCoordinate::where("roadcoordinates.minlat", "<", $winfo->stoplat)
+                ->where("roadcoordinates.maxlat", ">", $winfo->stoplat)
+                ->where("roadcoordinates.minlng", "<", $winfo->stoplng)
+                ->where("roadcoordinates.maxlng", ">", $winfo->stoplng)               
+                ->select("r.roadname", "roadcoordinates.lanetype", "roadcoordinates.laneno")
+                ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")
+                ->distinct()
+                ->get();                
         
         return view("/road/addwarninginfo", [
-           "winfo"=>$winfos[0] 
+            "winfo"=>$winfo,
+            "roadsStart"=>$roadsStart,
+            "roadsEnd"=>$roadsEnd
         ]);
     }
 

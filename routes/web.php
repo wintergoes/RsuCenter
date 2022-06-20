@@ -98,6 +98,7 @@ Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
+Route::any("/getroadsbycoord", "ManagerApiController@getRoadsByCoord");
 
 //***************************测试相关*****************************************
 Route::any("importgps2directiondatasave", "test\Gps2DirctionController@importDataSave");
