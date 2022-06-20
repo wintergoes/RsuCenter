@@ -325,4 +325,53 @@ class RoadCoordinateController extends Controller
             "road"=>$roads[0]
         ]);
     }
+    
+    function exportRoadCoordinate(Request $request){
+        if($request->roadid == ""){
+            return "缺少参数！";
+        }
+        
+        $roadid = $request->roadid;
+        
+        $roads = Road::where("id", $roadid)
+                ->get();
+        
+        if(count($roads) == 0){
+            return "道路信息不存在！";
+        }         
+        
+        $coords = RoadCoordinate::where("roadid", $roadid)
+                ->orderBy("lanetype", "asc")
+                ->orderBy("laneno", "asc")
+                ->orderBy("id", "asc")
+                ->get();
+        
+        if(count($coords) == 0){
+            return "无坐标数据！";
+        }
+        
+        $exportpath = "temp/" ;
+        if(!is_dir($exportpath)){
+            mkdir($exportpath, 0777, true);
+        }
+        $showtime=date("[Ymd_His]");
+        $exportfilename =  iconv("UTF-8", "GBK", $exportpath . $roads[0]->roadname . $showtime . '.csv');
+
+//        $contentssrc = "区名称,街道名称,社区名称,居民名称,积分卡号,微信昵称,电话,垃圾类型,"
+//            . "商品名称" . "," . "重量/斤" . ",";
+
+        foreach($coords as $coord){
+            $datasrc = $coord->coordtype . "," . $coord->lanetype . "," . $coord->laneno . "," . 
+                    sprintf("%.6f", $coord->lng1) . "," . sprintf("%.6f", $coord->lat1) . "," . sprintf("%.6f", $coord->lng2) . "," . sprintf("%.6f", $coord->lat2) . "," . 
+                    sprintf("%.6f", $coord->lng3) . "," . sprintf("%.6f", $coord->lat3) . "," . sprintf("%.6f", $coord->lng4) . "," . sprintf("%.6f", $coord->lat4) . "," . 
+                    sprintf("%.6f", $coord->maxlng) . "," . sprintf("%.6f", $coord->maxlat) . "," . sprintf("%.6f", $coord->minlng) . "," . sprintf("%.6f", $coord->minlat) . "," . 
+                    sprintf("%.6f", $coord->lng) . "," . sprintf("%.6f", $coord->lat) . "," . sprintf("%.6f", $coord->altitude) . "," . $coord->angle . "," . 
+                    $coord->distance . "\n";
+
+            $contents = iconv("UTF-8", "GBK//IGNORE", $datasrc);
+            file_put_contents($exportfilename, $contents, FILE_APPEND);
+        }
+
+        return redirect($exportfilename);        
+    }
 }
