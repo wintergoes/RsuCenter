@@ -15,10 +15,16 @@ class CreateOburoutedetailTable extends Migration
     {
         Schema::create('oburoutedetails', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("routeid");
+            $table->integer("routeid")->default(0);
+            $table->integer("obuid")->default(0);
+            $table->integer("managerid")->default(0);            
             $table->double("lat")->default(0);
             $table->double("lng")->default(0);
+            $table->double("altitude")->default(0);
+            $table->tinyInteger("locationtype");
             $table->timestamps();
+            
+            $table->index(["routeid", "obuid", "managerid", "locationtype"]);
         });
     }
 

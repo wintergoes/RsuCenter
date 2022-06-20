@@ -14,6 +14,7 @@ use App\SysToken;
 use App\Road;
 use App\RoadCoordinate;
 use App\RoadLink;
+use App\ObuRouteDetail;
 
 use DB;
 use Auth;
@@ -729,6 +730,35 @@ class ApiV1Controller extends Controller
         $users = $users->get();
         
         $arr = array("retcode"=>ret_success, "users"=>$users);
+        return json_encode($arr);
+    }
+    
+    function uploadLocations(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }
+
+        $localids = "";
+        $locs = json_decode($request->locjson);
+        foreach($locs as $loc){
+            $oburoutedetail = new ObuRouteDetail();
+            $oburoutedetail->obuid = $request->obuid;
+            $oburoutedetail->lat = $loc->lat;
+            $oburoutedetail->lng = $loc->lng;
+            $oburoutedetail->altitude = $loc->altitude;
+            $oburoutedetail->locationtype = $loc->locationtype;
+            $oburoutedetail->created_at = strtotime($loc->ctime);
+            $oburoutedetail->save();
+            
+            if($localids == ""){
+                $localids = $loc->id;
+            } else {
+                $localids .= "," . $loc->id;
+            }
+        }
+        
+        $arr = array("retcode"=>ret_success, "localids"=>$localids);
         return json_encode($arr);
     }
     

@@ -15,7 +15,9 @@ class CreateOburouteTable extends Migration
     {
         Schema::create('oburoutes', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("rid", "20")->default("");
+            $table->string("routename", "50")->default("");
+            $table->integer("obuid")->default(0);
+            $table->integer("managerid")->default(0);
             $table->double("startlat")->default(0);
             $table->double("startlng")->default(0);
             $table->string("startaddr", 50)->default("");
@@ -24,7 +26,7 @@ class CreateOburouteTable extends Migration
             $table->string("stopaddr", 50)->default("");
             $table->timestamps();
             
-            $table->index(["id", "rid"]);
+            $table->index(["id", "obuid", "managerid"]);
         });
     }
 
