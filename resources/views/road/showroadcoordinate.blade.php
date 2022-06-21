@@ -49,7 +49,11 @@
                             <option value="0">街道地图</option>
                             <option value="1">卫星地图</option>
                         </select>
-                    </td>                    
+                    </td> 
+                    
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroadcoordinate?roadid={{$road->id}}&showid=1">显示id</a></td>
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroadcoordinate?roadid={{$road->id}}&showangle=1">显示角度</a></td>
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroadcoordinate?roadid={{$road->id}}">不显示标注</a></td>
                 </tr>
             </table>
         </form>
@@ -138,7 +142,14 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         map.addOverlay(polygon);
         polygons.set(id, polygon);
         
-        var content = id;
+        var content = "";
+        if(getUrlParam("showid") === "1"){
+            content = id;
+        }
+        
+        if(getUrlParam("showangle") === "1"){
+            content = angle;
+        }
         var label = new BMapGL.Label(content, {       // 创建文本标注
             position: point,                          // 设置标注的地理位置
             offset: new BMapGL.Size(0, 0)           // 设置标注的偏移量
@@ -280,6 +291,18 @@ function onBdmapChange(obj){
     } else {
         map.setMapType(BMAP_SATELLITE_MAP  ); 
     }
+}
+
+function getUrlParam(name) {
+    //构造一个含有目标参数的正则表达式对象
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    //匹配目标参数
+    var r = window.location.search.substr(1).match(reg);
+    //返回参数值
+    if(r != null) {
+        return decodeURI(r[2]);
+    }
+    return null;    
 }
 </script>    
 @endsection

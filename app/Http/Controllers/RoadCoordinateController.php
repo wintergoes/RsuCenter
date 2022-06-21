@@ -277,7 +277,7 @@ class RoadCoordinateController extends Controller
             $lastlng = $lng;
         }
         
-        return "导入成功！<a href='showroadcoordinate?roadid=" . $roadid . "'>点击在地图中查看</a>";
+        return "导入成功！　　<a href='importroadcoordinate?roadid=" . $roadid . "'>继续导入</a>　　<a href='showroadcoordinate?roadid=" . $roadid . "'>点击在地图中查看</a>";
     }
     
     /**
