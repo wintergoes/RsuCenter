@@ -687,7 +687,11 @@ class ApiV1Controller extends Controller
         
 //        echo count($obus);
         if(count($obus) > 0){
-            $array = array ("retcode" => ret_error, "retmsg" => "设备已注册！" );
+            $tokens = SysToken::where("relatedid", $obus[0]->id)
+                    ->where("tokentype", token_obu_local)
+                    ->get();
+            
+            $array = array ("retcode" => ret_success, "obu" => $obus[0], "token"=>$tokens[0], "firstreg"=>"0");
             return json_encode ( $array );
         }
         
@@ -704,7 +708,7 @@ class ApiV1Controller extends Controller
         $systoken->tokenvalue = $this->create_uuid();
         $systoken->save();
         
-        $array = array ("retcode" => ret_success, "obu" => $obu, "token"=>$systoken );
+        $array = array ("retcode" => ret_success, "obu" => $obu, "token"=>$systoken, "firstreg"=>"1");
         return json_encode ( $array ); 
     }
     
