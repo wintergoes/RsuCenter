@@ -776,9 +776,9 @@ class ApiV1Controller extends Controller
         $maxrcid = 0;
         $maxroadlinkid = 0;
         
-        if($request->maxroadid != ""){
-            $maxroadid = $request->maxroadid;
-        }
+//        if($request->maxroadid != ""){
+//            $maxroadid = $request->maxroadid;
+//        }
         
         if($request->maxrcid != ""){
             $maxrcid = $request->maxrcid;
@@ -789,7 +789,6 @@ class ApiV1Controller extends Controller
         }
         
         $roads = Road::orderBy("id", "asc")
-                ->where("id", ">", $maxroadid)
                 ->where("published", 1)
                 ->select("id", "roadname", "remark")
                 ->get();
