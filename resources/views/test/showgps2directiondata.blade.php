@@ -2,7 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>
-
+<script type="text/javascript" src="js/coordtransform.js"></script>
 
 <table class="table mb-0 table-borderless " style="width: 100%;">
     <tr>
@@ -44,23 +44,27 @@ var rsuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size
 ?>
 @foreach($gpsdatas as $gps)
 @if($pindex % 10 == 1 || $pindex == count($gpsdatas))
-    @if($pindex != 1)
-        @if($pindex == count($gpsdatas))
-        points{{$parrayindex}}.push(new BMapGL.Point({{$gps->lng}}, {{$gps->lat}}));    
-        @endif
-    setTimeout(function(){
-        var convertor = new BMapGL.Convertor();
-        convertor.translate(points{{$parrayindex}}, COORDINATES_WGS84, COORDINATES_BD09, translateCallback)
-    }, 1000);
-    @endif
+//    @if($pindex != 1)
+//        @if($pindex == count($gpsdatas))
+//        points{{$parrayindex}}.push(new BMapGL.Point({{$gps->lng}}, {{$gps->lat}}));    
+//        @endif
+//    setTimeout(function(){
+//        var convertor = new BMapGL.Convertor();
+//        convertor.translate(points{{$parrayindex}}, COORDINATES_WGS84, COORDINATES_BD09, translateCallback)
+//    }, 1000);
+//    @endif
 <?php 
     $parrayindex++;
 ?>    
 var points{{$parrayindex}}=[];    
 @endif
 
-points{{$parrayindex}}.push(new BMapGL.Point({{$gps->lng}}, {{$gps->lat}}));
+//points{{$parrayindex}}.push(new BMapGL.Point({{$gps->lng}}, {{$gps->lat}}));
 
+
+        var latlng = coordtransform.wgs84togcj02({{$gps->lng}}, {{$gps->lat}});
+        latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1])
+        addPoint(latlng[1], latlng[0]);
 <?php $pindex++; ?>
 @endforeach
 @endif
