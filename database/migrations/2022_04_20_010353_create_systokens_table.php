@@ -23,8 +23,22 @@ class CreateSystokensTable extends Migration
             
             $table->index(["tokentype", "relatedid"]);
         });
+        
+        $insertstr = 'insert into systokens(tokentype, relatedid, tokenvalue, created_at)';
+        $insertstr .= 'values(?, ?, ?, NOW())';
+        DB::insert($insertstr, ['2', '1', $this->create_uuid()]);        
     }
 
+    public static function create_uuid($prefix=""){
+        $chars = md5(uniqid(mt_rand(), true));
+        $uuid = substr ( $chars, 0, 8 )
+            . substr ( $chars, 8, 4 ) 
+            . substr ( $chars, 12, 4 )
+            . substr ( $chars, 16, 4 )
+            . substr ( $chars, 20, 12 );
+        return $prefix.$uuid ;
+    }     
+    
     /**
      * Reverse the migrations.
      *

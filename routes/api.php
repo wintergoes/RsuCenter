@@ -38,7 +38,8 @@ Route::any("/rsumgruploadfile", "ApiV1Controller@uploadFile");
 Route::any("/getmanagers", 'ApiV1Controller@getManagers');
 Route::any("/uploadlocations", 'ApiV1Controller@uploadLocations');
 
-
+Route::any("/clientclockin", 'ApiV1Controller@clientClockIn');
+Route::any("/getclockinhistory", 'ApiV1Controller@getClockInHistory');
 //***************************OBU相关*****************************************
 Route::any("/registerobu", "ApiV1Controller@registerObu");
 Route::any("/getroadinfo", 'ApiV1Controller@getRoadInfo');

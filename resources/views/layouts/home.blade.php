@@ -95,6 +95,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
                                             <li > <a href="warninginfostat"><i class="bx bx-right-arrow-alt" ></i>预警信息统计</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU风险规避统计</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>车辆运行统计</a></li>
+                                            <li > <a href="clockins"><i class="bx bx-right-arrow-alt" ></i>考勤打卡</a></li>
 					</ul>
 				</li>
                                 

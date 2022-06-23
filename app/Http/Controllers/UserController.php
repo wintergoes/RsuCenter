@@ -9,11 +9,13 @@ use App\Http\Requests;
 
 use App\User;
 use App\UserGroup;
+use App\SysToken;
+
+require_once '../app/Constant.php';
 
 use DB;
 use Auth;
 use Cache;
-
 
 class UserController extends Controller
 {   
@@ -23,7 +25,6 @@ class UserController extends Controller
     }
     
     public function index(Request $request){
-        
         $users = User::orderBy('users.created_at', 'asc')
                 ->select('users.id',  'users.username', 'users.realname', 'users.mobile', 'users.created_at',
                         'ug.groupname')
@@ -37,7 +38,6 @@ class UserController extends Controller
         ]);
     }
     
-    
     public function addUser(Request $request){
         $usergroups  = UserGroup::orderBy("id", "desc")
                 ->select("id", "groupname")
@@ -48,7 +48,6 @@ class UserController extends Controller
         ]);
     }
 
-    
     public function addUserSave(Request $request){
         $this->validate($request, [
             'username' => 'required|unique:users,username'
@@ -62,6 +61,12 @@ class UserController extends Controller
         $user->mobile = $request->mobile;
         $user->save();
         
+        $systoken = new SysToken();
+        $systoken->tokentype = token_usertoken_on_obu;
+        $systoken->relatedid = $user->id;
+        $systoken->tokenvalue = $this->create_uuid();
+        $systoken->save();
+        
         return view('/other/simplemessage', [
             'simplemessage'=>"新建用户成功，默认登录密码为A625KZxh，请用户登录后修改密码！",
             'backurl1'=>'/users',
@@ -69,7 +74,17 @@ class UserController extends Controller
         ]);
     }
     
-   public function editUser(Request $request){
+    public static function create_uuid($prefix=""){
+        $chars = md5(uniqid(mt_rand(), true));
+        $uuid = substr ( $chars, 0, 8 )
+            . substr ( $chars, 8, 4 ) 
+            . substr ( $chars, 12, 4 )
+            . substr ( $chars, 16, 4 )
+            . substr ( $chars, 20, 12 );
+        return $prefix.$uuid ;
+    }    
+    
+    public function editUser(Request $request){
        $userid = $request->userid;
        
        if($userid == ""){

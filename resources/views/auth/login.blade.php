@@ -74,7 +74,7 @@ function KeyDown()
 									</div>
                 <div class="tip" style="color: red;">
                     @include('common.errors')   
-                </div>                                                                    
+                </div>
 									<div class="form-body">
 										<form class="row g-3">
 											<div class="col-12 mb-4">

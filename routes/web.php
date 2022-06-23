@@ -54,7 +54,10 @@ Route::any('/addwarninginfosave', "WarningInfoController@addWarningInfoSave");
 Route::any('/editwarninginfo', "WarningInfoController@editWarningInfo");
 Route::any('/editwarninginfosave', "WarningInfoController@editWarningInfoSave");
 Route::any('/deletewarninginfo', "WarningInfoController@deleteWarningInfo");
+
+//*******************************统计分析***************************************
 Route::any('/warninginfostat', "WarningInfoController@warningInfoStat");
+Route::any('/clockins', "ClockInController@index");
 
 //*******************************道路管理***************************************
 Route::any("/roads", "RoadController@index");

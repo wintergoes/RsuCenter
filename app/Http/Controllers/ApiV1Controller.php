@@ -15,6 +15,7 @@ use App\Road;
 use App\RoadCoordinate;
 use App\RoadLink;
 use App\ObuRouteDetail;
+use App\ClockIn;
 
 use DB;
 use Auth;
@@ -356,7 +357,12 @@ class ApiV1Controller extends Controller
     function clientLogin(Request $request){
         if(Auth::once(['username' => $request->username, 'password' => $request->password])){
             $users = User::where('username', $request->username)
-                     ->get();
+                    ->select("users.id", "users.username", "users.realname", "st.tokenvalue")
+                    ->leftjoin("systokens as st", function ($join) {
+                            $join->on('st.relatedid', '=', 'users.id')
+                                ->where('st.tokentype', '=', token_usertoken_on_obu);
+                            })
+                    ->get();
 
             if(count($users) > 0){
                 $user = $users[0];
@@ -813,6 +819,46 @@ class ApiV1Controller extends Controller
         
         $arr = array("retcode"=>ret_success, "roads"=>$roads, "roadcoords"=>$roadcoords, 
             "roadlinks"=>$roadlinks);
+        return json_encode($arr);
+    }
+    
+    function userApiAuth(Request $request){
+        return true;
+    }
+    
+    function clientClockIn(Request $request){
+        if($this->userApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);            
+        }
+        
+        $clockin = new ClockIn();
+        $clockin->userid = $request->userid;
+        $clockin->citype = $request->citype;
+        if($request->obuid != ""){
+            $clockin->relatedid = $request->obuid;
+        }
+        $clockin->cilat = $request->cilat;
+        $clockin->cilng = $request->cilng;
+        $clockin->cialt = $request->cialt;
+        $clockin->save();
+        
+        $arr = array("retcode"=>ret_success, "clockin"=>$clockin);
+        return json_encode($arr);
+    }
+    
+    function getClockInHistory(Request $request){
+        if($this->userApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);            
+        }        
+        
+        $clockins = ClockIn::orderBy("id", "asc")
+                ->select("userid", "citype", "relatedid", "cilat", "cilng", "created_at")
+                ->where("userid", $request->userid)
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "clockins"=>$clockins);
         return json_encode($arr);
     }
 }

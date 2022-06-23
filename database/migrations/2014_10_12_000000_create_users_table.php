@@ -22,12 +22,14 @@ class CreateUsersTable extends Migration
             $table->string('mobile', 15)->default("");
             $table->rememberToken();
             $table->timestamps();
+            
+            $table->index(["username", "usergroup"]);
         });
         
         $insertstr = 'insert into users (username, ';
         $insertstr .= 'uemail,  password, created_at) values (?, ?, ?, NOW() )';
         
-        DB::insert($insertstr, ['admin', '',  bcrypt('admin')]);          
+        DB::insert($insertstr, ['admin', '',  bcrypt('admin')]);      
     }
 
     /**
