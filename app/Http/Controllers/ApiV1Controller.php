@@ -331,6 +331,39 @@ class ApiV1Controller extends Controller
         return json_encode($arr);
     }
     
+    function getObuServerConfig(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }        
+        
+        $clockin_on_start = env("clockin_on_start") ;
+        if($clockin_on_start == ""){
+            $clockin_on_start = "0700";
+        }
+        
+        $clockin_on_end = env("clockin_on_end") ;
+        if($clockin_on_end == ""){
+            $clockin_on_end = "0900";
+        }
+        
+        $clockin_off_start = env("clockin_off_start") ;
+        if($clockin_off_start == ""){
+            $clockin_off_start = "1700";
+        }
+        
+        $clockin_off_end = env("clockin_off_end") ;
+        if($clockin_off_end == ""){
+            $clockin_off_end = "2359";
+        }
+ 
+        $arr = array("retcode"=>ret_success, "clockin_on_start"=>$clockin_on_start,
+            "clockin_on_end"=>$clockin_on_end, "clockin_off_start"=>$clockin_off_start,
+            "clockin_off_end"=>$clockin_off_end);
+ 
+        return json_encode($arr);
+    }    
+    
     function checkUpdate(Request $request){
         if($request->appKey == "cn.chibc.v2xapp"){
             $newapkfile = "update/v2xapp/v2x_release_1.0_vc1.apk";
@@ -851,12 +884,27 @@ class ApiV1Controller extends Controller
         if($this->userApiAuth($request) === false){
             $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
             return json_encode($arr);            
-        }        
+        }
         
-        $clockins = ClockIn::orderBy("id", "asc")
-                ->select("userid", "citype", "relatedid", "cilat", "cilng", "created_at")
-                ->where("userid", $request->userid)
-                ->get();
+        //select min(created_at),userid from clockins as sb where citype=1 group by date(created_at),userid;
+        //select max(created_at),userid from clockins as xb where citype=2 group by date(created_at),userid;
+        
+//        $clockins = ClockIn::orderBy("id", "asc")
+//                ->select("userid", "citype", "relatedid", "cilat", "cilng", "created_at")
+//                ->where("userid", $request->userid)
+//                ->get();
+        
+        $sqlstr = "select c.clockindate,c.userid,sb.sbtime,xb.xbtime from (select distinct(date(created_at)) as clockindate,userid from clockins) as c "
+                . " left join (select min(created_at) sbtime,  userid as sbuserid from clockins where citype=1 group by date(created_at),userid) as sb on date(sb.sbtime)=c.clockindate and sb.sbuserid=c.userid "
+                . " left join (select max(created_at) as xbtime,userid as xbuserid from clockins where citype=2 group by date(created_at), userid ) as xb on date(xb.xbtime)=c.clockindate and xb.xbuserid=c.userid ";
+        
+        if($request->userid != ""){
+            $sqlstr .= " where c.userid=" . $request->userid;
+        }
+        
+        $sqlstr .= " order by c.clockindate desc, c.userid; ";
+        
+        $clockins = DB::select($sqlstr);
         
         $arr = array("retcode"=>ret_success, "clockins"=>$clockins);
         return json_encode($arr);
