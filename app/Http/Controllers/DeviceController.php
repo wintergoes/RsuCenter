@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Device;
 
 class DeviceController extends Controller{
-   public function __construct(){
+    public function __construct(){
         $this->middleware('auth');
     }
     

@@ -12,6 +12,10 @@ use DB;
 
 class ClockInController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }    
+    
     function index(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
