@@ -34,7 +34,8 @@ class UploadFileController extends Controller
             $searchobu = $request->obudevice;
         }
         
-        $obuvideos = UploadFile::where("uploadfiles.filetype", upd_file_obu_video)
+        $obuvideos = UploadFile::orderBy("uploadfiles.id", "desc")
+                ->where("uploadfiles.filetype", upd_file_obu_video)
                 ->select("o.id as obuid", "o.obuid as obucode", "uploadfiles.filename")
                 ->leftjoin("obudevices as o", "o.id", "=", "uploadfiles.obuid");
         
