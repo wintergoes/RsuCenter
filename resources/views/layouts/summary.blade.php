@@ -94,7 +94,7 @@
                         <h6 class="mb-0 card-title">
                             <i class="bx bx-map">
                             </i>
-                            运行轨迹
+                            路段实况图
                         </h6>
                     </div>
                     <div class="d-flex align-items-center ms-auto font-13 gap-2">
@@ -181,8 +181,8 @@ var map = new BMapGL.Map("bdmap_container", {
    coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
                  // 指定完成后API将以指定的坐标类型处理您传入的坐标
 });          // 创建地图实例  
-var point = new BMapGL.Point(120.258579,36.14043);  // 创建点坐标  
-map.centerAndZoom(point, 13);                 // 初始化地图，设置中心点坐标和地图级别 
+var point = new BMapGL.Point({{$default_lng}}, {{$default_lat}});  // 创建点坐标  
+map.centerAndZoom(point, {{$default_zoom}});                 // 初始化地图，设置中心点坐标和地图级别 
 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
     
 var rsuIcon = new BMapGL.Icon("/images/rsu_device.png", new BMapGL.Size(24, 24));

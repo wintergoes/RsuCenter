@@ -23,8 +23,15 @@ class HomeController extends Controller
                 ->limit(6)
                 ->get();
         
+        $default_lat = env("home_default_lat", 36.183753);
+        $default_lng = env("home_default_lng", 120.339217);
+        $default_zoom = env("home_map_defaultzoom", 15);
+        
         return view('/layouts/summary', [
-            "obus"=>$obus
+            "obus"=>$obus,
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,
         ]);
     }
     
