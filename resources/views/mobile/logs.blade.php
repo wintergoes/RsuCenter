@@ -24,7 +24,7 @@
 <div class="tpl-portlet-components">
     <div class="tpl-block">
         <form id="form1" method="get" >
-            <input type="hidden" name="_token" value="ZaVg5KCerjuZCgDytKghF6Jc2kLHYSyMRo4MCXTB">
+            {{ csrf_field() }}
             <input type="hidden" name="devicecode" value="{{$searchdevicecode}}" />
             <input type="hidden" name="logtype" value="{{$searchlogtype}}" />
             <table style="font-size: 12px; margin-left: 15px;  text-align: center;" >

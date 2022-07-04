@@ -13,7 +13,7 @@
 
 <div class="row mb-4">
         <form id="form1" class="form-horizontal" method="get" >
-            <input type="hidden" name="_token" value="ZaVg5KCerjuZCgDytKghF6Jc2kLHYSyMRo4MCXTB">
+            {{ csrf_field() }}
             <input type="hidden" name="logtype" value="{{$logtype}}" />
             <table style="font-size: 12px; text-align: center;" >
                 <tr>                   

@@ -98,6 +98,11 @@ Route::get('/dashboard', 'HomeController@dashboard');
 Route::any('/dashboardsummary', 'HomeController@dashboardSummary');
 Route::any('/dashboardvehflow', 'HomeController@dashboardVehFlow');
 Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
+Route::any("/hardware", "HardwareUpdateController@index");
+Route::any("/hwupdateres", "HardwareUpdateController@updateResources");
+Route::any("/addhwupdateres", "HardwareUpdateController@addUpdateResource");
+Route::any("/addhwupdateressave", "HardwareUpdateController@addUpdateResourceSave");
+
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
