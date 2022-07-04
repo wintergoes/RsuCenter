@@ -191,6 +191,10 @@ var alertStartIcon = new BMapGL.Icon("/images/alertstart.png", new BMapGL.Size(2
 var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
     
 function updateBdMapSummary(){
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
     $.ajax({
         type: "POST",
         url: "homebdmapsummary",
@@ -278,6 +282,10 @@ updateBdMapSummary();
 
 <script>
 function updateHomeSummary(){
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
     $.ajax({
         type: "POST",
         url: "homedatasummary",
