@@ -256,4 +256,11 @@ class HardwareUpdateController extends Controller
         
         return redirect("hwupdateres");
     }
+    
+    function hardwareInfo(Request $request){
+        $devices = DB::select("select log_radom,Is_online,con_datetime from device_log");
+
+        $arr = array("retcode"=>ret_success, "devices"=>$devices);
+        return json_encode($arr);
+    }
 }

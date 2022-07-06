@@ -99,7 +99,7 @@
                             error: function(XMLHttpRequest, textStatus, errorThrown) {
                                 $('#updateres{{$hw->log_radom}}').html("取消更新失败！");
                             }
-                        });                        
+                        }); 
                     }
                     
                 function updateHw{{$hw->log_radom}}(resid){
@@ -145,9 +145,9 @@
                         <td>{{$hw->device_ID}}</td>
                         <td>{{$hw->hardversion}}</td>
                         <td>{{$hw->softversion}}</td>
-                        <td>{{$hw->Is_online == 1 ? "是" : "否"}}</td>
+                        <td><div id="onlinestatus{{$hw->log_radom}}">{{$hw->Is_online == 1 ? "是" : "否"}}</div></td>
                         <td>{{$hw->log_datetime}}</td>
-                        <td >{{$hw->con_datetime == "" ? "-" : $hw->con_datetime}}</td>
+                        <td ><div id="conntime{{$hw->log_radom}}">{{$hw->con_datetime == "" ? "-" : $hw->con_datetime}}</div></td>
                         <td >
                             <table id='tbl{{$hw->log_radom}}' {!!$hw->resource_id != "" ? "style='visibility:hidden;display: none;'" : ""!!}><tr><td>
                                 <select name="updateselector{{$hw->log_radom}}" id="updateselector{{$hw->log_radom}}"  class="form-select"  style="width: 200px">
@@ -187,4 +187,31 @@
     </div>
 </div>
  
+
+<script>
+    function hardwareinfo(){
+        $.ajaxSetup({ 
+            headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+        });    
+
+        $.ajax({
+            type: "POST",
+            url: "hardwareinfo",
+            dataType: "json",
+            success: function (data) {
+                if(data.retcode === 1){
+                    for(var i = 0; i < data.devices.length; i++){
+                        $("#onlinestatus" + data.devices[i].log_radom).text(data.devices[i].Is_online === 1 ? "是" : "否");
+                        $("#conntime" + data.devices[i].log_radom).text(data.devices[i].con_datetime);
+                    }
+                }
+                setTimeout('hardwareinfo()', 1000);    
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                setTimeout('hardwareinfo()', 1000);    
+            }
+        });
+    }
+    hardwareinfo();
+</script>
 @endsection

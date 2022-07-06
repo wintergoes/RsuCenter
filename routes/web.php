@@ -81,7 +81,6 @@ Route::any("/editroadcoordinatesave", "RoadCoordinateController@editRoadCoordina
 Route::any("/deleteroadcoordinate", "RoadCoordinateController@deleteRoadCoordinate");
 Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordinate");
 
-
 //*******************************Apis***************************************
 Route::any('/homedatasummary', 'HomeController@dataSummary');
 Route::any('/homebdmapsummary', 'HomeController@bdmapSummary');
@@ -99,6 +98,7 @@ Route::any('/dashboardsummary', 'HomeController@dashboardSummary');
 Route::any('/dashboardvehflow', 'HomeController@dashboardVehFlow');
 Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
 Route::any("/hardware", "HardwareUpdateController@index");
+Route::any("/hardwareinfo", "HardwareUpdateController@hardwareInfo");
 Route::any("/deletehardware", "HardwareUpdateController@deleteHardware");
 Route::any("/hwupdate", "HardwareUpdateController@hardwareUpdate");
 Route::any("/deletehwupdate", "HardwareUpdateController@deleteHardwareUpdate");
