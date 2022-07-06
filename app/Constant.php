@@ -3,6 +3,11 @@ define("ret_success", 1);
 define("ret_error", -1);
 define("ret_invalid_auth", -2);
 
+define("ret_hw_update_added", 1001);
+define("ret_hw_update_begin", 1002);
+define("ret_hw_update_finish", 1003);
+define("ret_hw_update_reply_blank", 1004);
+
 define("ret_upload_error", -10);
 
 define("upload_folder", "/var/www/rsumanager/public/uploadfiles/");

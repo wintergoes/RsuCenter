@@ -4,11 +4,11 @@
 
 <script>
     function confirmDelete(gtid){
-        if(confirm('确定删除这个用户吗？') == false){
+        if(confirm('确定删除这个升级包吗？') === false){
             return;
         }
         
-        window.location.href= 'deleteuser?userid=' + gtid;
+        window.location.href= 'deletehwupdateres?id=' + gtid;
     }
 </script>
 
@@ -33,7 +33,16 @@
                             <option class="form-control" value="1" {{$searchdevicetype == 1 ? "selected" : ""}}>OBU</option>
                             <option class="form-control" value="2" {{$searchdevicetype == 2 ? "selected" : ""}}>RSU</option>
                         </select>
-                    </td>                    
+                    </td> 
+                    
+                    <td class="search_td">&nbsp;&nbsp;可用&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="isuse" class="form-select"  style="width: 100px">
+                            <option class="form-control" value="0" {{$searchisuse == 0 ? "selected" : ""}}>全部</option>
+                            <option class="form-control" value="1" {{$searchisuse == 1 ? "selected" : ""}}>可用</option>
+                            <option class="form-control" value="2" {{$searchisuse == 2 ? "selected" : ""}}>不可用</option>
+                        </select>
+                    </td>                     
                     <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
             </table>
@@ -48,6 +57,7 @@
                 <thead>
                     <tr role="row">
                         <th >ID</th>
+                        <th >设备</th>
                         <th >升级包名称</th>
                         <th >升级包位置</th>
                         <th >HW Version</th>
@@ -61,7 +71,8 @@
                 <tbody>
                     @foreach($resources as $res)
                     <tr>
-                        <td >{{$res->resource_id}}</td>
+                        <td>{{$res->resource_id}}</td>
+                        <td>{{$res->devicetype == 1 ? "OBU" : "RSU"}}</td>
                         <td>{{$res->resource_name}}</td>
                         <td>{{$res->resource_content}}</td>
                         <td>{{$res->resource_hardversion}}</td>
@@ -73,8 +84,7 @@
                              <div class="dropdown">
                                     <button class="btn btn-light border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                     <ul class="dropdown-menu" style="margin: 0px;">
-                                                <li><a class="dropdown-item" href="edituser?userid={{$res->resource_id}}">编辑</a></li>
-                                                <li><a class="dropdown-item" href="javascript:confirmDelete({{$res->resource_id}});">删除</a></li>
+                                            <li><a class="dropdown-item" href="javascript:confirmDelete({{$res->id}});">删除</a></li>
                                     </ul>
                             </div>
                         </td>

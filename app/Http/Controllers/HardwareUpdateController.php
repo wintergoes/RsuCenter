@@ -10,6 +10,9 @@ require_once '../app/Constant.php';
 
 class HardwareUpdateController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }    
     
     function index(Request $request){
         $searchdevtype = "0";
@@ -17,7 +20,15 @@ class HardwareUpdateController extends Controller
             $searchdevtype = $request->devicetype;
         }
         
-        $sqlstr = "select * from device_log where 1=1 ";
+        $searchisonline = "0";
+        if($request->has("isonline")){
+            $searchisonline = $request->isonline;
+        }
+        
+        $sqlstr = "select device_log.log_radom, device_log.device_ID,device_log.hardversion,"
+                . "device_log.softversion,device_log.Is_online,device_log.log_datetime,"
+                . "device_log.con_datetime,tmp.resource_id,tmp.modifydatetime,tmp.returnJSON from device_log"
+                . " left join device_update_temp as tmp on device_log.log_radom=tmp.log_radom where 1=1 ";
         
         if($searchdevtype == "1"){            
             $sqlstr .= " and device_ID like 'v2x%' ";
@@ -25,25 +36,133 @@ class HardwareUpdateController extends Controller
             $sqlstr .= " and device_ID like 'RSU%' ";
         }
         
+        if($searchisonline == "1"){
+            $sqlstr .= " and Is_online=1";
+        } else if($searchisonline == "2"){
+            $sqlstr .= " and Is_online=0";
+        }
+        
         $sqlstr .= " order by log_datetime desc";
         
         $hws = DB::select($sqlstr);
         
+        $updateres = DB::select("select * from update_resource where Is_use=1");
+        
         return view("/other/hardware", [
             "hws"=>$hws,
-            "searchdevicetype"=>$searchdevtype
+            "updateres"=>$updateres,
+            "searchdevicetype"=>$searchdevtype,
+            "searchisonline"=>$searchisonline
         ]);
     }
     
+    function hardwareUpdate(Request $request){
+        if($request->radom == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr); 
+        }
+        
+        $log_radom = $request->radom;
+        
+        $tmpcheck = DB::select("select returnJSON from device_update_temp where log_radom=" . $log_radom);
+        if(count($tmpcheck) == 0){
+            if($request->resid == ""){
+                $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数1！");
+                return json_encode($arr); 
+            }
+            
+            $insertstr = "insert into device_update_temp(log_radom, resource_id, returnJSON) values("
+                    . $log_radom . "," . $request->resid . ",'" . "')";
+            DB::insert($insertstr);
+            
+            $arr = array("retcode"=>ret_hw_update_added, "retmsg"=>"添加更新任务成功！");
+            return json_encode($arr);            
+        }
+        
+        $retjson = $tmpcheck[0]->returnJSON;
+        
+        if($retjson == ""){
+            $arr = array("retcode"=>ret_hw_update_reply_blank, "retmsg"=>"无回复内容！");
+            return json_encode($arr);            
+        }
+        
+        if(strpos($retjson, "NO resource") !== false || strpos($retjson, "not found") !== false){
+            $arr = array("retcode"=>ret_error, "retmsg"=>$retjson);
+            return json_encode($arr);           
+        }
+        
+        if(strpos($retjson, '{"type"') >= 0){
+            $jsonobj = json_decode($retjson, true);
+            $retcode = ret_success;
+            $retmsg = "";
+            if($jsonobj["value"]["result"] == "fail"){
+                $retcode = ret_error;
+                $retmsg = $jsonobj["value"]["result"] . "(" . $jsonobj["value"]["reason"] . ")";
+            } else if($jsonobj["value"]["result"] == "begin"){
+                $retmsg = "正在更新……";
+                $retcode = ret_hw_update_begin;
+            } else if($jsonobj["value"]["result"] == "end"){
+                $retmsg = "更新成功！";
+                $retcode = ret_hw_update_finish;
+            }
+            $arr = array("retcode"=>$retcode, "retmsg"=>$retmsg);
+            return json_encode($arr);
+        }        
+    }
+    
+    function deleteHardwareUpdate(Request $request){
+        if($request->radom == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr); 
+        }
+
+        if($request->timeout == "1"){
+            $devchecks = DB::select("select Is_online from device_log where log_radom=" . $request->radom);
+            if(count($devchecks) > 0 && $devchecks[0]->Is_online == 0){
+                $arr = array("retcode"=>ret_error, "retmsg"=>"超时，但是设备为离线状态！");
+                return json_encode($arr);
+            }
+        }
+        DB::delete("delete from device_update_temp where log_radom=" . $request->radom);
+        
+        $arr = array("retcode"=>ret_success, "retmsg"=>"取消更新成功！");
+        return json_encode($arr);
+    }
+    
+    function deleteHardware(Request $request){
+        if($request->log_radom == ""){
+            return "缺少参数！";           
+        }
+        
+        DB::delete("delete from device_log where log_radom=" . $request->log_radom);
+        
+        return redirect("hardware");        
+    }
+
+
     function updateResources(Request $request){
         $searchdevtype = "0";
         if($request->has("devicetype")){
             $searchdevtype = $request->devicetype;
         }
         
-        $sqlstr = "select * from update_resource ";
+        $searchisuse = "0";
+        if($request->has("isuse")){
+            $searchisuse = $request->isuse;
+        }
         
+        $sqlstr = "select * from update_resource ";
         $sqlstr .= " where 1=1";
+        
+        if($searchdevtype != "" && $searchdevtype != "0"){
+            $sqlstr .= " and devicetype=" . $searchdevtype;
+        }
+        
+        if($searchisuse == "1"){
+            $sqlstr .= " and Is_use=" . $searchisuse;
+        } else if($searchisuse == "2"){
+            $sqlstr .= " and Is_use=0";
+        }        
         
         $sqlstr .= " order by resource_id desc, modifydate desc";
         
@@ -51,7 +170,8 @@ class HardwareUpdateController extends Controller
         
         return view("/other/hwupdateresources", [
             "resources"=>$resourceses,
-            "searchdevicetype"=>$searchdevtype
+            "searchdevicetype"=>$searchdevtype,
+            "searchisuse"=>$searchisuse
         ]);
     }
     
@@ -69,10 +189,10 @@ class HardwareUpdateController extends Controller
         $hwversion = $request->hardwareversion;
         $swversion = $request->softwareversion;
         $filefolder = $request->updatefolder;
-        $avaliable = $request->avaliable == "on" ? "1" : "0";
+        $avaliable = $request->avaliable == "true" ? "1" : "0";
         
-            $arr = array("retcode"=>ret_error, "retmsg"=>$request->avaliable);
-            return json_encode($arr);        
+//            $arr = array("retcode"=>ret_error, "retmsg"=>$request->avaliable);
+//            return json_encode($arr);
         
         if(!is_dir($filefolder)){
             $arr = array("retcode"=>ret_error, "retmsg"=>"升级目录不存在！");
@@ -125,5 +245,15 @@ class HardwareUpdateController extends Controller
         
         $arr = array("retcode"=>ret_success, "retmsg"=>"新增升级包成功！");
         return json_encode($arr);
-    }    
+    }
+    
+    function deleteUpdateResourceSave(Request $request){
+        if($request->id == ""){
+            return "缺少参数！";           
+        }
+        
+        DB::delete("delete from update_resource where id=" . $request->id);
+        
+        return redirect("hwupdateres");
+    }
 }

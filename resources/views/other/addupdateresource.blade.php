@@ -24,7 +24,7 @@ function submitData(){
         type: "POST",
         url: "addhwupdateressave?resourcename=" + $('#resourcename').val() + "&hardwareversion=" + $('#hardwareversion').val()
             + "&softwareversion=" + $('#softwareversion').val() + "&updatefolder=" + $('#updatefolder').val() 
-            + "&devicetype=" + $('#devicetype').val() + "&avaliable=" + $('#avaliable').attr("checked"),
+            + "&devicetype=" + $('#devicetype').val() + "&avaliable=" + $('#avaliable').prop("checked"),
         dataType: "json",
         success: function (data) {
             if(data.retcode === 1){
@@ -43,9 +43,9 @@ function submitData(){
 </script>
 
 @if(isset($updateres))
-<h5 class="card-title">用户管理 > 编辑用户</h5>
+<h5 class="card-title">升级包管理 > 编辑升级包</h5>
 @else
-<h5 class="card-title">用户管理 > 新增用户</h5>
+<h5 class="card-title">升级包管理 > 新增升级包</h5>
 @endif
 <hr>
 
@@ -63,6 +63,21 @@ function submitData(){
             <!-- Display Validation Errors -->
             @include('common.errors')
         </div>
+        
+        <div class="row mb-3">
+            <label for="devicetype" class="col-sm-2 col-form-label">设备类型</label>
+            <div class="col-sm-6">
+                <select name="devicetype" id="devicetype" class="form-select"  style="width: 100px">
+                @if(isset($updateres))
+                    <option class="form-control" value="1" {{$updateres->devicetype == 1 ? "selected" : ""}}>OBU</option>
+                    <option class="form-control" value="2" {{$updateres->devicetype == 2 ? "selected" : ""}}>RSU</option>
+                @else
+                    <option class="form-control" value="1">OBU</option>
+                    <option class="form-control" value="2">RSU</option>
+                @endif
+                </select>
+            </div>
+        </div>           
 
         <div class="row mb-3">
             <label for="resourcename" class="col-sm-2 col-form-label">升级包名称</label>
@@ -79,9 +94,9 @@ function submitData(){
             <label for="hardwareversion" class="col-sm-2 col-form-label">硬件版本适配</label>
             <div class="col-sm-6">
                 @if(isset($updateres))               
-                <input type="text" class="form-control" id="hardwareversion" name="hardwareversion" readonly value="{{$updateres->resource_hardversion}}">
+                <input type="text" class="form-control" id="hardwareversion" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'')" name="hardwareversion" readonly value="{{$updateres->resource_hardversion}}">
                 @else
-                <input type="text" class="form-control" id="hardwareversion" name="hardwareversion" placeholder="">
+                <input type="text" class="form-control" id="hardwareversion" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'')" name="hardwareversion" placeholder="">
                 @endif
             </div>
         </div>
@@ -90,9 +105,9 @@ function submitData(){
             <label for="softwareversion" class="col-sm-2 col-form-label">软件版本适配</label>
             <div class="col-sm-6">
                 @if(isset($updateres))
-                <input type="text" class="form-control" id="softwareversion" name="softwareversion" readonly value="{{$updateres->resource_softversion}}">
+                <input type="text" class="form-control" id="softwareversion" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'')" name="softwareversion" readonly value="{{$updateres->resource_softversion}}">
                 @else
-                <input type="text" class="form-control" id="softwareversion" name="softwareversion" placeholder="">
+                <input type="text" class="form-control" id="softwareversion" onkeyup="this.value=this.value.replace(/[^0-9\.]/g,'')" name="softwareversion" placeholder="">
                 @endif
             </div>
         </div>
@@ -108,28 +123,15 @@ function submitData(){
             </div>
         </div>
         
-        <div class="row mb-3">
-            <label for="devicetype" class="col-sm-2 col-form-label">设备类型</label>
-            <div class="col-sm-6">
-                <select name="devicetype" id="devicetype" class="form-select"  style="width: 100px">
-                @if(isset($updateres))
-                    <option class="form-control" value="1" {{$updateres->devicetype == 1 ? "selected" : ""}}>OBU</option>
-                    <option class="form-control" value="2" {{$updateres->devicetype == 2 ? "selected" : ""}}>RSU</option>
-                @else
-                    <option class="form-control" value="1">OBU</option>
-                    <option class="form-control" value="2">RSU</option>
-                @endif
-                </select>
-            </div>
-        </div>        
+     
 
         <div class="row mb-3">
             <label for="avaliable" class="col-sm-2 col-form-label">是否可用</label>
             <div class="col-sm-6 form-check form-switch" >
                 @if(isset($updateres))
-                <input type="checkbox" class="form-check-input" id="avaliable" name="avaliable" {{$updateres->Is_use == 1 ? "checked" : ""}}>
+                <input type="checkbox" class="form-check-input" id="avaliable" name="avaliable" {{$updateres->Is_use == 1 ? "checked='true'" : ""}}>
                 @else
-                <input type="checkbox" class="form-check-input" id="avaliable" name="avaliable" placeholder="">
+                <input type="checkbox" class="form-check-input" id="avaliable" checked="true" name="avaliable" placeholder="">
                 @endif
             </div>
         </div>
