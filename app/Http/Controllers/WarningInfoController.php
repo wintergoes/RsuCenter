@@ -22,8 +22,10 @@ class WarningInfoController extends Controller
         $winfos = WarningInfo::orderBy('id', 'desc')
                 ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
                         "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
-                        "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", "u.realname")
+                        "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", "u.realname",
+                        "tec.tecparentcode as tecpcode", "warninginfo.teccode")
                 ->leftjoin("users as u", "warninginfo.wicreator", "=", "u.id")
+                ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode")
                 ->get();
         
         return view('/road/warninginfo', [
@@ -52,6 +54,7 @@ class WarningInfoController extends Controller
         $winfo->startlng = $request->startlng;
         $winfo->stoplat = $request->stoplat;
         $winfo->stoplng = $request->stoplng;
+        $winfo->teccode = $request->tecchild;
         $winfo->wisource = 1;
         $winfo->wicreator = Auth::user()->id;
         $winfo->save();
@@ -64,7 +67,12 @@ class WarningInfoController extends Controller
             return "缺少参数！";
         }
         
-        $winfos = WarningInfo::where("id", $request->id)
+        $winfos = WarningInfo::where("warninginfo.id", $request->id)
+                ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
+                        "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
+                        "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
+                        "tec.tecparentcode", "warninginfo.teccode")                
+                ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode")
                 ->get();
         
         if(count($winfos) == 0){
@@ -77,7 +85,7 @@ class WarningInfoController extends Controller
                 ->where("roadcoordinates.minlng", "<", $winfo->startlng)
                 ->where("roadcoordinates.maxlng", ">", $winfo->startlng)               
                 ->select("r.roadname", "roadcoordinates.lanetype", "roadcoordinates.laneno")
-                ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")
+                ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")                
                 ->distinct()
                 ->get();        
         
@@ -125,6 +133,7 @@ class WarningInfoController extends Controller
         $winfo->startlng = $request->startlng;
         $winfo->stoplat = $request->stoplat;
         $winfo->stoplng = $request->stoplng;
+        $winfo->teccode = $request->tecchild;
         $winfo->wisource = 1;
         $winfo->wicreator = Auth::user()->id;
         $winfo->save();
@@ -147,5 +156,9 @@ class WarningInfoController extends Controller
             "searchfromdate"=>"2022-04-01",
             "searchtodate"=>"2022-04-11",
         ]);
+    }
+    
+    function warningTrendSummary(Request $request){
+        
     }
 }

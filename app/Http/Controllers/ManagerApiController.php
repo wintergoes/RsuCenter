@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\UploadFile;
 use App\RoadCoordinate;
 use App\Road;
+use App\TrafficEventClass;
 
 require_once '../app/Constant.php';
 
@@ -52,6 +53,22 @@ class ManagerApiController extends Controller
                 ->get();
         
         $arr = array("retcode"=>ret_success, "roads"=>$roadcoords, "extrainfo"=>$request->extrainfo);
+        return json_encode($arr);
+    }
+    
+    function getTrafficeEventClassJson(Request $request){
+        $tecs = TrafficEventClass::orderBy("teccode", "asc")
+                ->select("teccode", "tecname");
+        
+        if($request->parentcode == ""){
+            $tecs = $tecs->where("tecparentcode", "=", "");
+        } else {
+            $tecs = $tecs->where("tecparentcode", "=", $request->parentcode);
+        }
+        
+        $tecs = $tecs->get();
+        
+        $arr = array("retcode"=>ret_success, "tecs"=>$tecs);
         return json_encode($arr);
     }
 }

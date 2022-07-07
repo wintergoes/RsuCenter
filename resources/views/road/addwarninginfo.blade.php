@@ -3,6 +3,7 @@
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs"></script>
 <script type="text/javascript" src="js/coordtransform.js"></script>
+<script type="text/javascript" src="js/zlzl.js"></script>
 
 <script>
 function submitData(){
@@ -29,6 +30,14 @@ function getPosition(flag){
     document.getElementById("bdmap_ctrl_row").style.visibility = 'visible';
     document.getElementById("bdmap_ctrl_row").style.display = '';    
 }
+
+function onSelectTecRoot(){
+    initTrafficEventClass("tecchild", $("#tecroot").val(), "", "{{ csrf_token() }}");
+}
+
+function onSelectTecChild(){
+    $("#winame").val($("#tecchild").find("option:selected").text());
+}
 </script>
 
 @if(isset($winfo))
@@ -51,6 +60,27 @@ function getPosition(flag){
             <!-- Display Validation Errors -->
             @include('common.errors')
         </div>
+        
+        <div class="row mb-3">
+            <label for="mobile" class="col-sm-2 col-form-label">事件类型</label>
+            <div class="col-sm-2">
+                <select id="tecroot" name="tecroot" class="form-select" onchange="onSelectTecRoot()"></select>
+                @if(isset($winfo))
+                <script>initTrafficEventClass("tecroot", "", "{{$winfo->tecparentcode}}", "{{ csrf_token() }}");</script>
+                @else
+                <script>initTrafficEventClass("tecroot", "", "", "{{ csrf_token() }}");</script>
+                @endif
+            </div>
+            
+            <div class="col-sm-2">
+                <select id="tecchild" name="tecchild" class="form-select" onchange="onSelectTecChild()"></select>
+                @if(isset($winfo))
+                <script>initTrafficEventClass("tecchild", "{{$winfo->tecparentcode == '' ? '01' : $winfo->tecparentcode}}", "{{$winfo->teccode}}", "{{ csrf_token() }}");</script>
+                @else
+                <script>initTrafficEventClass("tecchild", "01", "", "{{ csrf_token() }}");</script>
+                @endif                
+            </div>                         
+        </div>        
 
         <div class="row mb-3">
             <label for="winame" class="col-sm-2 col-form-label">预警内容</label>
@@ -63,7 +93,7 @@ function getPosition(flag){
                 @endif
             </div>
         </div>
-
+        
         <div class="row mb-3">
             <label for="realname" class="col-sm-2 col-form-label">起始坐标</label>
             <div class="col-sm-2">
@@ -114,7 +144,7 @@ function getPosition(flag){
             <div class="col-sm-5" id="startExtraInfoContent">
             </div>
         </div>           
-        @endif
+        @endif        
 
         <div class="row mb-3">
             <label for="mobile" class="col-sm-2 col-form-label">终止坐标</label>

@@ -110,6 +110,7 @@ Route::any("/deletehwupdateres", "HardwareUpdateController@deleteUpdateResourceS
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
 Route::any("/getroadsbycoord", "ManagerApiController@getRoadsByCoord");
+Route::any("/getrafficeventclass", "ManagerApiController@getTrafficeEventClassJson");
 
 //***************************测试相关*****************************************
 Route::any("importgps2directiondatasave", "test\Gps2DirctionController@importDataSave");
