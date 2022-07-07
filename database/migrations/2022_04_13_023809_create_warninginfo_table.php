@@ -17,6 +17,7 @@ class CreateWarninginfoTable extends Migration
             $table->increments('id');
             $table->tinyInteger("witype")->default(0);
             $table->string("winame", 500)->default("");
+            $table->string("teccode", 4)->default("");
             $table->tinyInteger("wistatus")->defult(0);
             $table->tinyInteger("wisource")->default(0); //预警信息来源，1-人工，10-气象接口，20-交通接口
             $table->integer("wicreator")->default(0); //预警信息添加者

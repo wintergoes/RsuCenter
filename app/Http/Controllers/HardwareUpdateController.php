@@ -15,6 +15,11 @@ class HardwareUpdateController extends Controller
     }    
     
     function index(Request $request){
+        $searchdevice = "";
+        if($request->has("deviceid")){
+            $searchdevice = $request->deviceid;
+        }
+        
         $searchdevtype = "0";
         if($request->has("devicetype")){
             $searchdevtype = $request->devicetype;
@@ -42,17 +47,25 @@ class HardwareUpdateController extends Controller
             $sqlstr .= " and Is_online=0";
         }
         
+        if($searchdevice != "" && $searchdevice != "0"){
+            $sqlstr .= " and device_ID='" . $searchdevice . "'";
+        }
+        
         $sqlstr .= " order by log_datetime desc";
         
         $hws = DB::select($sqlstr);
         
         $updateres = DB::select("select * from update_resource where Is_use=1");
         
+        $devices = DB::select("select distinct device_ID from device_log");
+        
         return view("/other/hardware", [
             "hws"=>$hws,
             "updateres"=>$updateres,
             "searchdevicetype"=>$searchdevtype,
-            "searchisonline"=>$searchisonline
+            "searchisonline"=>$searchisonline,
+            "searchdevice"=>$searchdevice,
+            "devices"=>$devices
         ]);
     }
     
@@ -71,8 +84,8 @@ class HardwareUpdateController extends Controller
                 return json_encode($arr); 
             }
             
-            $insertstr = "insert into device_update_temp(log_radom, resource_id, returnJSON) values("
-                    . $log_radom . "," . $request->resid . ",'" . "')";
+            $insertstr = "insert into device_update_temp(log_radom, resource_id) values("
+                    . $log_radom . "," . $request->resid . ")";
             DB::insert($insertstr);
             
             $arr = array("retcode"=>ret_hw_update_added, "retmsg"=>"添加更新任务成功！");
@@ -97,7 +110,28 @@ class HardwareUpdateController extends Controller
             $retmsg = "";
             if($jsonobj["value"]["result"] == "fail"){
                 $retcode = ret_error;
-                $retmsg = $jsonobj["value"]["result"] . "(" . $jsonobj["value"]["reason"] . ")";
+                $errmsg = $jsonobj["value"]["reason"];
+                switch($jsonobj["value"]["reason"]){
+                    case -1:
+                        $errmsg = "无法连接FTP";
+                        break;
+                    case -2:
+                        $errmsg = "指定文件夹的更新包或md5文件或版本文件不存在";
+                        break;
+                    case -3:
+                        $errmsg = "更新失败但是系统正常";
+                        break;
+                    case -4:
+                        $errmsg = "发现系统无备份可用文件，更新失败但是系统正常";
+                        break;
+                    case -5:
+                        $errmsg = "系统更新失败导致系统异常，但是恢复成功";
+                        break;      
+                    case -6:
+                        $errmsg = "<font color='red'>系统更新更新失败导致系统异常，而且恢复失败</font>";
+                        break;                    
+                }
+                $retmsg = $jsonobj["value"]["result"] . "(" . $errmsg . ")";
             } else if($jsonobj["value"]["result"] == "begin"){
                 $retmsg = "正在更新……";
                 $retcode = ret_hw_update_begin;

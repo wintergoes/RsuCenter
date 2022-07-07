@@ -26,6 +26,15 @@
             {{ csrf_field() }}
             <table style="font-size: 12px; text-align: center;" >
                 <tr>                   
+                    <td class="search_td">&nbsp;&nbsp;设备id&nbsp;&nbsp;</td>                    
+                    <td class="search_td">
+                        <select name="deviceid" class="form-select"  style="width: 150px">
+                            <option class="form-control" value="0" {{$searchdevice == 0 ? "selected" : ""}}>不限</option>
+                            @foreach($devices as $dev)
+                            <option class="form-control" value="{{$dev->device_ID}}" {{$searchdevice == $dev->device_ID ? "selected" : ""}}>{{$dev->device_ID}}</option>
+                            @endforeach
+                        </select>
+                    </td>                     
                     <td class="search_td">&nbsp;&nbsp;设备类型&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="devicetype" class="form-select"  style="width: 100px">
@@ -72,7 +81,11 @@
                     var time{{$hw->log_radom}};
                     var canceling{{$hw->log_radom}} = 0;
                     var startTime{{$hw->log_radom}} = Date.parse(new Date());
-                    function cancelUpdate{{$hw->log_radom}}(timeout){
+                    function cancelUpdate{{$hw->log_radom}}(timeout, showalert){
+                        if(showalert === 1 && confirm('确定删除此更新吗？') === false){
+                            return;
+                        }
+                        
                         canceling{{$hw->log_radom}} = 1;
                         clearTimeout(time{{$hw->log_radom}});
                         $.ajaxSetup({ 
@@ -103,6 +116,8 @@
                     }
                     
                 function updateHw{{$hw->log_radom}}(resid){
+//                    console.log('updateHw: ' + resid);
+                    canceling{{$hw->log_radom}} = 0;
                     $.ajaxSetup({ 
                         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
                     });
@@ -111,7 +126,7 @@
                         url: "hwupdate?radom=" + {{$hw->log_radom}}+"&resid=" + resid,
                         dataType: "json",
                         success: function (data) {
-                            $('#updateres{{$hw->log_radom}}').html(data.retmsg + "(" + data.retcode + ")<a href='#' onclick='cancelUpdate{{$hw->log_radom}}(0);'>取消</a>");
+                            $('#updateres{{$hw->log_radom}}').html(data.retmsg + "(" + data.retcode + ")<a href='#' onclick='cancelUpdate{{$hw->log_radom}}(0, 1);'>取消</a>");
                             if(data.retcode === 1001){
                                 startTime{{$hw->log_radom}} = Date.parse(new Date());
                                 document.getElementById("tbl{{$hw->log_radom}}").style.visibility = 'hidden';
@@ -122,17 +137,17 @@
                             } else if(data.retcode === 1004){
 //                                alert(Date.parse(new Date()) - startTime{{$hw->log_radom}});
                                 if(Date.parse(new Date()) - startTime{{$hw->log_radom}} > 120000){
-                                    cancelUpdate{{$hw->log_radom}}(1);
+                                    cancelUpdate{{$hw->log_radom}}(1, 0);
                                 }
                             }
                             if(data.retcode !== 1003 && canceling{{$hw->log_radom}} === 0){
-                                time{{$hw->log_radom}} = setTimeout('updateHw{{$hw->log_radom}}()', 1000, resid); 
+                                time{{$hw->log_radom}} = setTimeout('updateHw{{$hw->log_radom}}(' + resid + ')', 1000); 
                             }
                         },
                         error: function(XMLHttpRequest, textStatus, errorThrown) {
                             $('#updateres{{$hw->log_radom}}').html("请求失败！");
                             if(canceling{{$hw->log_radom}} === 0){
-                                time{{$hw->log_radom}} = setTimeout('updateHw{{$hw->log_radom}}()', 1000, resid); 
+                                time{{$hw->log_radom}} = setTimeout('updateHw{{$hw->log_radom}}(' + resid + ')', 1000, resid); 
                             }
                         }
                     });                    
@@ -159,7 +174,7 @@
                             @endforeach
                             </select>
                             </td>
-                            <td><input type="button" id="updatebutton{{$hw->log_radom}}" onclick="updateHw{{$hw->log_radom}}($('#updateselector{{$hw->log_radom}}').val());" {{$hw->resource_id != "" ? 'disabled="true"' : ""}} value="更新"/></td>
+                            <td><input type="button" id="updatebutton{{$hw->log_radom}}" onclick="updateHw{{$hw->log_radom}}($('#updateselector{{$hw->log_radom}}').val());"  value="更新"/></td>
                                 </tr></table>
                             
                             <div id="updateres{{$hw->log_radom}}"></div>
