@@ -8,9 +8,12 @@ use App\WarningInfo;
 use App\User;
 use App\RoadCoordinate;
 use App\Road;
+use App\TrafficEventClass;
 
 use Auth;
 use DB;
+
+require_once '../app/Constant.php';
 
 class WarningInfoController extends Controller
 {
@@ -158,7 +161,67 @@ class WarningInfoController extends Controller
         ]);
     }
     
-    function warningTrendSummary(Request $request){
+    function eventTrendSummary(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',time());
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
         
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }        
+        
+        $tecs = TrafficEventClass::where("tecparentcode", "=", "")
+                ->select("teccode", "tecname")
+                ->get();
+        
+        $res = array("retcode"=>ret_success);
+        $datares = array();
+        
+        foreach($tecs as $tec){
+            $sqlstr = "select count(w.id) as eventcount,d.ddate from tbldates d " .
+                    " left join warninginfo w on date(w.created_at)=d.ddate ". 
+                    " left join trafficeventclasses tec on tec.teccode=w.teccode and tec.tecparentcode='" . $tec->teccode . "' " . 
+                    " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' " .
+                    " group by d.ddate;";
+//            echo $sqlstr;
+            $stats = DB::select($sqlstr);
+            $dary = array();
+            foreach ($stats as $stat){
+                $arr = array("date"=>$stat->ddate, "count"=>$stat->eventcount);
+                array_push($dary, $arr);
+            }
+
+            array_push($datares, array("code"=>$tec->teccode, 'name'=>$tec->tecname, "summary"=>$dary));
+//            }
+//            $arr = array("teccode"=>$tec->teccode, "tecname"=>$tec->tecname, "eventcount"=>$stats[0]->eventcount);
+            //array_push($datares, $arr);
+        }
+        
+        $dates = DB::select("select ddate from tbldates where ddate>='" . $searchfromdate . "' and ddate<='" . $searchtodate . "' ");
+        $labels = array();
+        foreach($dates as $d){
+            array_push($labels, $d->ddate);
+        }
+        
+        $res["esdata"] = $datares;
+        $res["labels"] = $labels;
+        return json_encode($res);
+    }
+    
+    function eventStat(Request $request){
+        return view("/stat/eventstat", [
+            "searchfromdate"=>"",
+            "searchtodate"=>""
+        ]);
     }
 }

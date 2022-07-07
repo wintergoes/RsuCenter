@@ -15,14 +15,14 @@ class CreateUpdateResourceTable extends Migration
     {
         Schema::create('update_resource', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("resource_id")->default(0);
+            $table->integer("resource_id")->default(null);
             $table->integer("devicetype")->default(0);
-            $table->string("resource_hardversion", 255)->default("");
-            $table->string("resource_softversion", 255)->default("");
-            $table->string("resource_content", 255)->default("");
-            $table->integer("Is_use")->default(0);
-            $table->string("resource_name", 255)->default("");
-            $table->dateTime("modifydate")->nullable();
+            $table->string("resource_hardversion", 255)->default(null);
+            $table->string("resource_softversion", 255)->default(null);
+            $table->string("resource_content", 255)->default(null);
+            $table->integer("Is_use")->default(null);
+            $table->string("resource_name", 255)->default(null);
+            $table->dateTime("modifydate")->nullable()->defulat(null);
         });
     }
 

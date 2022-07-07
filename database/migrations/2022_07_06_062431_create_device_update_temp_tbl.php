@@ -14,10 +14,12 @@ class CreateDeviceUpdateTempTbl extends Migration
     public function up()
     {
         Schema::create('device_update_temp', function (Blueprint $table) {
-            $table->string('log_radom', 255)->default("")->primary();
-            $table->integer("resource_id")->default(0)->primary();
+            $table->string('log_radom', 255)->default("");
+            $table->integer("resource_id")->default(0);
             $table->dateTime("modifydatetime")->nullable();
-            $table->string("returnJSON", 255)->default('')->nullable();
+            $table->string("returnJSON", 255)->default(null)->nullable();
+            
+            $table->primary(["log_radom", "resource_id"]);
         });
     }
 

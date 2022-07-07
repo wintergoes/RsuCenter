@@ -225,13 +225,13 @@ class HardwareUpdateController extends Controller
         $filefolder = $request->updatefolder;
         $avaliable = $request->avaliable == "true" ? "1" : "0";
         
-//            $arr = array("retcode"=>ret_error, "retmsg"=>$request->avaliable);
+//            $arr = array("retcode"=>ret_error, "retmsg"=>$filefolder);
 //            return json_encode($arr);
         
-        if(!is_dir($filefolder)){
-            $arr = array("retcode"=>ret_error, "retmsg"=>"升级目录不存在！");
-            return json_encode($arr);
-        }
+//        if(!is_dir($filefolder)){
+//            $arr = array("retcode"=>ret_error, "retmsg"=>"升级目录不存在！");
+//            return json_encode($arr);
+//        }
         
         if(!file_exists($filefolder . "/CHIBC_RSU001.zip") ||
                 !file_exists($filefolder . "/CHIBC_RSU.md5") ||

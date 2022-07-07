@@ -14,13 +14,13 @@ class CreateObuDeviceLogTbl extends Migration
     public function up()
     {
         Schema::create('device_log', function (Blueprint $table) {
-            $table->string('log_radom', 255)->default("")->primary();
-            $table->string("device_ID", 255)->default("");
-            $table->string("hardversion", 255)->default("");
-            $table->string("softversion", 255)->default("");
-            $table->integer("Is_online")->default(0);
-            $table->dateTime("log_datetime")->nullable();
-            $table->dateTime("con_datetime")->nullable();
+            $table->string('log_radom', 255)->default(null)->primary();
+            $table->string("device_ID", 255)->default(null);
+            $table->string("hardversion", 255)->default(null);
+            $table->string("softversion", 255)->default(null);
+            $table->integer("Is_online")->default(null);
+            $table->dateTime("log_datetime")->nullable()->defult(null);
+            $table->dateTime("con_datetime")->nullable()->default(null);
         });
     }
 
