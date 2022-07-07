@@ -126,7 +126,7 @@
                         url: "hwupdate?radom=" + {{$hw->log_radom}}+"&resid=" + resid,
                         dataType: "json",
                         success: function (data) {
-                            $('#updateres{{$hw->log_radom}}').html(data.retmsg + "(" + data.retcode + ")<a href='#' onclick='cancelUpdate{{$hw->log_radom}}(0, 1);'>取消</a>");
+                            $('#updateres{{$hw->log_radom}}').html(data.retmsg + "(" + data.retcode + ")<a href='javascript:void(0)' onclick='cancelUpdate{{$hw->log_radom}}(0, 1);'>取消</a>");
                             if(data.retcode === 1001){
                                 startTime{{$hw->log_radom}} = Date.parse(new Date());
                                 document.getElementById("tbl{{$hw->log_radom}}").style.visibility = 'hidden';

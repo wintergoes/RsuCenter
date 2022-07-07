@@ -29,7 +29,7 @@ function submitData(){
         success: function (data) {
             if(data.retcode === 1){
                 alert("添加成功！");
-                //window.location.href = "hwupdateres";
+                window.location.href = "hwupdateres";
             } else {
                 alert(data.retmsg);
             } 

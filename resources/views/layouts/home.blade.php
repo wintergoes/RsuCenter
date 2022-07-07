@@ -65,7 +65,8 @@ $l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "edi
 $l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));
 $l2_devicelogs = in_array($currentpath, array("devicelogs", "devicelogfilecontent"));
 $l2_bsmlogs = in_array($currentpath, array('bsmlogs', 'bsmlogfilecontent'));
-$l1_settings = $l2_users;
+$l2_hwupdate = in_array($currentpath, array('hardware', 'hwupdateres', 'addhwupdateres'));
+$l1_settings = $l2_users | $l2_devices | $l2_hwupdate;
 $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 ?>
 
