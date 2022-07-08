@@ -49,8 +49,17 @@
                     <tr>
                         <td>{{$ci->realname}}</td>
                         <td>{{$ci->clockindate}}</td>
+                        @if ($ci->sbtime == "")
+                        <td><font color="red">未打卡</font></td>
+                        @else
                         <td>{{$ci->sbtime}}</td>
+                        @endif
+
+                        @if ($ci->xbtime == "")
+                        <td><font color="red">未打卡</font></td>
+                        @else
                         <td>{{$ci->xbtime}}</td>
+                        @endif                        
                     </tr>
                     @endforeach
                 </tbody>
