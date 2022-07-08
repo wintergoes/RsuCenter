@@ -52,6 +52,9 @@ $l2_recyclenews = in_array($currentpath, array("recyclenews", "addnews", "editne
 $l1_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
+$l2_eventstat = in_array($currentpath, array("eventstat"));
+$l1_stat = $l2_eventstat;
+
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo"));
 $l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave"));
 $l1_road = $l2_warninginfo | $l2_road;
@@ -85,7 +88,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 					</a>
 				</li>
                                 
-				<li>
+				<li {!! $l1_stat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}>
 					<a href="javascript:;" class="has-arrow">
 						<div class="parent-icon">
                                                     <i class='bx bx-stats'></i>
@@ -93,6 +96,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 						<div class="menu-title">统计分析</div>
 					</a>
 					<ul>
+                                            <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>道路事件统计</a></li>                                            
                                             <li > <a href="warninginfostat"><i class="bx bx-right-arrow-alt" ></i>预警信息统计</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>OBU风险规避统计</a></li>
                                             <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>车辆运行统计</a></li>

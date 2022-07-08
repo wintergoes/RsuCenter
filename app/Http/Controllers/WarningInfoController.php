@@ -47,7 +47,7 @@ class WarningInfoController extends Controller
         
         if($request->stoplat == "" || $request->stoplng == ""){
             $request->stoplat = $request->startlat;
-            $request->stoplng = $request->stoplng;
+            $request->stoplng = $request->startlng;
         }
         
         $winfo = new WarningInfo();
@@ -168,7 +168,7 @@ class WarningInfoController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',time());
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -178,7 +178,7 @@ class WarningInfoController extends Controller
         
         if($searchtodate == ""){
             $searchtodate = date('Y-m-d',time());
-        }        
+        }
         
         $tecs = TrafficEventClass::where("tecparentcode", "=", "")
                 ->select("teccode", "tecname")
@@ -188,11 +188,21 @@ class WarningInfoController extends Controller
         $datares = array();
         
         foreach($tecs as $tec){
-            $sqlstr = "select count(w.id) as eventcount,d.ddate from tbldates d " .
-                    " left join warninginfo w on date(w.created_at)=d.ddate ". 
-                    " left join trafficeventclasses tec on tec.teccode=w.teccode and tec.tecparentcode='" . $tec->teccode . "' " . 
-                    " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' " .
-                    " group by d.ddate;";
+            $sqlstr = " select w1count as eventcount,d.ddate from tbldates d " 
+                    
+                    . " left join (select count(w.id) as w1count, w.teccode, date(created_at) as w1date from warninginfo w "
+                    . " left join trafficeventclasses tec on w.teccode=tec.teccode "
+                    . " where tec.tecparentcode='" . $tec->teccode . "' and date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' "
+                    . " group by date(w.created_at), w.teccode) w1 on w1.w1date=d.ddate " 
+                    
+                    . " left join trafficeventclasses tec on tec.teccode=w1.teccode  " 
+                    . " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' order by d.ddate;";
+            
+//            $sqlstr = "select count(w.id) as eventcount,d.ddate from tbldates d " .
+//                    " left join warninginfo w on date(w.created_at)=d.ddate ". 
+//                    " left join trafficeventclasses tec on tec.teccode=w.teccode and tec.tecparentcode='" . $tec->teccode . "' " . 
+//                    " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' " .
+//                    " group by d.ddate;";
 //            echo $sqlstr;
             $stats = DB::select($sqlstr);
             $dary = array();
@@ -207,6 +217,17 @@ class WarningInfoController extends Controller
             //array_push($datares, $arr);
         }
         
+        $totalstats = DB::select("select w1count as eventcount,d.ddate from tbldates d "
+                . " left join (select count(w.id)as w1count , date(created_at) as w1date from warninginfo w "
+                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by date(w.created_at)) as w1 "
+                . " on w1.w1date=d.ddate where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' order by d.ddate");
+        $dary = array();
+        foreach ($totalstats as $stat){
+            $arr = array("date"=>$stat->ddate, "count"=>$stat->eventcount);
+            array_push($dary, $arr);
+        }
+        array_push($datares, array("code"=>"all", 'name'=>"合计", "summary"=>$dary));
+        
         $dates = DB::select("select ddate from tbldates where ddate>='" . $searchfromdate . "' and ddate<='" . $searchtodate . "' ");
         $labels = array();
         foreach($dates as $d){
@@ -219,9 +240,85 @@ class WarningInfoController extends Controller
     }
     
     function eventStat(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }         
+        
         return view("/stat/eventstat", [
-            "searchfromdate"=>"",
-            "searchtodate"=>""
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate
         ]);
     }
+    
+    function eventTypeStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }        
+        
+        $sqlstr = "select count(w.id) as wcount,tec.tecparentcode, tp.tecname from warninginfo w "
+                . " left join trafficeventclasses tec on tec.teccode=w.teccode "
+                . " left join trafficeventclasses tp on tp.teccode=tec.tecparentcode "
+                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by tec.tecparentcode, tp.tecname ;";
+        
+        $eventtypesummary = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "summary"=>$eventtypesummary);
+        return json_encode($arr);
+    }
+    
+    function eventSourceStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }        
+        
+        $sqlstr = "select count(w.id) as scount,w.wisource, "
+                . " case w.wisource when 1 then '交警' when 2 then '政府' when 3 then '气象部门' "
+                . " when 4 then '互联网' when 5 then '本地检测' else '未知' end as sourcename from warninginfo w  "
+                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by w.wisource ;";
+        
+        $eventsourcesummary = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "summary"=>$eventsourcesummary);
+        return json_encode($arr);
+    }    
 }

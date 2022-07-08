@@ -60,6 +60,8 @@ Route::any('/warninginfostat', "WarningInfoController@warningInfoStat");
 Route::any('/clockins', "ClockInController@index");
 Route::any("/eventstat", "WarningInfoController@eventStat");
 Route::any("/eventtrendsummary", "WarningInfoController@eventTrendSummary");
+Route::any("/eventtypestatjson", "WarningInfoController@eventTypeStatJson");
+Route::any("/eventsourcestatjson", "WarningInfoController@eventSourceStatJson");
 
 //*******************************道路管理***************************************
 Route::any("/roads", "RoadController@index");

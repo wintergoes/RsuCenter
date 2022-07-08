@@ -138,7 +138,9 @@
             borderWidth: 0
           }]
         },
-		
+        zoom: {
+            enabled: false,
+        },		
         options:{
             maintainAspectRatio: false,
             legend: {
