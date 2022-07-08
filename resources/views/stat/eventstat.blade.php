@@ -143,7 +143,7 @@
 // chart 1
 function drawChart(){
     var ctx = document.getElementById("chart1").getContext('2d');
-    var barcolors = ['#008000', '#FF69B4', '#ADD8E6', '#90EE90', '#778899', '#800000', '#9370DB', '#191970'];
+    var barcolors = ['#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
 
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
@@ -166,7 +166,7 @@ function drawChart(){
             for(var i = 0; i < data.esdata.length; i++){
                 var celltitle=tr1.insertCell(i + 1);
                 celltitle.style.textAlign="center";
-                celltitle.innerHTML = data.esdata[i].name;
+                celltitle.innerHTML = "<b>" + data.esdata[i].name + "</b>";
             }
             
             for(var i = 0; i < data.esdata.length; i++){
@@ -252,7 +252,7 @@ fillQuickDateSelector("quickdateselector", "fromdate", "todate");
 
 function drawEventTypeStat(){
     var ctx = document.getElementById("chartEventType").getContext('2d');
-    var barcolors = ['#008000', '#FF69B4', '#ADD8E6', '#90EE90', '#778899', '#800000', '#9370DB', '#191970'];
+    var barcolors = ['#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
     var barhovercolors = ['#008033', '#FF6933', '#ADD833', '#90EE33', '#778833', '#800033', '#937033', '#191933'];
 
     $.ajaxSetup({ 
@@ -313,8 +313,8 @@ function drawEventTypeStat(){
 
 function drawEventSourceStat(){
     var ctx = document.getElementById("chartEventSource").getContext('2d');
-    var barcolors = ['#008000', '#FF69B4', '#ADD8E6', '#90EE90', '#778899', '#800000', '#9370DB', '#191970'];
-    var barhovercolors = ['#008033', '#FF6933', '#ADD833', '#90EE33', '#778833', '#800033', '#937033', '#191933'];
+    var barcolors = ['#88d73e', '#ff8da2', '#936cff', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
+    var barhovercolors = ['#88d700', '#ff8d00', '#936c00', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
 
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 

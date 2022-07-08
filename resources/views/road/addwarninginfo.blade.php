@@ -80,7 +80,31 @@ function onSelectTecChild(){
                 <script>initTrafficEventClass("tecchild", "01", "", "{{ csrf_token() }}");</script>
                 @endif                
             </div>                         
-        </div>        
+        </div>
+        
+        <div class="row mb-3">
+            <label for="wisource" class="col-sm-2 col-form-label">事件来源</label>
+            <div class="col-sm-2">
+                <select id="wisource" name="wisource" class="form-select" >
+                    @if(isset($winfo))
+                    <option value="0" {{$winfo->wisource == 0 ? "selected" : ""}}>未知</option>
+                    <option value="1" {{$winfo->wisource == 1 ? "selected" : ""}}>交警</option>
+                    <option value="2" {{$winfo->wisource == 2 ? "selected" : ""}}>政府</option>
+                    <option value="3" {{$winfo->wisource == 3 ? "selected" : ""}}>气象部门</option>
+                    <option value="4" {{$winfo->wisource == 4 ? "selected" : ""}}>互联网</option>
+                    <option value="5" {{$winfo->wisource == 5 ? "selected" : ""}}>本地检测</option>
+                    @else
+                    <option value="0" >未知</option>
+                    <option value="1" >交警</option>
+                    <option value="2" >政府</option>
+                    <option value="3" >气象部门</option>
+                    <option value="4" >互联网</option>
+                    <option value="5" >本地检测</option>                    
+                    @endif
+                </select>
+            </div>
+                      
+        </div>         
 
         <div class="row mb-3">
             <label for="winame" class="col-sm-2 col-form-label">预警内容</label>

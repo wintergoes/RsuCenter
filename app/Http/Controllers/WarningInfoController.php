@@ -58,7 +58,7 @@ class WarningInfoController extends Controller
         $winfo->stoplat = $request->stoplat;
         $winfo->stoplng = $request->stoplng;
         $winfo->teccode = $request->tecchild;
-        $winfo->wisource = 1;
+        $winfo->wisource = $request->wisource;
         $winfo->wicreator = Auth::user()->id;
         $winfo->save();
         
@@ -137,7 +137,7 @@ class WarningInfoController extends Controller
         $winfo->stoplat = $request->stoplat;
         $winfo->stoplng = $request->stoplng;
         $winfo->teccode = $request->tecchild;
-        $winfo->wisource = 1;
+        $winfo->wisource = $request->wisource;
         $winfo->wicreator = Auth::user()->id;
         $winfo->save();
         
