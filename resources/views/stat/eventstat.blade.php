@@ -38,7 +38,7 @@
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="16" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
-                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="drawChart();" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                     
                 </tr>
             </table>
@@ -141,6 +141,7 @@
 <script>
 
 // chart 1
+var eventTrendChart ;
 function drawChart(){
     var ctx = document.getElementById("chart1").getContext('2d');
     var barcolors = ['#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
@@ -193,46 +194,47 @@ function drawChart(){
                 esdataset.push(tecdata);           
             }
             
-            console.log(esdataset);
-            var myChart = new Chart(ctx, {
-              type: 'bar',
-              data: {
-                labels: data.labels,
-                datasets: esdataset
-              },
+            if(eventTrendChart){
+                eventTrendChart.clear();
+                eventTrendChart.destroy();
+            }
+            eventTrendChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.labels,
+              datasets: esdataset
+            },
 
-              options:{
-                  maintainAspectRatio: false,
-                  legend: {
-                        position: 'bottom',
-                        display: true,
-                            labels: {
-                                boxWidth:8
+            options:{
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    display: true,
+                        labels: {
+                            boxWidth:8
+                        }
+                    },
+                    tooltips: {
+                      displayColors:false,
+                    },	
+                    scales: {
+                        xAxes: [{
+                              barPercentage: .66
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
                             }
-                        },
-                        tooltips: {
-                          displayColors:false,
-                        },	
-                        scales: {
-                            xAxes: [{
-                                  barPercentage: .66
-                            }],
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero:true
-                                }
-                            }]                        
-                        }                      
-                  }
-              });
-    
-    
+                        }]                        
+                    }
+                }
+            });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
         }
     });
 }
-drawChart();
+
 
 function showEventTrendTable(){
     document.getElementById("eventtrendtablecontainer").style.visibility = 'visible';
@@ -250,6 +252,7 @@ function showEventTrendChart(){
 
 fillQuickDateSelector("quickdateselector", "fromdate", "todate");
 
+var eventTypeChart;
 function drawEventTypeStat(){
     var ctx = document.getElementById("chartEventType").getContext('2d');
     var barcolors = ['#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
@@ -283,7 +286,12 @@ function drawEventTypeStat(){
             etdataitem["hoverBackgroundColor"] = hoverbgcolor;            
             etdataitem["data"] = summarydata;
             etdataset.push(etdataitem);
-            var myChart = new Chart(ctx, {
+            
+            if(eventTypeChart){
+                eventTypeChart.clear();
+                eventTypeChart.destroy();
+            }
+            eventTypeChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
                         labels: etlabels,
@@ -311,6 +319,7 @@ function drawEventTypeStat(){
     });
 }
 
+var eventSourceChart;
 function drawEventSourceStat(){
     var ctx = document.getElementById("chartEventSource").getContext('2d');
     var barcolors = ['#88d73e', '#ff8da2', '#936cff', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
@@ -344,7 +353,12 @@ function drawEventSourceStat(){
             etdataitem["hoverBackgroundColor"] = hoverbgcolor;            
             etdataitem["data"] = summarydata;
             etdataset.push(etdataitem);
-            var myChart = new Chart(ctx, {
+            
+            if(eventSourceChart){
+                eventSourceChart.clear();
+                eventSourceChart.destroy();
+            }
+            eventSourceChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
                         labels: etlabels,
@@ -371,8 +385,13 @@ function drawEventSourceStat(){
         }
     });
 }
-  
-  drawEventTypeStat();
-  drawEventSourceStat();
+    
+function drawAllChart(){
+    drawChart(); 
+    drawEventTypeStat();
+    drawEventSourceStat();    
+}
+
+drawAllChart();
 </script>
 @endsection
