@@ -18,12 +18,12 @@
     }
 </script>
 
-<h5 class="card-title">预警信息</h5>
+<h5 class="card-title">事件管理</h5>
 <hr>
 
 <div class="mb-lg-3">
     <div class="col-sm-12 col-md-12">
-        <a href="addwarninginfo"><button type="button" class="btn btn-outline-success px-2 radius-6">新增预警</button></a>
+        <a href="addwarninginfo"><button type="button" class="btn btn-outline-success px-2 radius-6">新增事件</button></a>
     </div>
 </div>
 

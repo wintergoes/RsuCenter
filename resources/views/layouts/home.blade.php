@@ -114,7 +114,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 					</a>
 					<ul>
                                             <li {!! $l2_road ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="roads"><i class="bx bx-right-arrow-alt" ></i>路段管理</a></li>
-                                            <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>预警信息</a></li>
+                                            <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>事件管理</a></li>
 					</ul>
 				</li>
                                 

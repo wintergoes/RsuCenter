@@ -22,7 +22,7 @@
 	<script src="assets/plugins/raphael/raphael-min.js"></script>
 	<script src="assets/plugins/morris/js/morris.js"></script>
 
-<h5 class="card-title">预警信息统计</h5>
+<h5 class="card-title">事件统计</h5>
 <hr>
 
 <div class="row">
