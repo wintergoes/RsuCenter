@@ -2,6 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>
+<script type="text/javascript" src="js/coordtransform.js"></script>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
     <div class="col">
@@ -238,7 +239,10 @@ function updateBdMapSummary(){
             for(var i = 0; i < data.warnings.length; i++){
                 warnobj = data.warnings[i];
                 
-                let pt = new BMapGL.Point(warnobj.startlng, warnobj.startlat);
+                var latlng = coordtransform.wgs84togcj02(warnobj.startlng, warnobj.startlat);
+                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
+                
+                let pt = new BMapGL.Point(latlng[0], latlng[1]);
                 var marker = new BMapGL.Marker(pt, {
                     icon: alertStartIcon
                 });
