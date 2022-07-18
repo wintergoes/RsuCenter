@@ -62,6 +62,8 @@ Route::any("/eventstat", "WarningInfoController@eventStat");
 Route::any("/eventtrendsummary", "WarningInfoController@eventTrendSummary");
 Route::any("/eventtypestatjson", "WarningInfoController@eventTypeStatJson");
 Route::any("/eventsourcestatjson", "WarningInfoController@eventSourceStatJson");
+Route::any("/oburoute", "ObuRouteController@obuRoute");
+Route::any("/getroutevaliddates", "ObuRouteController@getRouteValidDate");
 
 //*******************************道路管理***************************************
 Route::any("/roads", "RoadController@index");
