@@ -790,6 +790,7 @@ class ApiV1Controller extends Controller
             $oburoutedetail->lat = $loc->lat;
             $oburoutedetail->lng = $loc->lng;
             $oburoutedetail->altitude = $loc->altitude;
+            $oburoutedetail->distance = $loc->distance;
             $oburoutedetail->locationtype = $loc->locationtype;
             $oburoutedetail->created_at = strtotime($loc->ctime);
             $oburoutedetail->save();
