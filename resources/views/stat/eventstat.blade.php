@@ -34,9 +34,9 @@
             <table style="font-size: 12px; text-align: center;" >
                 <tr>                   
                     <td class="search_td">日期 自&nbsp;&nbsp;</td>
-                    <td class="search_td"><input name="fromdate" id="fromdate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="16" value="{{$searchfromdate}}"/></td>
+                    <td class="search_td"><input name="fromdate" id="fromdate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
-                    <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="16" value="{{$searchtodate}}"/></td>
+                    <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
                     <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                     
