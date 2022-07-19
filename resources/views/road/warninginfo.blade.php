@@ -2,7 +2,9 @@
 
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs"></script>
-
+<script language="javascript" type="text/javascript" src="/js/zlzl.js"></script>
+<script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
+<script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 <script>
     function confirmDelete(gtid){
@@ -27,6 +29,30 @@
     </div>
 </div>
 
+<div class="row mb-4">
+        <form id="form1" class="form-horizontal" method="get" >
+            {{ csrf_field() }}
+            <table style="font-size: 12px; text-align: center;" >
+                <tr>                   
+                    <td class="search_td">创建日期 自&nbsp;&nbsp;</td>
+                    <td class="search_td"><input name="fromdate" id="fromdate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchfromdate}}"/></td>
+                    <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
+                    <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
+                    <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;状态&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="wistatus" class="form-select"  style="width: 80px">
+                            <option value="-1">全部</option>
+                            <option value="0" {{$searchwistatus == "0" ? "selected" : ""}}>无效</option>
+                            <option value="1" {{$searchwistatus == "1" ? "selected" : ""}}>有效</option>
+                        </select>
+                    </td>                    
+                    <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                </tr>
+            </table>
+        </form>
+</div>
+
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         @if (count($warninginfo) > 0)        
@@ -45,12 +71,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $commonctrl = new \App\Http\Controllers\CommonController() ?>
                     @foreach($warninginfo as $winfo)
                     <tr>
                         <td>{{$winfo->winame}}</td>
                         <td>{{$winfo->startlat}}, {{$winfo->startlng}}</td>
                         <td>{{$winfo->stoplat}}, {{$winfo->stoplng}}</td>
-                        <td>{{$winfo->wisource}}</td>
+                        <td>{{$commonctrl->eventSource2Str($winfo->wisource)}}</td>
                         <td>{{$winfo->realname}}</td>
                         <td>{{$winfo->wistatus == 1 ? "有效" : "无效"}}</td>
                         <td>{{$winfo->created_at}}</td>
@@ -71,11 +98,29 @@
         @else
         <div class="col-sm-12">
         <div class="p-4 border border-1 border-warning text-center rounded bg-light">
-                <div class="text-info">没有预警信息！</div>
+                <div class="text-info">没有符合条件的预警信息！</div>
         </div>
         </div>
         @endif         
     </div>
 </div>
- 
+
+@if(count($warninginfo) > 0)
+<div style="margin-top: 10px;">
+   
+    <nav aria-label="Page navigation example">						
+     <div id="pagelinks">
+    {{ $warninginfo->appends([ "fromdate"=>$searchfromdate,
+                "todate"=>$searchtodate, "wistatus"=>$searchwistatus])->links() }}  
+    </div> 
+    </nav>
+</div>
+
+<script>
+formatPagelinks();
+</script>
+@endif
+<script>
+fillQuickDateSelector("quickdateselector", "fromdate", "todate");    
+</script>
 @endsection

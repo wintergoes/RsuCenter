@@ -25,3 +25,21 @@ function initTrafficEventClass(selecterid, pcode, selectcode, token){
         }
     });    
 }
+
+
+function formatPagelinks(){
+    var objs = document.getElementById("pagelinks").getElementsByTagName("a");
+    for(var i = 0; i < objs.length; i++){
+        objs[i].className = objs[i].className + " page-link";
+    }
+
+    var liobjs = document.getElementById("pagelinks").getElementsByTagName("li");
+    for(var i = 0; i < liobjs.length; i++){
+        liobjs[i].className = liobjs[i].className + " page-item";
+    }
+
+    var spanobjs = document.getElementById("pagelinks").getElementsByTagName("span");
+    for(var i = 0; i < spanobjs.length; i++){
+        spanobjs[i].className = "page-link";
+    }
+}

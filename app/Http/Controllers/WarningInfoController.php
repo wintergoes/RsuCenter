@@ -22,17 +22,49 @@ class WarningInfoController extends Controller
     }    
     
     function index(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        $searchwistatus = $request->wistatus;
+        
         $winfos = WarningInfo::orderBy('id', 'desc')
                 ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
                         "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
                         "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", "u.realname",
                         "tec.tecparentcode as tecpcode", "warninginfo.teccode")
                 ->leftjoin("users as u", "warninginfo.wicreator", "=", "u.id")
-                ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode")
-                ->get();
+                ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode");
+        
+        if($searchfromdate != ""){
+            $winfos = $winfos->where("warninginfo.created_at", ">=" , $searchfromdate . " 00:00:00");
+        }
+        
+        if($searchtodate != ""){
+            $winfos = $winfos->where("warninginfo.created_at", "<=",  $searchtodate . " 23:59:59");
+        }
+        
+        if($searchwistatus != "" && $searchwistatus != "-1"){
+            $winfos = $winfos->where("warninginfo.wistatus", $searchwistatus);
+        }
+                
+        $winfos = $winfos->paginate(20);
         
         return view('/road/warninginfo', [
-            "warninginfo"=>$winfos
+            "warninginfo"=>$winfos,
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate,
+            "searchwistatus"=>$searchwistatus
         ]);
     }
     
