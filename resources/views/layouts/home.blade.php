@@ -101,6 +101,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
                                             <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>道路事件统计</a></li>                                            
                                             <li > <a href="warninginfostat"><i class="bx bx-right-arrow-alt" ></i>预警信息统计</a></li>
                                             <li {!! $l2_oburoute ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="oburoute"><i class="bx bx-right-arrow-alt" ></i>车辆运行轨迹</a></li>
+                                            <li > <a href="javascript:void(0)"><i class="bx bx-right-arrow-alt" ></i>车流量统计</a></li>
                                             <li {!! $l2_clockins ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="clockins"><i class="bx bx-right-arrow-alt" ></i>考勤打卡记录</a></li>                                            
 					</ul>
 				</li>

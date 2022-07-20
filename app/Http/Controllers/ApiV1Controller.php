@@ -16,6 +16,7 @@ use App\RoadCoordinate;
 use App\RoadLink;
 use App\ObuRouteDetail;
 use App\ClockIn;
+use App\WarningRecord;
 
 use DB;
 use Auth;
@@ -805,6 +806,40 @@ class ApiV1Controller extends Controller
         $arr = array("retcode"=>ret_success, "localids"=>$localids);
         return json_encode($arr);
     }
+    
+    function uploadWarningRecords(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }
+
+        $localids = "";
+        $jsonrows = json_decode($request->wrjson);
+        foreach($jsonrows as $row){
+            $wrecord = new WarningRecord();
+            $wrecord->obuid = $request->obuid;
+            $wrecord->eventid = $row->eventid;
+            $wrecord->eventtype = $row->eventtype;
+            $wrecord->eventsource = $row->eventsource;
+            $wrecord->eventstarttime = $row->eventstarttime ;
+            $wrecord->eventlat = $row->eventlat;
+            $wrecord->eventlng = $row->eventlng;
+            $wrecord->obulat = $row->obulat;
+            $wrecord->obulng = $row->obulng;
+            $wrecord->obualt = $row->obualt;
+            $wrecord->created_at = $row->createtime ;
+            $wrecord->save();
+            
+            if($localids == ""){
+                $localids = $row->id;
+            } else {
+                $localids .= "," . $row->id;
+            }
+        }
+        
+        $arr = array("retcode"=>ret_success, "localids"=>$localids);
+        return json_encode($arr);
+    }    
     
     function getRoadInfo(Request $request){
         if($this->obuApiAuth($request) === false){
