@@ -56,12 +56,18 @@ Route::any('/editwarninginfosave', "WarningInfoController@editWarningInfoSave");
 Route::any('/deletewarninginfo', "WarningInfoController@deleteWarningInfo");
 
 //*******************************统计分析***************************************
-Route::any('/warninginfostat', "WarningInfoController@warningInfoStat");
 Route::any('/clockins', "ClockInController@index");
+
 Route::any("/eventstat", "WarningInfoController@eventStat");
 Route::any("/eventtrendsummary", "WarningInfoController@eventTrendSummary");
 Route::any("/eventtypestatjson", "WarningInfoController@eventTypeStatJson");
 Route::any("/eventsourcestatjson", "WarningInfoController@eventSourceStatJson");
+
+Route::any('/warningrecordstat', "WarningInfoController@warningRecordStat");
+Route::any('/warningrecordcountstatjson', "WarningInfoController@warnRecordsCountStatJson");
+Route::any("/warningrecordeventtypestatjson", "WarningInfoController@warningRecordEventTypeStatJson");
+Route::any("/warningrecordeventsourcestatjson", "WarningInfoController@warningRecordEventSourceStatJson");
+
 Route::any("/oburoute", "ObuRouteController@obuRoute");
 Route::any("/getroutevaliddates", "ObuRouteController@getRouteValidDate");
 

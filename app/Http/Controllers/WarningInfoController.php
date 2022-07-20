@@ -352,5 +352,121 @@ class WarningInfoController extends Controller
         $eventsourcesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventsourcesummary);
         return json_encode($arr);
+    }
+    
+    function warningRecordStat(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }         
+        
+        return view("/stat/warningrecordstat", [
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate
+        ]);        
+    }
+    
+    function warnRecordsCountStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }          
+        
+        $sqlstr = "select d.ddate,ifnull(wrstat.wrcount,0)as wrcount from tbldates d "
+                . " left join (select count(id) as wrcount, date(created_at) as wrdate from warningrecords group by date(created_at)) wrstat on wrstat.wrdate=d.ddate "
+                . " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' order by d.ddate;";
+        $countstat = DB::select($sqlstr);
+        
+        $dates = DB::select("select ddate from tbldates where ddate>='" . $searchfromdate . "' and ddate<='" . $searchtodate . "' ");
+        $labels = array();
+        foreach($dates as $d){
+            array_push($labels, $d->ddate);
+        }        
+        
+        $arr = array("retcode"=>ret_success, "wrcdata"=>$countstat, "labels"=>$labels);
+        return json_encode($arr);
+    }
+    
+    function warningRecordEventTypeStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }        
+        
+        $sqlstr = "select count(wr.id) as wcount,tp.tecparentcode, tp.tecname from warningrecords wr "
+                . " left join trafficeventclasses tp on tp.teccode=wr.eventtype "
+                . " where date(wr.created_at)>='" . $searchfromdate . "' and date(wr.created_at)<='" . $searchtodate . "' group by tp.tecparentcode, tp.tecname ;";
+        
+        $eventtypesummary = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "summary"=>$eventtypesummary);
+        return json_encode($arr);
+    }
+    
+   function warningRecordEventSourceStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }        
+        
+        $sqlstr = "select count(wr.id) as scount,wr.eventsource, "
+                . " case wr.eventsource when 1 then '交警' when 2 then '政府' when 3 then '气象部门' "
+                . " when 4 then '互联网' when 5 then '本地检测' else '未知' end as sourcename from warningrecords wr  "
+                . " where date(wr.created_at)>='" . $searchfromdate . "' and date(wr.created_at)<='" . $searchtodate . "' group by wr.eventsource ;";
+        
+        $eventsourcesummary = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "summary"=>$eventsourcesummary);
+        return json_encode($arr);
     }    
 }
