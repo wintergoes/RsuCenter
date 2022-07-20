@@ -34,6 +34,7 @@
 
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
+        @if (count($clockins) > 0)
         <div class="col-sm-auto">
         <table class="table mb-0 table-hover table-bordered" >
                 <thead>
@@ -65,6 +66,13 @@
                 </tbody>
         </table>    
         </div>
+        @else
+        <div class="col-sm-12">
+        <div class="p-4 border border-1 border-warning text-center rounded bg-light">
+                <div class="text-info">没有符合条件的打卡记录！</div>
+        </div>
+        </div>
+        @endif          
     </div>
 </div>
 
