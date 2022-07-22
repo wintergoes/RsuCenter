@@ -99,5 +99,29 @@ class HomeController extends Controller
         
         $arr = array("retcode"=>ret_success, "devices"=>$devices);
         return json_encode($arr);
-    }    
+    }
+    
+    function dashboardEventJson(Request $request){
+        $latestevents = DB::select("select winame,time(created_at) as eventtime from warninginfo order by id desc limit 7");
+        
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-" . $request->statday . " day"));
+        }
+
+        $searchtodate = date('Y-m-d',time());
+        
+        $sqlstr = "select count(w.id) as wcount,tec.tecparentcode, tp.tecname from warninginfo w "
+                . " left join trafficeventclasses tec on tec.teccode=w.teccode "
+                . " left join trafficeventclasses tp on tp.teccode=tec.tecparentcode "
+                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by tec.tecparentcode, tp.tecname ;";
+        
+        $eventtypesummary = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "summary"=>$eventtypesummary, "events"=>$latestevents);
+        return json_encode($arr);        
+    }
 }

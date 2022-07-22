@@ -286,71 +286,24 @@
                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
             </div>
             <div class="item_sub_div">
-                <div class="item_subtitle">简要统计</div>
+                <div class="item_subtitle" id="event_sub_title">简要统计</div>
                 <div style=" margin-top: 10px; width: 100%;">
-                    <span class="stat_button">今日</span>
-                    <span class="stat_button">7天</span>
-                    <span class="stat_button">1个月</span>
+                    <span class="stat_button_active" id="eventtoday" onclick="showEventByDay(0);">今日</span>
+                    <span class="stat_button" id="event7day" onclick="showEventByDay(7);">7天</span>
+                    <span class="stat_button" id="event30day" onclick="showEventByDay(30);">1个月</span>
                 </div>                
-                <div style="margin-top: 60px; background: url('images/dashboard/chart_events_bkg1.png') no-repeat; background-size: 100%, 100%;"><canvas id="chart_events"></canvas></div>
-                <div>
-                    <table style="text-align: left;">
-                        <tbody style="background-color: rgba(0, 0, 0, 0);">
-                            <tr>
-                                <td><font color="#2e9fff">⬤</font> 团雾</td>
-                                <td><font color="#2968f6">⬤</font> 雨雪</td>
-                            </tr>
-                            <tr>
-                                <td><font color="#e02e89">⬤</font> 交通事故</td>
-                                <td><font color="#13f9fe">⬤</font> 交通管制</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="chart_events_container" style="width: 100%; text-align: center;">
+                    <canvas id="chart_events" width="180" height="260"></canvas>
                 </div>
             </div>
             <div class="item_sub_div">
                 <div class="item_subtitle">事件列表</div>
-                <table>
+                <table id="traffic_event_table">
                     <thead>
                         <td>序号</td>
                         <td>事件</td>
                         <td>时间</td>
                     </thead>
-                    <tr>
-                        <td>001</td>
-                        <td>团雾</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>001</td>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>001</td>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>001</td>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>001</td>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>001</td>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>001</td>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
                 </table>
             </div> 
         </div>
@@ -439,7 +392,7 @@ var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24,
     
 function updateBdMapSummary(){
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "homebdmapsummary",
         dataType: "json",
         success: function (data) {
@@ -525,104 +478,114 @@ function updateBdMapSummary(){
 
 <!--事件统计-->
 <script>
-    function test(){
-	Highcharts.chart('chart_events', {
-		chart: {
-                    backgroundColor: 'rgba(0,0,0,0)',
-                    type: 'variablepie',
-                    styledMode: true,
-		},
-                title:{
-                    text: '',
-                    style: {
-                        display: 'none'
-                    },
-                },
-                subtitle: {
-                    text: '',
-                    style: {
-                        display: 'none'
-                    },
-                },                
-		credits: {
-                    enabled: false
-		},
-                legend:{
-                    verticalAlign:'top',
-                },
-                plotOptions: {
-                    variablepie: {
-                            dataLabels: {
-                                enabled: false,
-                            },
-                            center: ['50%', '25%'],
-                            showInLegend: true
-                        }
-                },
-		tooltip: {
-			headerFormat: '',
-			pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' + 'Area (square km): <b>{point.y}</b><br/>' + 'Population density (people per square km): <b>{point.z}</b><br/>'
-		},
-		series: [{
-			minPointSize: 10,
-			innerSize: '20%',
-			zMin: 0,
-			name: 'countries',
-			data: [{
-				name: '团雾',
-				y: 505370,
-				z: 92.9
-			}, {
-				name: '雨雪天气',
-				y: 551500,
-				z: 118.7
-			}, {
-				name: '交通事故',
-				y: 312685,
-				z: 124.6
-			}, {
-				name: '交通管制',
-				y: 78867,
-				z: 137.5
-			}]
-		}]
-	});
-    }
-        
-function showEvents(){        
-    new Chart(document.getElementById("chart_events"), {
-            type: 'polarArea',
-            data: {
-                labels: ["团雾", "交通事故", "交通管制", "雨雪"],
-                datasets: [{
-                        label: "",
-                        backgroundColor: ["#2e9fff", "#2968f6", "#e02e89", "#13f9fe"],
-                        data: [1478, 900, 734, 784],
-                        borderColor: 'rgba(0, 0, 0, 0)',
-                        borderWidth: 8,
-                        borderAlign: 'inner',
-                        
-                }],
+var eventReqDay = 0;
+function showEventByDay(day){
+    eventReqDay  = day;
+    
+    $('#eventtoday').attr('class', "stat_button");
+    $('#event7day').attr('class', "stat_button");
+    $('#event30day').attr('class', "stat_button");
+    if(day === 0){
+        $('#eventtoday').attr('class', "stat_button_active");
+    } else if(day === 7){
+        $('#event7day').attr('class', "stat_button_active");
+    } else {
+        $('#event30day').attr('class', "stat_button_active");
+    }    
+    
+    showEvents();
+}    
+    
+var eventChart ; 
+var eventReqCount = 0;
+function showEvents(){
+    var constpiecolors = ["#2e9fff", "#2968f6", "#e02e89", "#13f9fe", '#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
+    var eventdateset = [];
+    var eventdataitem = {};
+    var labels = [];
+    var eventdata = [];
+    var piecolors = [];
+    var eventitemcount = 0;
+    $.getJSON("dashboardeventjson?statday=" + eventReqDay,function(data){
+        eventReqCount++;
+        var tbl = document.getElementById("traffic_event_table");
+        var rows = tbl.rows; //获取表格的行数
 
-                scaleFontColor : "red",
-                scaleLineColor: "red",
-                scaleLineWidth: 8, 
-            },
-            options: {               
-                maintainAspectRatio: false,
-                startAngle: 45,
-                title: {
-                        display: false,
-                        text: ''
-                },
-                legend: {
-                    display: false
-                },
-            }
+        for (var i = rows.length - 1; i > 0 ; i--) {
+            tbl.deleteRow(i);    
+        }
+
+        var maxid = Math.min(7, data["events"].length);
+        for(var i=0;i<maxid;i++){
+            var tr=tbl.insertRow(i+1);
+            tr.className = "tr_content";
+                        //添加单元格
+            var cell0=tr.insertCell(0);
+            cell0.innerHTML = i+1;
+            var cell1=tr.insertCell(1);
+            cell1.innerHTML=data["events"][i]["winame"];
+            var cell2=tr.insertCell(2);
+            cell2.innerHTML=data["events"][i]["eventtime"]; 
+        }
+
+        if(data["summary"] !== null){
+            eventitemcount = data["summary"].length;
+        }
+        for(var i = 0; i < data["summary"].length; i++){
+            labels.push(data["summary"][i].tecname);
+            eventdata.push(data["summary"][i].wcount);
+            piecolors.push(constpiecolors[i]);
+        }
+        
+        eventdataitem["data"] = eventdata;
+        eventdataitem["backgroundColor"] = piecolors;
+        eventdataitem["borderColor"] = 'rgba(0, 0, 0, 0)';
+        eventdataitem["borderWidth"] = 8;
+        eventdataitem["borderAlign"] = 'inner';
+        eventdateset.push(eventdataitem);
+
+//        if(eventChart){    
+//            eventChart.clear();
+//            eventChart.destroy();
+//        }
+        if(eventitemcount === 0){
+            $("#chart_events_container").html('<br/><br/><br/><br/>暂无数据。');
+        } else {
+            $("#chart_events_container").html('<canvas id="chart_events" width="180" height="200"></canvas>');
+
+            eventChart = new Chart(document.getElementById("chart_events"), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: eventdateset,
+                        scaleFontColor : "red",
+                        scaleLineColor: "red",
+                        scaleLineWidth: 8, 
+                    },
+                    options: {               
+                        maintainAspectRatio: false,
+                        startAngle: 45,
+                        title: {
+                                display: false,
+                                text: ''
+                        },
+                        legend: {
+                            position: 'bottom',
+                            display: true,
+                                labels: {
+                                    boxWidth:8
+                                }
+                        },
+                        animation: {
+                            duration: 0,
+                        }
+                    }
+            });        
+        }        
     });
 }
 
- var vehflowChart;       
+var vehflowChart;       
 function showVehFlowChart(reqcount){
     $('#vehflowtoday').attr('class', "stat_button");
     $('#vehflow7day').attr('class', "stat_button");
@@ -655,6 +618,9 @@ function showVehFlowChart(reqcount){
         },
         tooltips: {
                 enabled: false
+        },        
+        animation: {
+            duration: 0,
         },
         scales: {
             xAxes: [{
@@ -701,6 +667,7 @@ function showVehFlowChart(reqcount){
                }]
             };
         if(vehflowChart){
+            vehflowChart.clear();
             vehflowChart.destroy();
         }
         vehflowChart = new Chart(ctx, {
@@ -797,10 +764,6 @@ function showDeviceStatus(){
     }); 
 }
 
-function showDeviceChart(){
-
-}
-
 $(window).on('resize',function(){
     resizePage();
     //alert(window.innerWidth);
@@ -860,7 +823,6 @@ function refreshAll(){
     showDeviceStatus();
     updateBdMapSummary();
     showEvents();
-    showDeviceChart();
     showVehFlowChart(7);
     getWeekDay();
     showDate();    

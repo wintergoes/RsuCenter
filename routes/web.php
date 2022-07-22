@@ -109,6 +109,7 @@ Route::get('/dashboard', 'HomeController@dashboard');
 Route::any('/dashboardsummary', 'HomeController@dashboardSummary');
 Route::any('/dashboardvehflow', 'HomeController@dashboardVehFlow');
 Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
+Route::any('/dashboardeventjson', 'HomeController@dashboardEventJson');
 Route::any("/hardware", "HardwareUpdateController@index");
 Route::any("/hardwareinfo", "HardwareUpdateController@hardwareInfo");
 Route::any("/deletehardware", "HardwareUpdateController@deleteHardware");
