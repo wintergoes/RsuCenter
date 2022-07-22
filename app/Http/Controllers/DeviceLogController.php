@@ -149,19 +149,28 @@ class DeviceLogController extends Controller
         }
         
         $path .= $logfile;
-        
+        $allowed = array("\x9", "\xd", "\xa" /* , ... */);   
         //echo $path;
         
 	if (is_file($path)) {
-            $handle = fopen($path, "r");//读取二进制文件时，需要将第二个参数设置成'rb'
+            $handle = fopen($path, "rb");//读取二进制文件时，需要将第二个参数设置成'rb'
 
             //通过filesize获得文件大小，将整个文件一下子读到一个字符串中
             $contents = fread($handle, filesize ($path));
-            fclose($handle);            
+            $newcontent = "";
+            for($i=0; $i < strlen($contents); $i++) {
+                if(ctype_print($contents[$i]) || in_array($contents[$i], $allowed)){
+                    $newcontent = $newcontent . $contents[$i];
+                } else {
+                    $newcontent = $newcontent . "0x" . strtoupper(dechex(ord($contents[$i]))) ;
+                }
+            }
+            
+            fclose($handle);
             return view("/other/logcontent", [
                 "logtype"=>$logtype,
                 "logfile"=>$logfile,
-                "logcontent"=>$contents,
+                "logcontent"=>$newcontent,
             ]);
 	} else {
             return view('/other/simplemessage', [
