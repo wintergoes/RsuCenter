@@ -261,7 +261,9 @@ function updateBdMapSummary(){
                 map.addOverlay(marker);
                 
                 if(warnobj.startlat !== warnobj.stoplat || warnobj.startlng !== warnobj.stoplng){
-                    let ptstop = new BMapGL.Point(warnobj.stoplng, warnobj.stoplat);
+                    var latlng1 = coordtransform.wgs84togcj02(warnobj.stoplng, warnobj.stoplat);
+                    latlng1 = coordtransform.gcj02tobd09(latlng1[0], latlng1[1]);                    
+                    let ptstop = new BMapGL.Point(latlng1[0], latlng1[1]);
                     var marker = new BMapGL.Marker(ptstop, {
                         icon: alertStopIcon
                     });

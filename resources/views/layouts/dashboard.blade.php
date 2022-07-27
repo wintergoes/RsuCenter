@@ -54,7 +54,9 @@
 	<script src="assets/plugins/highchart_10_0_0/modules/export-data.js"></script>
 	<script src="assets/plugins/highchart_10_0_0/modules/accessibility.js"></script>
         
-	<script src="assets/plugins/chartjs/js/Chart.min.js"></script>   
+	<script src="assets/plugins/chartjs/js/Chart.min.js"></script> 
+        
+        <script type="text/javascript" src="js/coordtransform.js"></script>        
 	<title>RSU管理后台</title>
         
     <style type="text/css">
@@ -434,7 +436,9 @@ function updateBdMapSummary(){
             for(var i = 0; i < data.warnings.length; i++){
                 warnobj = data.warnings[i];
                 
-                let pt = new BMapGL.Point(warnobj.startlng, warnobj.startlat);
+                var latlng = coordtransform.wgs84togcj02(warnobj.startlng, warnobj.startlat);
+                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+                let pt = new BMapGL.Point(latlng[0], latlng[1]);
                 var marker = new BMapGL.Marker(pt, {
                     icon: alertStartIcon
                 });
@@ -453,7 +457,10 @@ function updateBdMapSummary(){
                 map.addOverlay(marker);
                 
                 if(warnobj.startlat !== warnobj.stoplat || warnobj.startlng !== warnobj.stoplng){
-                    let ptstop = new BMapGL.Point(warnobj.stoplng, warnobj.stoplat);
+                    var latlng1 = coordtransform.wgs84togcj02(warnobj.stoplng, warnobj.stoplat);
+                    latlng1 = coordtransform.gcj02tobd09(latlng1[0], latlng1[1]); 
+                    
+                    let ptstop = new BMapGL.Point(latlng1[0], latlng1[1]);
                     var marker = new BMapGL.Marker(ptstop, {
                         icon: alertStopIcon
                     });
