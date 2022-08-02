@@ -82,14 +82,33 @@ class HomeController extends Controller
             $reqcount = 7;
         }
         
-        $arr = array();
-        for($i = 1; $i <= $reqcount; $i++){
-            $str = "05.".$i;
-            $arrinner = array("date"=>$str, "value"=>rand(100, 10000));
-            array_push($arr, $arrinner);
-        }
+        $searchtodate = date('Y-m-d',time());
         
-        $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
+        if($reqcount != 0){
+            $searchfromdate = "";
+            if($request->has("fromdate")){
+                $searchfromdate = $request->fromdate;
+            }
+
+            if($searchfromdate == ""){
+                $searchfromdate = date('Y-m-d',strtotime("-" . $reqcount . " day"));
+            }
+
+            $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
+                    . " left join vehicleflow vf on date(vf.created_at)=d.ddate "
+                    . " where  d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' "
+                    . " group by d.ddate " ;
+
+            $arr = DB::select($sqlstr);
+            $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
+        } else {
+            $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(vf.created_at, '%H') as vfhour from  vehicleflow vf "
+                    . " where  date(vf.created_at)>='" . $searchtodate . "' and date(vf.created_at)<='" . $searchtodate . "' "
+                    . " group by DATE_FORMAT(vf.created_at, '%H') " ;
+
+            $arr = DB::select($sqlstr);
+            $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
+        }
         return json_encode($arr_vehflows);
     }
     

@@ -783,6 +783,9 @@ class ApiV1Controller extends Controller
             return json_encode($arr);
         }
 
+        $obus = ObuDevice::where("id", $request->obuid)
+                ->get();        
+        
         $localids = "";
         $locs = json_decode($request->locjson);
         foreach($locs as $loc){

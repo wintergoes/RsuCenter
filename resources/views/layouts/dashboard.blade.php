@@ -238,9 +238,9 @@
                 <canvas id="chart_veh_flow"></canvas>
             </div>
             <div style="width: 20%; position: absolute; right: 1px; margin-top: 30px;">
-                <p class="stat_button" id='vehflowtoday' onclick="showVehFlowChart(10);">今日</p>
-                <p class="stat_button" id='vehflow7day' onclick="showVehFlowChart(7);">7天</p>
-                <p class="stat_button" id='vehflow30day' onclick="showVehFlowChart(30);">1个月</p>
+                <p class="stat_button_active" id='vehflowtoday' onclick="showVehFlowChartByDay(0);">今日</p>
+                <p class="stat_button" id='vehflow7day' onclick="showVehFlowChartByDay(7);">7天</p>
+                <p class="stat_button" id='vehflow30day' onclick="showVehFlowChartByDay(30);">1个月</p>
             </div>
         </div>
     </div>
@@ -592,12 +592,15 @@ function showEvents(){
     });
 }
 
-var vehflowChart;       
-function showVehFlowChart(reqcount){
+var vehflowChart;
+var vehflowReqCount = 0;
+function showVehFlowChartByDay(reqcount){
+    vehflowReqCount = reqcount;
+    
     $('#vehflowtoday').attr('class', "stat_button");
     $('#vehflow7day').attr('class', "stat_button");
     $('#vehflow30day').attr('class', "stat_button");
-    if(reqcount === 10){
+    if(reqcount === 0){
         $('#vehflowtoday').attr('class', "stat_button_active");
     } else if(reqcount === 7){
         $('#vehflow7day').attr('class', "stat_button_active");
@@ -605,6 +608,10 @@ function showVehFlowChart(reqcount){
         $('#vehflow30day').attr('class', "stat_button_active");
     }
     
+    showVehFlowChart();
+}
+
+function showVehFlowChart(){
     var ctx = document.getElementById('chart_veh_flow').getContext('2d');
     var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
       gradientStroke1.addColorStop(0, 'rgba(32, 219, 253, 0.3)');  
@@ -653,18 +660,19 @@ function showVehFlowChart(reqcount){
         }
     };
 
-    $.getJSON("dashboardvehflow?reqcount=" + reqcount,function(data){
-        var clabels = [];
+    $.getJSON("dashboardvehflow?reqcount=" + vehflowReqCount,function(data){
+        if(vehflowReqCount !== 0){
+            var clabels = [];
             var cvalues = [];
 
             for(var i=0;i<data["vehflow"].length;i++){
-               clabels.push(data["vehflow"][i]["date"]);
-               cvalues.push(data["vehflow"][i]["value"]);
+               clabels.push(data["vehflow"][i]["vfdate"]);
+               cvalues.push(data["vehflow"][i]["vehcount"]);
             }
 
             const data1 = {
                 labels: clabels,
-               datasets: [{
+                datasets: [{
                    data: cvalues,
                    backgroundColor: gradientStroke1,
                    borderColor: gradientStroke2, 
@@ -673,15 +681,58 @@ function showVehFlowChart(reqcount){
                    borderWidth: 3                            
                }]
             };
-        if(vehflowChart){
-            vehflowChart.clear();
-            vehflowChart.destroy();
+
+            if(vehflowChart){
+                vehflowChart.clear();
+                vehflowChart.destroy();
+            }
+            vehflowChart = new Chart(ctx, {
+               type: "line",
+               data: data1,
+               options: chartoptions
+           });
+        } else {
+            var clabels = [];
+            var cvalues = [];
+            
+            for(var k = 1; k < 24; k++){
+                clabels.push(k);
+                var haveHour = false;
+                for(var i=0;i<data["vehflow"].length;i++){
+                    if(data["vehflow"][i]["vfhour"] === k.toString()){
+                        cvalues.push(data["vehflow"][i]["vehcount"]);
+                        haveHour = true;
+                        break;
+                    }                                    
+                }
+                
+                if(!haveHour){
+                    cvalues.push(0);
+                }
+            }
+
+            const data1 = {
+                labels: clabels,
+                datasets: [{
+                   data: cvalues,
+                   backgroundColor: gradientStroke1,
+                   borderColor: gradientStroke2, 
+                   pointRadius :"0",
+                   pointHoverRadius:"0",
+                   borderWidth: 3                            
+               }]
+            };
+
+            if(vehflowChart){
+                vehflowChart.clear();
+                vehflowChart.destroy();
+            }
+            vehflowChart = new Chart(ctx, {
+               type: "line",
+               data: data1,
+               options: chartoptions
+           });            
         }
-        vehflowChart = new Chart(ctx, {
-           type: "line",
-           data: data1,
-           options: chartoptions
-       });
    });
 }
 
@@ -830,7 +881,7 @@ function refreshAll(){
     showDeviceStatus();
     updateBdMapSummary();
     showEvents();
-    showVehFlowChart(7);
+    showVehFlowChart();
     getWeekDay();
     showDate();    
 }
