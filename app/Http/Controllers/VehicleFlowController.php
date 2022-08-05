@@ -10,6 +10,10 @@ use DB;
 
 class VehicleFlowController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }     
+    
     function vehflowStat(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){

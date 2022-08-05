@@ -71,9 +71,9 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            道路风险规避
+                            今日车流量
                         </p>
-                        <h4 class="my-1 text-success">
+                        <h4 class="my-1 text-success" id="vehflow">
                             360次
                         </h4>
                     </div>
@@ -300,6 +300,7 @@ function updateHomeSummary(){
             $('#rsucount').text(data[0].rsucount + "台");
             $('#obucount').text(data[0].obucount + "台");
             $('#warncount').text(data[0].warncount + "个");
+            $('#vehflow').text(data[0].vehflowcount + "");
             setTimeout('updateHomeSummary()', 5000);    
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

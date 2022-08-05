@@ -39,7 +39,8 @@ class HomeController extends Controller
         $stats = DB::select("select * from (select " . ret_success . " as ret_code) as ret,"
                 . "(select count(id) as rsucount from devices) as rsustat, "
                 . "(select count(id) as obucount from obudevices) as obustat,"
-                . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat");
+                . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat,"
+                . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat");
         
         return json_encode($stats);
     }
