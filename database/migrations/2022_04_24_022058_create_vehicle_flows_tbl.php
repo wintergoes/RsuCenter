@@ -18,6 +18,8 @@ class CreateVehicleFlowsTbl extends Migration
             $table->string("vehnumber", 20);  // 车牌号
             $table->integer("vehposition")->default(0); // 检测的位置，对应roadpositions中的id
             $table->integer("vehspeed")->default(0)->nullable();
+            $table->string("vehtype")->default(0)->nullable();
+            $table->string("vehbrand")->default("")->nullable();
             $table->integer("obuid")->default(0)->nullable();
             $table->timestamps();
         });

@@ -55,7 +55,9 @@ $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 $l2_oburoute = in_array($currentpath, array("oburoute"));
 $l2_eventstat = in_array($currentpath, array("eventstat"));
 $l2_clockins = in_array($currentpath, array("clockins"));
-$l1_stat = $l2_eventstat | $l2_clockins | $l2_oburoute;
+$l2_vehflowstat = in_array($currentpath, array("vehflowstat"));
+$l2_warningrecordstat = in_array($currentpath, array("warningrecordstat"));
+$l1_stat = $l2_eventstat | $l2_clockins | $l2_oburoute | $l2_vehflowstat | $l2_warningrecordstat;
 
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo"));
 $l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave"));
@@ -99,9 +101,9 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 					</a>
 					<ul>
                                             <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>道路事件统计</a></li>                                            
-                                            <li > <a href="warningrecordstat"><i class="bx bx-right-arrow-alt" ></i>预警记录统计</a></li>
+                                            <li {!! $l2_warningrecordstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warningrecordstat"><i class="bx bx-right-arrow-alt" ></i>预警记录统计</a></li>
                                             <li {!! $l2_oburoute ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="oburoute"><i class="bx bx-right-arrow-alt" ></i>车辆运行轨迹</a></li>
-                                            <li > <a href="javascript:void(0)"><i class="bx bx-right-arrow-alt" ></i>车流量统计</a></li>
+                                            <li {!! $l2_vehflowstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="vehflowstat"><i class="bx bx-right-arrow-alt" ></i>车流量统计</a></li>
                                             <li {!! $l2_clockins ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="clockins"><i class="bx bx-right-arrow-alt" ></i>考勤打卡记录</a></li>                                            
 					</ul>
 				</li>
