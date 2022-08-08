@@ -9,6 +9,7 @@ require_once "../app/Constant.php";
 use App\Device;
 use App\ObuDevice;
 use App\WarningInfo;
+use App\RoadCoordinate;
 
 use DB;
 
@@ -56,6 +57,7 @@ class HomeController extends Controller
         
         $warnings = WarningInfo::orderBy("id")
                 ->select("winame", "startlat", "startlng", "stoplat", "stoplng")
+                ->where("created_at", ">=", date("Y-m-d"))
                 ->get();
         
         $arr = array("retcode"=>ret_success, "rsudevices"=>$rdevices, "obudevices"=>$odevices,
@@ -103,9 +105,9 @@ class HomeController extends Controller
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
         } else {
-            $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(vf.created_at, '%H') as vfhour from  vehicleflow vf "
+            $sqlstr = " select count(vf.id) as vehcount,hour(vf.created_at) as vfhour from  vehicleflow vf "
                     . " where  date(vf.created_at)>='" . $searchtodate . "' and date(vf.created_at)<='" . $searchtodate . "' "
-                    . " group by DATE_FORMAT(vf.created_at, '%H') " ;
+                    . " group by hour(vf.created_at) " ;
 
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
@@ -143,5 +145,15 @@ class HomeController extends Controller
         $eventtypesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventtypesummary, "events"=>$latestevents);
         return json_encode($arr);        
+    }
+    
+    function dashboardTestLatlng(Request $request){
+        $coords = RoadCoordinate::where("roadid", 14)
+                ->select("lat", "lng")
+                ->orderBy("id", "asc")
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "coords"=>$coords);
+        return json_encode($arr);
     }
 }

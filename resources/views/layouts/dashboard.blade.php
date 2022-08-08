@@ -188,6 +188,7 @@
                 <span>系统导航栏</span>
                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
             </div>
+            <div id="test"></div>
         </div>
         
         <div class="item_container" style="width: 430px; height: 410px; 
@@ -358,6 +359,9 @@
 
 <div id="obu_videos" style="width: 240px; height: 100%; position: absolute; right: 0px; padding: 16px;
      background-color: #04090B; font-size: 12px; ">
+                <?php
+                $videocount = 0;
+                ?>
                 @foreach($obus as $obu)
                 <div >
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
@@ -372,6 +376,12 @@
                         </p>
                     </div>
                 </div>
+                <?php
+                $videocount++;
+                if($videocount == 5){
+                    break;
+                }
+                ?>
                 @endforeach        
 </div>
 <script>
@@ -699,7 +709,7 @@ function showVehFlowChart(){
                 clabels.push(k);
                 var haveHour = false;
                 for(var i=0;i<data["vehflow"].length;i++){
-                    if(data["vehflow"][i]["vfhour"] === k.toString()){
+                    if(data["vehflow"][i]["vfhour"] === k){
                         cvalues.push(data["vehflow"][i]["vehcount"]);
                         haveHour = true;
                         break;
@@ -874,6 +884,52 @@ function hideBd(){
     }    
 }
 
+var coords = [];
+var coordindex = 0;
+var carIcon = new BMapGL.Icon("/images/caricon_white.png", new BMapGL.Size(32, 32));
+var carmaker;
+function showTestVehs(){
+    if(coords.length === 0){
+        $.getJSON("dashboardtestlatlng",function(data){
+            coords = data["coords"];
+            showTestVehs();
+        });
+        return;
+    }
+    
+//    alert(coords[coordindex]["lng"] + "  " + coords[coordindex]["lat"]);
+    var latlng = coordtransform.wgs84togcj02(coords[coordindex]["lng"], coords[coordindex]["lat"]);
+    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+    var pt = new BMapGL.Point(latlng[0], latlng[1]);
+    //$("#test").html(pt.lat + "   " + pt.lng);
+
+    if(carmaker){
+        map.removeOverlay(carmaker);
+        //carmaker.setTitle("car" + coordindex);
+        //carmaker.setPosition(pt);
+    } 
+    carmaker = new BMapGL.Marker(pt, {
+        icon: carIcon
+    });
+
+    // 将标注添加到地图
+    map.addOverlay(carmaker); 
+    
+    coordindex = coordindex + 1;
+    if(coordindex + 1 <= coords.length - 1){
+        var radian = Math.atan2(coords[coordindex+1]["lng"] - coords[coordindex]["lng"], coords[coordindex+1]["lat"] - coords[coordindex]["lat"]);
+        var angle = 180 / Math.PI * radian;
+        carmaker.setRotation(angle);
+    }
+    //alert(coordindex);
+    
+    if(coordindex <= coords.length - 1){
+        setTimeout("showTestVehs()", 1000);
+    } else {
+        coordindex = 0;
+    }
+}
+
 function refreshAll(){
     setTimeout('refreshAll()', 5000);
     
@@ -884,8 +940,10 @@ function refreshAll(){
     showVehFlowChart();
     getWeekDay();
     showDate();    
+    
 }
 refreshAll();
+showTestVehs();
 </script>
 </body>
 
