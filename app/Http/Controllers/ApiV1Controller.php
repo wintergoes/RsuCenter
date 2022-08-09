@@ -18,6 +18,13 @@ use App\ObuRouteDetail;
 use App\ClockIn;
 use App\WarningRecord;
 
+use App\AidEvent;
+use App\AnprEvent;
+use App\TpsEvent;
+use App\TpsLaneEvent;
+use App\TpsRealtimeEvent;
+use App\VehDetection;
+
 use DB;
 use Auth;
 
@@ -948,4 +955,273 @@ class ApiV1Controller extends Controller
         $arr = array("retcode"=>ret_success, "clockins"=>$clockins);
         return json_encode($arr);
     }
+    
+    function uploadAidEvents(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $aid = new AidEvent();
+            $aid->localid = $row->id;
+            $aid->macaddr = $row->macaddr;
+            $aid->chanelid = $row->chanelid;
+            $aid->eventtime = $row->eventtime;
+            $aid->eventtype = $row->eventtype;
+            $aid->eventsatate = $row->eventsatate;
+            $aid->eventdescription = $row->eventdescription;
+            $aid->deviceid = $row->deviceid;
+            $aid->aidevent = $row->aidevent;
+            $aid->vehspeed = $row->vehspeed;
+            $aid->vehenterstate = $row->vehenterstate;
+            $aid->vehconfidence = $row->vehconfidence;
+            $aid->vehtype = $row->vehtype;
+            $aid->vehcolor = $row->vehcolor;
+            $aid->plate = $row->plate;
+            $aid->platetype = $row->platetype;
+            $aid->platecolor = $row->platecolor;
+            $aid->licensebright = $row->licensebright;
+            $aid->plateconfidence = $row->plateconfidence;
+            $aid->ralatedlaneno = $row->ralatedlaneno;
+            $aid->targettype = $row->targettype;
+            $aid->alarmlevel = $row->alarmlevel;
+            $aid->alertstarttime = $row->alertstarttime;
+            $aid->alertendtime = $row->alertendtime;
+            $aid->uid = $row->uid;
+            $aid->targetid = $row->targetid;
+            $aid->laneno = $row->laneno;
+            $aid->illegaltype = $row->illegaltype;
+            $aid->isoverspeed = $row->isoverspeed;
+            $aid->israpiddeceleration = $row->israpiddeceleration;
+            $aid->illegalparkingevent = $row->illegalparkingevent;
+            $aid->illegaltrafficeventsubtype = $row->illegaltrafficeventsubtype;
+            $aid->longitudetype = $row->longitudetype;
+            $aid->latitudetype = $row->latitudetype;
+            $aid->longitude = $row->longitude;
+            $aid->lngdegree = $row->lngdegree;
+            $aid->lngminute = $row->lngminute;
+            $aid->lngsec = $row->lngsec;
+            $aid->latitude = $row->latitude;
+            $aid->latdegree = $row->latdegree;
+            $aid->latminute = $row->latminute;
+            $aid->latsec = $row->latsec;
+            $aid->visibility = $row->visibility;
+            $aid->speedlimit = $row->speedlimit;
+            $aid->state = $row->state;
+            $aid->foguploadmode = $row->foguploadmode;
+            $aid->detectionpictranstype = $row->detectionpictranstype;
+            $aid->detectionpicnumber = $row->detectionpicnumber;
+            $aid->uuid = $row->uuid;
+            $aid->targetattrs = $row->targetattrs;
+            $aid->monitoringsiteid = $row->monitoringsiteid;
+            $aid->monitordescription = $row->monitordescription;
+            $aid->detectdir = $row->detectdir;
+            $aid->datemillisecondtime = $row->datemillisecondtime;
+            $aid->deviceuuid = $row->deviceuuid;
+            $aid->isalert = $row->isalert;
+            $aid->contentuuid = $row->contentuuid;
+            
+            $aid->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }
+    
+    function uploadAnprEvents(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $anpr = new AnprEvent();
+            $anpr->localid = $row->id;
+            $anpr->macaddr = $row->macaddr;
+            $anpr->chanelid = $row->chanelid;
+            $anpr->activepostcount = $row->activepostcount;
+            $anpr->eventtype = $row->eventtype;
+            $anpr->eventsatate = $row->eventsatate;
+            $anpr->eventdescription = $row->eventdescription;
+            $anpr->eventtime = $row->eventtime;
+            $anpr->licenseplate = $row->licenseplate;
+            $anpr->lineno = $row->lineno;
+            $anpr->confidencelevel = $row->confidencelevel;
+            $anpr->platetype = $row->platetype;
+            $anpr->platecolor = $row->platecolor;
+            $anpr->licensebright = $row->licensebright;
+            $anpr->pilotsafebelt = $row->pilotsafebelt;
+            $anpr->vicepilotsafebelt = $row->vicepilotsafebelt;
+            $anpr->pilotsunvisor = $row->pilotsunvisor;
+            $anpr->vicepilotsunvisor = $row->vicepilotsunvisor;
+            $anpr->envprosign = $row->envprosign;
+            $anpr->dangmark = $row->dangmark;
+            $anpr->uphone = $row->uphone;
+            $anpr->pendant = $row->pendant;
+            $anpr->tissueBox = $row->tissueBox;
+            $anpr->label = $row->label;
+            $anpr->helmet = $row->helmet;
+            $anpr->decoration = $row->decoration;
+            $anpr->vehicleType = $row->vehicleType;
+            $anpr->vehindex = $row->vehindex;
+            $anpr->vehtype1 = $row->vehtype1;
+            $anpr->vehcolor = $row->vehcolor;
+            $anpr->vehspeed = $row->vehspeed;
+            $anpr->vehlength = $row->vehlength;
+            $anpr->vehlogo = $row->vehlogo;
+            $anpr->vehsublogo = $row->vehsublogo;
+            $anpr->vehmodel = $row->vehmodel;
+            $anpr->vehtypebyweight = $row->vehtypebyweight;
+            $anpr->vehuuid = $row->vehuuid;
+            $anpr->vehpicnum = $row->vehpicnum;
+            $anpr->contentuuid = $row->contentuuid;
+            
+            $anpr->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }
+    
+    function uploadTpsEvents(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $tps = new TpsEvent();
+            $tps->localid = $row->id;
+            $tps->macaddr = $row->macaddr;
+            $tps->channelid = $row->channelid;
+            $tps->eventtime = $row->eventtime;
+            $tps->activepostcount = $row->activepostcount;
+            $tps->eventtype = $row->eventtype;
+            $tps->eventstate = $row->eventstate;
+            $tps->eventdescription = $row->eventdescription;
+            $tps->deviceid = $row->deviceid;
+            $tps->starttime = $row->starttime;
+            $tps->stoptime = $row->stoptime;
+            $tps->sampleperiod = $row->sampleperiod;
+            $tps->totallanenum = $row->totallanenum;
+            $tps->totalcoilnum = $row->totalcoilnum;
+            $tps->devlog = $row->devlog;
+            $tps->contentuuid = $row->contentuuid;
+            
+            $tps->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }
+    
+    function uploadTpsLaneEvents(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $tpslane = new TpsLaneEvent();
+            $tpslane->localid = $row->id;
+            $tpslane->tpseventid = $row->tpseventid;
+            $tpslane->laneno = $row->laneno;
+            $tpslane->averagespeed = $row->averagespeed;
+            $tpslane->smallcarnum = $row->smallcarnum;
+            $tpslane->midsizecarnum = $row->midsizecarnum;
+            $tpslane->heavyvehnum = $row->heavyvehnum;
+            $tpslane->headtimeinterval = $row->headtimeinterval;
+            $tpslane->headinterval = $row->headinterval;
+            $tpslane->spaceoccupyration = $row->spaceoccupyration;
+            $tpslane->timeoccupyration = $row->timeoccupyration;
+            $tpslane->channelizationlaneno = $row->channelizationlaneno;
+            $tpslane->averageparkingtime = $row->averageparkingtime;
+            $tpslane->averagedelay = $row->averagedelay;
+            $tpslane->averagequeuelen = $row->averagequeuelen;
+            $tpslane->arrivalflow = $row->arrivalflow;
+            $tpslane->vehiclenum = $row->vehiclenum;
+            $tpslane->nonmotorvehiclenum = $row->nonmotorvehiclenum;
+            $tpslane->oversizevehiclenum = $row->oversizevehiclenum;
+            $tpslane->lanelname = $row->lanelname;
+            $tpslane->lanetype = $row->lanetype;
+            $tpslane->lanestate = $row->lanestate;
+            $tpslane->varytype = $row->varytype;
+            $tpslane->tpstype = $row->tpstype;
+            $tpslane->queuelen = $row->queuelen;
+            
+            $tpslane->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }     
+    
+    function uploadTpsRealTimeEvents(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $tpsrealtime = new TpsRealtimeEvent();
+            $tpsrealtime->localid = $row->id;
+            $tpsrealtime->macaddr = $row->macaddr;
+            $tpsrealtime->chanelid = $row->chanelid;
+            $tpsrealtime->activepostcount = $row->activepostcount;
+            $tpsrealtime->eventtype = $row->eventtype;
+            $tpsrealtime->eventsatate = $row->eventsatate;
+            $tpsrealtime->eventdescription = $row->eventdescription;
+            $tpsrealtime->eventtime = $row->eventtime;
+            $tpsrealtime->deviceid = $row->deviceid;
+            $tpsrealtime->snaptime = $row->snaptime;
+            $tpsrealtime->totallanenum = $row->totallanenum;
+            $tpsrealtime->spaceheadway = $row->spaceheadway;
+            $tpsrealtime->laneno = $row->laneno;
+            $tpsrealtime->speed = $row->speed;
+            $tpsrealtime->vehicledirection = $row->vehicledirection;
+            $tpsrealtime->lanestate = $row->lanestate;
+            $tpsrealtime->downwardflow = $row->downwardflow;
+            $tpsrealtime->upwardflow = $row->upwardflow;
+            $tpsrealtime->jamlevel = $row->jamlevel;
+            $tpsrealtime->jamflow = $row->jamflow;
+            $tpsrealtime->timeheadway = $row->timeheadway;
+            $tpsrealtime->deviceuuid = $row->deviceuuid;
+            $tpsrealtime->contentuuid = $row->contentuuid;
+            
+            $tpsrealtime->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }
+    
+    function uploadVehDetectionEvents(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $vehdetect = new VehDetection();
+            $vehdetect->localid = $row->id;
+            $vehdetect->macaddr = $row->macaddr;
+            $vehdetect->detecttime = $row->detecttime;
+            $vehdetect->targetid = $row->targetid;
+            $vehdetect->uuid = $row->uuid;
+            $vehdetect->longitude = $row->longitude;
+            $vehdetect->latitude = $row->latitude;
+            $vehdetect->targettype = $row->targettype;
+            $vehdetect->vehiclesize = $row->vehiclesize;
+            $vehdetect->plateno = $row->plateno;
+            $vehdetect->platecolor = $row->platecolor;
+            $vehdetect->vehiclelogo = $row->vehiclelogo;
+            $vehdetect->vehiclesublogo = $row->vehiclesublogo;
+            $vehdetect->vehiclecolor = $row->vehiclecolor;
+            $vehdetect->laneno = $row->laneno;
+            $vehdetect->vehicleparkingtimes = $row->vehicleparkingtimes;
+            $vehdetect->positionx = $row->positionx;
+            $vehdetect->positiony = $row->positiony;
+            $vehdetect->speed = $row->speed;
+            $vehdetect->horizonspeed = $row->horizonspeed;
+            $vehdetect->radardetected = $row->radardetected;
+            $vehdetect->relativemotionstatus = $row->relativemotionstatus;
+            $vehdetect->shiplength = $row->shiplength;
+            $vehdetect->vehicletype = $row->vehicletype;
+            $vehdetect->radardirection = $row->radardirection;
+                        
+            $vehdetect->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }    
 }

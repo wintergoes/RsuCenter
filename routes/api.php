@@ -45,3 +45,12 @@ Route::any("/getclockinhistory", 'ApiV1Controller@getClockInHistory');
 //***************************OBU相关*****************************************
 Route::any("/registerobu", "ApiV1Controller@registerObu");
 Route::any("/getroadinfo", 'ApiV1Controller@getRoadInfo');
+
+
+//***************************雷视相关*****************************************
+Route::any("/uploadaidevents", "ApiV1Controller@uploadAidEvents");
+Route::any("/uploadanprevents", "ApiV1Controller@uploadAnprEvents");
+Route::any("/uploadtpsevents", "ApiV1Controller@uploadTpsEvents");
+Route::any("/uploadtpslaneevents", "ApiV1Controller@uploadTpsLaneEvents");
+Route::any("/uploadtpsrealtimeevents", "ApiV1Controller@uploadTpsRealtimeEvents");
+Route::any("/uploadvehdetectionevents", "ApiV1Controller@uploadVehDetectionEvents");
