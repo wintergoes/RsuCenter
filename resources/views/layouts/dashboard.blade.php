@@ -401,6 +401,10 @@ var rsuIcon = new BMapGL.Icon("/images/dashboard/rsu.png", new BMapGL.Size(64, 6
 var obuIcon = new BMapGL.Icon("/images/obu_vehicle.png", new BMapGL.Size(31, 15));
 var alertStartIcon = new BMapGL.Icon("/images/alertstart.png", new BMapGL.Size(24, 24));
 var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
+
+var rsumarkers = [];
+var obumarkers = [];
+var warningmarkers = []
     
 function updateBdMapSummary(){
     $.ajax({
@@ -408,7 +412,19 @@ function updateBdMapSummary(){
         url: "homebdmapsummary",
         dataType: "json",
         success: function (data) {
-            map.clearOverlays();
+            for(var i = 0; i < rsumarkers.length; i++){
+                map.removeOverlay(rsumarkers[i]);
+            }
+            
+            for(var i = 0; i < obumarkers.length; i++){
+                map.removeOverlay(obumarkers[i]);
+            }
+            
+            for(var i = 0; i < warningmarkers.length; i++){
+                map.removeOverlay(warningmarkers[i]);
+            }            
+            
+            //map.clearOverlays();
             for(var i = 0; i < data.rsudevices.length; i++){
                 rsuobj = data.rsudevices[i];
                 
@@ -416,6 +432,8 @@ function updateBdMapSummary(){
                 var marker = new BMapGL.Marker(pt, {
                     icon: rsuIcon
                 });
+                
+                rsumarkers.push(marker);
                 
                 // 创建信息窗口
                 var opts = {
@@ -439,6 +457,7 @@ function updateBdMapSummary(){
                 var marker = new BMapGL.Marker(pt, {
                     icon: obuIcon
                 });
+                obumarkers.push(marker);
                 // 将标注添加到地图
                 map.addOverlay(marker);                
             }
@@ -452,6 +471,7 @@ function updateBdMapSummary(){
                 var marker = new BMapGL.Marker(pt, {
                     icon: alertStartIcon
                 });
+                warningmarkers.push(marker);
                 
                 // 创建信息窗口
                 var opts = {
@@ -931,45 +951,162 @@ function showTestVehs(){
     }
 }
 
-var vehmarkers = [];
-function showVehicles(){
-    for(var i = 0; i < vehmarkers.length; i++){
-        map.removeOverlay(vehmarkers[i]);
+function HashMap(){
+    //定义长度
+    var length=0;
+    //创建一个对象
+    var obj=new Object();
+
+    //判断Map是否为空
+    this.isEmpty=function(){
+            return length==0;
     }
-    
-    $.getJSON("dashboardvehicles",function(data){
-        for(var i = 0; i < data["vehicles"].length; i++){
-            var latlng = coordtransform.wgs84togcj02(data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"]);
-            latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
-            var pt = new BMapGL.Point(latlng[0], latlng[1]); 
-            //$("#test").html(data["vehicles"][i]["longitude"] + "  "  + data["vehicles"][i]["latitude"]);
-            
-            var icon ;
-            if(data["vehicles"][i]["targettype"] === "vehicle"){
-                mkicon = carIcon;
-            } else {
-                mkicon = humanIcon;
+
+    //判断对象中是否包含给定Key
+    this.containsKey=function(key){
+            return (key in obj);
+    }
+
+    //判断对象中是否包含给定的Value
+    this.containsValue=function(value){
+            for(var key in obj){
+                    if(obj[key]==value){
+                            return true; 
+                    }
             }
-            var carmaker = new BMapGL.Marker(pt, {
-                icon: mkicon
-            });  
-            
-            var label = new BMapGL.Label(data["vehicles"][i]["plateno"] + " " + data["vehicles"][i]["targetid"], {       // 创建文本标注
-                position: pt,                          // 设置标注的地理位置
-                offset: new BMapGL.Size(10, -10)           // 设置标注的偏移量
-            })  
-            
-            label.setStyle({                              // 设置label的样式
-                color: '#000',
-                fontSize: '12px',
-                border: '2px solid #1E90FF'
-            })
-            
-            carmaker.setLabel(label);
-            carmaker.setTitle(data["vehicles"][i]["plateno"] + " " + data["vehicles"][i]["targetid"]);
-            
-            map.addOverlay(carmaker); 
-            vehmarkers.push(carmaker);
+            return false;
+    }
+
+    //向map中添加数据
+    this.put=function(key,value){
+            if(!this.containsKey(key)){
+                    length++;
+            }
+            obj[key]=value;
+    }
+
+    //根据给定的key获取Value
+    this.get=function(key){
+            return this.containsKey(key)?obj[key]:null;
+    }
+
+    //根据给定的Key删除一个值
+    this.remove=function(key){
+            if(this.containsKey(key)&&(delete obj[key])){
+                    length--;
+            }
+    }
+
+    //获得Map中所有的value
+    this.values=function(){
+            var _values=new Array();
+            for(var key in obj){
+                    _values.push(obj[key]);
+            }
+            return _values;
+    }
+
+    //获得Map中的所有key
+    this.keySet=function(){
+            var _keys=new Array();
+            for(var key in obj){
+                    _keys.push(key);
+            }
+            return _keys;
+    }
+
+    //获得Map的长度
+    this.size=function(){
+            return length;
+    }
+
+    //清空Map
+    this.clear=function(){
+            length=0;
+            obj=new Object();
+    }
+}
+
+function Vehicle(plateno, targetid, targettype, speed, laneno, lng, lat){
+    this.plateno = plateno;
+    this.targetid = targetid;
+    this.targettype = targettype;
+    this.speed = speed;
+    this.laneno = laneno;
+    this.lat = lat;
+    this.lng = lng;
+    
+    this.setMarker = function(marker){
+        this.marker = marker;
+    }
+}
+
+var vehmarkers = [];
+var vehMap = new HashMap();
+function showVehicles(){   
+    $.getJSON("dashboardvehicles",function(data){
+//        for(var i = 0; i < vehmarkers.length; i++){
+//            map.removeOverlay(vehmarkers[i]);
+//        }
+        
+        for(var i = 0; i < data["vehicles"].length; i++){
+            var vehuuid = data["vehicles"][i]["uuid"];
+            var vehrotation = data["vehicles"][i]["vehrotation"];
+            //alert(vehuuid);
+            var veh = vehMap.get(vehuuid);
+            //alert(veh);
+            if(veh === null){
+                //alert("a");
+                var veh = new Vehicle(data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
+                    data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
+                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"]);
+                
+                vehMap.put(vehuuid, veh);
+                //alert(veh.lng + "  " + veh.lat);
+                var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
+                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+                var pt = new BMapGL.Point(latlng[0], latlng[1]); 
+                //$("#test").html(data["vehicles"][i]["longitude"] + "  "  + data["vehicles"][i]["latitude"]);
+
+                var icon ;
+                if(veh.targettype === "vehicle"){
+                    mkicon = carIcon;
+                } else {
+                    mkicon = humanIcon;
+                }
+                var carmaker = new BMapGL.Marker(pt, {
+                    icon: mkicon
+                });  
+                carmaker.setRotation(vehrotation);
+                veh.setMarker(carmaker);
+
+                var labeltext = veh.plateno + " id: " + veh.targetid
+                    + " speed:" + veh.speed + " lane: " + veh.laneno;
+                var label = new BMapGL.Label(labeltext, {       // 创建文本标注
+                    position: pt,                          // 设置标注的地理位置
+                    offset: new BMapGL.Size(10, -10)           // 设置标注的偏移量
+                })  
+
+                label.setStyle({                              // 设置label的样式
+                    color: '#000',
+                    fontSize: '14px',
+                    border: '2px solid #1E90FF'
+                })
+
+                carmaker.setLabel(label);
+                carmaker.enableDragging();
+
+                map.addOverlay(carmaker); 
+                vehmarkers.push(carmaker);                
+            } else {
+                //alert(veh.lng + "  " + veh.lat);
+                var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
+                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+                var pt = new BMapGL.Point(latlng[0], latlng[1]);
+                
+                veh.marker.setPosition(pt);
+                veh.marker.setRotation(vehrotation);
+            }
         }
         
         setTimeout("showVehicles()", 1000);

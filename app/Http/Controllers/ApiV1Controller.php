@@ -17,6 +17,7 @@ use App\RoadLink;
 use App\ObuRouteDetail;
 use App\ClockIn;
 use App\WarningRecord;
+use App\VehicleFlow;
 
 use App\AidEvent;
 use App\AnprEvent;
@@ -1074,6 +1075,15 @@ class ApiV1Controller extends Controller
             $anpr->contentuuid = $row->contentuuid;
             
             $anpr->save();
+            
+            if($row->confidencelevel > 66){
+                $vehflow = new VehicleFlow();
+                $vehflow->vehnumber = $row->licenseplate;
+                $vehflow->vehspeed = $row->vehspeed;
+                $vehflow->vehbrand = $row->vehlogo;
+                $vehflow->vehtype = $row->vehicleType;
+                $vehflow->save();
+            }
         }
         
         $arr = array("retcode"=>ret_success);
@@ -1217,6 +1227,7 @@ class ApiV1Controller extends Controller
             $vehdetect->shiplength = $row->shiplength;
             $vehdetect->vehicletype = $row->vehicletype;
             $vehdetect->radardirection = $row->radardirection;
+            $vehdetect->vehrotation = $row->vehrotation;
                         
             $vehdetect->save();
         }

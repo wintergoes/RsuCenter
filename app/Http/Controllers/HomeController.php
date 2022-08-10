@@ -178,11 +178,11 @@ class HomeController extends Controller
         $searchdate = date("Y-m-d H:i:s" , strtotime("-1 hour"));
         //echo $searchdate;
         
-        $sqlstr = "select vd.macaddr,vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
-                . "vd.positionx, vd.positiony, vd.radardetected from "
+        $sqlstr = "select vd.uuid, vd.macaddr,vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
+                . "vd.positionx, vd.positiony, vd.radardetected, vd.vehrotation from "
                 . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
                 . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
-                . "where maxtime.maxtime > '" . $searchdate . "'"; // and targettype='vehicle'
+                . "where maxtime.maxtime > '" . $searchdate . "' "; // and targettype='vehicle'
         $vehicles = DB::select($sqlstr);
         
         $arr = array("retcode"=>ret_success, "vehicles"=>$vehicles);
