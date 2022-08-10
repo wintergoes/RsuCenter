@@ -70,8 +70,25 @@ class HomeController extends Controller
             ->limit(6)
             ->get();
         
+        $default_lat = env("dashboard_default_lat", 36.183753);
+        $default_lng = env("dashboard_default_lng", 120.339217);
+        $default_zoom = env("dashboard_map_defaultzoom", 15); 
+        
+        if($default_lat == ""){
+            $default_lat = env("home_default_lat", 36.183753);
+        }
+        if($default_lng == ""){
+            $default_lng = env("home_default_lng", 120.339217);
+        }
+        if($default_zoom == ""){
+            $default_zoom = env("home_map_defaultzoom", 15);
+        }
+        
         return view("/layouts/dashboard", [
-            'obus'=>$obus
+            'obus'=>$obus,
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,            
         ]);
     }
     
@@ -154,6 +171,21 @@ class HomeController extends Controller
                 ->get();
         
         $arr = array("retcode"=>ret_success, "coords"=>$coords);
+        return json_encode($arr);
+    }
+    
+    function dashboardVehicles(Request $request){
+        $searchdate = date("Y-m-d H:i:s" , strtotime("-1 hour"));
+        //echo $searchdate;
+        
+        $sqlstr = "select vd.macaddr,vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
+                . "vd.positionx, vd.positiony, vd.radardetected from "
+                . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
+                . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
+                . "where maxtime.maxtime > '" . $searchdate . "'"; // and targettype='vehicle'
+        $vehicles = DB::select($sqlstr);
+        
+        $arr = array("retcode"=>ret_success, "vehicles"=>$vehicles);
         return json_encode($arr);
     }
 }

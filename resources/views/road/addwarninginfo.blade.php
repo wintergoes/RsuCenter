@@ -256,7 +256,6 @@ function onSelectTecChild(){
     <div>
 </div>
 
-    
 <script>
     var map = new BMap.Map("bdmap_container", {
        coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。

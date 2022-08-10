@@ -126,6 +126,7 @@ Route::any("/addhwupdateres", "HardwareUpdateController@addUpdateResource");
 Route::any("/addhwupdateressave", "HardwareUpdateController@addUpdateResourceSave");
 Route::any("/deletehwupdateres", "HardwareUpdateController@deleteUpdateResourceSave");
 Route::any("/dashboardtestlatlng", "HomeController@dashboardTestLatlng");
+Route::any("/dashboardvehicles", "HomeController@dashboardVehicles");
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
