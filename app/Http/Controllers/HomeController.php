@@ -179,7 +179,7 @@ class HomeController extends Controller
         //echo $searchdate;
         
         $sqlstr = "select vd.uuid, vd.macaddr,vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
-                . "vd.positionx, vd.positiony, vd.radardetected, vd.vehrotation from "
+                . "vd.positionx, vd.positiony, vd.radardetected, vd.vehrotation, vd.detecttime from "
                 . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
                 . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
                 . "where maxtime.maxtime > '" . $searchdate . "' "; // and targettype='vehicle'

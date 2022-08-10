@@ -1001,7 +1001,7 @@ function HashMap(){
     this.values=function(){
             var _values=new Array();
             for(var key in obj){
-                    _values.push(obj[key]);
+                _values.push(obj[key]);
             }
             return _values;
     }
@@ -1027,7 +1027,8 @@ function HashMap(){
     }
 }
 
-function Vehicle(plateno, targetid, targettype, speed, laneno, lng, lat){
+function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime){
+    this.uuid = uuid;
     this.plateno = plateno;
     this.targetid = targetid;
     this.targettype = targettype;
@@ -1035,6 +1036,7 @@ function Vehicle(plateno, targetid, targettype, speed, laneno, lng, lat){
     this.laneno = laneno;
     this.lat = lat;
     this.lng = lng;
+    this.detecttime = detecttime;
     
     this.setMarker = function(marker){
         this.marker = marker;
@@ -1057,9 +1059,9 @@ function showVehicles(){
             //alert(veh);
             if(veh === null){
                 //alert("a");
-                var veh = new Vehicle(data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
+                var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
                     data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
-                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"]);
+                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"]);
                 
                 vehMap.put(vehuuid, veh);
                 //alert(veh.lng + "  " + veh.lat);
@@ -1109,6 +1111,15 @@ function showVehicles(){
             }
         }
         
+        var nowdate = new Date();
+        for(var i = vehMap.values().length - 1; i >= 0 ; i--){
+            var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
+            if(timecha > 120 * 60  * 1000){
+                map.removeOverlay(vehMap.values()[i].marker);
+                vehMap.remove(vehMap.values()[i].uuid);
+            }
+            //$("#test").html(vehMap.values()[i].detecttime + "  " + ());
+        }
         setTimeout("showVehicles()", 1000);
     }); 
 }
