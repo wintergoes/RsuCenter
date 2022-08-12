@@ -55,46 +55,53 @@
 	<div class="col-12 col-lg-12">
 		<div class="card radius-6">
 			<div class="card-body">
-				<div class="d-flex align-items-center">
-                                        <div>
-						<h6 class="mb-3">
-                                                    <b>事件类型统计</b>
-						</h6>
-					</div>
-
-                                        <div class="dropdown ms-auto">
-                                            <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown">
-                                                <i class="bx bx-dots-horizontal-rounded font-22 text-option">
-                                                </i>
+                            <ul class="nav nav-tabs nav-primary mb-3" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                            <a class="nav-link active" data-bs-toggle="tab" href="#eventstatChart" role="tab" aria-selected="true">
+                                                    <div class="d-flex align-items-center">
+                                                            <div class="tab-icon"><i class="bx bx-chart font-18 me-1"></i>
+                                                            </div>
+                                                            <div class="tab-title">事件类型趋势图</div>
+                                                    </div>
                                             </a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" onclick="showEventTrendChart();" href="javascript:;">图表</a>
-                                                    <a class="dropdown-item" onclick="showEventTrendTable();" href="javascript:;">表格</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-				</div>
-				<div class="chart-container-0" id="eventtrendchartcontainer">
-					<div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-						<div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-							<div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
-							</div>
-						</div>
-						<div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-							<div style="position:absolute;width:200%;height:200%;left:0; top:0">
-							</div>
-						</div>
-					</div>
-					<canvas id="chart1" width="515" height="320" style="display: block; width: 515px; height: 320px;"
-					class="chartjs-render-monitor">
-					</canvas>
-				</div>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                            <a class="nav-link" data-bs-toggle="tab" href="#eventstatTable" role="tab" aria-selected="false">
+                                                    <div class="d-flex align-items-center">
+                                                            <div class="tab-icon"><i class="bx bx-table font-18 me-1"></i>
+                                                            </div>
+                                                            <div class="tab-title">事件类型列表</div>
+                                                    </div>
+                                            </a>
+                                    </li>
+                            </ul>
                             
-                            <div style="display: none;" id="eventtrendtablecontainer">
-                                <table id="eventtrendtbl" class="table mb-0 table-hover table-bordered" >
-       
-                                </table>
+                            <div class="tab-content py-2">
+                                <div class="tab-pane fade active show" id="eventstatChart" role="tabpanel"> 
+                                    <div class="chart-container-0" id="eventtrendchartcontainer">
+                                            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+                                                    <div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                                                            <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0">
+                                                            </div>
+                                                    </div>
+                                                    <div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+                                                            <div style="position:absolute;width:200%;height:200%;left:0; top:0">
+                                                            </div>
+                                                    </div>
+                                            </div>
+                                            <canvas id="chart1" width="515" height="320" style="display: block; width: 515px; height: 320px;"
+                                            class="chartjs-render-monitor">
+                                            </canvas>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="eventstatTable" role="tabpanel">
+                                    <div id="eventtrendtablecontainer">
+                                        <table id="eventtrendtbl" class="table mb-0 table-hover table-bordered" >
+
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
 			</div>
 		</div>
