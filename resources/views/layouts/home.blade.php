@@ -66,15 +66,19 @@ $l1_road = $l2_warninginfo | $l2_road;
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));
 $l1_videos = $l2_obuvideos;
 
-$l2_devices = in_array($currentpath, array("devices", "editdevice", "rsusettings"));
-$l2_obudevices = in_array($currentpath, array("obudevices"));
-$l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
-$l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));
 $l2_devicelogs = in_array($currentpath, array("devicelogs", "devicelogfilecontent"));
 $l2_bsmlogs = in_array($currentpath, array('bsmlogs', 'bsmlogfilecontent'));
-$l2_hwupdate = in_array($currentpath, array('hardware', 'hwupdateres', 'addhwupdateres'));
-$l1_settings = $l2_users | $l2_devices | $l2_hwupdate;
 $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
+
+$l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));
+$l2_devices = in_array($currentpath, array("devices", "editdevice", "rsusettings"));
+$l2_obudevices = in_array($currentpath, array("obudevices"));
+$l2_radardevices = in_array($currentpath, array("obudevices", "addradardevice", "editradardevice"));
+$l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
+$l2_hwupdate = in_array($currentpath, array('hardware', 'hwupdateres', 'addhwupdateres'));
+$l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2_usergroups | $l2_hwupdate;
+
+
 ?>
 
 	<!--wrapper-->
@@ -160,8 +164,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
                                             <li {!! $l2_users ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="users"><i class="bx bx-right-arrow-alt" ></i>人员管理</a></li>
                                             <li {!! $l2_devices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devices"><i class="bx bx-right-arrow-alt"></i>RSU管理</a></li>
                                             <li {!! $l2_obudevices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obudevices"><i class="bx bx-right-arrow-alt"></i>OBU管理</a></li>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt"></i>车辆管理</a></li>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt"></i>字典管理</a></li>
+                                            <li {!! $l2_radardevices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="radardevices"><i class="bx bx-right-arrow-alt"></i>雷视设备管理</a></li>
 					</ul>
 				</li>                                
 			</ul>

@@ -162,11 +162,10 @@ class VehicleFlowController extends Controller
 
         $sqlstr = " select count(vf.vehbrand) as vehbrandcount, vf.vehbrand from  vehicleflow vf "
                 . " where  date(vf.created_at)>='" . $searchfromdate . "' and date(vf.created_at)<='" . $searchtodate . "' "
-                . " group by vf.vehbrand " ;
+                . " group by vf.vehbrand order by vehbrandcount desc limit 20" ;
 
         $arr = DB::select($sqlstr);
         $arr_vehflows = array("retcode"=>ret_success, "vehbrands"=>$arr);                        
-    
         
         return json_encode($arr_vehflows);
     }      

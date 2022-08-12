@@ -10,6 +10,7 @@ use App\Device;
 use App\ObuDevice;
 use App\WarningInfo;
 use App\RoadCoordinate;
+use App\RadarDevice;
 
 use DB;
 
@@ -175,17 +176,41 @@ class HomeController extends Controller
     }
     
     function dashboardVehicles(Request $request){
-        $searchdate = date("Y-m-d H:i:s" , strtotime("-1 hour"));
-        //echo $searchdate;
+        $searchdate = date("Y-m-d H:i:s" , strtotime("-5 second"));
         
-        $sqlstr = "select vd.uuid, vd.macaddr,vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
-                . "vd.positionx, vd.positiony, vd.radardetected, vd.vehrotation, vd.detecttime from "
+//        echo $searchdate;
+        
+        $sqlstr = "select vd.id, vd.uuid, vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
+                . "vd.radardetected, vd.vehrotation, vd.detecttime from "
                 . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
                 . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
                 . "where maxtime.maxtime > '" . $searchdate . "' "; // and targettype='vehicle'
         $vehicles = DB::select($sqlstr);
         
-        $arr = array("retcode"=>ret_success, "vehicles"=>$vehicles);
+        $arr = array("retcode"=>ret_success, "vehicles"=>$vehicles, "searchdate"=>$searchdate);
         return json_encode($arr);
     }
+    
+    function dashboardRadarVision(Request $request){        
+        $radars = RadarDevice::orderBy("id", "desc")
+                ->get();
+        
+        if(count($radars) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"没有雷视设备！");
+            return json_encode($arr);
+        }
+        
+        $searchdate = date("Y-m-d H:i:s" , strtotime("-100 hour"));
+        //echo $searchdate;
+        
+        $sqlstr = "select vd.uuid, vd.targettype, vd.targetid, vd.plateno, vd.speed, vd.laneno, "
+                . "vd.positionx, vd.positiony, vd.radardetected, vd.detecttime from "
+                . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
+                . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
+                . "where maxtime.maxtime > '" . $searchdate . "' and vd.macaddr=" . $radars[0]->macaddrint; // and targettype='vehicle'
+        $vehicles = DB::select($sqlstr);
+        
+        $arr = array("retcode"=>ret_success, "radar"=>$radars[0], "vehicles"=>$vehicles);
+        return json_encode($arr);
+    }    
 }

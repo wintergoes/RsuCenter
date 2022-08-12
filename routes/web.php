@@ -47,6 +47,14 @@ Route::any('/obudevices', 'ObuDeviceController@index');
 Route::any('/obuvideos', 'UploadFileController@obuVideos');
 Route::any('/deleteobudevice', 'ObuDeviceController@deleteObuDevice');
 
+//***************************雷视设备管理****************************************
+Route::any('/radardevices', 'RadarDeviceController@index');
+Route::any('/addradardevice', 'RadarDeviceController@addRadarDevice');
+Route::any('/addradardevicesave', 'RadarDeviceController@addRadarDeviceSave');
+Route::any('/editradardevice', 'RadarDeviceController@editRadarDevice');
+Route::any('/editradardevicesave', 'RadarDeviceController@editRadarDeviceSave');
+Route::any('/deleteradardevice', 'RadarDeviceController@deleteRadarDevice');
+
 //*******************************预警信息***************************************
 Route::any('/warninginfo', "WarningInfoController@index");
 Route::any('/addwarninginfo', "WarningInfoController@addWarninginfo");
@@ -127,6 +135,7 @@ Route::any("/addhwupdateressave", "HardwareUpdateController@addUpdateResourceSav
 Route::any("/deletehwupdateres", "HardwareUpdateController@deleteUpdateResourceSave");
 Route::any("/dashboardtestlatlng", "HomeController@dashboardTestLatlng");
 Route::any("/dashboardvehicles", "HomeController@dashboardVehicles");
+Route::any("/dashboardradarvision", "HomeController@dashboardRadarVision");
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");

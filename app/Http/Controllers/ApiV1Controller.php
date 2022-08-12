@@ -1067,7 +1067,9 @@ class ApiV1Controller extends Controller
             $anpr->vehspeed = $row->vehspeed;
             $anpr->vehlength = $row->vehlength;
             $anpr->vehlogo = $row->vehlogo;
+            $anpr->vehlogoname = $row->vehlogoname;
             $anpr->vehsublogo = $row->vehsublogo;
+            $anpr->vehsublogoname = $row->vehsublogoname;
             $anpr->vehmodel = $row->vehmodel;
             $anpr->vehtypebyweight = $row->vehtypebyweight;
             $anpr->vehuuid = $row->vehuuid;
@@ -1080,8 +1082,9 @@ class ApiV1Controller extends Controller
                 $vehflow = new VehicleFlow();
                 $vehflow->vehnumber = $row->licenseplate;
                 $vehflow->vehspeed = $row->vehspeed;
-                $vehflow->vehbrand = $row->vehlogo;
+                $vehflow->vehbrand = $row->vehlogoname;
                 $vehflow->vehtype = $row->vehicleType;
+                $vehflow->created_at = $row->eventtime;
                 $vehflow->save();
             }
         }

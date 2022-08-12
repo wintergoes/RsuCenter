@@ -319,7 +319,10 @@
                 <span>拥堵预警</span>
                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
             </div>
-            <div class="item_sub_div">
+            <div >
+                <canvas id="radar_canvas"  style="width: 380px; height: 160px;" ></canvas>
+            </div>
+<!--            <div class="item_sub_div">
                 <div class="item_subtitle">严重拥堵</div>
                <table>
                     <thead>
@@ -352,7 +355,7 @@
                         <td>10:30:00</td>                        
                     </tr>
                 </table>
-            </div>             
+            </div>             -->
         </div>
     </div>
 </div>
@@ -1027,7 +1030,7 @@ function HashMap(){
     }
 }
 
-function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime){
+function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, id){
     this.uuid = uuid;
     this.plateno = plateno;
     this.targetid = targetid;
@@ -1037,9 +1040,23 @@ function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, d
     this.lat = lat;
     this.lng = lng;
     this.detecttime = detecttime;
+    this.dbid = id;
     
     this.setMarker = function(marker){
         this.marker = marker;
+    }
+    
+    this.updateData = function(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, id){
+        this.uuid = uuid;
+        this.plateno = plateno;
+        this.targetid = targetid;
+        this.targettype = targettype;
+        this.speed = speed;
+        this.laneno = laneno;
+        this.lat = lat;
+        this.lng = lng;
+        this.detecttime = detecttime;
+        this.dbid = id;        
     }
 }
 
@@ -1061,7 +1078,8 @@ function showVehicles(){
                 //alert("a");
                 var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
                     data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
-                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"]);
+                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
+                    data["vehicles"][i]["id"]);
                 
                 vehMap.put(vehuuid, veh);
                 //alert(veh.lng + "  " + veh.lat);
@@ -1083,7 +1101,11 @@ function showVehicles(){
                 veh.setMarker(carmaker);
 
                 var labeltext = veh.plateno + " id: " + veh.targetid
-                    + " speed:" + veh.speed + " lane: " + veh.laneno;
+                    + " speed:" + veh.speed + " lane: " + veh.laneno 
+                    + " lat:" + veh.lat + " lng: " + veh.lng 
+                    + " id: " + veh.dbid;
+            
+                    labeltext = veh.plateno + " id: " + veh.targetid;
                 var label = new BMapGL.Label(labeltext, {       // 创建文本标注
                     position: pt,                          // 设置标注的地理位置
                     offset: new BMapGL.Size(10, -10)           // 设置标注的偏移量
@@ -1102,27 +1124,70 @@ function showVehicles(){
                 vehmarkers.push(carmaker);                
             } else {
                 //alert(veh.lng + "  " + veh.lat);
+                veh.updateData(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
+                    data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
+                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
+                    data["vehicles"][i]["id"]);
+                
                 var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
                 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
                 var pt = new BMapGL.Point(latlng[0], latlng[1]);
                 
                 veh.marker.setPosition(pt);
                 veh.marker.setRotation(vehrotation);
+                
+                var labeltext = veh.plateno + " id: " + veh.targetid
+                    + " speed:" + veh.speed + " lane: " + veh.laneno 
+                    + " lat:" + veh.lat + " lng: " + veh.lng 
+                    + " id: " + veh.dbid;
+            
+                labeltext = veh.plateno + " id: " + veh.targetid
+            
+                 veh.marker.getLabel().setContent(labeltext);
             }
         }
         
         var nowdate = new Date();
         for(var i = vehMap.values().length - 1; i >= 0 ; i--){
             var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
-            if(timecha > 120 * 60  * 1000){
+            if(timecha > 1  * 5000){
                 map.removeOverlay(vehMap.values()[i].marker);
                 vehMap.remove(vehMap.values()[i].uuid);
             }
-            //$("#test").html(vehMap.values()[i].detecttime + "  " + ());
+            $("#test").html(nowdate);
         }
-        setTimeout("showVehicles()", 1000);
+        setTimeout("showVehicles()", 100);
     }); 
 }
+
+const canvas = document.querySelector('#radar_canvas');
+const ctx = canvas.getContext('2d');
+function drawCircle() {
+//    ctx.beginPath();
+//    ctx.fillStyle = 'blue';
+//    ctx.arc(10, 10, 10, 0, Math.PI * 2);
+//    ctx.fill();
+//    ctx.closePath();
+    
+    var canvasw = canvas.style.width;
+    var canvash = canvas.style.height;
+    //alert(canvasw);
+    
+    $.getJSON("dashboardradarvision",function(data){
+        var widthstr = data["radar"]["lanewidth"];
+//        alert(widthstr);
+        var widths = widthstr.split(",");
+        lanewidth = 0;
+        for(var i = 0; i < widths.length; i++){
+            lanewidth = lanewidth + parseFloat(widths[i]);
+//            alert(widths[i]);
+        }
+        lanewidth = lanewidth * 2;
+        
+        canvasHUnit = lanewidth / canvash ;
+    });
+}
+drawCircle();
 
 function refreshAll(){
     setTimeout('refreshAll()', 5000);
