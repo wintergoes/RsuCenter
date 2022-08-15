@@ -171,7 +171,7 @@
 </head>
 
 <body style="width: 100%; height: 100%">
-<div id='dashboard_left' style="position:relative;width: 84%; height: 100%; float: left;">
+<div id='dashboard_left' style="position:relative;width: 100%; height: 100%; float: left;">
     <div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
     <div id="dashboard_title">
         <img src="images/dashboard/dashboard_title.png">
@@ -360,33 +360,6 @@
     </div>
 </div>
 
-<div id="obu_videos" style="width: 240px; height: 100%; position: absolute; right: 0px; padding: 16px;
-     background-color: #04090B; font-size: 12px; ">
-                <?php
-                $videocount = 0;
-                ?>
-                @foreach($obus as $obu)
-                <div >
-                    <div style="background: url('images/dashboard/video_background.png') no-repeat; 
-                         background-size: 100% 100%; height: 135px; padding: 6px;">
-                    <video autoplay="autoplay" onended="onVideoEnded({{$obu->id}})" id="video{{$obu->id}}" muted="muted" controls class="card-img-top">
-                        <source src="getnewobuvideo?obuid={{$obu->id}}" type="video/mp4">
-                    </div>
-                    </video>
-                        <div class=" text-center" style="padding: 3px;">
-                        <p class="card-title">
-                            {{$obu->obuid}}
-                        </p>
-                    </div>
-                </div>
-                <?php
-                $videocount++;
-                if($videocount == 5){
-                    break;
-                }
-                ?>
-                @endforeach        
-</div>
 <script>
 var map = new BMapGL.Map("bdmap_container", {
    coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
@@ -875,13 +848,6 @@ resizePage();
 </script>
 
 <script>
-//video视频播放完成的事件
-function onVideoEnded(obuid) {
-    var aud = document.getElementById('video' + obuid);
-    aud.src = "getnewobuvideo?obuid=" + obuid;
-};    
-
-
 function getWeekDay() { 
     var myDate= new Date(); 
     var str = ''; 
