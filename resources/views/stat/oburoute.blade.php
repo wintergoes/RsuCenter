@@ -2,6 +2,7 @@
 
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>
+<script src="http://code.bdstatic.com/npm/mapvgl@1.0.0-beta.141/dist/mapvgl.min.js"></script>
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="js/coordtransform.js"></script>
@@ -87,10 +88,15 @@ var routeEndIcon = new BMapGL.Icon("/images/route_end.png", new BMapGL.Size(32, 
 <?php $pcounter = 0 ?>
 
 var points = [];
+var rbdata = [];
 @foreach($routes as $route)
 var latlng = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
 points.push(new BMapGL.Point(latlng[0], latlng[1]));
+var rbdataitem = [];
+rbdataitem.push(latlng[0]);
+rbdataitem.push(latlng[1]);
+rbdata.push(rbdataitem);
 <?php 
 if($pcounter == 0){
 ?>
@@ -114,10 +120,26 @@ $pcounter++;
 ?>
 @endforeach
 
+var view = new mapvgl.View({
+    map: map
+});
+var lineLayer = new mapvgl.LineRainbowLayer({
+    style: 'road', // road, arrow, normal
+    width: 6,
+    color: ['#0a0']
+});
+view.addLayer(lineLayer);
+var rbdata = [{
+        geometry:{
+            type: 'LineString',
+            coordinates: rbdata
+        }
+}];
+lineLayer.setData(rbdata);
 
 @if(count($routes) > 0)
-var polyline = new BMapGL.Polyline(points, {strokeColor:"blue", strokeWeight:5, strokeOpacity:1});
-map.addOverlay(polyline);
+//var polyline = new BMapGL.Polyline(points, {strokeColor:"blue", strokeWeight:5, strokeOpacity:1});
+//map.addOverlay(polyline);
 @endif
 
 function showAlert(){
