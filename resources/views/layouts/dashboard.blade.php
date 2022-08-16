@@ -180,184 +180,109 @@
         <img style="width: 100%; height: 100%;" src="images/dashboard/background.png"/>
     </div>
 
-    <div style='z-index: 10; position: absolute; left: 0px; top: 80px;'>
-        <div class="item_container" style="width: 430px; height: 160px; 
-             background: url('images/dashboard/nav_background.png') no-repeat;
-                 background-size:100% 100%; ">
-            <div >
-                <span>系统导航栏</span>
-                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
-            </div>
-            <div id="test"></div>
-        </div>
-        
-        <div class="item_container" style="width: 430px; height: 410px; 
-             background: url('images/dashboard/device_background.png') no-repeat;
-                 background-size:100% 100%; ">
-            <div >
-                <span>设备管理</span>
-                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
-            </div>
-            <div class="item_sub_div">
-                <div class="item_subtitle">设备状态</div>
-                <div style="margin-top: 20px;">
-                    <canvas id="chart_devices"></canvas>
-                </div>
+    <div style='z-index: 10; position: absolute; left: 0px; bottom: 0px; '>
+        <table style="margin-bottom: 10px; ">
+            <tr>
+                <td>
+                    <div class="item_container" style="width: 430px; height: 260px; 
+                         background: url('images/dashboard/device_background.png') no-repeat;
+                         background-size:100% 100%; ">
+                         <div>
+                             <span>环境信息</span>
+                             <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
+                         </div>
+                         <div >
+                             <table class="forecast_tbl">
+                                 <tr>
+                                     <td><span id='datespan'></span></td>                       
+                                     <td><img src="images/dashboard/wendu.png"/></td>
+                                     <td>湿度</td>
+                                     <td>30</td>
+                                     <td><img src="images/dashboard/shidu.png"/></td>
+                                     <td>湿度</td>
+                                     <td>23hPa</td>
+                                 </tr>
+                                 <tr>
+                                     <td><span id='weekday'>星期四</span> <img src="images/dashboard/sunshine.png"></td>
+                                     <td><img src="images/dashboard/fengli.png"/></td>
+                                     <td>风力</td>
+                                     <td>62Km/h</td>
+                                     <td><img src="images/dashboard/fengxiang.png"/></td>
+                                     <td>风向</td>
+                                     <td>东南</td>
+                                 </tr>                    
+                             </table>
+                         </div>
+                     </div>                    
+                </td>
+                <td>
+                    <div class="item_container" style="width: 430px; height: 260px; 
+                         background: url('images/dashboard/device_background.png') no-repeat;
+                             background-size:100% 100%; ">
+                        <div >
+                            <span>车流量统计</span>
+                            <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
+                        </div>
+                        <table>
+                            <tr>
+                                <td>
+                        <div style="margin-top: 30px; float: left;">
+                            <canvas id="chart_veh_flow"></canvas>
+                        </div>                                    
+                                </td>
+                                <td>
+                        <div style="width: 20%;  right: 1px; margin-top: 30px;">
+                            <p class="stat_button_active" id='vehflowtoday' onclick="showVehFlowChartByDay(0);">今日</p>
+                            <p class="stat_button" id='vehflow7day' onclick="showVehFlowChartByDay(7);">7天</p>
+                            <p class="stat_button" id='vehflow30day' onclick="showVehFlowChartByDay(30);">1个月</p>
+                        </div>                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>                                        
+                </td>
                 
-                <div style="width: 100%; font-size: 12px; margin-top: 36px;">
-                    <div style="float: left;"><img src="images/dashboard/device_chart_zc.png"></div>
-                    <div style="width: 90px; margin-left: 6px; float: left;">正常设备</div>
-                    <div id="normaldevicepercent">70%</div>
-                </div>
                 
-                <div style="width: 100%; font-size: 12px; margin-top: 16px;">
-                    <div style="float: left;"><img src="images/dashboard/device_chart_yc.png"></div>
-                    <div style="width: 90px; margin-left: 6px; float: left;">异常设备</div>
-                    <div id="abnormaldevicepercent">30%</div>
-                </div>                
-            </div>
-            <div class="item_sub_div">
-                <div class="item_subtitle">设备列表</div>
-                <table id='device_table'>
-                    <thead>
-                        <td>序号</td>
-                        <td>设备名称</td>
-                        <td>状态</td>
-                    </thead>
-                </table>
-            </div>
-        </div>
-        
-        <div class="item_container" style="width: 430px; height: 240px; 
-             background: url('images/dashboard/nav_background.png') no-repeat;
-                 background-size:100% 100%; ">
-            <div >
-                <span>车流量统计</span>
-                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
-            </div>
-            <div style="margin-top: 30px; float: left;">
-                <canvas id="chart_veh_flow"></canvas>
-            </div>
-            <div style="width: 20%; position: absolute; right: 1px; margin-top: 30px;">
-                <p class="stat_button_active" id='vehflowtoday' onclick="showVehFlowChartByDay(0);">今日</p>
-                <p class="stat_button" id='vehflow7day' onclick="showVehFlowChartByDay(7);">7天</p>
-                <p class="stat_button" id='vehflow30day' onclick="showVehFlowChartByDay(30);">1个月</p>
-            </div>
-        </div>
-    </div>
-
-
-    <div style='z-index: 10; position: absolute; right: 0px; top: 80px;'>
-        <div class="item_container" style="width: 430px; height: 160px; 
-             background: url('images/dashboard/nav_background.png') no-repeat;
-                 background-size:100% 100%; ">
-            <div>
-                <span>环境信息</span>
-                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
-            </div>
-            
-            
-            <div >
-                <table class="forecast_tbl">
-                    <tr>
-                        <td><span id='datespan'></span></td>                       
-                        <td><img src="images/dashboard/wendu.png"/></td>
-                        <td>湿度</td>
-                        <td>30</td>
-                        <td><img src="images/dashboard/shidu.png"/></td>
-                        <td>湿度</td>
-                        <td>23hPa</td>
-                    </tr>
-                    <tr>
-                        <td><span id='weekday'>星期四</span> <img src="images/dashboard/sunshine.png"></td>
-                        <td><img src="images/dashboard/fengli.png"/></td>
-                        <td>风力</td>
-                        <td>62Km/h</td>
-                        <td><img src="images/dashboard/fengxiang.png"/></td>
-                        <td>风向</td>
-                        <td>东南</td>
-                    </tr>                    
-                </table>
-            </div>
-        </div>
-        
-        <div class="item_container" style="width: 430px; height: 410px; 
-             background: url('images/dashboard/device_background.png') no-repeat;
-                 background-size:100% 100%; ">
-            <div>
-                <span>事件统计</span>
-                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
-            </div>
-            <div class="item_sub_div">
-                <div class="item_subtitle" id="event_sub_title">简要统计</div>
-                <div style=" margin-top: 10px; width: 100%;">
-                    <span class="stat_button_active" id="eventtoday" onclick="showEventByDay(0);">今日</span>
-                    <span class="stat_button" id="event7day" onclick="showEventByDay(7);">7天</span>
-                    <span class="stat_button" id="event30day" onclick="showEventByDay(30);">1个月</span>
-                </div>                
-                <div id="chart_events_container" style="width: 100%; text-align: center;">
-                    <canvas id="chart_events" width="180" height="260"></canvas>
-                </div>
-            </div>
-            <div class="item_sub_div">
-                <div class="item_subtitle">事件列表</div>
-                <table id="traffic_event_table">
-                    <thead>
-                        <td>序号</td>
-                        <td>事件</td>
-                        <td>时间</td>
-                    </thead>
-                </table>
-            </div> 
-        </div>
+                <td>
+                    <div style='z-index: 10; '>
+                        <div class="item_container" style="width: 430px; height: 260px; 
+                             background: url('images/dashboard/device_background.png') no-repeat;
+                                 background-size:100% 100%; ">
+                            <div>
+                                <span>事件统计</span>
+                                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
+                            </div>
+                            <div class="item_sub_div">
+                                <div style=" margin-top: 10px; width: 100%;">
+                                    <span class="stat_button_active" id="eventtoday" onclick="showEventByDay(0);">今日</span>
+                                    <span class="stat_button" id="event7day" onclick="showEventByDay(7);">7天</span>
+                                    <span class="stat_button" id="event30day" onclick="showEventByDay(30);">1个月</span>
+                                </div>                
+                                <div id="chart_events_container" style="width: 100%; text-align: center;">
+                                    <canvas id="chart_events" width="100" height="160"></canvas>
+                                </div>
+                            </div>
+                            <div class="item_sub_div">
+                                <table id="traffic_event_table">
+                                    <thead>
+                                        <td>序号</td>
+                                        <td>事件</td>
+                                        <td>时间</td>
+                                    </thead>
+                                </table>
+                            </div> 
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+ 
         
 
-        <div class="item_container" style="width: 430px; height: 240px; 
-             background: url('images/dashboard/nav_background.png') no-repeat;
-                 background-size:100% 100%; ">
-            <div>
-                <span>拥堵预警</span>
-                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
-            </div>
-            <div >
-                <canvas id="radar_canvas"  style="width: 380px; height: 160px;" ></canvas>
-            </div>
-<!--            <div class="item_sub_div">
-                <div class="item_subtitle">严重拥堵</div>
-               <table>
-                    <thead>
-                        <td>路段</td>
-                        <td>时间</td>
-                    </thead>
-                    <tr>
-                        <td>团雾</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                </table>                
-            </div>
-            <div class="item_sub_div">
-                <div class="item_subtitle">中度拥堵</div>
-                <table>
-                    <thead>
-                        <td>路段</td>
-                        <td>时间</td>
-                    </thead>
-                    <tr>
-                        <td>团雾</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                    <tr>
-                        <td>交通事故</td>
-                        <td>10:30:00</td>                        
-                    </tr>
-                </table>
-            </div>             -->
-        </div>
-    </div>
+
+
+
 </div>
 
 <script>
@@ -528,7 +453,7 @@ function showEvents(){
             tbl.deleteRow(i);    
         }
 
-        var maxid = Math.min(7, data["events"].length);
+        var maxid = Math.min(4, data["events"].length);
         for(var i=0;i<maxid;i++){
             var tr=tbl.insertRow(i+1);
             tr.className = "tr_content";
@@ -564,7 +489,7 @@ function showEvents(){
         if(eventitemcount === 0){
             $("#chart_events_container").html('<br/><br/><br/><br/>暂无数据。');
         } else {
-            $("#chart_events_container").html('<canvas id="chart_events" width="180" height="200"></canvas>');
+            $("#chart_events_container").html('<canvas id="chart_events" width="80" height="80"></canvas>');
 
             eventChart = new Chart(document.getElementById("chart_events"), {
                     type: 'pie',
@@ -740,92 +665,6 @@ function showVehFlowChart(){
            });            
         }
    });
-}
-
-var globalNormalPercent = 0;
-var deviceStatusChart ;
-function showDeviceStatus(){
-    //return;
-    $.getJSON("dashboarddevices",function(data){
-        var tbl = document.getElementById("device_table");
-        var rows = tbl.rows; //获取表格的行数
-
-        for (var i = rows.length - 1; i > 0 ; i--) {
-            tbl.deleteRow(i);    
-        }
-
-        var maxid = Math.min(7, data["devices"].length);
-        for(var i=0;i<maxid;i++){
-            var tr=tbl.insertRow(i+1);
-            tr.className = "tr_content";
-                        //添加单元格
-            var cell0=tr.insertCell(0);
-            cell0.innerHTML = i+1;
-            var cell1=tr.insertCell(1);
-            cell1.innerHTML=data["devices"][i]["devicecode"];
-            var cell2=tr.insertCell(2);
-
-            if(data["devices"][i]["dstatus"] === 1){
-                cell2.innerHTML="正常"; 
-                normalDeviceCounter++;
-            } else {
-                cell2.innerHTML="异常"; 
-            }
-        }
-        
-        var normalDeviceCounter = 0;   
-        for(var i=0;i< data["devices"].length;i++){
-            if(data["devices"][i]["dstatus"] === 1){
-                normalDeviceCounter++;
-            }
-        }        
-        var normalPercent = (normalDeviceCounter / data["devices"].length) * 100;
-        var abnormalPercent = ((data["devices"].length - normalDeviceCounter) / data["devices"].length) * 100;
-        $("#normaldevicepercent").html(normalPercent.toFixed(0) + "%");
-        $("#abnormaldevicepercent").html(abnormalPercent.toFixed(0) + "%");
-        
-        if(normalPercent !== globalNormalPercent){
-            globalNormalPercent = normalPercent;
-            var abnormalDeviceCounter = data["devices"].length - normalDeviceCounter;
-            var ctx = document.getElementById('chart_devices').getContext('2d');    
-            var gradientStroke1 = ctx.createLinearGradient(0, 0, 0, 300);
-              gradientStroke1.addColorStop(0, 'rgba(32, 242, 233, 1)');  
-              gradientStroke1.addColorStop(1, 'rgba(41, 150, 246, 1)'); 
-
-            var gradientStroke3 = ctx.createLinearGradient(0, 0, 0, 300);
-              gradientStroke3.addColorStop(0, 'rgba(65, 126, 255, 1)');  
-              gradientStroke3.addColorStop(1, 'rgba(86, 157, 253, 1)');  
-
-            if(deviceStatusChart){
-                deviceStatusChart.clear();
-                deviceStatusChart.destroy();
-            }          
-            // chart 6
-            deviceStatusChart = new Chart(document.getElementById("chart_devices"), {
-                type: 'doughnut',
-                data: {
-                    labels: ["正常设备", "异常设备"],
-                    datasets: [{
-                            label: "",
-                            backgroundColor: [gradientStroke1, gradientStroke3],
-                            data: [normalDeviceCounter, abnormalDeviceCounter],
-                            borderColor: 'rgba(255, 255, 255, 0.3)',
-                            hoverBackgroundColor: [gradientStroke1, gradientStroke3],
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    title: {
-                            display: false,
-                            text: ''
-                    },
-                    legend: {
-                        display: false,
-                    }
-                }
-            });        
-        }        
-    }); 
 }
 
 $(window).on('resize',function(){
@@ -1126,8 +965,8 @@ function showVehicles(){
     }); 
 }
 
-const canvas = document.querySelector('#radar_canvas');
-const ctx = canvas.getContext('2d');
+//const canvas = document.querySelector('#radar_canvas');
+//const ctx = canvas.getContext('2d');
 function drawCircle() {
 //    ctx.beginPath();
 //    ctx.fillStyle = 'blue';
@@ -1153,13 +992,12 @@ function drawCircle() {
         canvasHUnit = lanewidth / canvash ;
     });
 }
-drawCircle();
+//drawCircle();
 
 function refreshAll(){
     setTimeout('refreshAll()', 5000);
     
     hideBd();
-    showDeviceStatus();
     updateBdMapSummary();
     showEvents();
     showVehFlowChart();
