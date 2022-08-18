@@ -242,9 +242,9 @@
                                 <td class="summary_stat_title_td">今日预警次数</td>                     
                             </tr>
                             <tr>
-                                <td  class="summary_stat_value_td" style="color: #8b4343;" id="vehflow">0</td>
-                                <td  class="summary_stat_value_td" style="color: #e5650c;" id="warncount">0</td>                                           
-                                <td  class="summary_stat_value_td" style="color: #62851e;" id="warnrecordcount">0</td>
+                                <td  class="summary_stat_value_td" style="color: #16F7FB;" id="vehflow">0</td>
+                                <td  class="summary_stat_value_td" style="color: #2EA1FF;" id="warncount">0</td>                                           
+                                <td  class="summary_stat_value_td" style="color: #2B69F4;" id="warnrecordcount">0</td>
                             </tr>
                             <tr>
                                 <td class="summary_stat_title_td">RSU数量</td>
@@ -252,9 +252,9 @@
                                 <td class="summary_stat_title_td">雷视数量</td>                     
                             </tr>
                             <tr>
-                                <td  class="summary_stat_value_td" style="color: #8b4343;" id="rsucount">0</td>
-                                <td  class="summary_stat_value_td" style="color: #e5650c;" id="obucount">0</td>                                           
-                                <td  class="summary_stat_value_td" style="color: #62851e;" id="radarcount">0</td>
+                                <td  class="summary_stat_value_td" style="color: #16F7FB;" id="rsucount">0</td>
+                                <td  class="summary_stat_value_td" style="color: #2EA1FF;" id="obucount">0</td>                                           
+                                <td  class="summary_stat_value_td" style="color: #2B69F4;" id="radarcount">0</td>
                             </tr>                           
                         </table>
                     </div>                                      
@@ -444,7 +444,7 @@ var stylejson = [{
     "elementType": "geometry",
     "stylers": {
         "visibility": "on",
-        "weight": 30
+        "weight": 40
     }
 }, {
     "featureType": "highway",
@@ -487,7 +487,7 @@ var stylejson = [{
     "elementType": "geometry",
     "stylers": {
         "visibility": "on",
-        "weight": 30
+        "weight": 40
     }
 }, {
     "featureType": "arterial",
@@ -1780,7 +1780,7 @@ function updateBdMapSummary(){
                     position: pt,                          // 设置标注的地理位置
                     offset: new BMapGL.Size(-60, -100)           // 设置标注的偏移量
                 })    
-                label.setStyle({border: "1px dotted #ffffff", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
+                label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
                 marker.setLabel(label);                 
                 
                 marker.setTitle(radarobj.devicecode);
@@ -1904,7 +1904,7 @@ function showEventByDay(day){
 var eventChart ; 
 var eventReqCount = 0;
 function showEvents(){
-    var constpiecolors = ["#2e9fff", "#2968f6", "#e02e89", "#13f9fe", '#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
+    var constpiecolors = ["#13F9F9", "#2EA1FF", "#2B68FA", "#DA3097", '#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
     var eventdateset = [];
     var eventdataitem = {};
     var labels = [];
