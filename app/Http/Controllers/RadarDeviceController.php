@@ -39,6 +39,9 @@ class RadarDeviceController extends Controller
         $rdevice = new RadarDevice();
         $rdevice->devicecode = $request->devicecode;
         $rdevice->macaddress = $request->macaddress;
+        $rdevice->ipaddress = $request->ipaddress;
+        $rdevice->httpstreamport = $request->httpstreamport;
+        $rdevice->videostreamaddress = $request->videostreamaddress;
         $rdevice->macaddrint = $this->mac_to_int($request->macaddress);
         $rdevice->lanenumber = $request->lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
@@ -51,11 +54,49 @@ class RadarDeviceController extends Controller
     }
     
     function editRadarDevice(Request $request){
+        if($request->id == ""){
+            return "缺少参数！";
+        }
         
+        $radars = RadarDevice::where("id", $request->id)
+                ->get();
+        
+        if(count($radars) == 0){
+            return "设备不存在！";
+        }
+        
+        return view("/basicdata/addradardevice", [
+            "radardevice"=>$radars[0]
+        ]);
     }
     
     function editRadarDeviceSave(Request $request){
+        if($request->id == ""){
+            return "缺少参数！";
+        }
         
+        $radars = RadarDevice::where("id", $request->id)
+                ->get();
+        
+        if(count($radars) == 0){
+            return "设备不存在！";
+        }
+        
+        $rdevice = $radars[0];
+        $rdevice->devicecode = $request->devicecode;
+        $rdevice->macaddress = $request->macaddress;
+        $rdevice->ipaddress = $request->ipaddress;
+        $rdevice->httpstreamport = $request->httpstreamport;
+        $rdevice->videostreamaddress = $request->videostreamaddress;
+        $rdevice->macaddrint = $this->mac_to_int($request->macaddress);
+        $rdevice->lanenumber = $request->lanenumber;
+        $rdevice->lanewidth = $request->lanewidth;
+        $rdevice->status = $request->status;
+        $rdevice->lat = $request->lat;
+        $rdevice->lng = $request->lng;
+        $rdevice->save();
+        
+        return redirect("radardevices");        
     }
     
     function deleteRadarDevice(Request $request){

@@ -30,7 +30,9 @@
                     <tr role="row">
                         <th >ID</th>
                         <th >设备编号</th>
-                        <th >Mac地址</th>                                                
+                        <th >Mac地址</th>
+                        <th >ip地址</th>
+                        <th >视频流地址</th>
                         <th >车道数</th>
                         <th >车道宽度</th>
                         <th >坐标</th>
@@ -45,6 +47,8 @@
                         <td >{{$radar->id}}</td>
                         <td>{{$radar->devicecode}}</td>
                         <td>{{$radar->macaddress}}</td>
+                        <td>{{$radar->ipaddress}}</td>
+                        <td>{{$radar->videostreamaddress}}</td>
                         <td>{{$radar->lanenumber}}</td>
                         <td>{{$radar->lanewidth}}</td>
                         <td>{{$radar->lng}}, {{$radar->lat}}</td>
@@ -54,7 +58,7 @@
                              <div class="dropdown">
                                     <button class="btn btn-light border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                     <ul class="dropdown-menu" style="margin: 0px;">
-                                                <li><a class="dropdown-item" href="editradardevice?userid={{$radar->id}}">编辑</a></li>
+                                                <li><a class="dropdown-item" href="editradardevice?id={{$radar->id}}">编辑</a></li>
                                                 <li><a class="dropdown-item" href="javascript:confirmDelete({{$radar->id}});">删除</a></li>
                                     </ul>
                             </div>

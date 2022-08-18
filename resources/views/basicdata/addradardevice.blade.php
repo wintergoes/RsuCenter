@@ -76,7 +76,40 @@ function onSelectTecChild(){
                 <input type="text" class="form-control" id="macaddress" name="macaddress" placeholder="请输入mac地址">
                 @endif
             </div>
-        </div> 
+        </div>
+        
+        <div class="row mb-3">
+            <label for="ipaddress" class="col-sm-2 col-form-label">ip地址</label>
+            <div class="col-sm-6">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="ipaddress" name="ipaddress" value="{{$radardevice->ipaddress}}">
+                @else
+                <input type="text" class="form-control" id="ipaddress" name="ipaddress" placeholder="请输入ip地址">
+                @endif
+            </div>
+        </div>
+        
+        <div class="row mb-3">
+            <label for="videostreamaddress" class="col-sm-2 col-form-label">视频流地址</label>
+            <div class="col-sm-6">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="videostreamaddress" name="videostreamaddress" value="{{$radardevice->videostreamaddress}}">
+                @else
+                <input type="text" class="form-control" id="videostreamaddress" name="videostreamaddress" placeholder="请输入http流端口">
+                @endif
+            </div>
+        </div>        
+        
+        <div class="row mb-3">
+            <label for="httpstreamport" class="col-sm-2 col-form-label">http流端口</label>
+            <div class="col-sm-6">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="httpstreamport" name="httpstreamport" value="{{$radardevice->httpstreamport}}">
+                @else
+                <input type="text" class="form-control" id="httpstreamport" name="httpstreamport" placeholder="请输入http流端口">
+                @endif
+            </div>
+        </div>
         
         <div class="row mb-3">
             <label for="lanenumber" class="col-sm-2 col-form-label">车道数量</label>

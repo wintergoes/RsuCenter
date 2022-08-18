@@ -17,7 +17,10 @@ class CreateRadarDeviceTable extends Migration
             $table->increments('id');
             $table->string("devicecode", 100)->default("");
             $table->string("macaddress", 50)->default("");
+            $table->string("ipaddress", 20)->default("");
             $table->bigInteger("macaddrint")->default(0);
+            $table->integer("httpstreamport")->default(0);
+            $table->string("videostreamaddress", "100")->default("");
             $table->integer("lanenumber")->default(0);
             $table->string("lanewidth", 100)->default("");
             $table->integer("status")->default(1);
