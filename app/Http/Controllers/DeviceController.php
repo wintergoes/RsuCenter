@@ -14,7 +14,9 @@ class DeviceController extends Controller{
     public function index(Request $request){
         $devices = Device::orderBy('devices.created_at', 'asc')
                 ->select('devices.id',  'devices.devicecode', 'devices.created_at',
-                        'devices.rsulat', 'devices.rsulng');
+                        'devices.rsulat', 'devices.rsulng',
+                        "rstatus.*")
+                ->leftjoin("RSU_status as rstatus", "rstatus.device_ID", "=", "devices.devicecode");
         
         $devices = $devices->get();
   
