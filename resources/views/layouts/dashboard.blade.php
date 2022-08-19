@@ -272,7 +272,7 @@
                         <table height="90%">
                             <tr>
                                 <td>
-                        <div style="margin-top: 6px; width: 100%; height: 100%">
+                        <div style="margin-top: 6px; width: 100%; height: 90%">
                             <canvas id="chart_veh_flow"></canvas>
                         </div>                                    
                                 </td>
@@ -2125,7 +2125,10 @@ function showVehFlowChart(){
             var clabels = [];
             var cvalues = [];
             
-            for(var k = 1; k < 24; k++){
+            var d = new Date();
+            var loophour = Math.max(8, d.getHours());
+
+            for(var k = 1; k <= loophour; k++){
                 clabels.push(k);
                 var haveHour = false;
                 for(var i=0;i<data["vehflow"].length;i++){
@@ -2479,7 +2482,7 @@ function showDataSummary(){
     });    
     
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: "dashboardsummary",
         dataType: "json",
         success: function (data) {
