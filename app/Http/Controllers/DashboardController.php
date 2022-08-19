@@ -22,6 +22,10 @@ class DashboardController extends Controller
             ->limit(6)
             ->get();
         
+        $radars = RadarDevice::orderBy("id", "desc")
+                ->limit(6)
+                ->get();
+        
         $default_lat = env("dashboard_default_lat", 36.183753);
         $default_lng = env("dashboard_default_lng", 120.339217);
         $default_zoom = env("dashboard_map_defaultzoom", 15); 
@@ -38,6 +42,7 @@ class DashboardController extends Controller
         
         return view("/layouts/dashboard", [
             'obus'=>$obus,
+            'radars'=>$radars,
             "default_lat"=>$default_lat,
             "default_lng"=>$default_lng,
             "default_zoom"=>$default_zoom,            

@@ -326,7 +326,7 @@
     </div>
 </div>
     
-    
+@if(env("dashboard_video_type") == "obu")    
 <div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
      background-color: rgba(100, 0, 0, 0);  font-size: 12px; ">
                 <?php
@@ -353,7 +353,39 @@
                 }
                 ?>
                 @endforeach        
-</div>    
+</div>
+@else
+<div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
+     background-color: rgba(100, 0, 0, 0);  font-size: 12px; z-index: 10;">
+                <?php
+                $videocount = 0;
+                ?>
+                @foreach($radars as $radar)
+                <div style="float: left; margin-right: 10px;">
+                    <div style="background: url('images/dashboard/video_background.png') no-repeat; 
+                         background-size: 100% 100%; width: 260px; height: 155px; padding: 6px;">
+                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" class="card-img-top" preload="none">
+                            <source src="{{$radar->videostreamaddress}}" type="video/mp4">
+                        </video>
+                        <script>
+                        document.getElementById("radarvideo{{$radar->id}}").play();
+                        </script>
+                    </div>
+                    <div  style="padding: 3px;">
+                        <p class="video_text">
+                            {{$radar->devicecode}}
+                        </p>
+                    </div>
+                </div>
+                <?php
+                $videocount++;
+                if($videocount == 7){
+                    break;
+                }
+                ?>
+                @endforeach        
+</div>
+@endif
 <script>
 var map = new BMapGL.Map("bdmap_container", {
    coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
