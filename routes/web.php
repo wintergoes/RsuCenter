@@ -119,11 +119,6 @@ Route::any("/bsmlogfilecontent", "DeviceLogController@logfileContent");
 Route::get("/bsmlogs", "DeviceLogController@index");
 
 Route::get('/home', 'HomeController@index');
-Route::get('/dashboard', 'HomeController@dashboard');
-Route::any('/dashboardsummary', 'HomeController@dashboardSummary');
-Route::any('/dashboardvehflow', 'HomeController@dashboardVehFlow');
-Route::any('/dashboarddevices', 'HomeController@dashboardDevices');
-Route::any('/dashboardeventjson', 'HomeController@dashboardEventJson');
 Route::any("/hardware", "HardwareUpdateController@index");
 Route::any("/hardwareinfo", "HardwareUpdateController@hardwareInfo");
 Route::any("/deletehardware", "HardwareUpdateController@deleteHardware");
@@ -133,9 +128,18 @@ Route::any("/hwupdateres", "HardwareUpdateController@updateResources");
 Route::any("/addhwupdateres", "HardwareUpdateController@addUpdateResource");
 Route::any("/addhwupdateressave", "HardwareUpdateController@addUpdateResourceSave");
 Route::any("/deletehwupdateres", "HardwareUpdateController@deleteUpdateResourceSave");
-Route::any("/dashboardtestlatlng", "HomeController@dashboardTestLatlng");
-Route::any("/dashboardvehicles", "HomeController@dashboardVehicles");
-Route::any("/dashboardradarvision", "HomeController@dashboardRadarVision");
+
+//***************************Dashboard相关*****************************************
+Route::get('/dashboard', 'DashboardController@dashboard');
+Route::any('/dashboardsummary', 'DashboardController@dashboardSummary');
+Route::any('/dashboardvehflow', 'DashboardController@dashboardVehFlow');
+Route::any('/dashboarddevices', 'DashboardController@dashboardDevices');
+Route::any('/dashboardeventjson', 'DashboardController@dashboardEventJson');
+Route::any("/dashboardtestlatlng", "DashboardController@dashboardTestLatlng");
+Route::any("/dashboardvehicles", "DashboardController@dashboardVehicles");
+Route::any("/dashboardradarvision", "DashboardController@dashboardRadarVision");
+Route::any("/dashboardgetnewobuvideo", "DashboardController@getObuNewVideo");
+Route::any('/dashboardbdmapsummary', 'DashboardController@bdmapSummary');
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");

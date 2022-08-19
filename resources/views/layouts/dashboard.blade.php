@@ -337,7 +337,7 @@
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
                          background-size: 100% 100%; width: 220px; height: 155px; padding: 6px;">
                         <video autoplay="autoplay" onended="onVideoEnded({{$obu->id}})" id="video{{$obu->id}}" muted="muted" controls class="card-img-top">
-                            <source src="getnewobuvideo?obuid={{$obu->id}}" type="video/mp4">
+                            <source src="dashboardgetnewobuvideo?obuid={{$obu->id}}" type="video/mp4">
                         </video>
                     </div>
                     <div  style="padding: 3px;">
@@ -1686,7 +1686,7 @@ var radarmarkers = [];
 function updateBdMapSummary(){
     $.ajax({
         type: "GET",
-        url: "homebdmapsummary",
+        url: "dashboardbdmapsummary",
         dataType: "json",
         success: function (data) {
             for(var i = 0; i < rsumarkers.length; i++){
@@ -2496,7 +2496,7 @@ function drawCircle() {
 //video视频播放完成的事件
 function onVideoEnded(obuid) {
     var aud = document.getElementById('video' + obuid);
-    aud.src = "getnewobuvideo?obuid=" + obuid;
+    aud.src = "dashboardgetnewobuvideo?obuid=" + obuid;
 };   
 
 function refreshAll(){
