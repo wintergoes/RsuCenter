@@ -1986,7 +1986,7 @@ function showEvents(){
 //            eventChart.destroy();
 //        }
         if(eventitemcount === 0){
-            $("#chart_events_container").html('<br/><br/><br/><br/>暂无数据。');
+            $("#chart_events_container").html('<br/><br/>暂无数据。');
         } else {
             $("#chart_events_container").html('<canvas id="chart_events" width="80" height="80"></canvas>');
 

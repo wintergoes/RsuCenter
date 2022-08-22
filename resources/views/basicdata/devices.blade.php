@@ -112,14 +112,18 @@
                         $errstr = "";
                     } else {
                         if($errstr != ""){
-                            $errstr = substr($errstr, 0);
+                            $errstr = substr($errstr, 3);
                         }
                     }
                     ?>
                     <tr>
                         <td>{{$device->id}}</td>
                         <td>{{$device->devicecode}}</td>
-                        <td>{{$device->score == "" ? "-" : $device->score}} <?php echo($errstr == "" ? "00" : "<br/>" . $errstr); ?></td>
+                        @if ($errstr != "")
+                        <td><a href="javascript:alert('{{$errstr}}');" >{{$device->score == "" ? "-" : $device->score}}</a></td>
+                        @else
+                        <td>{{$device->score == "" ? "-" : $device->score}}</td>
+                        @endif
                         <td>{{$device->rsulat}}, {{$device->rsulng}}</td>
                         <td>{{$device->con_datetime}}</td>
                         <td>{{$device->created_at}}</td>
