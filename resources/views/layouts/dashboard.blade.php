@@ -1743,17 +1743,18 @@ function updateBdMapSummary(){
                 
                 let pt = new BMapGL.Point(rsuobj.rsulng, rsuobj.rsulat);
                 var marker = new BMapGL.Marker(pt, {
-                    icon: rsuobj.id === 2 ? rsuErrorIcon : rsuIcon,
+                    icon: rsuIcon,
                     offset: new BMapGL.Size(0, -10)
                 });
                 
-                if(rsuobj.id === 2){
-                    var label = new BMapGL.Label(rsuobj.devicecode + " <font color='#d77f43'>设备异常</font>", {       // 创建文本标注
+                if(rsuobj.score < 80){
+                    var label = new BMapGL.Label(rsuobj.devicecode + " <a href='devices' target='_blank'><font color='#d77f43'>设备异常</font></a>", {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
                         offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
                     })    
                     label.setStyle({border: "1px solid rgb(75 139 88)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
-                    marker.setLabel(label);                    
+                    marker.setLabel(label); 
+                    marker.setIcon(rsuErrorIcon);
                 }
                 marker.setTitle(rsuobj.devicecode);
                 rsumarkers.push(marker);
