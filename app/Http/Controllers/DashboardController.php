@@ -204,7 +204,7 @@ class DashboardController extends Controller
                 ->get();
         
         $odevices = ObuDevice::orderBy("id")
-                ->select("id", "obuid", "obulatitude", "obulongtitude")
+                ->select("id", "obuid", "obulatitude", "obulongtitude", "positiontime", "obudirection")
                 ->get();
         
         $warnings = WarningInfo::orderBy("id")

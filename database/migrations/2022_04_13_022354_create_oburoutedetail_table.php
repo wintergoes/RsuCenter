@@ -21,6 +21,7 @@ class CreateOburoutedetailTable extends Migration
             $table->double("lat")->default(0);
             $table->double("lng")->default(0);
             $table->double("altitude")->default(0);
+            $table->float("direction")->default(0);
             $table->integer("distance")->default(0); 
             $table->tinyInteger("locationtype");
             $table->timestamps();

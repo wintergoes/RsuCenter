@@ -802,10 +802,16 @@ class ApiV1Controller extends Controller
             $oburoutedetail->lat = $loc->lat;
             $oburoutedetail->lng = $loc->lng;
             $oburoutedetail->altitude = $loc->altitude;
+            $oburoutedetail->direction = $loc->direction;
             $oburoutedetail->distance = $loc->distance;
             $oburoutedetail->locationtype = $loc->locationtype;
             $oburoutedetail->created_at = strtotime($loc->ctime);
             $oburoutedetail->save();
+            
+            $updatesql = "update obudevices set obulatitude=" . $loc->lat . 
+                    ", obulongtitude=" . $loc->lng . ", obudirection=" . $loc->direction .
+                    ", positiontime=NOW() where id=" . $request->obuid;
+            DB::update($updatesql);
             
             if($localids == ""){
                 $localids = $loc->id;

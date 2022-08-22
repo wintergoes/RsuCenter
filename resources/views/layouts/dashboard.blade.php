@@ -387,17 +387,6 @@
 </div>
 @endif
 <script>
-var map = new BMapGL.Map("bdmap_container", {
-   coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
-                 // 指定完成后API将以指定的坐标类型处理您传入的坐标
-});          // 创建地图实例  
-var point = new BMapGL.Point({{$default_lng}}, {{$default_lat}});  // 创建点坐标  
-map.centerAndZoom(point, {{$default_zoom}});                 // 初始化地图，设置中心点坐标和地图级别 
-map.setMinZoom(14);
-map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-//map.setMapType(BMAP_EARTH_MAP);      // 设置地图类型为地球模式
-
-
 var stylejson = [{
     "featureType": "land",
     "elementType": "geometry",
@@ -1699,6 +1688,16 @@ var stylejson = [{
     }
 }]
 
+var map = new BMapGL.Map("bdmap_container", {
+   coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
+                 // 指定完成后API将以指定的坐标类型处理您传入的坐标
+});          // 创建地图实例  
+var point = new BMapGL.Point({{$default_lng}}, {{$default_lat}});  // 创建点坐标  
+map.centerAndZoom(point, {{$default_zoom}});                 // 初始化地图，设置中心点坐标和地图级别 
+map.setMinZoom(6);
+map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+//map.setMapType(BMAP_EARTH_MAP);      // 设置地图类型为地球模式
+
 map.setMapStyleV2({     
   styleJson: stylejson
 });
@@ -1776,12 +1775,23 @@ function updateBdMapSummary(){
             
             for(var i = 0; i < data.obudevices.length; i++){
                 obuobj = data.obudevices[i];
+                if (obuobj.obulongtitude === 0 || obuobj.obulatitude === 0){
+                    continue;
+                }
+                var nowdate = new Date();
+                var obuposdate = new Date(obuobj.positiontime);
+                if (nowdate - obuposdate > 10000){
+                    continue;
+                }
               
-                var pt = new BMapGL.Point(obuobj.obulongtitude, obuobj.obulatitude);
+                var latlng = coordtransform.wgs84togcj02(obuobj.obulongtitude, obuobj.obulatitude);
+                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+                var pt = new BMapGL.Point(latlng[0], latlng[1]);
                 var marker = new BMapGL.Marker(pt, {
                     icon: obuIcon
                 });
                 obumarkers.push(marker);
+                marker.setRotation(obuobj.obudirection);
                 // 将标注添加到地图
                 map.addOverlay(marker);                
             }
@@ -2536,7 +2546,7 @@ function onVideoEnded(obuid) {
 };   
 
 function refreshAll(){
-    setTimeout('refreshAll()', 50000);
+    setTimeout('refreshAll()', 5000);
     
     hideBd();
     updateBdMapSummary();
