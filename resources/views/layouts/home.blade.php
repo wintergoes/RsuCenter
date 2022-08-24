@@ -64,7 +64,8 @@ $l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "edit
 $l1_road = $l2_warninginfo | $l2_road;
 
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));
-$l1_videos = $l2_obuvideos;
+$l2_radarvideos = in_array($currentpath, array("radarvideos"));
+$l1_videos = $l2_obuvideos | $l2_radarvideos;
 
 $l2_devicelogs = in_array($currentpath, array("devicelogs", "devicelogfilecontent"));
 $l2_bsmlogs = in_array($currentpath, array('bsmlogs', 'bsmlogfilecontent'));
@@ -134,7 +135,7 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 					</a>
 					<ul>
                                             <li {!! $l2_obuvideos ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obuvideos"><i class="bx bx-right-arrow-alt" ></i>OBU视频</a></li>
-                                            <li > <a href="#"><i class="bx bx-right-arrow-alt" ></i>人工影像</a></li>
+                                            <li {!! $l2_radarvideos ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="radarvideos"><i class="bx bx-right-arrow-alt" ></i>雷视视频</a></li>
 					</ul>
 				</li>
                                 

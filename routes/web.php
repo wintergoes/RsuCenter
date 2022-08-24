@@ -54,6 +54,8 @@ Route::any('/addradardevicesave', 'RadarDeviceController@addRadarDeviceSave');
 Route::any('/editradardevice', 'RadarDeviceController@editRadarDevice');
 Route::any('/editradardevicesave', 'RadarDeviceController@editRadarDeviceSave');
 Route::any('/deleteradardevice', 'RadarDeviceController@deleteRadarDevice');
+Route::any('/radarvideos', 'RadarDeviceController@radarVideos');
+Route::any('/getradarvideo', 'RadarDeviceController@getRadarVideo');
 
 //*******************************预警信息***************************************
 Route::any('/warninginfo', "WarningInfoController@index");

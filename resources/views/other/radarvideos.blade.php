@@ -19,9 +19,10 @@
                   
                     <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
-                        <select name="obudevice" class="form-select"  style="width: 200px">
-                            @foreach($obus as $obu)
-                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
+                        <select name="radardevice" class="form-select"  style="width: 200px">
+                            <option value="-1">全部</option>
+                            @foreach($radars as $radar)
+                            <option class="form-control" value="{{$radar->id}}" {{$searchradar == $radar->id ? "selected" : ""}}>{{$radar->devicecode}}</option>
                             @endforeach
                         </select>
                     </td>                    
@@ -32,20 +33,20 @@
 </div>
 
 <div class="row">
-    @if(count($obuvideos) > 0)
+    @if(count($radarvideos) > 0)
     <div class="col-12 col-lg-12 ">
         <div class="card radius-6 border-1 border-grey111111">
             <div class="card-body">
                 <div class="row row-cols-1 row-cols-md-4 row-cols-lg-4 row-cols-xl-4">
-                    @foreach($obuvideos as $video)
+                    @foreach($radarvideos as $video)
                     <div class="col">
                         <div class="">
                             <video muted="muted" controls class="card-img-top">
-                                <source src="uploadfiles/obuvideos/{{$video->obuid}}/{{$video->filename}}" type="video/mp4">
+                                <source src="http://192.168.150.130:8079/{{$video->devicecode}}/{{$video->filename}}" type="video/mp4">
                             </video>
                             <div class="card-body text-center">
                                 <p class="card-title">
-                                    {{$video->obucode}} - {{$video->filename}}
+                                    {{$video->filename}}
                                 </p>
                             </div>
                         </div>
@@ -64,13 +65,13 @@
     @endif
 </div>
 
-@if(count($obuvideos) > 0)
+@if(count($radarvideos) > 0)
 <div class="card" id="pagelinks_container">
     <div class="card-body">
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
-    {{ $obuvideos->appends([ "fromdate"=>$searchfromdate,
-                "todate"=>$searchtodate, "obudevice"=>$searchobu])->links() }}  
+    {{ $radarvideos->appends([ "fromdate"=>$searchfromdate,
+                "todate"=>$searchtodate, "radardevice"=>$searchradar])->links() }}  
     </div> 
     </nav>
     </div>

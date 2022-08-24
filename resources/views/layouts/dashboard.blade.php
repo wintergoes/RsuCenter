@@ -364,7 +364,7 @@
                 <div style="float: left; margin-right: 10px;">
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
                          background-size: 100% 100%; width: 260px; height: 155px; padding: 6px;">
-                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" class="card-img-top" preload="none">
+                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none">
                             <source src="{{$radar->videostreamaddress}}" type="video/mp4">
                         </video>
                         <script>
@@ -2543,7 +2543,19 @@ function drawCircle() {
 function onVideoEnded(obuid) {
     var aud = document.getElementById('video' + obuid);
     aud.src = "dashboardgetnewobuvideo?obuid=" + obuid;
-};   
+}; 
+
+function onRadarVideoEnded(radarid, videourl){
+//    var aud = document.getElementById('radarvideo' + radarid);
+//    aud.play();
+    setTimeout("playRadarVideo(" + radarid + ", '" + videourl + "')", 5000);
+}
+
+function playRadarVideo(radarid, videourl){
+    var aud = document.getElementById('radarvideo' + radarid);
+    aud.src = videourl;
+    aud.play();    
+}
 
 function refreshAll(){
     setTimeout('refreshAll()', 5000);

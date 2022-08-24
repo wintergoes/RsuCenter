@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\RadarDevice;
+use App\RadarVideo;
 
 use DB;
 
@@ -126,5 +127,62 @@ class RadarDeviceController extends Controller
                     return $mac_int;
             else
                     return 0;
-    }    
+    }
+    
+    function radarVideos(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',time()) . " 00:00:00";
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        $searchradar = "";
+        if($request->has("radardevice")){
+            $searchradar = $request->radardevice;
+        }
+        
+        $radarvideos = RadarVideo::orderBy("radarvideos.id", "desc")
+                ->where("radarvideos.deleted", "0")
+                ->select("radarvideos.id", "radarvideos.filename", "radar.devicecode")
+                ->leftjoin("radardevices as radar", "radar.id", "=", "radarvideos.radarid");
+        
+        if($searchradar != "" && $searchradar != "-1"){
+            $radarvideos = $radarvideos->where("radarvideos.radarid", $searchradar);
+        }
+        
+        if($searchfromdate != ""){
+            $radarvideos = $radarvideos->where("radarvideos.created_at", ">", $searchfromdate);
+        }
+        
+        if($searchtodate != ""){
+            $radarvideos = $radarvideos->where("radarvideos.created_at", "<", $searchtodate);
+        }
+        
+        $radarvideos = $radarvideos->paginate(16);
+        
+        $radars = RadarDevice::orderBy("id", "desc")
+                ->select("id", "devicecode")
+                ->get();
+        
+        return view("/other/radarvideos", [
+            "radarvideos"=>$radarvideos,
+            "radars"=>$radars,
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate,
+            "searchradar"=>$searchradar
+        ]);        
+    }
+    
+    function getRadarVideo(Request $request){
+        $filename = "/var/video/RS00001/20220824_143722.ogg";
+        return file_get_contents($filename);
+    }
 }
