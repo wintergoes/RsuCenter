@@ -33,8 +33,8 @@
 
 <div class="row">
     @if(count($obuvideos) > 0)
-    <div class="col-12 col-lg-12 ">
-        <div class="card radius-6 border-1 border-grey111111">
+    <div class="col-12 col-lg-12 p-xl-3">
+        <div class="card radius-6 border-1 ">
             <div class="card-body">
                 <div class="row row-cols-1 row-cols-md-4 row-cols-lg-4 row-cols-xl-4">
                     @foreach($obuvideos as $video)
