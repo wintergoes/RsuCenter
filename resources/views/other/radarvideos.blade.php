@@ -42,11 +42,11 @@
                     <div class="col">
                         <div class="">
                             <video muted="muted" controls class="card-img-top">
-                                <source src="http://192.168.150.130:8079/{{$video->devicecode}}/{{$video->filename}}" type="video/mp4">
+                                <source src="{{$radar_video_root_path}}/radarvideo/{{$video->devicecode}}/{{$video->filename}}" type="video/mp4">
                             </video>
                             <div class="card-body text-center">
                                 <p class="card-title">
-                                    {{$video->filename}}
+                                    {{$video->devicecode}} {{$video->filename}}
                                 </p>
                             </div>
                         </div>

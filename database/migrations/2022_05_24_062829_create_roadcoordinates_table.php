@@ -39,7 +39,7 @@ class CreateRoadcoordinatesTable extends Migration
             $table->double("distance");
             $table->timestamps();
             
-            $table-index(["roadid", "laneno", "lanetype"]);
+            $table->index(["roadid", "laneno", "lanetype"]);
         });
     }
 

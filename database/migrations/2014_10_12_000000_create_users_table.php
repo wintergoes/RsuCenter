@@ -27,9 +27,9 @@ class CreateUsersTable extends Migration
         });
         
         $insertstr = 'insert into users (username, ';
-        $insertstr .= 'uemail,  password, created_at) values (?, ?, ?, NOW() )';
+        $insertstr .= ' password, created_at) values (?,  ?, NOW() )';
         
-        DB::insert($insertstr, ['admin', '',  bcrypt('admin')]);      
+        DB::insert($insertstr, ['admin',  bcrypt('admin')]);      
     }
 
     /**

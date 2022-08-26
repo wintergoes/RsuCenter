@@ -21,6 +21,8 @@ class CreateObuDeviceLogTbl extends Migration
             $table->integer("Is_online")->default(null);
             $table->dateTime("log_datetime")->nullable()->defult(null);
             $table->dateTime("con_datetime")->nullable()->default(null);
+            
+            $table->index(["device_ID"]);
         });
     }
 

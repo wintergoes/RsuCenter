@@ -19,6 +19,8 @@ class CreateDevicesTable extends Migration
             $table->double("rsulat")->default(0);
             $table->double("rsulng")->default(0);
             $table->timestamps();
+            
+            $table->index(["devicecode"]);
         });
     }
 

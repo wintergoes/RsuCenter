@@ -47,8 +47,8 @@ class RadarDeviceController extends Controller
         $rdevice->lanenumber = $request->lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
         $rdevice->status = $request->status;
-        $rdevice->lat = $request->lat;
-        $rdevice->lng = $request->lng;
+        $rdevice->lat = $request->lat == "" ? 0 : $request->lat;
+        $rdevice->lng = $request->lng == "" ? 0 : $request->lng;
         $rdevice->save();
         
         return redirect("radardevices");
@@ -172,12 +172,15 @@ class RadarDeviceController extends Controller
                 ->select("id", "devicecode")
                 ->get();
         
+        $radar_video_root_path = env("radar_video_root_path");
+        
         return view("/other/radarvideos", [
             "radarvideos"=>$radarvideos,
             "radars"=>$radars,
             "searchfromdate"=>$searchfromdate,
             "searchtodate"=>$searchtodate,
-            "searchradar"=>$searchradar
+            "searchradar"=>$searchradar,
+            "radar_video_root_path"=>$radar_video_root_path
         ]);        
     }
     

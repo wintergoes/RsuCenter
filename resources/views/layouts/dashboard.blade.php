@@ -2538,6 +2538,18 @@ function drawCircle() {
     });
 }
 //drawCircle();
+function  getNowTime() {
+    var date = new Date();
+    this.year = date.getFullYear();
+    this.month = date.getMonth() + 1;
+    this.date = date.getDate();
+    this.hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    this.minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    this.second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+    this.milliSeconds = date.getMilliseconds();
+    var currentTime = this.year+'-'+this.month + '-' + this.date + ' ' + this.hour + ':' + this.minute + ':' + this.second + '.' + this.milliSeconds;
+    return currentTime;
+};
 
 //video视频播放完成的事件
 function onVideoEnded(obuid) {
@@ -2548,10 +2560,12 @@ function onVideoEnded(obuid) {
 function onRadarVideoEnded(radarid, videourl){
 //    var aud = document.getElementById('radarvideo' + radarid);
 //    aud.play();
+    console.debug(getNowTime() + ": onRadarVideoEnded");
     setTimeout("playRadarVideo(" + radarid + ", '" + videourl + "')", 5000);
 }
 
 function playRadarVideo(radarid, videourl){
+    console.debug(getNowTime() + ":: onRadarVideoEnded_playRadarVideo");
     var aud = document.getElementById('radarvideo' + radarid);
     aud.src = videourl;
     aud.play();    

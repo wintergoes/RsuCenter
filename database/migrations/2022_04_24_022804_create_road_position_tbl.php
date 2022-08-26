@@ -15,6 +15,7 @@ class CreateRoadPositionTbl extends Migration
     {
         Schema::create('roadpositions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer("roadid")->default(0);
             $table->String("rpname", 50)->nullable()->default("");
             $table->integer("rptype")->nullable()->defult(0); // 0 - 普通位置，1 - 出入口位置
             $table->double("rpstartlat")->default(0)->nullable();
@@ -22,6 +23,8 @@ class CreateRoadPositionTbl extends Migration
             $table->double("rpendlat")->default(0)->nullable();
             $table->double("rpendlng")->default(0)->nullable();            
             $table->timestamps();
+            
+            $table->index(["roadid", "rptype"]);
         });
     }
 
