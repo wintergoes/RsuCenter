@@ -38,7 +38,8 @@
 	<script src="assets/plugins/chartjs/js/Chart.min.js"></script>
 	<script src="assets/plugins/chartjs/js/Chart.extension.js"></script>
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>        
+	<script src="assets/js/app.js"></script>
+        <script src="js/zlzl.js"></script>    
         
         <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>   
         
@@ -326,6 +327,10 @@
     </div>
 </div>
     
+<script>
+var radarVideoMap = new HashMap();
+</script>
+    
 @if(env("dashboard_video_type") == "obu")    
 <div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
      background-color: rgba(100, 0, 0, 0);  font-size: 12px; ">
@@ -364,17 +369,19 @@
                 <div style="float: left; margin-right: 10px;">
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
                          background-size: 100% 100%; width: 260px; height: 155px; padding: 6px;">
-                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none">
-                            <source src="{{$radar->videostreamaddress}}" type="video/mp4">
+                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" src="{{$radar->videostreamaddress}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none">
+                            <source  type="video/mp4">
                         </video>
                         <script>
                         document.getElementById("radarvideo{{$radar->id}}").play();
+                        radarVideoMap.put({{$radar->id}}, "{{$radar->videostreamaddress}}");
                         </script>
                     </div>
                     <div  style="padding: 3px;">
-                        <p class="video_text">
+                        <p class="video_text" >
                             {{$radar->devicecode}}
                         </p>
+                        <p id="videolabel{{$radar->id}}"></p>
                     </div>
                 </div>
                 <?php
@@ -2242,8 +2249,8 @@ var carmaker;
 function showTestVehs(){
     if(coords.length === 0){
         $.getJSON("dashboardtestlatlng",function(data){
-            coords = data["coords"];
-            showTestVehs();
+            coords = data["coords"];            
+            setTimeout("showTestVehs()", 1000);
         });
         return;
     }
@@ -2279,82 +2286,6 @@ function showTestVehs(){
     }
     
     setTimeout("showTestVehs()", 1000);
-}
-
-function HashMap(){
-    //定义长度
-    var length=0;
-    //创建一个对象
-    var obj=new Object();
-
-    //判断Map是否为空
-    this.isEmpty=function(){
-            return length==0;
-    }
-
-    //判断对象中是否包含给定Key
-    this.containsKey=function(key){
-            return (key in obj);
-    }
-
-    //判断对象中是否包含给定的Value
-    this.containsValue=function(value){
-            for(var key in obj){
-                    if(obj[key]==value){
-                            return true; 
-                    }
-            }
-            return false;
-    }
-
-    //向map中添加数据
-    this.put=function(key,value){
-            if(!this.containsKey(key)){
-                    length++;
-            }
-            obj[key]=value;
-    }
-
-    //根据给定的key获取Value
-    this.get=function(key){
-            return this.containsKey(key)?obj[key]:null;
-    }
-
-    //根据给定的Key删除一个值
-    this.remove=function(key){
-            if(this.containsKey(key)&&(delete obj[key])){
-                    length--;
-            }
-    }
-
-    //获得Map中所有的value
-    this.values=function(){
-            var _values=new Array();
-            for(var key in obj){
-                _values.push(obj[key]);
-            }
-            return _values;
-    }
-
-    //获得Map中的所有key
-    this.keySet=function(){
-            var _keys=new Array();
-            for(var key in obj){
-                    _keys.push(key);
-            }
-            return _keys;
-    }
-
-    //获得Map的长度
-    this.size=function(){
-            return length;
-    }
-
-    //清空Map
-    this.clear=function(){
-            length=0;
-            obj=new Object();
-    }
 }
 
 function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, id){
@@ -2483,7 +2414,7 @@ function showVehicles(){
             }
             $("#test").html(nowdate);
         }
-        setTimeout("showVehicles()", 100);
+        setTimeout("showVehicles()", 1000);
     }); 
 }
 
@@ -2557,15 +2488,31 @@ function onVideoEnded(obuid) {
     aud.src = "dashboardgetnewobuvideo?obuid=" + obuid;
 }; 
 
+function checkVideoPlay(){
+    videoctrls = document.getElementsByTagName("video");
+    for(var i = 0; i < videoctrls.length; i++){
+        id = videoctrls[i].id;
+        idstr = id.replace("radarvideo", "");
+        console.debug(id + ": " + videoctrls[i].networkState + ", " + videoctrls[i].paused + ", " + radarVideoMap.get(idstr));
+        if(videoctrls[i].networkState === 3  && videoctrls[i].paused === true){            
+            videoctrls[i].src = radarVideoMap.get(idstr);
+        }
+        videoctrls[i].play();
+        //$("#videolabel" + idstr).html(videoctrls[i].src + " " + videoctrls[i].networkState);            
+    }
+    
+    setTimeout("checkVideoPlay()", 5000);
+}
+checkVideoPlay();
+
+
 function onRadarVideoEnded(radarid, videourl){
 //    var aud = document.getElementById('radarvideo' + radarid);
 //    aud.play();
-    console.debug(getNowTime() + ": onRadarVideoEnded");
     setTimeout("playRadarVideo(" + radarid + ", '" + videourl + "')", 5000);
 }
 
 function playRadarVideo(radarid, videourl){
-    console.debug(getNowTime() + ":: onRadarVideoEnded_playRadarVideo");
     var aud = document.getElementById('radarvideo' + radarid);
     aud.src = videourl;
     aud.play();    
