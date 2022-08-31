@@ -52,6 +52,10 @@ $l2_recyclenews = in_array($currentpath, array("recyclenews", "addnews", "editne
 $l1_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
+$l2_radar_anpr = in_array($currentpath, array("anprevents"));
+$l2_radar_aidevents = in_array($currentpath, array("aidevents"));
+$ll_data = $l2_radar_anpr | $l2_radar_aidevents;
+
 $l2_oburoute = in_array($currentpath, array("oburoute"));
 $l2_eventstat = in_array($currentpath, array("eventstat"));
 $l2_clockins = in_array($currentpath, array("clockins"));
@@ -96,6 +100,19 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 						<div class="menu-title">管理首页</div>
 					</a>
 				</li>
+                                
+				<li {!! $ll_data ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon">
+                                                    <i class='bx bx-data'></i>
+						</div>
+						<div class="menu-title">数据查询</div>
+					</a>
+					<ul>
+                                            <li {!! $l2_radar_anpr ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="anprevents"><i class="bx bx-right-arrow-alt" ></i>车辆识别查询</a></li>
+                                            <li {!! $l2_radar_aidevents ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="aidevents"><i class="bx bx-right-arrow-alt" ></i>雷视事件检测</a></li>
+					</ul>
+				</li>                                
                                 
 				<li {!! $l1_stat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}>
 					<a href="javascript:;" class="has-arrow">

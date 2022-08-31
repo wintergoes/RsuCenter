@@ -2494,9 +2494,10 @@ function checkVideoPlay(){
         id = videoctrls[i].id;
         idstr = id.replace("radarvideo", "");
         console.debug(id + ": " + videoctrls[i].networkState + ", " + videoctrls[i].paused + ", " + radarVideoMap.get(idstr));
-        if(videoctrls[i].networkState === 3  && videoctrls[i].paused === true){            
+        if(videoctrls[i].networkState !== 2  && videoctrls[i].paused === true){            
             videoctrls[i].src = radarVideoMap.get(idstr);
         }
+        console.debug(id + ", play()");
         videoctrls[i].play();
         //$("#videolabel" + idstr).html(videoctrls[i].src + " " + videoctrls[i].networkState);            
     }
