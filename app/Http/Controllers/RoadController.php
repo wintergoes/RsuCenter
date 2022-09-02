@@ -47,11 +47,42 @@ class RoadController extends Controller
     }
 
     function editRoad(Request $request){
-        return "loading...";
+        if($request->roadid == ""){
+            echo "缺少参数！";
+            return ;
+        }
+        
+        $roads = Road::where("id", $request->roadid)
+                ->get();
+        if(count($roads) == 0){
+            echo "数据不存在！";
+            return;
+        }
+        
+        return view("/road/addroad", [
+            "road"=>$roads[0]
+        ]);
     }
 
     function editRoadSave(Request $request){
-        return "loading...";
+        if($request->roadid == ""){
+            echo "缺少参数！";
+            return ;
+        }
+        
+        $roads = Road::where("id", $request->roadid)
+                ->get();
+        if(count($roads) == 0){
+            echo "数据不存在！";
+            return;
+        } 
+        
+        $road = $roads[0];
+        $road->roadname = $request->roadname;
+        $road->remark = $request->remark;
+        $road->save();
+        
+        return redirect("/roads");        
     }
 
     function deleteRoad(Request $request){

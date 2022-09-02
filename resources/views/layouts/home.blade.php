@@ -63,9 +63,10 @@ $l2_vehflowstat = in_array($currentpath, array("vehflowstat"));
 $l2_warningrecordstat = in_array($currentpath, array("warningrecordstat"));
 $l1_stat = $l2_eventstat | $l2_clockins | $l2_oburoute | $l2_vehflowstat | $l2_warningrecordstat;
 
+$l2_trafficsign = in_array($currentpath, array("trafficsigns", "addtrafficsign", "edittrafficsign"));
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo"));
 $l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave"));
-$l1_road = $l2_warninginfo | $l2_road;
+$l1_road = $l2_warninginfo | $l2_road | $l2_trafficsign;
 
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));
 $l2_radarvideos = in_array($currentpath, array("radarvideos"));
@@ -140,6 +141,7 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 					<ul>
                                             <li {!! $l2_road ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="roads"><i class="bx bx-right-arrow-alt" ></i>路段管理</a></li>
                                             <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>事件管理</a></li>
+                                            <li {!! $l2_trafficsign ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="trafficsigns"><i class="bx bx-right-arrow-alt" ></i>交通标志管理</a></li>
 					</ul>
 				</li>
                                 

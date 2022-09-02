@@ -23,6 +23,10 @@
         </form>
 </div>
 
+<?php
+$commonctrl = new \App\Http\Controllers\CommonController();
+?>
+
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         @if (count($anprevents) > 0)
@@ -30,6 +34,8 @@
         <table class="table mb-0 table-hover table-bordered" >
                 <thead>
                     <tr role="row">
+                        <th >ID</th>
+                        <th >UUID</th>                        
                         <th >车牌号</th>
                         <th >车道号</th>
                         <th >置信度</th>
@@ -37,9 +43,7 @@
                         <th >PlateColor</th>
                         <th >VehType</th>
                         <th >VehType1</th>
-                        <th >车身颜色</th>
                         <th >速度</th>
-                        <th >车辆长度</th>
                         <th >车辆品牌</th>
                         <th >车辆子品牌</th>
                         <th >检测时间</th>
@@ -48,16 +52,16 @@
                 <tbody>
                     @foreach($anprevents as $event)
                     <tr>
+                        <td>{{$event->id}}</td>
+                        <td>{{$event->vehuuid}}</td>
                         <td>{{$event->licenseplate}}</td>
                         <td>{{$event->lineno}}</td>
                         <td>{{$event->confidencelevel}}</td>
                         <td>{{$event->platetype}}</td>
                         <td>{{$event->platecolor}}</td>
-                        <td>{{$event->vehicleType}}</td>
+                        <td>{{$commonctrl->hkVehType2Str($event->vehicleType)}}</td>
                         <td>{{$event->vehtype1}}</td>
-                        <td>{{$event->vehcolor}}</td>
                         <td>{{$event->vehspeed}}</td>
-                        <td>{{$event->vehlength}}</td>
                         <td>{{$event->vehlogoname}}</td>
                         <td>{{$event->vehsublogoname}}</td>
                         <td>{{$event->eventtime}}</td>

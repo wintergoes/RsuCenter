@@ -41,7 +41,7 @@ function submitData(){
             <label for="roadname" class="col-sm-2 col-form-label">路段名称</label>
             <div class="col-sm-6">
                 @if(isset($road))
-                <input type="hidden" name="groupid" value="{{$road->id}}" />
+                <input type="hidden" name="roadid" value="{{$road->id}}" />
                 <input type="text" class="form-control" id="roadname" name="roadname" value="{{$road->roadname}}">
                 @else
                 <input type="text" class="form-control" id="roadname" name="roadname" placeholder="请输入路段名称">

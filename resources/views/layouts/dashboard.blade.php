@@ -39,7 +39,8 @@
 	<script src="assets/plugins/chartjs/js/Chart.extension.js"></script>
 	<!--app JS-->
 	<script src="assets/js/app.js"></script>
-        <script src="js/zlzl.js"></script>    
+        <script src="js/zlzl.js"></script>
+        <script src="js/hikvision.js"></script>
         
         <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>   
         
@@ -110,6 +111,12 @@
         tr{
            height: 36px; 
         }
+        
+        .tr_realtime_vehicle{
+            /*background-color: #0B2F49;*/
+            font-weight: lighter;  
+            height: 30px;
+        }        
         
         .tr_content{
             background-color: #0B2F49;
@@ -289,8 +296,6 @@
                     </div>                                      
                 </td>
 
-           
-                
                 <td>
                     <div style='z-index: 10; '>
                         <div class="item_container" style="width: 430px; height: 260px; 
@@ -322,6 +327,24 @@
                         </div>
                     </div>
                 </td>
+                
+                <td>
+                    <div style='z-index: 10; '>
+                        <div class="item_container" style="width: 430px; height: 260px; 
+                             background: url('images/dashboard/device_background.png') no-repeat;
+                                 background-size:100% 100%; ">
+                            <div>
+                                <span>车辆识别</span>
+                                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
+                            </div>
+                            <div >
+                                <table id="tbl_realtime_vehicles">
+
+                                </table>
+                            </div> 
+                        </div>
+                    </div>
+                </td>                
             </tr>
         </table>    
     </div>
@@ -861,6 +884,7 @@ var stylejson = [{
     "stylers": {
         "visibility": "off",
         "level": "10",
+        "weight": "20",
         "curZoomRegionId": "0",
         "curZoomRegion": "6-10"
     }
@@ -1711,7 +1735,7 @@ map.setMapStyleV2({
     
 var rsuIcon = new BMapGL.Icon("/images/dashboard/rsu_device.png", new BMapGL.Size(24, 24));
 var rsuErrorIcon = new BMapGL.Icon("/images/dashboard/rsu_device_error.png", new BMapGL.Size(24, 24));
-var obuIcon = new BMapGL.Icon("/images/obu_vehicle.png", new BMapGL.Size(31, 15));
+var obuIcon = new BMapGL.Icon("/images/obu_vehicle.png", new BMapGL.Size(15, 31));
 var radarIcon = new BMapGL.Icon("/images/dashboard/radarvision.png", new BMapGL.Size(24, 24));
 var alertStartIcon = new BMapGL.Icon("/images/alertstart.png", new BMapGL.Size(24, 24));
 var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
@@ -2325,6 +2349,26 @@ function showVehicles(){
 //        for(var i = 0; i < vehmarkers.length; i++){
 //            map.removeOverlay(vehmarkers[i]);
 //        }
+                
+        var tbl = document.getElementById("tbl_realtime_vehicles");
+        var rows = tbl.rows; //获取表格的行数
+
+        for (var i = rows.length - 1; i >= 0 ; i--) {
+            tbl.deleteRow(i);    
+        }
+
+        var maxid = Math.min(6, data["vehicles"].length);
+        for(var i=0;i<maxid;i++){
+            var tr=tbl.insertRow(i);
+            tr.className = "tr_realtime_vehicle";
+                        //添加单元格
+            var cell0=tr.insertCell(0);
+            cell0.innerHTML = data["vehicles"][i]["targetid"];
+            var cell1=tr.insertCell(1);
+            cell1.innerHTML=data["vehicles"][i]["plateno"] === "" ? "-" : data["vehicles"][i]["plateno"];
+            var cell1=tr.insertCell(2);
+            cell1.innerHTML=hkVehType2Str(data["vehicles"][i]["vehicletype"]);
+        }        
         
         for(var i = 0; i < data["vehicles"].length; i++){
             var vehuuid = data["vehicles"][i]["uuid"];
@@ -2363,19 +2407,24 @@ function showVehicles(){
                     + " lat:" + veh.lat + " lng: " + veh.lng 
                     + " id: " + veh.dbid;
             
-                    labeltext = veh.plateno + " id: " + veh.targetid;
-                var label = new BMapGL.Label(labeltext, {       // 创建文本标注
-                    position: pt,                          // 设置标注的地理位置
-                    offset: new BMapGL.Size(10, -10)           // 设置标注的偏移量
-                })  
-
-                label.setStyle({                              // 设置label的样式
-                    color: '#000',
-                    fontSize: '14px',
-                    border: '2px solid #1E90FF'
-                })
-
-                carmaker.setLabel(label);
+//                if(veh.plateno === ""){
+//                    labeltext = "ID: " + veh.targetid;
+//                } else {
+//                    labeltext = "ID: " + veh.targetid + ", " + veh.plateno;
+//                }
+//                var label = new BMapGL.Label(labeltext, {       // 创建文本标注
+//                    position: pt,                          // 设置标注的地理位置
+//                    offset: new BMapGL.Size(10, -10)           // 设置标注的偏移量
+//                })  
+//
+//                label.setStyle({                              // 设置label的样式
+//                    color: '#000',
+//                    fontSize: '6px',
+//                    background: '#eeeeee',
+//                    border: '1px solid #1E90FF'
+//                })
+//
+//                carmaker.setLabel(label);
                 carmaker.enableDragging();
 
                 map.addOverlay(carmaker); 
@@ -2394,27 +2443,31 @@ function showVehicles(){
                 veh.marker.setPosition(pt);
                 veh.marker.setRotation(vehrotation);
                 
-                var labeltext = veh.plateno + " id: " + veh.targetid
-                    + " speed:" + veh.speed + " lane: " + veh.laneno 
-                    + " lat:" + veh.lat + " lng: " + veh.lng 
-                    + " id: " + veh.dbid;
-            
-                labeltext = veh.plateno + " id: " + veh.targetid
-            
-                 veh.marker.getLabel().setContent(labeltext);
+//                var labeltext = veh.plateno + " id: " + veh.targetid
+//                    + " speed:" + veh.speed + " lane: " + veh.laneno 
+//                    + " lat:" + veh.lat + " lng: " + veh.lng 
+//                    + " id: " + veh.dbid;
+//            
+//                if(veh.plateno === ""){
+//                    labeltext = "ID: " + veh.targetid;
+//                } else {
+//                    labeltext = "ID: " + veh.targetid + ", " + veh.plateno;
+//                }
+//            
+//                veh.marker.getLabel().setContent(labeltext);
             }
         }
         
         var nowdate = new Date();
         for(var i = vehMap.values().length - 1; i >= 0 ; i--){
             var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
-            if(timecha > 1  * 5000){
+            if(timecha > 1  * 1000){
                 map.removeOverlay(vehMap.values()[i].marker);
                 vehMap.remove(vehMap.values()[i].uuid);
             }
             $("#test").html(nowdate);
         }
-        setTimeout("showVehicles()", 1000);
+        setTimeout("showVehicles()", 500);
     }); 
 }
 
@@ -2532,7 +2585,7 @@ function refreshAll(){
 }
 refreshAll();
 showVehicles();
-showTestVehs();
+//showTestVehs();
 </script>
 </body>
 

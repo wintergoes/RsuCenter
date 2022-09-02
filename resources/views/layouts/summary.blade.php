@@ -104,7 +104,7 @@
                             RSU
                         </span>
                         <span class="border px-1 rounded cursor-pointer">
-                            <img src="images/obu_vehicle.png" width="25" style="vertical-align: middle;"></img>
+                            <img src="images/obu_vehicle.png" width="10" style="vertical-align: middle;"></img>
                             OBU
                         </span>
                         <span class="border px-1 rounded cursor-pointer">

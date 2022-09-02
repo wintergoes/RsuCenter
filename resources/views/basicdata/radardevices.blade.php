@@ -33,6 +33,7 @@
                         <th >Mac地址</th>
                         <th >ip地址</th>
                         <th >视频流地址</th>
+                        <th >端口</th>
                         <th >车道数</th>
                         <th >车道宽度</th>
                         <th >坐标</th>
@@ -49,6 +50,7 @@
                         <td>{{$radar->macaddress}}</td>
                         <td>{{$radar->ipaddress}}</td>
                         <td>{{$radar->videostreamaddress}}</td>
+                        <td>{{$radar->httpstreamport}}</td>
                         <td>{{$radar->lanenumber}}</td>
                         <td>{{$radar->lanewidth}}</td>
                         <td>{{$radar->lng}}, {{$radar->lat}}</td>

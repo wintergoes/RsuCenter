@@ -22,7 +22,9 @@
             </table>
         </form>
 </div>
-
+<?php
+$commonctrl = new \App\Http\Controllers\CommonController();
+?>
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         @if (count($aidevents) > 0)
@@ -48,7 +50,7 @@
                         <td>{{$event->plate}}</td>
                         <td>{{$event->laneno}}</td>
                         <td>{{$event->vehconfidence}}</td>
-                        <td>{{$event->aidevent}}</td>
+                        <td>{{$commonctrl->hkEvent2Str($event->aidevent)}}</td>
                         <td>{{$event->platetype}}</td>
                         <td>{{$event->platecolor}}</td>
                         <td>{{$event->vehtype}}</td>

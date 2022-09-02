@@ -30,6 +30,7 @@
                     <tr role="row">
                         <th >ID</th>
                         <th >名称</th>
+                        <th >发布状态</th>
                         <th >备注</th>
                         <th>操作</th>
                     </tr>
@@ -39,6 +40,7 @@
                     <tr>
                         <td>{{$road->id}}</td>
                         <td>{{$road->roadname}}</td>
+                        <td>{{$road->published == 1 ? "已发布" : "未发布"}}</td>
                         <td>{{$road->remark == "" ? "-" : $road->remark}}</td>
                         <td>
                              <div class="dropdown">
@@ -51,7 +53,7 @@
                                     @else
                                     <li><a class="dropdown-item" href="publishroad?roadid={{$road->id}}">发布</a></li>
                                     @endif
-                                    <li><a class="dropdown-item" href="editroad?roaid={{$road->id}}">编辑</a></li>
+                                    <li><a class="dropdown-item" href="editroad?roadid={{$road->id}}">编辑</a></li>
                                     <li><a class="dropdown-item" href="javascript:confirmDelete({{$road->id}});">删除</a></li>
                                 </ul>
                             </div>

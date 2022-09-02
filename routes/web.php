@@ -65,6 +65,14 @@ Route::any('/editwarninginfo', "WarningInfoController@editWarningInfo");
 Route::any('/editwarninginfosave', "WarningInfoController@editWarningInfoSave");
 Route::any('/deletewarninginfo', "WarningInfoController@deleteWarningInfo");
 
+//*******************************交通标志信息***************************************
+Route::any('/trafficsigns', "TrafficSignController@index");
+Route::any('/addtrafficsign', "TrafficSignController@addTrafficSign");
+Route::any('/addtrafficsignsave', "TrafficSignController@addTrafficSignSave");
+Route::any('/edittrafficsign', "TrafficSignController@editTrafficSign");
+Route::any('/edittrafficsignsave', "TrafficSignController@editTrafficSignSave");
+Route::any('/deletetrafficsign', "TrafficSignController@deleteTrafficSign");
+
 //*******************************数据查询***************************************
 Route::any('/anprevents', "DataController@anprEvents");
 Route::any('/aidevents', "DataController@aidEvents");

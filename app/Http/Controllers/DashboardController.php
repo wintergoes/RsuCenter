@@ -145,12 +145,12 @@ class DashboardController extends Controller
 //        echo $searchdate;
         
         $sqlstr = "select vd.id, vd.uuid, vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
-                . "vd.radardetected, vd.vehrotation, vd.detecttime from "
+                . "vd.radardetected, vd.vehrotation, vd.detecttime, vd.vehicletype from "
                 . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
                 . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
                 . "where maxtime.maxtime > '" . $searchdate . "' "; // and targettype='vehicle'
         $vehicles = DB::select($sqlstr);
-        
+//        echo $sqlstr;
         $arr = array("retcode"=>ret_success, "vehicles"=>$vehicles, "searchdate"=>$searchdate);
         return json_encode($arr);
     }
