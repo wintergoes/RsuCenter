@@ -197,10 +197,7 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
                             <nav class="navbar navbar-expand">
                     <div class="sidebar-header">
                         <div>
-                                <img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
-                        </div>
-                        <div>
-                                <h4 class="logo-text">RSU管理后台</h4>
+                                <h4 class="logo-text"><img src="images/site_title_icon.png" alt="RSU管理后台"></h4>
                         </div>
                         <div class="toggle-icon ms-auto logo-text"><i class='bx bx-arrow-to-left'></i>
                         </div>
