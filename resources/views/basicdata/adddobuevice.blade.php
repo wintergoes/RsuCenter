@@ -79,8 +79,7 @@ function getPosition(flag){
 
         
         <div class="row mb-3" style="visibility: hidden; height: 500px; display: none;" id="bdmap_row">
-            <div class="col-sm-12" id="bdmap_container">
-            </div>           
+            <div class="col-sm-12" id="bdmap_container"></div>           
         </div>         
 
         <div class="row mb-3">

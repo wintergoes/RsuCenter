@@ -1848,6 +1848,11 @@ a {
 	border-color: #e7eaf3
 }
 
+.btn-transparent {
+	background-color: transparent;
+	border-color: transparent
+}
+
 .chart-container1 {
 	position: relative;
 	height: 340px
