@@ -17,7 +17,7 @@ class CreateObudeviceTable extends Migration
             $table->increments('id');
             $table->string("obuid", 20)->default("");
             $table->string("obulocalid", 32)->nullable();
-            $table->integer("obustatus")->default(0);
+            $table->integer("obustatus")->default(1);
             $table->double("obulatitude")->default(0);
             $table->double("obulongtitude")->default(0);
             $table->float("obudirection")->default(0);

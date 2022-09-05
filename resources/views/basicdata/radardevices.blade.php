@@ -55,7 +55,11 @@
                         <td>{{$radar->httpstreamport}}</td>
                         <td>{{$radar->lanenumber}}</td>
                         <td>{{$radar->lanewidth}}</td>
+                        @if($radar->lng == 0 || $radar->lat == 0)
+                        <td>未设置</td>
+                        @else
                         <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showRadarPosition('{{$radar->devicecode}}', {{$radar->lng}}, {{$radar->lat}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        @endif
                         <td>{{$radar->status == 1 ? "有效" : "无效"}}</td>                        
                         <td >{{$radar->created_at}}</td>
                         <td>
@@ -105,8 +109,8 @@
 
 
 <script>
-
-
+var radarIcon = new BMapGL.Icon("/images/dashboard/radarvision.png", new BMapGL.Size(24, 24));        
+    
 function showRadarPosition(dcode, lng, lat){
     var map = new BMapGL.Map("bdmap_container", {
        coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
@@ -115,7 +119,7 @@ function showRadarPosition(dcode, lng, lat){
     var point = new BMapGL.Point(39, 120);  // 创建点坐标  
     map.centerAndZoom(point, 15); 
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-    var radarIcon = new BMapGL.Icon("/images/dashboard/radarvision.png", new BMapGL.Size(24, 24));    
+    
     map.addEventListener("tilesloaded",function(){
         $("#map_title").text(dcode + " 位置信息");
         map.clearOverlays();
