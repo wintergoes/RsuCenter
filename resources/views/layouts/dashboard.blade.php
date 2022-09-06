@@ -91,7 +91,7 @@
         .item_sub_div{
             padding: 8px;
             width: 50%;
-            height: 100%;
+            height: 90%;
             float: left;
         }
         
