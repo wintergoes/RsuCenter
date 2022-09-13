@@ -4,6 +4,9 @@
 <script type="text/javascript" src="/api/bdmapjs"></script>
 <script type="text/javascript" src="js/coordtransform.js"></script>
 <script type="text/javascript" src="js/zlzl.js"></script>
+<script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
+<script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+
 
 <script>
 function submitData(){
@@ -87,14 +90,12 @@ function onSelectTecChild(){
             <div class="col-sm-2">
                 <select id="wisource" name="wisource" class="form-select" >
                     @if(isset($winfo))
-                    <option value="0" {{$winfo->wisource == 0 ? "selected" : ""}}>未知</option>
                     <option value="1" {{$winfo->wisource == 1 ? "selected" : ""}}>交警</option>
                     <option value="2" {{$winfo->wisource == 2 ? "selected" : ""}}>政府</option>
                     <option value="3" {{$winfo->wisource == 3 ? "selected" : ""}}>气象部门</option>
                     <option value="4" {{$winfo->wisource == 4 ? "selected" : ""}}>互联网</option>
                     <option value="5" {{$winfo->wisource == 5 ? "selected" : ""}}>本地检测</option>
                     @else
-                    <option value="0" >未知</option>
                     <option value="1" >交警</option>
                     <option value="2" >政府</option>
                     <option value="3" >气象部门</option>
@@ -171,56 +172,37 @@ function onSelectTecChild(){
         @endif        
 
         <div class="row mb-3">
-            <label for="mobile" class="col-sm-2 col-form-label">终止坐标</label>
-            <div class="col-sm-2">
+            <label for="wiradius" class="col-sm-2 col-form-label">影响半径(米)</label>
+            <div class="col-sm-6">
                 @if(isset($winfo))
-                <input type="text" class="form-control" id="stoplat" name="stoplat" value="{{$winfo->stoplat}}">
+                <input type="number" class="form-control" id="wiradius" name="wiradius" value="{{$winfo->wiradius}}">
                 @else
-                <input type="text" class="form-control" id="stoplat" name="stoplat" placeholder="请拾取坐标">
+                <input type="number" class="form-control" id="wiradius" name="wiradius" placeholder="请输入影响半径">
                 @endif
             </div>
-            
-            <div class="col-sm-2">
-                @if(isset($winfo))
-                <input type="text" class="form-control" id="stoplng" name="stoplng" value="{{$winfo->stoplng}}">
-                @else
-                <input type="text" class="form-control" id="stoplng" name="stoplng" placeholder="请拾取坐标">
-                @endif
-            </div>
-            
-            <div class="col-sm-1">
-                <input type="button" class="form-control" onclick="getPosition(1);" value="拾取"></button>
-            </div>             
-        </div>   
+        </div>
         
-        @if(isset($winfo))
-       <div class="row mb-3"  id="endExtraInfo">
-            <label for="realname" class="col-sm-2 col-form-label"></label>
-            @if(count($roadsEnd) == 0)
-            <div class="col-sm-5" id="endExtraInfoContent"><font color="red">此坐标没有在任何路段上。</font></div>
-            @else
-            <div class="col-sm-5" id="endExtraInfoContent">
-                <ul>
-                    @foreach($roadsEnd as $road)
-                    <li>{{$road->roadname}}
-                    @if($road->lanetype == 0)
-                    ，全车道
-                    @else
-                    ，{{$road->laneno}}车道
-                    @endif
-                    </li>
-                    @endforeach
-                </ul>
+        <div class="row mb-3">
+            <label for="starttime" class="col-sm-2 col-form-label">开始时间</label>
+            <div class="col-sm-6">
+                @if(isset($winfo))
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="starttime" name="starttime" value="{{$winfo->starttime}}">
+                @else
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="starttime" name="starttime" placeholder="请输入开始时间">
+                @endif
             </div>
-            @endif
-        </div>   
-        @else
-        <div class="row mb-3" style="visibility: hidden; display: none;" id="endExtraInfo">
-            <label for="realname" class="col-sm-2 col-form-label"></label>
-            <div class="col-sm-5" id="endExtraInfoContent">
+        </div>
+
+        <div class="row mb-3">
+            <label for="endtime" class="col-sm-2 col-form-label">结束时间</label>
+            <div class="col-sm-6">
+                @if(isset($winfo))
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="endtime" name="endtime" value="{{$winfo->endtime}}">
+                @else
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="endtime" name="endtime" value="0" placeholder="请输入结束时间">
+                @endif
             </div>
         </div>        
-        @endif        
         
         <div class="row mb-3">
             <label for="wistatus" class="col-sm-2 col-form-label">状态</label>

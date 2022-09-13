@@ -41,7 +41,9 @@ class WarningInfoController extends Controller
         $winfos = WarningInfo::orderBy('id', 'desc')
                 ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
                         "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
-                        "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", "u.realname",
+                        "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
+                        "warninginfo.wiradius", "warninginfo.starttime", "warninginfo.endtime", 
+                        "u.realname",
                         "tec.tecparentcode as tecpcode", "warninginfo.teccode")
                 ->leftjoin("users as u", "warninginfo.wicreator", "=", "u.id")
                 ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode");
@@ -92,6 +94,9 @@ class WarningInfoController extends Controller
         $winfo->teccode = $request->tecchild;
         $winfo->wisource = $request->wisource;
         $winfo->wicreator = Auth::user()->id;
+        $winfo->wiradius = $request->wiradius;
+        $winfo->starttime = $request->starttime;
+        $winfo->endtime = $request->endtime;
         $winfo->save();
         
         return redirect("/warninginfo");
@@ -106,6 +111,7 @@ class WarningInfoController extends Controller
                 ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
                         "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
                         "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
+                        "warninginfo.wiradius", "warninginfo.starttime", "warninginfo.endtime", 
                         "tec.tecparentcode", "warninginfo.teccode")                
                 ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode")
                 ->get();

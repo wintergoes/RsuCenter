@@ -25,6 +25,9 @@ class CreateWarninginfoTable extends Migration
             $table->double("startlng")->default(0);
             $table->double("stoplat")->default(0);
             $table->double("stoplng")->default(0);
+            $table->integer("wiradius")->default(0);
+            $table->timestamp("starttime")->nullable();
+            $table->timestamp("endtime")->nullable();
             $table->timestamps();
             
             $table->index(["witype", "wisource", "wistatus", "created_at"]);

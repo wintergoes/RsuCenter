@@ -62,7 +62,9 @@
                     <tr role="row">
                         <th >预警名称</th>
                         <th >起始坐标</th>
-                        <th >终点坐标</th>
+                        <th >影响半径</th>
+                        <th >开始时间</th>
+                        <th >结束时间</th>
                         <th >来源</th>
                         <th >创建者</th>
                         <th >状态</th>
@@ -76,7 +78,9 @@
                     <tr>
                         <td>{{$winfo->winame}}</td>
                         <td>{{$winfo->startlat}}, {{$winfo->startlng}}</td>
-                        <td>{{$winfo->stoplat}}, {{$winfo->stoplng}}</td>
+                        <td>{{$winfo->wiradius}}</td>
+                        <td>{{$winfo->starttime}}</td>
+                        <td>{{$winfo->endtime}}</td>
                         <td>{{$commonctrl->eventSource2Str($winfo->wisource)}}</td>
                         <td>{{$winfo->realname}}</td>
                         <td>{{$winfo->wistatus == 1 ? "有效" : "无效"}}</td>
