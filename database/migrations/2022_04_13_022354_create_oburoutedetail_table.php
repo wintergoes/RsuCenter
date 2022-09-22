@@ -24,6 +24,7 @@ class CreateOburoutedetailTable extends Migration
             $table->float("direction")->default(0);
             $table->integer("distance")->default(0); 
             $table->tinyInteger("locationtype");
+            $table->tinyInteger("flag")->default(0);
             $table->timestamps();
             
             $table->index(["routeid", "obuid", "managerid", "locationtype"]);

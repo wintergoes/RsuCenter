@@ -172,11 +172,14 @@ class WarningInfoController extends Controller
         $winfo->wistatus = $request->wistatus;
         $winfo->startlat = $request->startlat;
         $winfo->startlng = $request->startlng;
-        $winfo->stoplat = $request->stoplat;
-        $winfo->stoplng = $request->stoplng;
+//        $winfo->stoplat = $request->stoplat;
+//        $winfo->stoplng = $request->stoplng;
         $winfo->teccode = $request->tecchild;
         $winfo->wisource = $request->wisource;
         $winfo->wicreator = Auth::user()->id;
+        $winfo->wiradius = $request->wiradius;
+        $winfo->starttime = $request->starttime;
+        $winfo->endtime = $request->endtime;        
         $winfo->save();
         
         return redirect("/warninginfo");        

@@ -41,7 +41,12 @@ class ObuRouteController extends Controller
         $searchobu = "0";
         if($request->has("obudevice")){
             $searchobu = $request->obudevice;
-        }      
+        }
+        
+        $searchlocationtype = "-1";
+        if($request->has("locationtype")){
+            $searchlocationtype = $request->locationtype;
+        }
         
         $obus = ObuDevice::orderBy("id", "desc")
                 ->select("id", "obuid")
@@ -61,8 +66,13 @@ class ObuRouteController extends Controller
         $routes = ObuRouteDetail::orderBy("id", "asc")
                 ->where("created_at", ">=", $searchfromdate . " " . $searchfromtime . ":00")
                 ->where("created_at", "<=", $searchfromdate . " " . $searchtotime . ":59")
-                ->where("obuid", $searchobu)
-                ->get();
+                ->where("obuid", $searchobu);
+        
+        if($searchlocationtype != "-1"){
+            $routes = $routes->where("locationtype", $searchlocationtype);
+        }
+        
+        $routes = $routes->get();
         
         return view("/stat/oburoute", [
             "routes"=>$routes,
@@ -71,6 +81,7 @@ class ObuRouteController extends Controller
             "searchfromdate"=>$searchfromdate,
             "searchfromtime"=>$searchfromtime,
             "searchtotime"=>$searchtotime,
+            "searchlocationtype"=>$searchlocationtype,
             "searchobu"=>$searchobu,
             "default_lat"=>$default_lat,
             "default_lng"=>$default_lng,

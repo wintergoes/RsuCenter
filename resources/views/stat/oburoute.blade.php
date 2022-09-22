@@ -21,7 +21,7 @@
                 <tr>
                     <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
-                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 200px">
+                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 160px">
                             @foreach($obus as $obu)
                             <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
                             @endforeach
@@ -30,10 +30,20 @@
                     <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;日期&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <input name="fromdate1111" type="hidden" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="8" value="{{$searchfromdate}}"/>
-                        <select name="fromdate" id="fromdate" class="form-select" style="width: 200px">
+                        <select name="fromdate" id="fromdate" class="form-select" style="width: 160px">
                             @foreach($validdates as $validdate)
                             <option class="form-control" value="{{$validdate->vdate}}" {{$searchfromdate == $validdate->vdate ? "selected" : ""}}>{{$validdate->vdate}}</option>
                             @endforeach
+                        </select>                        
+                    </td>
+                    
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;坐标类型&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="locationtype" id="locationtype" class="form-select" style="width: 100px">
+                            
+                            <option class="form-control" value="-1" {{$searchlocationtype == -1 ? "selected" : ""}}>不限</option>
+                            <option class="form-control" value="0" {{$searchlocationtype == 0 ? "selected" : ""}}>GPS</option>
+                            <option class="form-control" value="1" {{$searchlocationtype == 1 ? "selected" : ""}}>RTK</option>
                         </select>                        
                     </td>
                     
@@ -84,6 +94,7 @@ map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
 var routeStartIcon = new BMapGL.Icon("/images/route_start.png", new BMapGL.Size(32, 32));
 var routeEndIcon = new BMapGL.Icon("/images/route_end.png", new BMapGL.Size(32, 32));
+var obuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(8, 8));
 
 <?php $pcounter = 0 ?>
 
@@ -92,7 +103,8 @@ var rbdata = [];
 @foreach($routes as $route)
 var latlng = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
-points.push(new BMapGL.Point(latlng[0], latlng[1]));
+
+points.push(pt);
 var rbdataitem = [];
 rbdataitem.push(latlng[0]);
 rbdataitem.push(latlng[1]);
@@ -120,6 +132,8 @@ $pcounter++;
 ?>
 @endforeach
 
+
+
 var view = new mapvgl.View({
     map: map
 });
@@ -129,18 +143,31 @@ var lineLayer = new mapvgl.LineRainbowLayer({
     color: ['#0a0']
 });
 view.addLayer(lineLayer);
-var rbdata = [{
+var rbdatas = [{
         geometry:{
             type: 'LineString',
             coordinates: rbdata
         }
 }];
-lineLayer.setData(rbdata);
+//lineLayer.setData(rbdatas);
 
 @if(count($routes) > 0)
 //var polyline = new BMapGL.Polyline(points, {strokeColor:"blue", strokeWeight:5, strokeOpacity:1});
 //map.addOverlay(polyline);
 @endif
+
+@foreach($routes as $route)
+var latlng = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
+latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
+
+var pt = new BMapGL.Point(latlng[0], latlng[1]);
+var marker = new BMapGL.Marker(pt, {
+    icon: obuIcon
+});
+
+// 将标注添加到地图
+map.addOverlay(marker); 
+@endforeach
 
 function showAlert(){
     Lobibox.notify('warning', {

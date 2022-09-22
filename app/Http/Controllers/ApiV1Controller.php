@@ -801,10 +801,17 @@ class ApiV1Controller extends Controller
             $oburoutedetail->obuid = $request->obuid;
             $oburoutedetail->lat = $loc->lat;
             $oburoutedetail->lng = $loc->lng;
-            $oburoutedetail->altitude = $loc->altitude;
-            $oburoutedetail->direction = $loc->direction;
+            $oburoutedetail->altitude = $loc->altitude;            
+            if(array_key_exists("direction", $loc)){
+                $oburoutedetail->direction = $loc->direction;
+            } else {
+                $oburoutedetail->direction = 0;
+            }
             $oburoutedetail->distance = $loc->distance;
             $oburoutedetail->locationtype = $loc->locationtype;
+            if(array_key_exists("flag", $loc)){
+                $oburoutedetail->flag = $loc->flag;
+            }            
             $oburoutedetail->created_at = strtotime($loc->ctime);
             $oburoutedetail->save();
             
