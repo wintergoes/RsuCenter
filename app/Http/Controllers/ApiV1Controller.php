@@ -813,6 +813,7 @@ class ApiV1Controller extends Controller
                 $oburoutedetail->flag = $loc->flag;
             }            
             $oburoutedetail->created_at = strtotime($loc->ctime);
+            $oburoutedetail->loctime = $loc->ctime;
             $oburoutedetail->save();
             
             $updatesql = "update obudevices set obulatitude=" . $loc->lat . 
