@@ -3,6 +3,7 @@
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script> 
 <script type="text/javascript" src="/api/bdmapjs"></script>
+<script type="text/javascript" src="js/coordtransform.js"></script>
 <script language="javascript" type="text/javascript" src="/js/zlzl.js"></script>
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
@@ -80,7 +81,7 @@
                     <tr>
                         <td>{{$winfo->id}}</td>
                         <td>{{$winfo->winame}}</td>
-                        <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->startlat}}', {{$winfo->startlng}}, {{$winfo->tslat}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$winfo->wiradius}}米</td>
                         <td>{{$winfo->starttime}}</td>
                         <td>{{$winfo->endtime}}</td>
@@ -157,12 +158,19 @@ fillQuickDateSelector("quickdateselector", "fromdate", "todate");
 <script>
     
 function showDevicePosition(tscid, tsname, lng, lat){
-    var rsuIcon = new BMapGL.Icon("/images/trafficevents/traffic_event_" + tscid + ".png", new BMapGL.Size(32, 32));        
+    var tscidInt = parseInt(tscid);
+    var rsuIcon = new BMapGL.Icon("/images/trafficevents/traffic_event_" + tscidInt + ".png", new BMapGL.Size(32, 32));        
     var map = new BMapGL.Map("bdmap_container", {
        coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
                      // 指定完成后API将以指定的坐标类型处理您传入的坐标
     });          // 创建地图实例  
-    var point = new BMapGL.Point(39, 120);  // 创建点坐标  
+    
+    var latlng = coordtransform.wgs84togcj02(lng, lat);
+    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
+    var tmplng = latlng[0];
+    var tmplat = latlng[1];      
+    
+    var point = new BMapGL.Point(tmplat, tmplng);  // 创建点坐标  
     map.centerAndZoom(point, 15); 
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
     
@@ -170,7 +178,8 @@ function showDevicePosition(tscid, tsname, lng, lat){
         $("#map_title").text(tsname + " 位置信息");
         map.clearOverlays();
                        
-        var pt = new BMapGL.Point(lng, lat);
+                     
+        var pt = new BMapGL.Point(tmplng, tmplat);
         var marker = new BMapGL.Marker(pt, {
             icon: rsuIcon,
             offset: new BMapGL.Size(0, 0)
