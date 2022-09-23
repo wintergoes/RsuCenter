@@ -170,7 +170,7 @@
                                 </div>
                             </div>
                     </div>
-            </div>              
+            </div>
         </div>
         @else
         <div class="col-sm-12">

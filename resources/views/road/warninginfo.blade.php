@@ -78,7 +78,7 @@
                     <tr>
                         <td>{{$winfo->winame}}</td>
                         <td>{{$winfo->startlat}}, {{$winfo->startlng}}</td>
-                        <td>{{$winfo->wiradius}}</td>
+                        <td>{{$winfo->wiradius}}米</td>
                         <td>{{$winfo->starttime}}</td>
                         <td>{{$winfo->endtime}}</td>
                         <td>{{$commonctrl->eventSource2Str($winfo->wisource)}}</td>

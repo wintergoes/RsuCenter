@@ -21,7 +21,19 @@ function submitData(){
         $('#startlat').focus();
         return;
     }    
-
+    
+    if($('#wiradius').val() === ''){
+        alert('影响半径不能为空！');
+        $('#wiradius').focus();
+        return;
+    }
+    
+    if($('#starttime').val() === '' || $('#endtime').val() === ''){
+        alert('起始时间不能为空！');
+        $('#starttime').focus();
+        return;
+    }  
+    
     $('#form1').submit();
 }
 
@@ -186,9 +198,9 @@ function onSelectTecChild(){
             <label for="starttime" class="col-sm-2 col-form-label">开始时间</label>
             <div class="col-sm-6">
                 @if(isset($winfo))
-                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="starttime" name="starttime" value="{{$winfo->starttime}}">
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="starttime" name="starttime" value="{{$winfo->starttime}}">
                 @else
-                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="starttime" name="starttime" placeholder="请输入开始时间">
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="starttime" name="starttime" placeholder="请输入开始时间">
                 @endif
             </div>
         </div>
@@ -197,9 +209,9 @@ function onSelectTecChild(){
             <label for="endtime" class="col-sm-2 col-form-label">结束时间</label>
             <div class="col-sm-6">
                 @if(isset($winfo))
-                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="endtime" name="endtime" value="{{$winfo->endtime}}">
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="endtime" name="endtime" value="{{$winfo->endtime}}">
                 @else
-                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="endtime" name="endtime" value="0" placeholder="请输入结束时间">
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="endtime" name="endtime" value="" placeholder="请输入结束时间">
                 @endif
             </div>
         </div>        

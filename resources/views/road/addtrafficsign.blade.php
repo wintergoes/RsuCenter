@@ -4,18 +4,27 @@
 <script type="text/javascript" src="/api/bdmapjs"></script>
 <script type="text/javascript" src="js/coordtransform.js"></script>
 <script type="text/javascript" src="js/zlzl.js"></script>
+<script type="text/javascript" src="js/zlzl.js"></script>
+<script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
+<script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 <script>
 function submitData(){
-    if($('#winame').val() === ''){
-        alert('预警名称不能为空！');
-        $('#winame').focus();
+    if($('#tsname').val() === ''){
+        alert('交通标志名称不能为空！');
+        $('#tsname').focus();
         return;
     }
     
-    if($('#startlat').val() === '' || $('#startlng').val() === ''){
+    if($('#tslat').val() === '' || $('#tslng').val() === ''){
         alert('起始坐标不能为空！');
         $('#startlat').focus();
+        return;
+    }
+    
+    if($('#starttime').val() === '' || $('#endtime').val() === ''){
+        alert('起始时间不能为空！');
+        $('#starttime').focus();
         return;
     }    
 
@@ -80,7 +89,7 @@ function selectTrafficSignClass(){
                 <input type="hidden" name="tscid" id="tscid" value="{{$trafficsign->tscid}}" />
                 <input type="text" class="form-control" id="tsname" name="tsname" value="{{$trafficsign->tsname}}">
                 @else
-                <input type="hidden" name="tscid" id="tscid"  />
+                <input type="hidden" name="tscid" id="tscid"  value="1"/>
                 <input type="text" class="form-control" id="tsname" name="tsname" placeholder="请输入交通标志名称">
                 @endif
             </div>
@@ -92,7 +101,6 @@ function selectTrafficSignClass(){
                 @if(isset($trafficsign))
                 <input type="text" class="form-control" id="tsparam1" name="tsparam1" value="{{$trafficsign->tsparam1}}">
                 @else
-                <input type="hidden" name="tscid" id="tscid"  />
                 <input type="text" class="form-control" id="tsparam1" name="tsparam1" placeholder="请输入参数1">
                 @endif
             </div>
@@ -150,6 +158,27 @@ function selectTrafficSignClass(){
         </div>           
         @endif           
 
+        <div class="row mb-3">
+            <label for="starttime" class="col-sm-2 col-form-label">开始时间</label>
+            <div class="col-sm-6">
+                @if(isset($trafficsign))
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="starttime" name="starttime" value="{{$trafficsign->starttime}}">
+                @else
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="starttime" name="starttime" placeholder="请输入开始时间">
+                @endif
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="endtime" class="col-sm-2 col-form-label">结束时间</label>
+            <div class="col-sm-6">
+                @if(isset($trafficsign))
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="endtime" name="endtime" value="{{$trafficsign->endtime}}">
+                @else
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="endtime" name="endtime" value="" placeholder="请输入结束时间">
+                @endif
+            </div>
+        </div>
         
         <div class="row mb-3" style="visibility: hidden; display: none;" id="bdmap_ctrl_row">
             <div >

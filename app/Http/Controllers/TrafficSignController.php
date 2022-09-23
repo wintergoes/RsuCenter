@@ -15,8 +15,9 @@ class TrafficSignController extends Controller
 {
     function index(Request $request){
         $signs = TrafficSign::orderBy("trafficsigns.id", "desc")
-                ->select("trafficsigns.id", "trafficsigns.tsname", "trafficsigns.tslat", 
+                ->select("trafficsigns.id", "trafficsigns.tscid", "trafficsigns.tsname", "trafficsigns.tslat", 
                         "trafficsigns.tslng", "trafficsigns.created_at", "trafficsigns.tsparam1", 
+                        "trafficsigns.starttime", "trafficsigns.endtime",
                         "u.realname")
                 ->leftjoin("trafficsignclasses as tsc", "trafficsigns.tscid", "=", "tsc.id")
                 ->leftjoin("users as u", "u.id", "=", "trafficsigns.tsmanager")
@@ -38,13 +39,35 @@ class TrafficSignController extends Controller
     }
     
     function addTrafficSignSave(Request $request){
+        $lat = 0;
+        if($request->tslat != ""){
+            $lat = $request->tslat;
+        }
+        
+        $lng = 0;
+        if($request->tslng != ""){
+            $lat = $request->tslng;
+        }
+        
+        $starttime = "";
+        if($request->starttime != ""){
+            $starttime = $request->starttime;
+        }
+        
+        $endtime = "";
+        if($request->endtime != ""){
+            $endtime = $request->endtime;
+        }        
+        
         $ts = new TrafficSign();
-        $ts->tscid = $request->tscid;
+        $ts->tscid = trim($request->tscid);
         $ts->tsname = $request->tsname;
-        $ts->tslat = $request->tslat;
-        $ts->tslng = $request->tslng;
+        $ts->tslat = $lat;
+        $ts->tslng = $lng;
         $ts->tsmanager = Auth::user()->id;
         $ts->tsparam1 = $request->tsparam1;
+        $ts->starttime = $starttime;
+        $ts->endtime = $endtime; 
         $ts->save();
         
         return redirect("trafficsigns");
@@ -96,12 +119,14 @@ class TrafficSignController extends Controller
         }
         
         $ts = $trafficsigns[0];
-        $ts->tscid = $request->tscid;
+        $ts->tscid = trim($request->tscid);
         $ts->tsname = $request->tsname;
         $ts->tslat = $request->tslat;
         $ts->tslng = $request->tslng;
         $ts->tsmanager = Auth::user()->id;
         $ts->tsparam1 = $request->tsparam1;
+        $ts->starttime = $request->starttime;
+        $ts->endtime = $request->endtime;          
         $ts->save();
         
         return redirect("trafficsigns");

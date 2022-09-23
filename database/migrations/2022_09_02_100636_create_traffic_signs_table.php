@@ -22,6 +22,8 @@ class CreateTrafficSignsTable extends Migration
             $table->double("tsmanager")->default(0);
             $table->string("tsparam1", 50)->default("");
             $table->string("tsparam2", 50)->default("");
+            $table->timestamp("starttime")->nullable();
+            $table->timestamp("endtime")->nullable();            
             $table->timestamps();
             
             $table->index(["tscid"]);
