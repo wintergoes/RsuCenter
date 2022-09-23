@@ -96,6 +96,7 @@ var routeStartIcon = new BMapGL.Icon("/images/route_start.png", new BMapGL.Size(
 var routeEndIcon = new BMapGL.Icon("/images/route_end.png", new BMapGL.Size(32, 32));
 var obuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(8, 8));
 var routeErrorIcon = new BMapGL.Icon("/images/route_error.png", new BMapGL.Size(8, 8));
+var routeErrorLargeSpeedIcon = new BMapGL.Icon("/images/route_error_largespeed.png", new BMapGL.Size(8, 8));
 
 <?php $pcounter = 0 ?>
 
@@ -167,6 +168,9 @@ var marker = new BMapGL.Marker(pt, {
 marker.setIcon(routeErrorIcon);
 @endif
 
+@if($route->flag == 3)
+marker.setIcon(routeErrorLargeSpeedIcon);
+@endif
 // 将标注添加到地图
 map.addOverlay(marker); 
 @endforeach
