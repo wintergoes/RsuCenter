@@ -827,6 +827,17 @@ class ApiV1Controller extends Controller
             }
         }
         
+        if($request->maxjson != ""){
+            $maxloc = json_decode($request->maxjson);
+            $obus = ObuDevice::where("id", $request->obuid)
+                    ->get();
+            if(count($obus) > 0){
+                $obus[0]->obulatitude = $maxloc->maxlat;
+                $obus[0]->obulongtitude = $maxloc->maxlng;
+                $obus[0]->save();
+            }
+        }
+        
         $arr = array("retcode"=>ret_success, "localids"=>$localids);
         return json_encode($arr);
     }

@@ -64,6 +64,7 @@ class ObuRouteController extends Controller
         $default_lng = env("home_default_lng", 120.339217); 
         
         $routes = ObuRouteDetail::orderBy("id", "asc")
+                ->select("lat", "lng", "locationtype", "flag")
                 ->where("created_at", ">=", $searchfromdate . " " . $searchfromtime . ":00")
                 ->where("created_at", "<=", $searchfromdate . " " . $searchtotime . ":59")
                 ->where("obuid", $searchobu);

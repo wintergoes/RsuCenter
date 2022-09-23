@@ -95,6 +95,7 @@ map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 var routeStartIcon = new BMapGL.Icon("/images/route_start.png", new BMapGL.Size(32, 32));
 var routeEndIcon = new BMapGL.Icon("/images/route_end.png", new BMapGL.Size(32, 32));
 var obuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(8, 8));
+var routeErrorIcon = new BMapGL.Icon("/images/route_error.png", new BMapGL.Size(8, 8));
 
 <?php $pcounter = 0 ?>
 
@@ -132,8 +133,6 @@ $pcounter++;
 ?>
 @endforeach
 
-
-
 var view = new mapvgl.View({
     map: map
 });
@@ -164,6 +163,9 @@ var pt = new BMapGL.Point(latlng[0], latlng[1]);
 var marker = new BMapGL.Marker(pt, {
     icon: obuIcon
 });
+@if($route->flag == 2)
+marker.setIcon(routeErrorIcon);
+@endif
 
 // 将标注添加到地图
 map.addOverlay(marker); 
