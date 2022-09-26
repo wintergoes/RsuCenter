@@ -140,7 +140,7 @@ class DashboardController extends Controller
     }
     
     function dashboardVehicles(Request $request){
-        $searchdate = date("Y-m-d H:i:s" , strtotime("-5 second"));
+        $searchdate = date("Y-m-d H:i:s" , strtotime("-10 second"));
         
 //        echo $searchdate;
         
