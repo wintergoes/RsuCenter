@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Device;
 
+use DB;
+
+require_once '../app/Constant.php';
+
 class DeviceController extends Controller{
     public function __construct(){
         $this->middleware('auth');
@@ -81,5 +85,12 @@ class DeviceController extends Controller{
         return view("/basicdata/rsusettings", [
             "rsudevice"=>$devices[0]
         ]);
+    }
+    
+    function getRsuOnline(Request $request){
+        $rsus = DB::select("select * from device_info_connect where Is_online=1");
+        
+        $arr = array("retcode"=>ret_success, "rsus"=>$rsus);
+        return json_encode($arr);
     }
 }

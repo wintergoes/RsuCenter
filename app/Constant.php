@@ -25,4 +25,7 @@ define("coord_type_bd09", 2);
 
 define("clockin_goto_work", 1);
 define("clockin_gooff_work", 1);
+
+define("rsi_type_rte", 1);
+define("rsi_type_rts", 2);
 ?>

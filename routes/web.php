@@ -41,6 +41,7 @@ Route::any('/rsusettings', 'DeviceController@rsuSettings');
 Route::any('/editdevice', 'DeviceController@editRsuDevice');
 Route::any('/editdevicesave', 'DeviceController@editRsuDeviceSave');
 Route::any('/deletedevice', 'DeviceController@deleteDevice');
+Route::any("/getrsuonline", "DeviceController@getRsuOnline");
 
 //***************************OBU设备管理****************************************
 Route::any('/obudevices', 'ObuDeviceController@index');
@@ -64,6 +65,8 @@ Route::any('/addwarninginfosave', "WarningInfoController@addWarningInfoSave");
 Route::any('/editwarninginfo', "WarningInfoController@editWarningInfo");
 Route::any('/editwarninginfosave', "WarningInfoController@editWarningInfoSave");
 Route::any('/deletewarninginfo', "WarningInfoController@deleteWarningInfo");
+Route::any("/sendrte2rsu", "WarningInfoController@sendRte2Rsu");
+Route::any("/sendrte2rsusave", "WarningInfoController@sendRte2RsuSave");
 
 //*******************************交通标志信息***************************************
 Route::any('/trafficsigns', "TrafficSignController@index");

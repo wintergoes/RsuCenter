@@ -477,5 +477,90 @@ class WarningInfoController extends Controller
         $eventsourcesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventsourcesummary);
         return json_encode($arr);
-    }    
+    }
+    
+    function sendRte2Rsu(Request $request){
+        $winfos = WarningInfo::whereraw("warninginfo.endtime > now()")
+                ->whereraw("id not in (select relatedid from rsisendrecords where sendtype=" . rsi_type_rte . ")")
+//                ->leftjoin("rsisendrecords as rsr", function($join){
+//                    $join->on("rsr.relatedid", "=", "warninginfo.id")
+//                            ->on("rsr.sendtype", rsi_type_rte);
+//                })
+                ->get();
+        
+        $default_lat = env("dashboard_default_lat", 36.183753);
+        $default_lng = env("dashboard_default_lng", 120.339217);
+        $default_zoom = env("dashboard_map_defaultzoom", 15);         
+        
+        return view("/road/sendrte2rsu", [
+            "warninginfo"=>$winfos,
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,              
+        ]);
+    }
+    
+    function sendRte2RsuSave(Request $request){
+        $selRsu = $request->selectedRsu;
+        $rsus = DB::select("SELECT * FROM device_info_connect where device_id='" . $selRsu . "' order by con_datetime desc limit 1");
+        if(count($rsus) == 0){
+            echo "RSU在数据库中不存在！";
+            return ;
+        }
+        
+        if($rsus[0]->Is_online != "1"){
+            echo "设备" . $selRsu . "不在线！";
+            return;
+        }
+        
+        $events = $request->events;
+        $searchevents = "";
+        foreach($events as $event){
+            if($searchevents == ""){
+                $searchevents = $event;
+            } else {
+                $searchevents = $searchevents . "," . $event;
+            }            
+        }
+        
+        if($searchevents == ""){
+            echo "未选择事件！";
+            return;
+        }
+        
+        $maxreqno = DB::select("select max(reqno) as maxReqNo from (select convert(request_no, UNSIGNED INTEGER) AS reqno FROM device_info_request) as request");
+        $reqNo = $maxreqno[0]->maxReqNo + 1;
+        
+        $winfos = WarningInfo::whereRaw("id in (" . $searchevents . ")")
+                ->get();
+        
+        $rtes = array();
+        foreach($winfos as $winfo){
+            $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
+            $starttime = strtotime($winfo->starttime);
+            $endtime = strtotime($winfo->endtime);
+            
+            $startminute = round(($starttime - $yearstart) / 60);
+            $endminute = round(($endtime - $yearstart) / 60);
+            $nowminute = round((time() - $yearstart) / 60);
+            
+            $eventPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$winfo->startlng, "lat"=>$winfo->startlat)), "offsetV"=>null);
+            $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
+            $winfoitem = array("rteId"=>1, "eventType"=>intval($winfo->teccode), "eventSource"=>$winfo->wisource, 
+                "eventPos"=>$eventPos, "eventRadius"=>$winfo->wiradius, "timeDetails"=>$timeDetails);
+            array_push($rtes, $winfoitem);
+        }
+        
+        $refpos = array("lat"=>floatval($rsus[0]->RSU_lat), "long"=>floatval($rsus[0]->RSU_lng), "elevation"=>0);
+        $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>"RSU0001", "refPos"=>$refpos, "rtss"=>null, "rtes"=>$rtes);
+        $arr = array("type"=>"rte", "value"=>$rsivalue);
+        
+        $reqJson = json_encode($arr);
+        
+        $insertsql = "insert into device_info_request log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
+            . " request_start_time, request_end_time ) values('" . $rsus[0]->log_radom . "', '"
+            . $selRsu . "', now(), 'RTE', '" . $reqNo . "', '" . $reqJson . "', ";
+        
+        //return json_encode($arr);
+    }
 }
