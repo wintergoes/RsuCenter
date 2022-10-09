@@ -34,22 +34,27 @@ class DataController extends Controller
             $searchvehtype = $request->vehicletype;
         }        
 
-        $aidevents = AidEvent::orderBY("id", "desc");
+        $aidevents = AidEvent::orderBY("aidevents.id", "desc")
+                ->select("rd.devicecode", "aidevents.id", "aidevents.plate", "aidevents.laneno", 
+                        "aidevents.aidevent", "aidevents.eventtime", "aidevents.platecolor", "aidevents.vehtype",
+                        "aidevents.vehcolor", "aidevents.vehspeed", "aidevents.longitude", "aidevents.latitude",
+                        "aidevents.detectionpicnumber")
+                ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "aidevents.macaddr");
         
         if($searchfromdate != ""){
-            $aidevents = $aidevents->where("eventtime", ">=", $searchfromdate);
+            $aidevents = $aidevents->where("aidevents.eventtime", ">=", $searchfromdate);
         }
         
         if($searchtodate != ""){
-            $aidevents = $aidevents->where("eventtime", "<=", $searchtodate);
+            $aidevents = $aidevents->where("aidevents.eventtime", "<=", $searchtodate);
         }
         
         if($searchlicenseplate != ""){
-            $aidevents = $aidevents->where("plate", "like", "%". $searchlicenseplate . "%");
+            $aidevents = $aidevents->where("aidevents.plate", "like", "%". $searchlicenseplate . "%");
         }
         
         if($searchvehtype != "-1"){
-            $aidevents = $aidevents->where("vehtype", "=", $searchvehtype);
+            $aidevents = $aidevents->where("aidevents.vehtype", "=", $searchvehtype);
         }        
         
         $aidevents = $aidevents->paginate(30);
@@ -110,22 +115,28 @@ class DataController extends Controller
             $searchvehtype = $request->vehicletype;
         }
 
-        $anprevents = AnprEvent::orderBY("id", "desc");
+        $anprevents = AnprEvent::orderBY("anprevents.id", "desc")
+                ->select("rd.devicecode", "anprevents.id", "anprevents.eventtime",
+                        "anprevents.licenseplate", "anprevents.lineno", "anprevents.confidencelevel",
+                        "anprevents.platecolor", "anprevents.vehicleType", "anprevents.vehtype1",
+                        "anprevents.vehspeed", "anprevents.vehlogoname", "anprevents.vehsublogoname",
+                        "anprevents.vehpicnum")
+                ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "anprevents.macaddr");
         
         if($searchfromdate != ""){
-            $anprevents = $anprevents->where("eventtime", ">=", $searchfromdate);
+            $anprevents = $anprevents->where("anprevents.eventtime", ">=", $searchfromdate);
         }
         
         if($searchtodate != ""){
-            $anprevents = $anprevents->where("eventtime", "<=", $searchtodate);
+            $anprevents = $anprevents->where("anprevents.eventtime", "<=", $searchtodate);
         }
         
         if($searchlicenseplate != ""){
-            $anprevents = $anprevents->where("licenseplate", "like", "%". $searchlicenseplate . "%");
+            $anprevents = $anprevents->where("anprevents.licenseplate", "like", "%". $searchlicenseplate . "%");
         }
         
         if($searchvehtype != "-1"){
-            $anprevents = $anprevents->where("vehicletype", "=", $searchvehtype);
+            $anprevents = $anprevents->where("anprevents.vehicletype", "=", $searchvehtype);
         }
         
         $anprevents = $anprevents->paginate(30);

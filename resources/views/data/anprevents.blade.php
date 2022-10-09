@@ -42,7 +42,8 @@ $commonctrl = new \App\Http\Controllers\CommonController();
         <table class="table mb-0 table-hover table-bordered text-center" >
                 <thead>
                     <tr role="row">
-                        <th >ID</th>                      
+                        <th >ID</th>
+                        <th >雷视</th>
                         <th >车牌号</th>
                         <th >车道号</th>
                         <th >置信度</th>
@@ -60,6 +61,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                     @foreach($anprevents as $event)
                     <tr>
                         <td>{{$event->id}}</td>
+                        <td>{{$event->devicecode}}</td>
                         <td>{{$event->licenseplate}}</td>
                         <td>{{$event->lineno}}</td>
                         <td>{{$event->confidencelevel}}</td>

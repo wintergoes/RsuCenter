@@ -41,6 +41,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                 <thead>
                     <tr role="row">
                         <th >ID</th>
+                        <th >雷视</th>
                         <th >车牌号</th>
                         <th >车道号</th>
                         <th >事件名称</th>
@@ -57,6 +58,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                     @foreach($aidevents as $event)
                     <tr>
                         <td>{{$event->id}}</td>
+                        <td>{{$event->devicecode}}</td>
                         <td>{{$event->plate}}</td>
                         <td>{{$event->laneno}}</td>
                         <td>{{$commonctrl->hkEvent2Str($event->aidevent)}}</td>
