@@ -2,6 +2,7 @@
 
 @section('content')
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
+<script language="javascript" type="text/javascript" src="/js/hikvision.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 <h5 class="card-title">车辆识别查询</h5>
@@ -17,6 +18,13 @@
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
+                    <td class="search_td">&nbsp;&nbsp;车牌号：&nbsp;&nbsp;</td>
+                    <td class="search_td"><input name="licenseplate" class="form-control" size="10" value="{{$searchlicenseplate}}"/></td>
+                    <td class="search_td">&nbsp;&nbsp;车辆类型：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="vehicletype" id="vehicletype" class="form-select" ></select>                        
+                    </td>
+                    
                     <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
             </table>
@@ -31,21 +39,20 @@ $commonctrl = new \App\Http\Controllers\CommonController();
     <div class="row">
         @if (count($anprevents) > 0)
         <div class="col-sm-auto">
-        <table class="table mb-0 table-hover table-bordered" >
+        <table class="table mb-0 table-hover table-bordered text-center" >
                 <thead>
                     <tr role="row">
-                        <th >ID</th>
-                        <th >UUID</th>                        
+                        <th >ID</th>                      
                         <th >车牌号</th>
                         <th >车道号</th>
                         <th >置信度</th>
-                        <th >PlateType</th>
-                        <th >PlateColor</th>
-                        <th >VehType</th>
-                        <th >VehType1</th>
+                        <th >车牌颜色</th>
+                        <th >车辆类型</th>
+                        <th >车辆类型1</th>
                         <th >速度</th>
                         <th >车辆品牌</th>
                         <th >车辆子品牌</th>
+                        <th >抓拍图片</th>
                         <th >检测时间</th>
                     </tr>
                 </thead>            
@@ -53,17 +60,16 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                     @foreach($anprevents as $event)
                     <tr>
                         <td>{{$event->id}}</td>
-                        <td>{{$event->vehuuid}}</td>
                         <td>{{$event->licenseplate}}</td>
                         <td>{{$event->lineno}}</td>
                         <td>{{$event->confidencelevel}}</td>
-                        <td>{{$event->platetype}}</td>
-                        <td>{{$event->platecolor}}</td>
-                        <td>{{$commonctrl->hkVehType2Str($event->vehicleType)}}</td>
-                        <td>{{$event->vehtype1}}</td>
+                        <td>{{$commonctrl->hkVehcolor2Str($event->platecolor)}}</td>
+                        <td>{{$commonctrl->hkVehType2Str($event->vehicleType)}}</script></td>
+                        <td>{{$commonctrl->hkVehType12Str($event->vehtype1)}}</td>
                         <td>{{$event->vehspeed}}</td>
-                        <td>{{$event->vehlogoname}}</td>
-                        <td>{{$event->vehsublogoname}}</td>
+                        <td>{{$event->vehlogoname == "" ? "-" : $event->vehlogoname}}</td>
+                        <td>{{$event->vehsublogoname == "" ? "-" : $event->vehsublogoname}}</td>
+                        <td><a href="anprdetail?anprid={{$event->id}}" target="_blank">{{$event->vehpicnum}}</a></td>
                         <td>{{$event->eventtime}}</td>
                     </tr>
                     @endforeach
@@ -81,12 +87,12 @@ $commonctrl = new \App\Http\Controllers\CommonController();
 </div>
 
 @if (count($anprevents) > 0)
-<div class="card" id="pagelinks_container">
+<div class="card mt-3" id="pagelinks_container">
     <div class="card-body">
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
     {{ $anprevents->appends([ "fromdate"=>$searchfromdate,
-                "todate"=>$searchtodate])->links() }}  
+                "todate"=>$searchtodate, "licenseplate"=>$searchlicenseplate, "vehicletype"=>$searchvehtype])->links() }}  
     </div> 
     </nav>
     </div>
@@ -117,5 +123,6 @@ for(var i = 0; i < spanobjs.length; i++){
 
 <script>
 fillQuickDateSelector("quickdateselector", "fromdate", "todate");
+fillVehTypeSelect("vehicletype", "{{$searchvehtype}}");
 </script>
 @endsection

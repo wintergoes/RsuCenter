@@ -51,12 +51,12 @@ class DashboardController extends Controller
     
     function dashboardSummary(Request $request){
         $stats = DB::select("select * from (select " . ret_success . " as ret_code) as ret,"
-                . "(select count(id) as rsucount from devices) as rsustat, "
-                . "(select count(id) as obucount from obudevices) as obustat,"
-                . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat,"
+                . "(select count(id) as warncount from warninginfo where endtime>now() and wistatus=1) as warnstat,"
                 . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat,"
                 . "(select count(id) as warnrecordcount from warningrecords where date(created_at)=date(now())) as warnrecordstat,"
-                . "(select count(id) as radarcount from radardevices) as radarstat");
+                . "(select count(id) as speedcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as speedstat,"
+                . "(select count(id) as lowspeedcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as lowspeedstat,"
+                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as abandonedobjectstat");
         
         return json_encode($stats);        
     }
@@ -106,7 +106,7 @@ class DashboardController extends Controller
     }
     
     function dashboardEventJson(Request $request){
-        $latestevents = DB::select("select winame,time(created_at) as eventtime from warninginfo order by id desc limit 7");
+        $latestevents = DB::select("select winame,time(created_at) as eventtime from warninginfo where endtime>now() order by id desc limit 7");
         
         $searchfromdate = "";
         if($request->has("fromdate")){

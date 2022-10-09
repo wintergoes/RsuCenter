@@ -78,7 +78,9 @@ Route::any('/deletetrafficsign', "TrafficSignController@deleteTrafficSign");
 
 //*******************************数据查询***************************************
 Route::any('/anprevents', "DataController@anprEvents");
+Route::any('/anprdetail', "DataController@anprDetail");
 Route::any('/aidevents', "DataController@aidEvents");
+Route::any('/aiddetail', "DataController@aidDetail");
 
 //*******************************统计分析***************************************
 Route::any('/clockins', "ClockInController@index");

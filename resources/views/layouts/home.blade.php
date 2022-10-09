@@ -52,8 +52,8 @@ $l2_recyclenews = in_array($currentpath, array("recyclenews", "addnews", "editne
 $l1_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
-$l2_radar_anpr = in_array($currentpath, array("anprevents"));
-$l2_radar_aidevents = in_array($currentpath, array("aidevents"));
+$l2_radar_anpr = in_array($currentpath, array("anprevents", "anprdetail"));
+$l2_radar_aidevents = in_array($currentpath, array("aidevents", "aiddetail"));
 $ll_data = $l2_radar_anpr | $l2_radar_aidevents;
 
 $l2_oburoute = in_array($currentpath, array("oburoute"));
@@ -83,8 +83,6 @@ $l2_radardevices = in_array($currentpath, array("radardevices", "addradardevice"
 $l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
 $l2_hwupdate = in_array($currentpath, array('hardware', 'hwupdateres', 'addhwupdateres'));
 $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2_usergroups | $l2_hwupdate;
-
-
 ?>
 
 	<!--wrapper-->

@@ -122,9 +122,32 @@ class CommonController extends Controller
     }    
     
     function hkVehType12Str($str){
-        
+        $resstr = "";
+        switch ($str){
+            case "1":
+                $resstr = "小型车";
+                break;
+            case "2":
+                $resstr = "大型车";
+                break;
+            case "3":
+                $resstr = "行人";
+                break;
+            case "4":
+                $resstr = "二轮车";
+                break;
+            case "5":
+                $resstr = "三轮车";
+                break;
+            case "6":
+                $resstr = "机动车";
+                break;
+            default:
+                $resstr = "其他";
+                break;
+        }
+        return $resstr;
     }
-
 
     function hkVehcolor2Str($str){
         $resstr = "";

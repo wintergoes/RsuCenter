@@ -255,14 +255,14 @@
                                 <td  class="summary_stat_value_td" style="color: #2B69F4;" id="warnrecordcount">0</td>
                             </tr>
                             <tr>
-                                <td class="summary_stat_title_td">RSU数量</td>
-                                <td class="summary_stat_title_td">OBU数量</td>
-                                <td class="summary_stat_title_td">雷视数量</td>                     
+                                <td class="summary_stat_title_td">超速驾驶</td>
+                                <td class="summary_stat_title_td">低速驾驶</td>
+                                <td class="summary_stat_title_td">抛洒物</td>                     
                             </tr>
                             <tr>
-                                <td  class="summary_stat_value_td" style="color: #16F7FB;" id="rsucount">0</td>
-                                <td  class="summary_stat_value_td" style="color: #2EA1FF;" id="obucount">0</td>                                           
-                                <td  class="summary_stat_value_td" style="color: #2B69F4;" id="radarcount">0</td>
+                                <td  class="summary_stat_value_td" style="color: #16F7FB;" id="speedcount">0</td>
+                                <td  class="summary_stat_value_td" style="color: #2EA1FF;" id="lowspeedcount">0</td>                                           
+                                <td  class="summary_stat_value_td" style="color: #2B69F4;" id="abandonedobjectcount">0</td>
                             </tr>                           
                         </table>
                     </div>                                      
@@ -2406,25 +2406,6 @@ function showVehicles(){
                     + " speed:" + veh.speed + " lane: " + veh.laneno 
                     + " lat:" + veh.lat + " lng: " + veh.lng 
                     + " id: " + veh.dbid;
-            
-//                if(veh.plateno === ""){
-//                    labeltext = "ID: " + veh.targetid;
-//                } else {
-//                    labeltext = "ID: " + veh.targetid + ", " + veh.plateno;
-//                }
-//                var label = new BMapGL.Label(labeltext, {       // 创建文本标注
-//                    position: pt,                          // 设置标注的地理位置
-//                    offset: new BMapGL.Size(10, -10)           // 设置标注的偏移量
-//                })  
-//
-//                label.setStyle({                              // 设置label的样式
-//                    color: '#000',
-//                    fontSize: '6px',
-//                    background: '#eeeeee',
-//                    border: '1px solid #1E90FF'
-//                })
-//
-//                carmaker.setLabel(label);
                 carmaker.enableDragging();
 
                 map.addOverlay(carmaker); 
@@ -2442,19 +2423,6 @@ function showVehicles(){
                 
                 veh.marker.setPosition(pt);
                 veh.marker.setRotation(vehrotation);
-                
-//                var labeltext = veh.plateno + " id: " + veh.targetid
-//                    + " speed:" + veh.speed + " lane: " + veh.laneno 
-//                    + " lat:" + veh.lat + " lng: " + veh.lng 
-//                    + " id: " + veh.dbid;
-//            
-//                if(veh.plateno === ""){
-//                    labeltext = "ID: " + veh.targetid;
-//                } else {
-//                    labeltext = "ID: " + veh.targetid + ", " + veh.plateno;
-//                }
-//            
-//                veh.marker.getLabel().setContent(labeltext);
             }
         }
         
@@ -2481,12 +2449,12 @@ function showDataSummary(){
         url: "dashboardsummary",
         dataType: "json",
         success: function (data) {
-            $('#rsucount').text(data[0].rsucount + "");
-            $('#obucount').text(data[0].obucount + "");
-            $('#warncount').text(data[0].warncount + "");
-            $('#vehflow').text(data[0].vehflowcount + "");
-            $('#radarcount').text(data[0].radarcount + "");
-            $('#warnrecordcount').text(data[0].warnrecordcount + "");
+            $('#vehflow').html("<a href='anprevents' target='_blank' style='color: #16F7FB;'>" + data[0].vehflowcount + "</a>");
+            $('#warncount').html("<a href='warninginfo' target='_blank' style='color: 2EA1FF;'>" + data[0].warncount + "</a>");
+            $('#warnrecordcount').html("<a href='warningrecordstat' target='_blank' style='color: 2B69F4;'>" + data[0].warnrecordcount + "</a>");            
+            $('#speedcount').html("<a href='aidevents?aidevent=speed' target='_blank' style='color: #16F7FB;'>" + data[0].speedcount + "</a>");
+            $('#lowspeedcount').html("<a href='aidevents?aidevent=lowspeed' target='_blank' style='color: 2EA1FF;'>" + data[0].lowspeedcount + "</a>");
+            $('#abandonedobjectcount').html("<a href='aidevents?aidevent=abandonedobject' target='_blank' style='color: 2B69F4;'>" + data[0].abandonedobjectcount + "</a>");   
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             

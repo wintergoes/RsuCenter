@@ -119,3 +119,4 @@ function HashMap(){
             obj=new Object();
     }
 }
+
