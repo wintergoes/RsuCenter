@@ -1850,7 +1850,9 @@ function updateBdMapSummary(){
                     lanestatestr = "畅通";
                 }
                 lanestatestr =  "<font color='" + lanestatecolor + "'>" + lanestatestr + "</font>";
-                var label = new BMapGL.Label("车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr, {       // 创建文本标注
+                var label = new BMapGL.Label("平均车速：" + Math.round(radarobj.avgspeed) + "km/h<br/>"
+                        + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
+                        + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr, {       // 创建文本标注
                     position: pt,                          // 设置标注的地理位置
                     offset: new BMapGL.Size(-60, -100)           // 设置标注的偏移量
                 })    
@@ -2346,10 +2348,6 @@ var vehmarkers = [];
 var vehMap = new HashMap();
 function showVehicles(){   
     $.getJSON("dashboardvehicles",function(data){
-//        for(var i = 0; i < vehmarkers.length; i++){
-//            map.removeOverlay(vehmarkers[i]);
-//        }
-                
         var tbl = document.getElementById("tbl_realtime_vehicles");
         var rows = tbl.rows; //获取表格的行数
 
@@ -2363,11 +2361,16 @@ function showVehicles(){
             tr.className = "tr_realtime_vehicle";
                         //添加单元格
             var cell0=tr.insertCell(0);
-            cell0.innerHTML = data["vehicles"][i]["targetid"];
+            cell0.innerHTML = data["vehicles"][i]["devicecode"];
+            cell0.width = 80;
             var cell1=tr.insertCell(1);
-            cell1.innerHTML=data["vehicles"][i]["plateno"] === "" ? "-" : data["vehicles"][i]["plateno"];
-            var cell1=tr.insertCell(2);
-            cell1.innerHTML=hkVehType2Str(data["vehicles"][i]["vehicletype"]);
+            cell1.innerHTML = data["vehicles"][i]["targetid"];
+            cell1.width = 80;
+            var cell2=tr.insertCell(2);
+            cell2.innerHTML=data["vehicles"][i]["plateno"] === "" ? "-" : data["vehicles"][i]["plateno"];
+            var cell3=tr.insertCell(3);
+            cell3.innerHTML=hkVehType2Str(data["vehicles"][i]["vehicletype"]);
+            cell3.width = 80;
         }        
         
         for(var i = 0; i < data["vehicles"].length; i++){

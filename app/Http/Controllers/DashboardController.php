@@ -145,9 +145,10 @@ class DashboardController extends Controller
 //        echo $searchdate;
         
         $sqlstr = "select vd.id, vd.uuid, vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
-                . "vd.radardetected, vd.vehrotation, vd.detecttime, vd.vehicletype from "
+                . "vd.radardetected, vd.vehrotation, vd.detecttime, vd.vehicletype, rd.devicecode from "
                 . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
                 . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
+                . "left join radardevices as rd on rd.macaddrint=vd.macaddr "
                 . "where maxtime.maxtime > '" . $searchdate . "' "; // and targettype='vehicle'
         $vehicles = DB::select($sqlstr);
 //        echo $sqlstr;
@@ -213,7 +214,12 @@ class DashboardController extends Controller
                 ->where("wistatus", "1")
                 ->get();
         
-        $radarsql = "select rd.id, rd.devicecode, rd.lanenumber, rd.status, rd.lat, rd.lng, tpsr1.timeheadway, tpsr1.spaceheadway, tpsr1.laneno, tpsr1.lanestate from radardevices rd left join (select tpsr.timeheadway, tpsr.spaceheadway, tpsr.laneno, tpsr.lanestate, tpsr.macaddr from (select macaddr, max(eventtime) as eventtime from tpsrealtimeevents  group by macaddr) as tpsmax left join tpsrealtimeevents tpsr on tpsr.eventtime=tpsmax.eventtime) as tpsr1 on rd.macaddrint=tpsr1.macaddr";
+        $radarsql = "select rd.id, rd.devicecode, rd.lanenumber, rd.status, rd.lat, rd.lng, tpsr1.timeheadway, tpsr1.spaceheadway, "
+                . " tpsr1.laneno, tpsr1.lanestate, tblavgspeed.avgspeed from radardevices rd left join (select tpsr.timeheadway, tpsr.spaceheadway, "
+                . " tpsr.laneno, tpsr.lanestate, tpsr.macaddr from "
+                . " (select macaddr, max(eventtime) as eventtime from tpsrealtimeevents  group by macaddr) as tpsmax "
+                . " left join tpsrealtimeevents tpsr on tpsr.eventtime=tpsmax.eventtime) as tpsr1 on rd.macaddrint=tpsr1.macaddr"
+                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where date(eventtime)=date(now()) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
         $radars = DB::select($radarsql);
 //        $radars = RadarDevice::orderBy("id")
 //                ->where("status", "1")
