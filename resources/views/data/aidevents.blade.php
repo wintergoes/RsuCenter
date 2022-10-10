@@ -5,7 +5,7 @@
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/hikvision.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
-
+<script type="text/javascript" src="js/coordtransform.js"></script>
 <h5 class="card-title">雷视事件检测查询</h5>
 <hr>
 
@@ -25,6 +25,10 @@
                     <td class="search_td">
                         <select name="vehicletype" id="vehicletype" class="form-select" ></select>                        
                     </td>
+                    <td class="search_td">&nbsp;&nbsp;事件：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="aidevent" id="aidevent" class="form-select" ></select>                        
+                    </td>                    
                     <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
             </table>
@@ -69,7 +73,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         @if($event->longitude == 0 || $event->latitude == 0)
                         <td>未设置</td>
                         @else
-                        <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showObuPosition('{{$event->plate}} {{$commonctrl->hkEvent2Str($event->aidevent)}}', {{$event->longitude}}, {{$event->latitude}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;" data-bs-toggle="modal" onclick="showAidPosition('{{$event->plate}} {{$commonctrl->hkEvent2Str($event->aidevent)}}', {{$event->longitude}}, {{$event->latitude}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
                         <td><a href="aiddetail?aidid={{$event->id}}">{{$event->detectionpicnumber}}</a></td>
                         <td>{{$event->eventtime}}</td>
@@ -115,7 +119,8 @@ $commonctrl = new \App\Http\Controllers\CommonController();
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
     {{ $aidevents->appends([ "fromdate"=>$searchfromdate,
-                "todate"=>$searchtodate, "licenseplate"=>$searchlicenseplate, "vehicletype"=>$searchvehtype])->links() }}  
+                "todate"=>$searchtodate, "licenseplate"=>$searchlicenseplate, "vehicletype"=>$searchvehtype,
+            "aidevent"=>$searchaidevent])->links() }}  
     </div> 
     </nav>
     </div>
@@ -146,19 +151,23 @@ for(var i = 0; i < spanobjs.length; i++){
 
 
 <script>
-var obuIcon = new BMapGL.Icon("/images/obu_vehicle.png", new BMapGL.Size(15, 31));  
+var obuIcon = new BMapGL.Icon("/images/aidalert.png", new BMapGL.Size(15, 31));  
 
-function showObuPosition(dcode, lng, lat){
+function showAidPosition(dcode, lng, lat){
     if(lng === 0 || lat === 0){
         alert("未设置坐标！");
         return ;
     }
     
+    var latlng = coordtransform.wgs84togcj02(lng, lat);
+    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+    var pt = new BMapGL.Point(latlng[0], latlng[1]);    
+    
     var map = new BMapGL.Map("bdmap_container", {
        coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
                      // 指定完成后API将以指定的坐标类型处理您传入的坐标
     });          // 创建地图实例  
-    var point = new BMapGL.Point(39, 120);  // 创建点坐标  
+    var point = new BMapGL.Point(pt.lat, pt.lng);  // 创建点坐标  
     map.centerAndZoom(point, 15); 
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
       
@@ -166,10 +175,6 @@ function showObuPosition(dcode, lng, lat){
         $("#map_title").text(dcode + " 位置信息");
         map.clearOverlays();
        
-        var latlng = coordtransform.wgs84togcj02(lng, lat);
-        latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
-        var pt = new BMapGL.Point(latlng[0], latlng[1]);
-
         var marker = new BMapGL.Marker(pt, {
             icon: obuIcon,
             offset: new BMapGL.Size(0, 0)
@@ -191,5 +196,6 @@ function showObuPosition(dcode, lng, lat){
 <script>
 fillQuickDateSelector("quickdateselector", "fromdate", "todate");
 fillVehTypeSelect("vehicletype", "{{$searchvehtype}}");
+fillAidEventSelect("aidevent", "{{$searchaidevent}}");
 </script>
 @endsection

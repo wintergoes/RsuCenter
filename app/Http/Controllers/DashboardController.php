@@ -219,7 +219,7 @@ class DashboardController extends Controller
                 . " tpsr.laneno, tpsr.lanestate, tpsr.macaddr from "
                 . " (select macaddr, max(eventtime) as eventtime from tpsrealtimeevents  group by macaddr) as tpsmax "
                 . " left join tpsrealtimeevents tpsr on tpsr.eventtime=tpsmax.eventtime) as tpsr1 on rd.macaddrint=tpsr1.macaddr"
-                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where date(eventtime)=date(now()) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
+                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where vehspeed<>0 and date(eventtime)=date(now()) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
         $radars = DB::select($radarsql);
 //        $radars = RadarDevice::orderBy("id")
 //                ->where("status", "1")

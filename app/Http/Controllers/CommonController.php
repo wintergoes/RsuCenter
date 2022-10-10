@@ -217,7 +217,7 @@ class CommonController extends Controller
                 $resstr = "抛洒物";
                 break;
             case "checkPoint":
-                $resstr = "卡 口检测";
+                $resstr = "卡口检测";
                 break;
             case "congestion":
                 $resstr = "拥堵";
@@ -330,6 +330,9 @@ class CommonController extends Controller
             case "tfsManuaTrigger":
                 $resstr = "手动违章取证";
                 break;
+            case "lowSpeed":
+                $resstr = "低速行驶";
+                break;            
             default:
                 $resstr = $str;
         }

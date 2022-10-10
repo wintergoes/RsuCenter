@@ -58,7 +58,7 @@
         
 	<script src="assets/plugins/chartjs/js/Chart.min.js"></script> 
         
-        <script type="text/javascript" src="js/coordtransform.js"></script>        
+        <script type="text/javascript" src="js/coordtransform.js"></script>
 	<title>RSU管理后台</title>
         
     <style type="text/css">
@@ -1854,7 +1854,7 @@ function updateBdMapSummary(){
                         + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
                         + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr, {       // 创建文本标注
                     position: pt,                          // 设置标注的地理位置
-                    offset: new BMapGL.Size(-60, -100)           // 设置标注的偏移量
+                    offset: new BMapGL.Size(-60, -110)           // 设置标注的偏移量
                 })    
                 label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
                 marker.setLabel(label);                 
@@ -2468,24 +2468,15 @@ function showDataSummary(){
 //const canvas = document.querySelector('#radar_canvas');
 //const ctx = canvas.getContext('2d');
 function drawCircle() {
-//    ctx.beginPath();
-//    ctx.fillStyle = 'blue';
-//    ctx.arc(10, 10, 10, 0, Math.PI * 2);
-//    ctx.fill();
-//    ctx.closePath();
-    
     var canvasw = canvas.style.width;
     var canvash = canvas.style.height;
-    //alert(canvasw);
     
     $.getJSON("dashboardradarvision",function(data){
         var widthstr = data["radar"]["lanewidth"];
-//        alert(widthstr);
         var widths = widthstr.split(",");
         lanewidth = 0;
         for(var i = 0; i < widths.length; i++){
             lanewidth = lanewidth + parseFloat(widths[i]);
-//            alert(widths[i]);
         }
         lanewidth = lanewidth * 2;
         

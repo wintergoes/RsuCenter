@@ -159,3 +159,32 @@ function fillVehTypeSelect(selecterid, selectedVehType){
     optstr = "<option value='mediumHeavyTruck' " + (selectedVehType === "mediumHeavyTruck" ? "selected" : "") + ">中重型货车</option>";
     $("#" + selecterid).append(optstr);
 }
+
+
+function fillAidEventSelect(selecterid, selectedAidEvent){
+    $("#" + selecterid).empty();
+    var optstr = "<option value='-1'" + (selectedAidEvent === "-1" ? "selected" : "") + ">不限</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='abandonedObject' " + (selectedAidEvent === "abandonedObject" ? "selected" : "") + ">抛洒物</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='congestion' " + (selectedAidEvent === "congestion" ? "selected" : "") + ">拥堵</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='crossLane' " + (selectedAidEvent === "crossLane" ? "selected" : "") + ">压线</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='illegalParking' " + (selectedAidEvent === "illegalParking" ? "selected" : "") + ">违停</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='pedestrian' " + (selectedAidEvent === "pedestrian" ? "selected" : "") + ">行人检测</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='smoke' " + (selectedAidEvent === "smoke" ? "selected" : "") + ">烟雾</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='speed' " + (selectedAidEvent === "speed" ? "selected" : "") + ">车辆超速</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='lowSpeed' " + (selectedAidEvent === "lowSpeed" ? "selected" : "") + ">低速行驶</option>";
+    $("#" + selecterid).append(optstr);     
+    optstr = "<option value='trafficAccident' " + (selectedAidEvent === "trafficAccident" ? "selected" : "") + ">交通事故</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='wrongDirection' " + (selectedAidEvent === "wrongDirection" ? "selected" : "") + ">逆行</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='singleVehicleBreakdown' " + (selectedAidEvent === "singleVehicleBreakdown" ? "selected" : "") + ">单车抛锚</option>";
+    $("#" + selecterid).append(optstr);
+}

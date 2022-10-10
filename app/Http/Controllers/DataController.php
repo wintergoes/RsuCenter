@@ -32,7 +32,12 @@ class DataController extends Controller
         $searchvehtype = "-1";
         if($request->has("vehicletype")){
             $searchvehtype = $request->vehicletype;
-        }        
+        }
+        
+        $searchaidevent = "-1";
+        if($request->has("aidevent")){
+            $searchaidevent = $request->aidevent;
+        }
 
         $aidevents = AidEvent::orderBY("aidevents.id", "desc")
                 ->select("rd.devicecode", "aidevents.id", "aidevents.plate", "aidevents.laneno", 
@@ -55,7 +60,11 @@ class DataController extends Controller
         
         if($searchvehtype != "-1"){
             $aidevents = $aidevents->where("aidevents.vehtype", "=", $searchvehtype);
-        }        
+        }
+        
+        if($searchaidevent != "-1"){
+            $aidevents = $aidevents->where("aidevents.aidevent", "=", $searchaidevent);
+        }
         
         $aidevents = $aidevents->paginate(30);
         
@@ -65,6 +74,7 @@ class DataController extends Controller
             "searchtodate"=>$searchtodate,
             "searchlicenseplate"=>$searchlicenseplate,
             "searchvehtype"=>$searchvehtype,
+            "searchaidevent"=>$searchaidevent
         ]);        
     }
     

@@ -82,7 +82,7 @@
                     <tr>
                         <td>{{$winfo->id}}</td>
                         <td>{{$winfo->winame}}</td>
-                        <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;"  data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$winfo->wiradius}}米</td>
                         <td>{{$winfo->starttime}}</td>
                         <td>{{$winfo->endtime}}</td>
