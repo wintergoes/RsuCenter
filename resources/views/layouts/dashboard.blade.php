@@ -2403,6 +2403,7 @@ function showVehicles(){
                     icon: mkicon
                 });  
                 carmaker.setRotation(vehrotation);
+                carmaker.setTitle(veh.targetid);
                 veh.setMarker(carmaker);
 
                 var labeltext = veh.plateno + " id: " + veh.targetid
@@ -2425,6 +2426,7 @@ function showVehicles(){
                 var pt = new BMapGL.Point(latlng[0], latlng[1]);
                 
                 veh.marker.setPosition(pt);
+                veh.marker.setTitle(data["vehicles"][i]["targetid"]);
                 veh.marker.setRotation(vehrotation);
             }
         }

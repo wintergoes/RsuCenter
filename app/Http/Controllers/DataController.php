@@ -85,7 +85,7 @@ class DataController extends Controller
         }
         
         $aidevents = AidEvent::where("aidevents.id", $request->aidid)
-                ->select("aidevents.id", "aidevents.plate", "aidevents.eventtime", 
+                ->select("aidevents.id", "aidevents.plate", "aidevents.aidevent", "aidevents.eventtime", 
                         "aidevents.detectionpicnumber", "rd.devicecode")
                 ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "aidevents.macaddr")
                 ->get();

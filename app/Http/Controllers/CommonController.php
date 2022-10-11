@@ -332,6 +332,9 @@ class CommonController extends Controller
                 break;
             case "lowSpeed":
                 $resstr = "低速行驶";
+                break;
+            case "lowVisibility":
+                $resstr = "能见度低";
                 break;            
             default:
                 $resstr = $str;

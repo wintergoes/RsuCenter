@@ -22,6 +22,10 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         <td>{{$aidevent->plate}}</td>
                     </tr>
                     <tr>
+                        <td>事件名称：</td>
+                        <td>{{$commonctrl->hkEvent2Str($aidevent->aidevent)}}</td>
+                    </tr>                    
+                    <tr>
                         <td>检测时间：</td>
                         <td>{{$aidevent->eventtime}}</td>
                     </tr>

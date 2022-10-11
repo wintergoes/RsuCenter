@@ -75,7 +75,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         @else
                         <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;" data-bs-toggle="modal" onclick="showAidPosition('{{$event->plate}} {{$commonctrl->hkEvent2Str($event->aidevent)}}', {{$event->longitude}}, {{$event->latitude}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
-                        <td><a href="aiddetail?aidid={{$event->id}}">{{$event->detectionpicnumber}}</a></td>
+                        <td><a href="aiddetail?aidid={{$event->id}}" target="_blank">{{$event->detectionpicnumber}}</a></td>
                         <td>{{$event->eventtime}}</td>
                     </tr>
                     @endforeach
@@ -172,7 +172,7 @@ function showAidPosition(dcode, lng, lat){
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
       
     map.addEventListener("tilesloaded",function(){
-        $("#map_title").text(dcode + " 位置信息");
+        $("#map_title").text(dcode + " 位置信息 " + lng + ", " + lat);
         map.clearOverlays();
        
         var marker = new BMapGL.Marker(pt, {

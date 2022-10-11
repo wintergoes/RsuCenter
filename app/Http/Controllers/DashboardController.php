@@ -55,8 +55,8 @@ class DashboardController extends Controller
                 . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat,"
                 . "(select count(id) as warnrecordcount from warningrecords where date(created_at)=date(now())) as warnrecordstat,"
                 . "(select count(id) as speedcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as speedstat,"
-                . "(select count(id) as lowspeedcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as lowspeedstat,"
-                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as abandonedobjectstat");
+                . "(select count(id) as lowspeedcount from aidevents where aidevent='lowSpeed' and date(eventtime)=date(now())) as lowspeedstat,"
+                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='abandonedObject' and date(eventtime)=date(now())) as abandonedobjectstat");
         
         return json_encode($stats);        
     }
