@@ -13,7 +13,7 @@
         <form id="form1" class="form-horizontal" method="get" >
             {{ csrf_field() }}
             <table style="font-size: 12px; text-align: center;" >
-                <tr>                   
+                <tr height="40px">                   
                     <td class="search_td">日期 自&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="fromdate" id="fromdate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
@@ -25,12 +25,25 @@
                     <td class="search_td">
                         <select name="vehicletype" id="vehicletype" class="form-select" ></select>                        
                     </td>
-                    <td class="search_td">&nbsp;&nbsp;事件：&nbsp;&nbsp;</td>
+                </tr>
+                
+                <tr> 
+                    <td class="search_td">雷视设备：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="radarmac" id="radarmac" class="form-select" >
+                            <option value="-1"  {{"-1" == $searchradar ? "selected" : ""}}>不限</option>
+                            @foreach ($radars as $radar)
+                            <option value="{{$radar->macaddrint}}" {{$radar->macaddrint == $searchradar ? "selected" : ""}}>{{$radar->devicecode}}</option>
+                            @endforeach
+                        </select>                        
+                    </td> 
+                    
+                    <td class="search_td">&nbsp;&nbsp;事件类型：&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="aidevent" id="aidevent" class="form-select" ></select>                        
                     </td>                    
-                    <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
-                </tr>
+                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                </tr>                
             </table>
         </form>
 </div>
@@ -64,11 +77,11 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         <td>{{$event->id}}</td>
                         <td>{{$event->devicecode}}</td>
                         <td>{{$event->plate}}</td>
-                        <td>{{$event->laneno}}</td>
-                        <td>{{$commonctrl->hkEvent2Str($event->aidevent)}}</td>
-                        <td>{{$commonctrl->hkVehcolor2Str($event->platecolor)}}</td>
-                        <td>{{$commonctrl->hkVehType2Str($event->vehtype)}}</td>
-                        <td>{{$commonctrl->hkVehcolor2Str($event->vehcolor)}}</td>
+                        <td>{{$event->relatedlaneno}}</td>
+                        <td id="aidaidevent{{$event->id}}"></td>
+                        <td id="aidplatecolor{{$event->id}}"></td>
+                        <td id="aidvehtype{{$event->id}}">{{$commonctrl->hkVehType2Str($event->vehtype)}}</td>
+                        <td id="aidvehcolor{{$event->id}}"></td>
                         <td>{{$event->vehspeed}}</td>
                         @if($event->longitude == 0 || $event->latitude == 0)
                         <td>未设置</td>
@@ -77,6 +90,12 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         @endif
                         <td><a href="aiddetail?aidid={{$event->id}}" target="_blank">{{$event->detectionpicnumber}}</a></td>
                         <td>{{$event->eventtime}}</td>
+                        <script>
+                            $("#aidplatecolor{{$event->id}}").text(hkVehcolor2Str("{{$event->platecolor}}"));
+                            $("#aidvehcolor{{$event->id}}").text(hkVehcolor2Str("{{$event->vehcolor}}"));
+                            $("#aidvehtype{{$event->id}}").text(hkVehType2Str("{{$event->vehtype}}"));
+                            $("#aidaidevent{{$event->id}}").text(hkEvent2Str("{{$event->aidevent}}"));
+                        </script>
                     </tr>
                     @endforeach
                 </tbody>
@@ -120,7 +139,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
      <div id="pagelinks">
     {{ $aidevents->appends([ "fromdate"=>$searchfromdate,
                 "todate"=>$searchtodate, "licenseplate"=>$searchlicenseplate, "vehicletype"=>$searchvehtype,
-            "aidevent"=>$searchaidevent])->links() }}  
+            "aidevent"=>$searchaidevent, "radarmac"=>$searchradar])->links() }}  
     </div> 
     </nav>
     </div>

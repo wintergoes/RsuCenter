@@ -1007,7 +1007,7 @@ class ApiV1Controller extends Controller
             $aid->platecolor = $row->platecolor;
             $aid->licensebright = $row->licensebright;
             $aid->plateconfidence = $row->plateconfidence;
-            $aid->ralatedlaneno = $row->ralatedlaneno;
+            $aid->relatedlaneno = $row->relatedlaneno;
             $aid->targettype = $row->targettype;
             $aid->alarmlevel = $row->alarmlevel;
             $aid->alertstarttime = $row->alertstarttime;

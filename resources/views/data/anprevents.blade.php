@@ -24,9 +24,20 @@
                     <td class="search_td">
                         <select name="vehicletype" id="vehicletype" class="form-select" ></select>                        
                     </td>
-                    
-                    <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
+                
+                <tr> 
+                    <td class="search_td">雷视设备：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="radarmac" id="radarmac" class="form-select" >
+                            <option value="-1"  {{"-1" == $searchradar ? "selected" : ""}}>不限</option>
+                            @foreach ($radars as $radar)
+                            <option value="{{$radar->macaddrint}}" {{$radar->macaddrint == $searchradar ? "selected" : ""}}>{{$radar->devicecode}}</option>
+                            @endforeach
+                        </select>                        
+                    </td>                 
+                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                </tr>                
             </table>
         </form>
 </div>
@@ -94,7 +105,8 @@ $commonctrl = new \App\Http\Controllers\CommonController();
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
     {{ $anprevents->appends([ "fromdate"=>$searchfromdate,
-                "todate"=>$searchtodate, "licenseplate"=>$searchlicenseplate, "vehicletype"=>$searchvehtype])->links() }}  
+                "todate"=>$searchtodate, "licenseplate"=>$searchlicenseplate, "vehicletype"=>$searchvehtype,
+            "radarmac"=>$searchradar])->links() }}  
     </div> 
     </nav>
     </div>

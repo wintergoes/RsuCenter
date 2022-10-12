@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\AnprEvent;
 use App\AidEvent;
+use App\RadarDevice;
 
 class DataController extends Controller
 {
@@ -38,20 +39,25 @@ class DataController extends Controller
         if($request->has("aidevent")){
             $searchaidevent = $request->aidevent;
         }
+        
+        $searchradar = "-1";
+        if($request->has("radarmac")){
+            $searchradar = $request->radarmac;
+        }
 
         $aidevents = AidEvent::orderBY("aidevents.id", "desc")
-                ->select("rd.devicecode", "aidevents.id", "aidevents.plate", "aidevents.laneno", 
+                ->select("rd.devicecode", "aidevents.id", "aidevents.plate", "aidevents.relatedlaneno", 
                         "aidevents.aidevent", "aidevents.eventtime", "aidevents.platecolor", "aidevents.vehtype",
                         "aidevents.vehcolor", "aidevents.vehspeed", "aidevents.longitude", "aidevents.latitude",
                         "aidevents.detectionpicnumber")
                 ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "aidevents.macaddr");
         
         if($searchfromdate != ""){
-            $aidevents = $aidevents->where("aidevents.eventtime", ">=", $searchfromdate);
+            $aidevents = $aidevents->whereraw("date(aidevents.eventtime) >='" . $searchfromdate . "'");
         }
         
         if($searchtodate != ""){
-            $aidevents = $aidevents->where("aidevents.eventtime", "<=", $searchtodate);
+            $aidevents = $aidevents->whereraw("date(aidevents.eventtime) <= '" . $searchtodate . "'");
         }
         
         if($searchlicenseplate != ""){
@@ -66,7 +72,15 @@ class DataController extends Controller
             $aidevents = $aidevents->where("aidevents.aidevent", "=", $searchaidevent);
         }
         
+        if($searchradar != "-1"){
+            $aidevents = $aidevents->where("aidevents.macaddr", "=", $searchradar);
+        }
+        
         $aidevents = $aidevents->paginate(30);
+        
+        $radars = RadarDevice::orderBy("id", "asc")
+                ->select("id", "macaddrint", "devicecode")
+                ->get();
         
         return view("/data/aidevents", [
             "aidevents"=>$aidevents,
@@ -74,7 +88,9 @@ class DataController extends Controller
             "searchtodate"=>$searchtodate,
             "searchlicenseplate"=>$searchlicenseplate,
             "searchvehtype"=>$searchvehtype,
-            "searchaidevent"=>$searchaidevent
+            "searchaidevent"=>$searchaidevent,
+            "searchradar"=>$searchradar,
+            "radars"=>$radars
         ]);        
     }
     
@@ -125,6 +141,11 @@ class DataController extends Controller
             $searchvehtype = $request->vehicletype;
         }
 
+        $searchradar = "-1";
+        if($request->has("radarmac")){
+            $searchradar = $request->radarmac;
+        }        
+        
         $anprevents = AnprEvent::orderBY("anprevents.id", "desc")
                 ->select("rd.devicecode", "anprevents.id", "anprevents.eventtime",
                         "anprevents.licenseplate", "anprevents.lineno", "anprevents.confidencelevel",
@@ -134,11 +155,11 @@ class DataController extends Controller
                 ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "anprevents.macaddr");
         
         if($searchfromdate != ""){
-            $anprevents = $anprevents->where("anprevents.eventtime", ">=", $searchfromdate);
+            $anprevents = $anprevents->whereraw(" date(anprevents.eventtime) >= '" . $searchfromdate . "'") ;
         }
         
         if($searchtodate != ""){
-            $anprevents = $anprevents->where("anprevents.eventtime", "<=", $searchtodate);
+            $anprevents = $anprevents->whereraw("anprevents.eventtime <='" . $searchtodate . "'");
         }
         
         if($searchlicenseplate != ""){
@@ -149,7 +170,15 @@ class DataController extends Controller
             $anprevents = $anprevents->where("anprevents.vehicletype", "=", $searchvehtype);
         }
         
+        if($searchradar != "-1"){
+            $anprevents = $anprevents->where("anprevents.macaddr", "=", $searchradar);
+        }        
+        
         $anprevents = $anprevents->paginate(30);
+        
+        $radars = RadarDevice::orderBy("id", "asc")
+            ->select("id", "macaddrint", "devicecode")
+            ->get();
         
         return view("/data/anprevents", [
             "anprevents"=>$anprevents,
@@ -157,6 +186,8 @@ class DataController extends Controller
             "searchtodate"=>$searchtodate,
             "searchlicenseplate"=>$searchlicenseplate,
             "searchvehtype"=>$searchvehtype,
+            "searchradar"=>$searchradar,
+            "radars"=>$radars
         ]);
     }
     

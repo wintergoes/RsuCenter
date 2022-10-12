@@ -1744,6 +1744,8 @@ var rsumarkers = [];
 var obumarkers = [];
 var warningmarkers = []
 var radarmarkers = [];
+var radarLabels = [];
+var radarDeviceMap = new HashMap();
     
 function updateBdMapSummary(){
     $.ajax({
@@ -1751,21 +1753,49 @@ function updateBdMapSummary(){
         url: "dashboardbdmapsummary",
         dataType: "json",
         success: function (data) {
-            for(var i = 0; i < rsumarkers.length; i++){
-                map.removeOverlay(rsumarkers[i]);
-            }
+//            for(var i = 0; i < rsumarkers.length; i++){
+//                map.removeOverlay(rsumarkers[i]);
+//            }
+            while(rsumarkers.length > 0){
+                tmpRsuMaker = rsumarkers.pop();
+                map.removeOverlay(tmpRsuMaker);
+            } 
             
-            for(var i = 0; i < obumarkers.length; i++){
-                map.removeOverlay(obumarkers[i]);
-            }
-            
-            for(var i = 0; i < warningmarkers.length; i++){
-                map.removeOverlay(warningmarkers[i]);
-            }
-            
-            for(var i = 0; i < radarmarkers.length; i++){
-                map.removeOverlay(radarmarkers[i]);
+//            for(var i = 0; i < obumarkers.length; i++){
+//                map.removeOverlay(obumarkers[i]);
+//            }
+            while(obumarkers.length > 0){
+                tmpObuMaker = obumarkers.pop();
+                map.removeOverlay(tmpObuMaker);
             }            
+            
+//            for(var i = 0; i < warningmarkers.length; i++){
+//                map.removeOverlay(warningmarkers[i]);
+//            }
+            while(warningmarkers.length > 0){
+                tmpWarnMaker = warningmarkers.pop();
+                map.removeOverlay(tmpWarnMaker);
+            }
+            
+//            for(var i = 0; i < radarLabels.length; i++){
+//                radarLabels[i].setContent("");
+//                //map.removeOverlay(radarLabels[i]);
+//            }
+
+            while(radarLabels.length > 0){
+                tmpRadarLabel = radarLabels.pop();
+                tmpRadarLabel.setContent("");
+                map.removeOverlay(tmpRadarLabel);
+//                map.removeOverlay(tmpradar);
+            }
+            
+//            for(var i = 0; i < radarmarkers.length; i++){
+//                map.removeOverlay(radarmarkers[i]);
+//            } 
+            while(radarmarkers.length > 0){
+                tmpradar = radarmarkers.pop();
+                map.removeOverlay(tmpradar);
+            }
             
             //map.clearOverlays();
             for(var i = 0; i < data.rsudevices.length; i++){
@@ -1832,11 +1862,7 @@ function updateBdMapSummary(){
                 
                 var latlng = coordtransform.wgs84togcj02(radarobj.lng, radarobj.lat);
                 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
-                var pt = new BMapGL.Point(latlng[0], latlng[1]);                
-                var marker = new BMapGL.Marker(pt, {
-                    icon: radarIcon,
-                    offset: new BMapGL.Size(0, -10)
-                });
+                var pt = new BMapGL.Point(latlng[0], latlng[1]); 
                 
                 var lanestatestr = "";
                 var lanestatecolor = "#0fb904"
@@ -1849,18 +1875,34 @@ function updateBdMapSummary(){
                 } else {
                     lanestatestr = "畅通";
                 }
-                lanestatestr =  "<font color='" + lanestatecolor + "'>" + lanestatestr + "</font>";
-                var label = new BMapGL.Label("平均车速：" + Math.round(radarobj.avgspeed) + "km/h<br/>"
-                        + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
-                        + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr, {       // 创建文本标注
-                    position: pt,                          // 设置标注的地理位置
-                    offset: new BMapGL.Size(-60, -110)           // 设置标注的偏移量
-                })    
-                label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
-                marker.setLabel(label);                 
+                lanestatestr =  "<font color='" + lanestatecolor + "'>" + lanestatestr + "</font>";  
+                var labelstr = "平均车速：" + Math.round(radarobj.avgspeed) + "km/h<br/>"
+                            + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
+                            + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr;
+                
+                var marker = radarDeviceMap.get(radarobj.id);
+                if(marker === null){
+                    marker = new BMapGL.Marker(pt, {
+                        icon: radarIcon,
+                        offset: new BMapGL.Size(0, -10)
+                    });
+                    
+                    var label = new BMapGL.Label(labelstr, {       // 创建文本标注
+                        position: pt,                          // 设置标注的地理位置
+                        offset: new BMapGL.Size(-60, -110)           // 设置标注的偏移量
+                    })    
+                    label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
+                    label.enableMassClear();
+//                    radarLabels.push(label);
+                    marker.setLabel(label);                      
+                } else {
+//                    alert(labelstr);
+                    marker.getLabel().setContent(labelstr);
+                }
                 
                 marker.setTitle(radarobj.devicecode);
-                radarmarkers.push(marker);
+                radarDeviceMap.put(radarobj.id, marker);
+//                radarmarkers.push(marker);
                 // 将标注添加到地图
                 map.addOverlay(marker);
             }            
@@ -2344,7 +2386,7 @@ function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, d
     }
 }
 
-var vehmarkers = [];
+//var vehmarkers = [];
 var vehMap = new HashMap();
 function showVehicles(){   
     $.getJSON("dashboardvehicles",function(data){
@@ -2413,7 +2455,7 @@ function showVehicles(){
                 carmaker.enableDragging();
 
                 map.addOverlay(carmaker); 
-                vehmarkers.push(carmaker);                
+//                vehmarkers.push(carmaker);                
             } else {
                 //alert(veh.lng + "  " + veh.lat);
                 veh.updateData(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
