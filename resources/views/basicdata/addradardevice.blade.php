@@ -154,7 +154,25 @@ function onSelectTecChild(){
             <div class="col-sm-1">
                 <input type="button" class="form-control" onclick="getPosition(0);" value="拾取"></button>
             </div>            
-        </div> 
+        </div>
+        
+        <div class="row mb-3">
+            <label for="lat" class="col-sm-2 col-form-label">Y坐标范围</label>
+            <div class="col-sm-2">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" value="{{$radardevice->validYposSmall}}">
+                @else
+                <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" placeholder="">
+                @endif
+            </div>
+            <div class="col-sm-2">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" value="{{$radardevice->validYposLarge}}">
+                @else
+                <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" placeholder="">
+                @endif
+            </div>          
+        </div>
         
         <div class="row mb-3">
             <label for="status" class="col-sm-2 col-form-label">状态</label>

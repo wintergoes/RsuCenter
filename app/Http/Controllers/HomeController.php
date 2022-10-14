@@ -29,8 +29,12 @@ class HomeController extends Controller
         $default_lng = env("home_default_lng", 120.339217);
         $default_zoom = env("home_map_defaultzoom", 15);
         
+        $radars = RadarDevice::orderBy("id", "desc")
+                ->get();
+        
         return view('/layouts/summary', [
             "obus"=>$obus,
+            "radars"=>$radars,
             "default_lat"=>$default_lat,
             "default_lng"=>$default_lng,
             "default_zoom"=>$default_zoom,
@@ -42,7 +46,9 @@ class HomeController extends Controller
                 . "(select count(id) as rsucount from devices) as rsustat, "
                 . "(select count(id) as obucount from obudevices) as obustat,"
                 . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat,"
-                . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat");
+                . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat,"
+                . "(select count(id) as aidcount from aidevents where date(eventtime)=date(now())) as aidstat,"
+                . "(select count(id) as warnrecordcount from warningrecords where date(created_at)=date(now())) as warnrecordstat");
         
         return json_encode($stats);
     }

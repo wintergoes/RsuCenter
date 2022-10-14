@@ -11,9 +11,9 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0">
-                            RSU数量
+                            今日车流量
                         </p>
-                        <h4 class="my-1 text-info" id="rsucount">
+                        <h4 class="my-1 text-info" id="vehflow">
                             0台
                         </h4>
                     </div>
@@ -31,10 +31,10 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            OBU数量
+                            雷视识别事件
                         </p>
-                        <h4 class="my-1 text-info" id="obucount">
-                            0台
+                        <h4 class="my-1 text-info" id="aidcount">
+                            0
                         </h4>
                     </div>
                     <div class="widgets-icons-2 rounded-circle  text-white ms-auto">
@@ -51,7 +51,7 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            道路预警信息
+                            RSU发布事件
                         </p>
                         <h4 class="my-1 text-danger" id="warncount">
                             0个
@@ -71,9 +71,9 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            今日车流量
+                            OBU预警次数
                         </p>
-                        <h4 class="my-1 text-success" id="vehflow">
+                        <h4 class="my-1 text-success" id="obuwarningcount">
                             360次
                         </h4>
                     </div>
@@ -297,10 +297,10 @@ function updateHomeSummary(){
         url: "homedatasummary",
         dataType: "json",
         success: function (data) {
-            $('#rsucount').text(data[0].rsucount + "台");
-            $('#obucount').text(data[0].obucount + "台");
+            $('#obuwarningcount').text(data[0].warnrecordcount + "台");
+            $('#aidcount').text(data[0].aidcount + "个");
             $('#warncount').text(data[0].warncount + "个");
-            $('#vehflow').text(data[0].vehflowcount + "");
+            $('#vehflow').text(data[0].vehflowcount);
             setTimeout('updateHomeSummary()', 5000);    
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

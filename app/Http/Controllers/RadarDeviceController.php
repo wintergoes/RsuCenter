@@ -47,6 +47,8 @@ class RadarDeviceController extends Controller
         $rdevice->lanenumber = $request->lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
         $rdevice->status = $request->status;
+        $rdevice->validYposSmall = $request->validYposSmall;
+        $rdevice->validYPosLarge = $request->validYposLarge;
         $rdevice->lat = $request->lat == "" ? 0 : $request->lat;
         $rdevice->lng = $request->lng == "" ? 0 : $request->lng;
         $rdevice->save();
@@ -93,6 +95,8 @@ class RadarDeviceController extends Controller
         $rdevice->lanenumber = $request->lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
         $rdevice->status = $request->status;
+        $rdevice->validYposSmall = $request->validYposSmall;
+        $rdevice->validYPosLarge = $request->validYposLarge;
         $rdevice->lat = $request->lat;
         $rdevice->lng = $request->lng;
         $rdevice->save();
