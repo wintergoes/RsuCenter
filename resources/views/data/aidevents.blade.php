@@ -42,7 +42,7 @@
                     <td class="search_td">
                         <select name="aidevent" id="aidevent" class="form-select" ></select>                        
                     </td>                    
-                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary radius-6" style="padding: 2px;">查询</button></td>
                 </tr>                
             </table>
         </form>
@@ -53,7 +53,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         @if (count($aidevents) > 0)
-        <div class="col-sm-auto">
+        <div class="col-sm-12">
         <table class="table mb-0 table-hover table-bordered text-center" >
                 <thead>
                     <tr role="row">

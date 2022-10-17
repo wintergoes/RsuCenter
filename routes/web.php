@@ -129,7 +129,7 @@ Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordina
 //*******************************Apis***************************************
 Route::any('/homedatasummary', 'HomeController@dataSummary');
 Route::any('/homebdmapsummary', 'HomeController@bdmapSummary');
-
+Route::any('/homeaidevents', 'HomeController@homeAidEvents');
 
 Route::get("/devicelogs", "DeviceLogController@index");
 Route::get("/dllogfile", "ApiV1Controller@dlLogFile");

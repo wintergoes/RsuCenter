@@ -24,9 +24,6 @@
                     <td class="search_td">
                         <select name="vehicletype" id="vehicletype" class="form-select" ></select>                        
                     </td>
-                </tr>
-                
-                <tr> 
                     <td class="search_td">雷视设备：&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="radarmac" id="radarmac" class="form-select" >
@@ -35,9 +32,9 @@
                             <option value="{{$radar->macaddrint}}" {{$radar->macaddrint == $searchradar ? "selected" : ""}}>{{$radar->devicecode}}</option>
                             @endforeach
                         </select>                        
-                    </td>                 
-                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
-                </tr>                
+                    </td>                   
+                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>                    
+                </tr>              
             </table>
         </form>
 </div>
@@ -49,8 +46,8 @@ $commonctrl = new \App\Http\Controllers\CommonController();
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         @if (count($anprevents) > 0)
-        <div class="col-sm-auto">
-        <table class="table mb-0 table-hover table-bordered text-center" >
+        <div class="col-sm-12">
+        <table class="table mb-0 table-hover table-bordered text-center">
                 <thead>
                     <tr role="row">
                         <th >ID</th>

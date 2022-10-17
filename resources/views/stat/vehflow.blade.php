@@ -2,6 +2,7 @@
 
 @section('content')
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
+<script language="javascript" type="text/javascript" src="/js/hikvision.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
 
@@ -142,7 +143,7 @@
 				<div class="d-flex align-items-center">
 					<div>
 						<h6 class="mb-3">
-							<b>车辆品牌占比图</b>
+							<b>车辆品牌前10名占比图</b>
 						</h6>
 					</div>
 				</div>                            
@@ -275,8 +276,8 @@ fillQuickDateSelector("quickdateselector", "fromdate", "todate");
 var vehflowHourChart;
 function drawVehFlowHourStat(){
     var ctx = document.getElementById("chart_vehflow_hours").getContext('2d');
-    var barcolors = ['#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
-    var barhovercolors = ['#008033', '#FF6933', '#ADD833', '#90EE33', '#778833', '#800033', '#937033', '#191933'];
+    var barcolors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
+    var barhovercolors = ['#6991cc', '#c89752', '#977abd', '#6daa7e', '#c47566', '#63aecd', '#c5ad4d', '#995cb9', '#b5b3b4', '#6dc0ae'];
 
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
@@ -348,8 +349,8 @@ function drawVehFlowHourStat(){
 var vehTypeChart;
 function drawVehTypeStat(){
     var ctx = document.getElementById("veh_type_chart").getContext('2d');
-    var barcolors = ['#88d73e', '#ff8da2', '#936cff', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
-    var barhovercolors = ['#88d700', '#ff8d00', '#936c00', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
+    var barcolors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
+    var barhovercolors = ['#6991cc', '#c89752', '#977abd', '#6daa7e', '#c47566', '#63aecd', '#c5ad4d', '#995cb9', '#b5b3b4', '#6dc0ae'];
 
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
@@ -367,7 +368,7 @@ function drawVehTypeStat(){
             var hoverbgcolor = [];
             var summarydata = [];
             for(var i = 0; i < data.vehtypes.length; i++){
-                etlabels.push(data.vehtypes[i].vehtype);
+                etlabels.push(hkVehType2Str(data.vehtypes[i].vehtype));
                 
                 bgcolor[i] = barcolors[i];
                 hoverbgcolor[i] = barhovercolors[i];
@@ -415,8 +416,8 @@ function drawVehTypeStat(){
 var vehBrandChart;
 function drawVehBrandStat(){
     var ctx = document.getElementById("veh_brand_chart").getContext('2d');
-    var barcolors = ['#88d73e', '#ff8da2', '#936cff', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
-    var barhovercolors = ['#88d700', '#ff8d00', '#936c00', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
+    var barcolors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
+    var barhovercolors = ['#6991cc', '#c89752', '#977abd', '#6daa7e', '#c47566', '#63aecd', '#c5ad4d', '#995cb9', '#b5b3b4', '#6dc0ae'];
 
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 

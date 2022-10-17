@@ -78,5 +78,14 @@ class HomeController extends Controller
         $arr = array("retcode"=>ret_success, "rsudevices"=>$rdevices, "obudevices"=>$odevices,
             "warnings"=>$warnings, "radars"=>$radars);
         return json_encode($arr);
-    } 
+    }
+    
+    function homeAidEvents(Request $request){
+        $sqlstr = "select eventtime, aidevent, plate from aidevents where date(eventtime)=date(now()) order by id desc"; //
+        
+        $aidevents = DB::select($sqlstr);
+        
+        $arr = array("retcode"=>ret_success, "aidevents"=>$aidevents);
+        return json_encode($arr);
+    }
 }
