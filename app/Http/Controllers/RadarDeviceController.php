@@ -24,8 +24,15 @@ class RadarDeviceController extends Controller
         ]);
     }
     
-    function addRadarDevice(Request $request){
-        return view("/basicdata/addradardevice");
+    function addRadarDevice(Request $request){        
+        $sqlstr = "select max(httpstreamport) as maxport from radardevices  ";
+        $maxports = DB::select($sqlstr);
+        $maxport = $maxports[0]->maxport + 1;
+        if($maxport == 1){
+            $maxport = 8080;
+        }
+        
+        return view("/basicdata/addradardevice", ["maxport"=>$maxport]);
     }
     
     function addRadarDeviceSave(Request $request){
@@ -37,6 +44,11 @@ class RadarDeviceController extends Controller
             return "设备编码已存在！";
         }
         
+        $lanenumber = $request->lanenumber;
+        if($lanenumber == ""){
+            $lanenumber = 2;
+        }
+        
         $rdevice = new RadarDevice();
         $rdevice->devicecode = $request->devicecode;
         $rdevice->macaddress = $request->macaddress;
@@ -44,7 +56,7 @@ class RadarDeviceController extends Controller
         $rdevice->httpstreamport = $request->httpstreamport;
         $rdevice->videostreamaddress = $request->videostreamaddress;
         $rdevice->macaddrint = $this->mac_to_int($request->macaddress);
-        $rdevice->lanenumber = $request->lanenumber;
+        $rdevice->lanenumber = $lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
         $rdevice->status = $request->status;
         $rdevice->validYposSmall = $request->validYposSmall;

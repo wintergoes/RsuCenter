@@ -2356,7 +2356,7 @@ function showTestVehs(){
     setTimeout("showTestVehs()", 1000);
 }
 
-function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, id){
+function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, positiony, id){
     this.uuid = uuid;
     this.plateno = plateno;
     this.targetid = targetid;
@@ -2366,13 +2366,14 @@ function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, d
     this.lat = lat;
     this.lng = lng;
     this.detecttime = detecttime;
+    this.positiony = positiony;
     this.dbid = id;
     
     this.setMarker = function(marker){
         this.marker = marker;
     }
     
-    this.updateData = function(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, id){
+    this.updateData = function(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, positiony, id){
         this.uuid = uuid;
         this.plateno = plateno;
         this.targetid = targetid;
@@ -2382,6 +2383,7 @@ function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, d
         this.lat = lat;
         this.lng = lng;
         this.detecttime = detecttime;
+        this.positiony = positiony;
         this.dbid = id;        
     }
 }
@@ -2426,7 +2428,7 @@ function showVehicles(){
                 var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
                     data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
                     data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
-                    data["vehicles"][i]["id"]);
+                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);
                 
                 vehMap.put(vehuuid, veh);
                 //alert(veh.lng + "  " + veh.lat);
@@ -2448,24 +2450,40 @@ function showVehicles(){
                 carmaker.setTitle(veh.targetid);
                 veh.setMarker(carmaker);
 
-                var labeltext = veh.plateno + " id: " + veh.targetid
-                    + " speed:" + veh.speed + " lane: " + veh.laneno 
-                    + " lat:" + veh.lat + " lng: " + veh.lng 
-                    + " id: " + veh.dbid;
-                carmaker.enableDragging();
+                if(getQueryVariable("showvehiclelabel") === "1"){
+                    var labeltext = veh.plateno + " id: " + veh.targetid
+                        + " speed:" + veh.speed + " lane: " + veh.laneno 
+                        + " lat:" + veh.lat + " lng: " + veh.lng + " positionY: " + veh.positiony
+                        + " id: " + veh.dbid;
+                    var label = new BMapGL.Label(labeltext, {       // 创建文本标注
+                        position: pt,                          // 设置标注的地理位置
+                        offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
+                    })    
+                    label.setStyle({border: "1px solid rgb(230 230 230)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
+                    carmaker.setLabel(label);                 
+                }
+//                carmaker.enableDragging();
 
                 map.addOverlay(carmaker); 
-//                vehmarkers.push(carmaker);                
+//                vehmarkers.push(carmaker); 
             } else {
                 //alert(veh.lng + "  " + veh.lat);
                 veh.updateData(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
                     data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
                     data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
-                    data["vehicles"][i]["id"]);
+                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);
                 
                 var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
                 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
                 var pt = new BMapGL.Point(latlng[0], latlng[1]);
+                
+                if(getQueryVariable("showvehiclelabel") === "1"){
+                    var labeltext = veh.plateno + " id: " + veh.targetid
+                        + " speed:" + veh.speed + " lane: " + veh.laneno 
+                        + " lat:" + veh.lat + " lng: " + veh.lng + ", positionY: " + veh.positiony
+                        + " id: " + veh.dbid;
+                    veh.marker.getLabel().setContent(labeltext);
+                }
                 
                 veh.marker.setPosition(pt);
                 veh.marker.setTitle(data["vehicles"][i]["targetid"]);
@@ -2476,7 +2494,7 @@ function showVehicles(){
         var nowdate = new Date();
         for(var i = vehMap.values().length - 1; i >= 0 ; i--){
             var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
-            if(timecha > 10  * 1000){
+            if(timecha > 2  * 1000){
                 map.removeOverlay(vehMap.values()[i].marker);
                 vehMap.remove(vehMap.values()[i].uuid);
             }

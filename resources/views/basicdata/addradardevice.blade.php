@@ -11,7 +11,13 @@ function submitData(){
         alert('设备编码不能为空！');
         $('#devicecode').focus();
         return;
-    }  
+    }
+    
+    if($('#macaddress').val() === ''){
+        alert('Mac地址不能为空！');
+        $('#macaddress').focus();
+        return;
+    }     
 
     $('#form1').submit();
 }
@@ -62,7 +68,7 @@ function onSelectTecChild(){
                 <input type="hidden" name="id" value="{{$radardevice->id}}" />
                 <input type="text" class="form-control" id="devicecode" name="devicecode" value="{{$radardevice->devicecode}}">
                 @else
-                <input type="text" class="form-control" id="devicecode" name="devicecode" placeholder="请输入设备编码">
+                <input type="text" class="form-control" id="devicecode" name="devicecode" placeholder="请输入设备编码，格式：LS00001">
                 @endif
             </div>
         </div>
@@ -82,9 +88,9 @@ function onSelectTecChild(){
             <label for="ipaddress" class="col-sm-2 col-form-label">ip地址</label>
             <div class="col-sm-6">
                 @if(isset($radardevice))
-                <input type="text" class="form-control" id="ipaddress" name="ipaddress" value="{{$radardevice->ipaddress}}">
+                <input type="text" class="form-control" id="ipaddress" name="ipaddress" value="{{$radardevice->ipaddress}}" placeholder="请输入雷视一体机的ip地址">
                 @else
-                <input type="text" class="form-control" id="ipaddress" name="ipaddress" placeholder="请输入ip地址">
+                <input type="text" class="form-control" id="ipaddress" name="ipaddress" placeholder="请输入雷视一体机的ip地址">
                 @endif
             </div>
         </div>
@@ -93,9 +99,9 @@ function onSelectTecChild(){
             <label for="videostreamaddress" class="col-sm-2 col-form-label">视频流地址</label>
             <div class="col-sm-6">
                 @if(isset($radardevice))
-                <input type="text" class="form-control" id="videostreamaddress" name="videostreamaddress" value="{{$radardevice->videostreamaddress}}">
+                <input type="text" class="form-control" id="videostreamaddress" name="videostreamaddress" value="{{$radardevice->videostreamaddress}}" placeholder="格式：http://视频服务器地址:http流端口/radarvideo">
                 @else
-                <input type="text" class="form-control" id="videostreamaddress" name="videostreamaddress" placeholder="请输入http流端口">
+                <input type="text" class="form-control" id="videostreamaddress" name="videostreamaddress" placeholder="格式：http://视频服务器地址:http流端口/radarvideo">
                 @endif
             </div>
         </div>        
@@ -106,7 +112,7 @@ function onSelectTecChild(){
                 @if(isset($radardevice))
                 <input type="text" class="form-control" id="httpstreamport" name="httpstreamport" value="{{$radardevice->httpstreamport}}">
                 @else
-                <input type="text" class="form-control" id="httpstreamport" name="httpstreamport" placeholder="请输入http流端口">
+                <input type="text" class="form-control" id="httpstreamport" name="httpstreamport" value="{{$maxport}}" placeholder="请输入http流端口">
                 @endif
             </div>
         </div>
@@ -126,9 +132,9 @@ function onSelectTecChild(){
             <label for="lanewidth" class="col-sm-2 col-form-label">车道宽度</label>
             <div class="col-sm-6">
                 @if(isset($radardevice))
-                <input type="text" class="form-control" id="lanewidth" name="lanewidth" value="{{$radardevice->lanewidth}}">
+                <input type="text" class="form-control" id="lanewidth" name="lanewidth" value="{{$radardevice->lanewidth}}" placeholder="请输入所有车道的宽度，以英文逗号分隔，格式：3.6,3.6">
                 @else
-                <input type="text" class="form-control" id="lanewidth" name="lanewidth" placeholder="请输入车道宽度">
+                <input type="text" class="form-control" id="lanewidth" name="lanewidth" placeholder="请输入所有车道的宽度，以英文逗号分隔，格式：3.6,3.6">
                 @endif
             </div>
         </div>        
@@ -162,14 +168,14 @@ function onSelectTecChild(){
                 @if(isset($radardevice))
                 <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" value="{{$radardevice->validYposSmall}}">
                 @else
-                <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" placeholder="">
+                <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" value="-1000" placeholder="">
                 @endif
             </div>
             <div class="col-sm-2">
                 @if(isset($radardevice))
                 <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" value="{{$radardevice->validYposLarge}}">
                 @else
-                <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" placeholder="">
+                <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" value="1000" placeholder="">
                 @endif
             </div>          
         </div>

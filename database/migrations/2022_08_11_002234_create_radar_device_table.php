@@ -24,8 +24,8 @@ class CreateRadarDeviceTable extends Migration
             $table->integer("lanenumber")->default(0);
             $table->string("lanewidth", 100)->default("");
             $table->integer("status")->default(1);
-            $table->double("validYposSmall")->default(-100);
-            $table->double("validYposyLarge")->default(100);
+            $table->double("validYposSmall")->default(-1000);
+            $table->double("validYposyLarge")->default(1000);
             $table->double("lat");
             $table->double("lng");
             $table->timestamps();

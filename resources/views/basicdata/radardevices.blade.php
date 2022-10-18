@@ -50,11 +50,11 @@
                         <td >{{$radar->id}}</td>
                         <td>{{$radar->devicecode}}</td>
                         <td>{{$radar->macaddress}}</td>
-                        <td>{{$radar->ipaddress}}</td>
-                        <td>{{$radar->videostreamaddress}}</td>
+                        <td>{{$radar->ipaddress == "" ? "-" : $radar->ipaddress}}</td>
+                        <td>{{$radar->videostreamaddress == "" ? "-" : $radar->videostreamaddress}}</td>
                         <td>{{$radar->httpstreamport}}</td>
                         <td>{{$radar->lanenumber}}</td>
-                        <td>{{$radar->lanewidth}}</td>
+                        <td>{{$radar->lanewidth == "" ? "-" : $radar->lanewidth}}</td>
                         @if($radar->lng == 0 || $radar->lat == 0)
                         <td>未设置</td>
                         @else
