@@ -2388,8 +2388,19 @@ function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, d
     }
 }
 
+function RadarMacObj(macaddr){
+    this.macaddr = macaddr;
+    this.borderColor = " rgb(255 255 255) ";
+    
+    this.setBorderColor = function(bcolor){
+        this.borderColor = bcolor;
+    } 
+}
+
 //var vehmarkers = [];
 var vehMap = new HashMap();
+var radarMacMap = new HashMap();
+var borderColors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
 function showVehicles(){   
     $.getJSON("dashboardvehicles",function(data){
         var tbl = document.getElementById("tbl_realtime_vehicles");
@@ -2418,6 +2429,19 @@ function showVehicles(){
         }        
         
         for(var i = 0; i < data["vehicles"].length; i++){
+            var radarMac = radarMacMap.get(data["vehicles"][i]["macaddr"]);
+            if(radarMac === null){
+                radarMac = new RadarMacObj(data["vehicles"][i]["macaddr"]);
+                radarMacMap.put(data["vehicles"][i]["macaddr"], radarMac);
+                
+                if(radarMacMap.size() <= borderColors.length){
+                    radarMac.setBorderColor(borderColors[radarMacMap.size() - 1]);
+//                    radarMac.setBorderColor(" rgb(255 255 255)");
+                } else {
+                    radarMac.setBorderColor(" rgb(255 255 255)");
+                }
+            }
+            
             var vehuuid = data["vehicles"][i]["uuid"];
             var vehrotation = data["vehicles"][i]["vehrotation"];
             //alert(vehuuid);
@@ -2428,7 +2452,7 @@ function showVehicles(){
                 var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
                     data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
                     data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
-                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);
+                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);                 
                 
                 vehMap.put(vehuuid, veh);
                 //alert(veh.lng + "  " + veh.lat);
@@ -2449,20 +2473,28 @@ function showVehicles(){
                 carmaker.setRotation(vehrotation);
                 carmaker.setTitle(veh.targetid);
                 veh.setMarker(carmaker);
+                
+                var labeltext = "";
+                
+                if(getQueryVariable("showpositiony") === "1"){    
+                    labeltext = "positionY: " + veh.positiony;                    
+                } 
 
                 if(getQueryVariable("showvehiclelabel") === "1"){
-                    var labeltext = veh.plateno + " id: " + veh.targetid
+                    labeltext = veh.plateno + " id: " + veh.targetid
                         + " speed:" + veh.speed + " lane: " + veh.laneno 
                         + " lat:" + veh.lat + " lng: " + veh.lng + " positionY: " + veh.positiony
                         + " id: " + veh.dbid;
+                }
+
+                if(getQueryVariable("showpositiony") === "1" || getQueryVariable("showvehiclelabel") === "1") {
                     var label = new BMapGL.Label(labeltext, {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
                         offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
                     })    
-                    label.setStyle({border: "1px solid rgb(230 230 230)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
-                    carmaker.setLabel(label);                 
+                    label.setStyle({border: "1px solid " + radarMac.borderColor, backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
+                    carmaker.setLabel(label);                    
                 }
-//                carmaker.enableDragging();
 
                 map.addOverlay(carmaker); 
 //                vehmarkers.push(carmaker); 
@@ -2485,6 +2517,11 @@ function showVehicles(){
                     veh.marker.getLabel().setContent(labeltext);
                 }
                 
+                if(getQueryVariable("showpositiony") === "1"){
+                    var labeltext = "positionY: " + veh.positiony;
+                    veh.marker.getLabel().setContent(labeltext);                    
+                }
+                
                 veh.marker.setPosition(pt);
                 veh.marker.setTitle(data["vehicles"][i]["targetid"]);
                 veh.marker.setRotation(vehrotation);
@@ -2494,7 +2531,7 @@ function showVehicles(){
         var nowdate = new Date();
         for(var i = vehMap.values().length - 1; i >= 0 ; i--){
             var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
-            if(timecha > 2  * 1000){
+            if(timecha > 3  * 1000){
                 map.removeOverlay(vehMap.values()[i].marker);
                 vehMap.remove(vehMap.values()[i].uuid);
             }
