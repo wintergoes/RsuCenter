@@ -14,7 +14,7 @@
     }
 </script>
 
-<h5 class="card-title">OBU设备列表</h5>
+<h5 class="card-title">雷视设备列表</h5>
 <hr>
 
 <div class="mb-lg-3">

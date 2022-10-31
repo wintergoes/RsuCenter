@@ -35,7 +35,7 @@
                     </td> 
                     <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="showInputCoord();" class="btn btn-outline-secondary px-1 radius-6">定位点</button></td>
                     
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript: selectLngLatMode=1;">拾取坐标</a></td>
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;拾取坐标</td>
                     <td class="search_td">
                         <input type="text" class="form-control" id="outputcoord" placeholder="">
                     </td>
@@ -71,55 +71,62 @@
 </table>
 
 <script>
-    //初始化地图对象
-    var map=new TMap("bdmap_container");
-    //设置显示地图的中心点和级别
-    map.centerAndZoom(new TLngLat(116.296286, 39.984241), 18);
-     //允许鼠标滚轮缩放地图
-    map.enableHandleMouseScroll();
-    map.setMapType(TMAP_SATELLITE_MAP);
+var map = new BMapGL.Map("bdmap_container", {
+   coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
+                 // 指定完成后API将以指定的坐标类型处理您传入的坐标
+});          // 创建地图实例  
+var point = new BMapGL.Point(116.296286, 39.984241);  // 创建点坐标  
+map.centerAndZoom(point, 13);                 // 初始化地图，设置中心点坐标和地图级别 
+map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
-    var polygons = new Map();
-    var bdlabels = new Map();
-    var bdmakers = new Map();
+var polygons = new Map();
+var bdlabels = new Map();
+var bdmakers = new Map();
 
-    var tmplng;
-    var tmplat;
-    var getcoordMarker;
-    TEvent.addListener(map, "click", function(p){
-        if(selectLngLatMode === 0){
-            return;
-        }
-        
-        var lnglat = map.fromContainerPixelToLngLat(p);
+var testlng = 120.295772;
+var testlat = 36.188451;
+var testlatlng = coordtransform.wgs84togcj02(testlng, testlat);
+testlatlng = coordtransform.gcj02towgs84(testlatlng[0], testlatlng[1]);
 
-        tmplng = lnglat.getLng();//经度
-        tmplat = lnglat.getLat();//维度
-;
-        var pt = new TLngLat(tmplng, tmplat);
-        map.removeOverLay(getcoordMarker);
-        getcoordMarker = new TMarker(pt);
-        // 将标注添加到地图
-        map.addOverLay(getcoordMarker); 
-    
-        document.getElementById('outputcoord').value = tmplng.toFixed(6) + "," + tmplat.toFixed(6);     
-        
-        selectLngLatMode = 0;
-    });
+//var testlatlng = coordtransform.gcj02tobd09(testlng, testlat);
+//testlatlng = coordtransform.bd09togcj02(testlatlng[0], testlatlng[1]);
+alert(testlng + ", " + testlat + "\n" + testlatlng[0] + ", " + testlatlng[1]);
 
-    var rsuIcon = new TIcon("/images/circle_white_border.png", new TSize(16, 16));
-    @if(count($coords) > 0)
-    @foreach($coords as $coord)
-    addRoadRect({{$coord->lng1}}, {{$coord->lat1}}, {{$coord->lng2}}, {{$coord->lat2}}, 
-            {{$coord->lng3}}, {{$coord->lat3}}, {{$coord->lng4}}, {{$coord->lat4}}, 
-            {{$coord->id}}, {{sprintf("%.1f", $coord->angle)}}, {{$coord->lng}}, {{$coord->lat}},
-            {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}}, map);
-    @endforeach
-    @endif
-    
-var selectLngLatMode = 0;    
+var tmplng;
+var tmplat;
+var getcoordMarker;
+map.addEventListener("rightclick", function(e){
+    tmplng = e.latlng.lng;//经度
+    tmplat = e.latlng.lat;//维度
+//    alert(tmplng + " " + tmplng);
+    var pt = new BMapGL.Point(tmplng, tmplat);
+    map.removeOverlay(getcoordMarker);
+    getcoordMarker = new BMapGL.Marker(pt, {});
+    // 将标注添加到地图
+    map.addOverlay(getcoordMarker); 
+
+    if($("#getcoord_sys").val() === "0"){
+        var latlng = coordtransform.bd09togcj02(tmplng, tmplat);
+        latlng = coordtransform.gcj02towgs84(latlng[0], latlng[1]);
+        document.getElementById('outputcoord').value = latlng[0].toFixed(6) + "," + latlng[1].toFixed(6); 
+    } else {
+        document.getElementById('outputcoord').value = tmplng.toFixed(6) + "," + tmplat.toFixed(6);        
+    }    
+});
+
+var rsuIcon = new BMapGL.Icon("/images/circle_white_border.png", new BMapGL.Size(16, 16));
+@if(count($coords) > 0)
+@foreach($coords as $coord)
+addRoadRect({{$coord->lng1}}, {{$coord->lat1}}, {{$coord->lng2}}, {{$coord->lat2}}, 
+        {{$coord->lng3}}, {{$coord->lat3}}, {{$coord->lng4}}, {{$coord->lat4}}, 
+        {{$coord->id}}, {{sprintf("%.1f", $coord->angle)}}, {{$coord->lng}}, {{$coord->lat}},
+        {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}});
+@endforeach
+@endif
+
+
 function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, lng, lat,
-    maxlng, maxlat, minlng, minlat, map){
+    maxlng, maxlat, minlng, minlat){
         var latlng = coordtransform.wgs84togcj02(lng1, lat1);
         latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1])
         var bdlng1 = latlng[0]; var bdlat1 = latlng[1];
@@ -136,84 +143,75 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1])
         var bdlng4 = latlng[0]; var bdlat4 = latlng[1];
         
-        var point = new TLngLat(lng1, lat1);  // 创建点坐标  
-        map.centerAndZoom(point, 21);                 // 初始化地图，设置中心点坐标和地图级别  
-        var points = [];
-        points.push(new TLngLat(lng1, lat1));
-        points.push(new TLngLat(lng2, lat2));
-        points.push(new TLngLat(lng3, lat3));
-        points.push(new TLngLat(lng4, lat4));
-        var polygon = new TPolygon(points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.5, fillOpacity:0.5});
-        
-        TEvent.addListener(polygon, "click", function(p){
-            if(polygon.isEditable()){
-                polygon.disableEdit();
-                newPoints = polygon.getLngLats();
-                if(newPoints.length !== 4){
-                    alert("数据错误，数据顶点不等于四个。");
-                    return;
-                }
-//                var tmplog = "";
-//                for(var i = 0; i < newPoints.length; i++){
-//                    var newlatlng = coordtransform.bd09togcj02(newPoints[i].getLng(), newPoints[i].getLat());
-//                    newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                    newlng1 = newlatlng[0]; newlat1 = newlatlng[1];
-//                    tmplog = tmplog + newPoints[i].getLat() + "," + newPoints[i].getLng() + "\n=======" + newlat1 + ", " + newlng1 + "\n";
-//                }
-//                alert(tmplog);
-
-                $.ajaxSetup({ 
-                    headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
-                }); 
-
-//                var newlatlng = coordtransform.bd09togcj02(newPoints[0].getLng(), newPoints[0].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng1 = newlatlng[0]; newlat1 = newlatlng[1]; 
-
-//                newlatlng = coordtransform.bd09togcj02(newPoints[1].getLng(), newPoints[1].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng2 = newlatlng[0]; newlat2 = newlatlng[1];             
-
-//                newlatlng = coordtransform.bd09togcj02(newPoints[2].getLng(), newPoints[2].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng3 = newlatlng[0]; newlat3 = newlatlng[1];             
-
-//                newlatlng = coordtransform.bd09togcj02(newPoints[3].getLng(), newPoints[3].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng4 = newlatlng[0]; newlat4 = newlatlng[1]; 
-                
-                newlat1 = newPoints[0].getLat(); newlng1 = newPoints[0].getLng();
-                newlat2 = newPoints[1].getLat(); newlng2 = newPoints[1].getLng();
-                newlat3 = newPoints[2].getLat(); newlng3 = newPoints[2].getLng();
-                newlat4 = newPoints[3].getLat(); newlng4 = newPoints[3].getLng();
-                
-
-                $.ajax({
-                    type: "GET",
-                    url: "updateroadcoordinate?p1lat=" + newlat1 + "&p1lng=" + newlng1 +
-                            "&p2lat=" + newlat2 + "&p2lng=" + newlng2 +
-                            "&p3lat=" + newlat3 + "&p3lng=" + newlng3 +
-                            "&p4lat=" + newlat4 + "&p4lng=" + newlng4 +
-                            "&coordid=" + id,
-                    dataType: "json",
-                    success: function (data) {
-                        if(data.retcode === 1){
-                            alert("更新坐标成功！");
-                        } else {
-                            alert("更新坐标失败！(" + data.retcode + ")");
-                        }
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("更新坐标失败！");
-                    }
-                });             
-                //alert(tmplog);                
-            } else {
-                polygon.enableEdit();
-            }
+        var point = new BMapGL.Point(bdlng1, bdlat1);  // 创建点坐标  
+        map.centerAndZoom(point, 18);                 // 初始化地图，设置中心点坐标和地图级别           
+        var polygon = new BMapGL.Polygon([
+                new BMapGL.Point(bdlng1, bdlat1),
+                new BMapGL.Point(bdlng2, bdlat2),
+                new BMapGL.Point(bdlng3, bdlat3),
+                new BMapGL.Point(bdlng4, bdlat4)
+            ], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});
+        polygon.addEventListener("click", function(){
+            polygon.enableEditing();
         });
         
-        map.addOverLay(polygon);
+        polygon.addEventListener("rightclick", function(){
+            polygon.disableEditing();
+            newPoints = polygon.getPath();
+            if(newPoints.length !== 5){
+                alert("数据错误，数据顶点多于四个。");
+                return;
+            }
+            var tmplog = "";
+            for(var i = 0; i < newPoints.length; i++){
+                var newlatlng = coordtransform.bd09togcj02(newPoints[i].lng, newPoints[i].lat);
+                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
+                newlng1 = newlatlng[0]; newlat1 = newlatlng[1];
+                tmplog = tmplog + newPoints[i].lat + "," + newPoints[i].lng + "\n=======" + newlat1 + ", " + newlng1 + "\n";
+            }
+            
+            $.ajaxSetup({ 
+                headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+            }); 
+            
+            var newlatlng = coordtransform.bd09togcj02(newPoints[0].lng, newPoints[0].lat);
+            newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
+            newlng1 = newlatlng[0]; newlat1 = newlatlng[1]; 
+            
+            newlatlng = coordtransform.bd09togcj02(newPoints[1].lng, newPoints[1].lat);
+            newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
+            newlng2 = newlatlng[0]; newlat2 = newlatlng[1];             
+            
+            newlatlng = coordtransform.bd09togcj02(newPoints[2].lng, newPoints[2].lat);
+            newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
+            newlng3 = newlatlng[0]; newlat3 = newlatlng[1];             
+            
+            newlatlng = coordtransform.bd09togcj02(newPoints[3].lng, newPoints[3].lat);
+            newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
+            newlng4 = newlatlng[0]; newlat4 = newlatlng[1];             
+
+            $.ajax({
+                type: "GET",
+                url: "updateroadcoordinate?p1lat=" + newlat1 + "&p1lng=" + newlng1 +
+                        "&p2lat=" + newlat2 + "&p2lng=" + newlng2 +
+                        "&p3lat=" + newlat3 + "&p3lng=" + newlng3 +
+                        "&p4lat=" + newlat4 + "&p4lng=" + newlng4 +
+                        "&coordid=" + id,
+                dataType: "json",
+                success: function (data) {
+                    if(data.retcode === 1){
+                        alert("更新坐标成功！");
+                    } else {
+                        alert("更新坐标失败！(" + data.retcode + ")");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("更新坐标失败！");
+                }
+            });             
+            //alert(tmplog);
+        });        
+        map.addOverlay(polygon);
         polygons.set(id, polygon);
         
         var content = "";
@@ -226,35 +224,41 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         }
         
         if(content !== ""){
-            var config = {
-                text: content,
-                offset: new TPixel(0, 0),
-                position: point
-            }
-            var label = new TLabel(config)  
-            map.addOverLay(label);  
-//            label.setStyle({                              // 设置label的样式
-//                color: '#1b8e30',
-//                fontSize: '10px',
-//                padding: '3px',
-//                border: '1px solid #1E90FF'
-//            })
+            var label = new BMapGL.Label(content, {       // 创建文本标注
+                position: point,                          // 设置标注的地理位置
+                offset: new BMapGL.Size(0, 0)           // 设置标注的偏移量
+            })  
+            map.addOverlay(label);  
+            label.setStyle({                              // 设置label的样式
+                color: '#1b8e30',
+                fontSize: '10px',
+                padding: '3px',
+                border: '1px solid #1E90FF'
+            })
             bdlabels.set(id, label);
 
-            TEvent.addListener(label, "click", function(p){  
+            label.addEventListener("click", function(){  
                 showInfoWindow(bdlng1, bdlat1, lng1, lat1, id);
             });  
         }
         
-//        latlng = coordtransform.wgs84togcj02(lng, lat);
-//        latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
-        var pt = new TLngLat(lng, lat);
-        var marker = new TMarker(pt, {
+        latlng = coordtransform.wgs84togcj02(lng, lat);
+        latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
+        var pt = new BMapGL.Point(latlng[0], latlng[1]);
+        var marker = new BMapGL.Marker(pt, {
             icon: rsuIcon
         });
         // 将标注添加到地图
-        map.addOverLay(marker);  
+        map.addOverlay(marker);  
         bdmakers.set(id, marker);
+        
+//        var polygonmax = new BMapGL.Polygon([
+//                new BMapGL.Point(maxlng, maxlat),
+//                new BMapGL.Point(minlng, maxlat),
+//                new BMapGL.Point(minlng, minlat),
+//                new BMapGL.Point(maxlng, minlat)
+//            ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+//        map.addOverlay(polygonmax);    
 }
 
 //坐标转换完之后的回调函数
@@ -277,17 +281,17 @@ function addPoint(lat, lng){
 }
 
 function showInfoWindow(bdlng, bdlat, lng, lat, id){
-//    var pt = new TLngLat(lng, lat);   
-//    var opts = {
-//        width: 200,
-//        height: 80,
-//        title: '坐标信息'
-//    };
-//    var infoText = lng.toFixed(6) + "," + lat.toFixed(6) + "<br/>" +
-//            "<a target='_blank' href='editroadcoordinate?coordid=" + id + "'>编辑坐标</a><br/>" + 
-//            "<a  onclick='deleteOverlay(" + id + ");'>删除坐标</a>"; // 
-//    let infoWindow = new TInfoWindow(infoText, opts);                  
-//    map.openInfoWindow(infoWindow, pt); // 开启信息窗口    
+    var pt = new BMapGL.Point(bdlng, bdlat);   
+    var opts = {
+        width: 200,
+        height: 80,
+        title: '坐标信息'
+    };
+    var infoText = lng.toFixed(6) + "," + lat.toFixed(6) + "<br/>" +
+            "<a target='_blank' href='editroadcoordinate?coordid=" + id + "'>编辑坐标</a><br/>" + 
+            "<a  onclick='deleteOverlay(" + id + ");'>删除坐标</a>"; // 
+    let infoWindow = new BMapGL.InfoWindow(infoText, opts);                  
+    map.openInfoWindow(infoWindow, pt); // 开启信息窗口    
 }
 
 function deleteOverlay(id){       
@@ -358,9 +362,9 @@ function showInputCoord(){
 
 function onBdmapChange(obj){
     if($(obj).val() === "0"){
-        map.setMapType(TMAP_NORMAL_MAP);
+        map.setMapType(BMAP_NORMAL_MAP ); 
     } else {
-        map.setMapType(TMAP_SATELLITE_MAP);
+        map.setMapType(BMAP_SATELLITE_MAP  ); 
     }
 }
 

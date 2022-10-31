@@ -137,7 +137,9 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 						<div class="menu-title">道路管理</div>
 					</a>
 					<ul>
+                                            @if(Auth::user()->username == "admin")
                                             <li {!! $l2_road ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="roads"><i class="bx bx-right-arrow-alt" ></i>路段管理</a></li>
+                                            @endif
                                             <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>交通事件管理</a></li>
                                             <li {!! $l2_trafficsign ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="trafficsigns"><i class="bx bx-right-arrow-alt" ></i>交通标志管理</a></li>
 					</ul>

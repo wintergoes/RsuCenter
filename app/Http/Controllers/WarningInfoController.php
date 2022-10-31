@@ -535,8 +535,8 @@ class WarningInfoController extends Controller
                 ->get();
         
         $rtes = array();
+        $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
         foreach($winfos as $winfo){
-            $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
             $starttime = strtotime($winfo->starttime);
             $endtime = strtotime($winfo->endtime);
             
@@ -556,11 +556,22 @@ class WarningInfoController extends Controller
         $arr = array("type"=>"rte", "value"=>$rsivalue);
         
         $reqJson = json_encode($arr);
+//        echo $reqJson;
         
-        $insertsql = "insert into device_info_request log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
+        $rtestarttime = strtotime($request->starttime);
+        $rteendtime = strtotime($request->endtime);
+        
+        $rtestarttime_minute = round(($rtestarttime - $yearstart) / 60);
+        $rteendtime_minute = round(($rteendtime - $yearstart) / 60);
+        
+        DB::update("update device_info_request set deleted=1 where request_type='RTE' and device_id='" . $selRsu . "'");
+        
+        $insertsql = "insert into device_info_request (log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
             . " request_start_time, request_end_time ) values('" . $rsus[0]->log_radom . "', '"
-            . $selRsu . "', now(), 'RTE', '" . $reqNo . "', '" . $reqJson . "', ";
+            . $selRsu . "', now(), 'RTE', '" . $reqNo . "', '" . $reqJson . "', " . $rtestarttime_minute . ", " . $rteendtime_minute . ")";
         
-        //return json_encode($arr);
+        DB::insert($insertsql);
+        
+        echo "下发成功！";
     }
 }

@@ -22,12 +22,45 @@
     }
     
     function submitData(){
+        if($("#selectedRsu").val() === ""){
+            alert("请选择要接收的Rsu设备。");
+            return;            
+        }
+        
+        if($("#starttime").val() === ""){
+            alert("开始时间不能为空，请输入开始时间。");
+            return;            
+        }
+        
+        if($("#endtime").val() === ""){
+            alert("结束时间不能为空，请输入结束时间。");
+            return;            
+        }        
+        
+        var elements = document.getElementsByName("events[]");
+        var selectCount = 0;
+        for(var i=0;i<elements.length;i++){
+            if(elements[i].checked){
+                selectCount++;
+            }
+        }
+        
+        if(selectCount === 0){
+            alert("请选择要发送的事件。");
+            return;
+        }
+        
         $("#form1").submit();
     }
 </script>
 
 <h5 class="card-title">事件下发</h5>
 <hr>
+
+<?php
+$minstarttime = "2050-01-01 00:00:00";
+$maxendtime = "2000-01-01 00:00:00";
+?>
 
 <form class="form-horizontal" id="form1" method="post" action="/sendrte2rsusave">
     {{ csrf_field() }}      
@@ -53,8 +86,12 @@
                 <tbody>
                     <?php $commonctrl = new \App\Http\Controllers\CommonController() ?>
                     @foreach($warninginfo as $winfo)
+                    <?php
+                        $minstarttime = min($minstarttime, $winfo->starttime);
+                        $maxendtime = max($maxendtime, $winfo->endtime);
+                    ?>
                     <tr>
-                        <td><input type="checkbox" name="events[]" id="event{{$winfo->id}}" value="{{$winfo->id}}"></td>
+                        <td><input type="checkbox" name="events[]" id="event{{$winfo->id}}" value="{{$winfo->id}}" checked="checked"></td>
                         <td>{{$winfo->winame}}</td>
                         <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$winfo->wiradius}}米</td>
@@ -112,23 +149,25 @@
         <div class="row mb-3" style=" padding-left: 6px;">
             <label for="" class="col-sm-1 col-form-label" style="text-align: left;">开始时间：</label>
             <div class="col-sm-2" style="text-align: right;">
-                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="starttime" name="starttime" placeholder="请输入开始时间">
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  value="{{$minstarttime}}" autocomplete="off" id="starttime" name="starttime" placeholder="请输入开始时间">
             </div>
             
             <label for="" class="col-sm-3 col-form-label" ></label>
             
             <label for="" class="col-sm-1 col-form-label" style="text-align: left;">结束时间：</label>
             <div class="col-sm-2" style="text-align: right;">
-                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="endtime" name="endtime" placeholder="请输入开始时间">
+                <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="{{$maxendtime}}"  autocomplete="off" id="endtime" name="endtime" placeholder="请输入开始时间">
             </div>            
         </div>                
                 
                 <div class="d-flex align-items-center mb-3">
-                    <div>
-                        <span class="mb-0 card-title" onclick="showRsuMap();" style="cursor: pointer;">
-                            <b>选择要发送的RSU：</b>
-                        </span>
-                        <span id="selectedRsuSpan"><input id="selectedRsu" name="selectedRsu" readonly="readonly"></span>
+                    <label for="" class="col-sm-1 col-form-label" style="text-align: left;" onclick="showRsuMap();" style="cursor: pointer;">选择要发送的RSU：</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="selectedRsu" name="selectedRsu" readonly="readonly" class="form-control">
+                    </div>
+                    
+                    <div class="col-sm-1">
+                        <input type="button" onclick="showRsuMap()" value="选择RSU" class="form-control">
                     </div>
                 </div>
                 <div id="bdmap_rsu_container" style="width: 100%; height: 400px; visibility: hidden; display: none; "></div>

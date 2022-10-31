@@ -9,6 +9,8 @@ use App\Road;
 
 use DB;
 
+require_once '../app/Constant.php';
+
 class RoadCoordinateController extends Controller
 {
     public function __construct(){
@@ -278,6 +280,50 @@ class RoadCoordinateController extends Controller
         }
         
         return "导入成功！　　<a href='importroadcoordinate?roadid=" . $roadid . "'>继续导入</a>　　<a href='showroadcoordinate?roadid=" . $roadid . "'>点击在地图中查看</a>";
+    }
+    
+    function updateRoadCoordinate(Request $request){
+        if($request->coordid == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
+        
+        $coords = RoadCoordinate::where("id", $request->coordid)
+                ->get();
+        
+        if(count($coords) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"数据不存在！");
+            return json_encode($arr);            
+        }
+        
+        $roadcoord = $coords[0];
+        
+        $p1lat = $request->p1lat; $p1lng = $request->p1lng;
+        $p2lat = $request->p2lat; $p2lng = $request->p2lng;
+        $p3lat = $request->p3lat; $p3lng = $request->p3lng;
+        $p4lat = $request->p4lat; $p4lng = $request->p4lng;
+        
+        $maxlat = max($p1lat, $p2lat, $p3lat, $p4lat);
+        $minlat = min($p1lat, $p2lat, $p3lat, $p4lat);
+        $maxlng = max($p1lng, $p2lng, $p3lng, $p4lng);
+        $minlng = min($p1lng, $p2lng, $p3lng, $p4lng); 
+        
+        $roadcoord->lat1 = $p1lat;
+        $roadcoord->lng1 = $p1lng;
+        $roadcoord->lat2 = $p2lat;
+        $roadcoord->lng2 = $p2lng;
+        $roadcoord->lat3 = $p3lat;
+        $roadcoord->lng3 = $p3lng;
+        $roadcoord->lat4 = $p4lat;
+        $roadcoord->lng4 = $p4lng;
+        $roadcoord->maxlat = $maxlat;
+        $roadcoord->maxlng = $maxlng;
+        $roadcoord->minlat = $minlat;
+        $roadcoord->minlng = $minlng;
+        $roadcoord->save();
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
     }
     
     /**
