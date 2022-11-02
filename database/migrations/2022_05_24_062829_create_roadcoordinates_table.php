@@ -17,6 +17,7 @@ class CreateRoadcoordinatesTable extends Migration
             $table->increments('id');
             $table->integer("coordtype");
             $table->integer("roadid");
+            $table->integer("roadsectionno")->default(0);
             $table->tinyInteger("laneno")->default(0);
             $table->tinyInteger("lanetype")->default(0);
             $table->double("lat1");

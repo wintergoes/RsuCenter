@@ -99,9 +99,24 @@ class RoadCoordinateController extends Controller
         $importcount = 0;
         $roadid = $request->roadid;
         
+        if($roadid == 0 || $roadid == ""){
+            echo "缺少参数！";
+            return;
+        }
+        
         $laneno = 0;
         if($request->laneno != ""){
             $laneno = $request->laneno;
+        }
+        
+        $lanetype = $request->lanetype;
+        $sectionno = 0;
+        if($lanetype == 0){
+            $sectionnos = DB::select("select max(roadsectionno) as roadsectionno from roadcoordinates where roadid=" . $roadid . " and lanetype=0");
+            $sectionno = $sectionnos[0]->roadsectionno + 1;
+        } else {
+            $sectionnos = DB::select("select max(roadsectionno) as roadsectionno from roadcoordinates where roadid=" . $roadid . " and lanetype=1 and laneno=" . $laneno);
+            $sectionno = $sectionnos[0]->roadsectionno + 1;
         }
         
         $distanceL = $request->leftwidth;    //坐标点左侧路的宽度，米
@@ -245,6 +260,7 @@ class RoadCoordinateController extends Controller
             
             $roadcoord = new RoadCoordinate();
             $roadcoord->roadid = $roadid;
+            $roadcoord->roadsectionno = $sectionno;
             $roadcoord->lanetype = $request->lanetype;
             $roadcoord->laneno = $laneno;
             $roadcoord->lat1 = $p1lat;
@@ -353,22 +369,78 @@ class RoadCoordinateController extends Controller
             return "缺少参数！";
         }
         
-        $roadid = $request->roadid;
+        $searchroadid = $request->roadid;
         
-        $roads = Road::where("id", $roadid)
+        $searchlanetype = "0";
+        if($request->has("lanetype")){
+            $searchlanetype = $request->lanetype;
+        }
+        
+        $searchlaneno = "0";
+        if($request->has("laneno")){
+            $searchlaneno = $request->laneno;
+        }
+        
+        $searchshowid = "0";
+        if($request->has("showid")){
+            $searchshowid = $request->showid;
+        }
+        
+        $searchshowangle = "0";
+        if($request->has("showangle")){
+            $searchshowangle = $request->showangle;
+        }
+        
+        $searchsecno = "";
+        if($request->has("secnos")){
+            $searchsecno = $request->secnos;
+//            $secnos = $request->secnos;
+//            foreach($secnos as $secno){
+//                if($searchsecno == ""){
+//                    $searchsecno = $secno;
+//                } else {
+//                    $searchsecno = $searchsecno . "," . $secno;
+//                }            
+//            }
+        }
+        
+        $roads = Road::where("id", $searchroadid)
                 ->get();
         
         if(count($roads) == 0){
             return "道路信息不存在！";
         }        
         
-        $coords = RoadCoordinate::where("roadid", $roadid)
-                ->orderBy("id", "desc")
-                ->get();
+        $coords = RoadCoordinate::where("roadid", $searchroadid)
+                ->orderBy("id", "desc");
+        
+        if($searchlanetype != "" && $searchlanetype != "0"){
+            $coords = $coords->where("lanetype", $searchlanetype);
+        }
+        
+        if($searchlaneno != "" && $searchlaneno != "0"){
+            $coords = $coords->where("laneno", $searchlaneno);
+        }
+        
+        if($searchsecno != ""){
+            $coords = $coords->wherein("roadsectionno", $searchsecno);
+        }
+        
+        $coords = $coords->get();
+        
+        $sectionnos = DB::select("select distinct(roadsectionno) as secno from roadcoordinates where lanetype=" 
+                . $searchlanetype . " and laneno=". $searchlaneno . " and roadid=" . $searchroadid);
         
         return view("/road/showroadcoordinate", [
             "coords"=>$coords,
-            "road"=>$roads[0]
+            "road"=>$roads[0],
+            "searchlanetype"=>$searchlanetype,
+            "searchlaneno"=>$searchlaneno,
+            "sectionnos"=>$sectionnos,
+            "searchshowid"=>$searchshowid,
+            "searchshowangle"=>$searchshowangle,
+            "searchroadid"=>$searchroadid,
+            "searchsecno"=>$searchsecno
         ]);
     }
     
@@ -419,5 +491,58 @@ class RoadCoordinateController extends Controller
         }
 
         return redirect($exportfilename);        
+    }
+    
+    function addRoadSectionManually(Request $request){
+        $laneno = 0;        
+        $lanetype = 0;
+        
+        if($request->roadid == ""){
+            return "缺少参数！";
+        }
+        
+        $roadid = $request->roadid;        
+        
+        $sectionno = 0;
+        if($lanetype == 0){
+            $sectionnos = DB::select("select max(roadsectionno) as roadsectionno from roadcoordinates where roadid=" . $roadid . " and lanetype=0");
+            $sectionno = $sectionnos[0]->roadsectionno + 1;
+        } else {
+            $sectionnos = DB::select("select max(roadsectionno) as roadsectionno from roadcoordinates where roadid=" . $roadid . " and lanetype=1 and laneno=" . $laneno);
+            $sectionno = $sectionnos[0]->roadsectionno + 1;
+        }        
+        
+        $p1lat = $request->p1lat; $p1lng = $request->p1lng;
+        $p2lat = $request->p2lat; $p2lng = $request->p2lng;
+        $p3lat = $request->p3lat; $p3lng = $request->p3lng;
+        $p4lat = $request->p4lat; $p4lng = $request->p4lng;
+        
+        $maxlat = max($p1lat, $p2lat, $p3lat, $p4lat);
+        $minlat = min($p1lat, $p2lat, $p3lat, $p4lat);
+        $maxlng = max($p1lng, $p2lng, $p3lng, $p4lng);
+        $minlng = min($p1lng, $p2lng, $p3lng, $p4lng); 
+        
+        $roadcoord = new RoadCoordinate();
+        $roadcoord->coordtype = 0;
+        $roadcoord->roadid = $roadid;
+        $roadcoord->roadsectionno = $sectionno;
+        $roadcoord->laneno = $laneno;
+        $roadcoord->lanetype = 0;
+        $roadcoord->lat1 = $p1lat;
+        $roadcoord->lng1 = $p1lng;
+        $roadcoord->lat2 = $p2lat;
+        $roadcoord->lng2 = $p2lng;
+        $roadcoord->lat3 = $p3lat;
+        $roadcoord->lng3 = $p3lng;
+        $roadcoord->lat4 = $p4lat;
+        $roadcoord->lng4 = $p4lng;
+        $roadcoord->maxlat = $maxlat;
+        $roadcoord->maxlng = $maxlng;
+        $roadcoord->minlat = $minlat;
+        $roadcoord->minlng = $minlng;
+        $roadcoord->save();
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);        
     }
 }

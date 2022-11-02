@@ -126,6 +126,7 @@ Route::any("/editroadcoordinatesave", "RoadCoordinateController@editRoadCoordina
 Route::any("/deleteroadcoordinate", "RoadCoordinateController@deleteRoadCoordinate");
 Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordinate");
 Route::any("/updateroadcoordinate", "RoadCoordinateController@updateRoadCoordinate");
+Route::any("/addroadsectionmanually", "RoadCoordinateController@addRoadSectionManually");
 
 //*******************************Apis***************************************
 Route::any('/homedatasummary', 'HomeController@dataSummary');

@@ -22,7 +22,51 @@
 <div class="row mb-0">
         <form id="form1" class="form-horizontal" method="get" >
             {{ csrf_field() }} 
-            <table style="font-size: 12px; text-align: center;" >
+            <input type="hidden" class="form-control" id="roadid" name="roadid" value="{{$searchroadid}}" placeholder="">
+            <table style="font-size: 12px; text-align: center; margin-bottom: 6px;" >
+                <tr> 
+                    <td class="search_td">车辆类型&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="lanetype" class="form-select"  >
+                            <option class="form-control" value="0" >全车道</option>
+                            <option class="form-control" value="1" >具体车道</option>
+                        </select>
+                    </td> 
+                    
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;车道号&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <input type="text" class="form-control" id="laneno" name="laneno" placeholder="">
+                    </td>
+                    
+                    <td class="search_td">&nbsp;&nbsp;显示id&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="showid" class="form-select"  >
+                            <option class="form-control" value="0" {{$searchshowid == "0" ? "selected" : ""}}>否</option>
+                            <option class="form-control" value="1" {{$searchshowid == "1" ? "selected" : ""}} >是</option>
+                        </select>
+                    </td>
+                    <td class="search_td">&nbsp;&nbsp;显示角度&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="showangle" class="form-select"  >
+                            <option class="form-control" value="0" {{$searchshowangle == "0" ? "selected" : ""}}>否</option>
+                            <option class="form-control" value="1" {{$searchshowangle == "1" ? "selected" : ""}}>是</option>
+                        </select>
+                    </td>                    
+                    
+                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">显示坐标</button></td>
+                </tr>                  
+            </table>
+            
+            <table style="font-size: 12px; text-align: center; margin-bottom: 6px;" >
+                <tr>
+                    @foreach($sectionnos as $secno)
+                    <input type="checkbox" name="secnos[]" id="secno{{$secno->secno}}" value="{{$secno->secno}}"
+                           {{is_array($searchsecno) && in_array($secno->secno, $searchsecno) !== false ? "checked" : ""}}>{{$secno->secno}}
+                    @endforeach
+                </tr>                  
+            </table>
+            
+            <table style="font-size: 12px; text-align: center;" >                             
                 <tr>                   
                     <td class="search_td">
                         <input type="text" class="form-control" id="inputcoord" placeholder="经度,纬度">
@@ -54,9 +98,8 @@
                         </select>
                     </td> 
                     
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroadcoordinate?roadid={{$road->id}}&showid=1">显示id</a></td>
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroadcoordinate?roadid={{$road->id}}&showangle=1">显示角度</a></td>
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="showroadcoordinate?roadid={{$road->id}}">不显示标注</a></td>
+                    <td class="search_td"><button type="button" onclick="addRoadSectionOnMap();" class="btn btn-outline-secondary px-1 radius-6">地图增加路段</button></td>
+                    <td class="search_td"><button type="button" onclick="saveMapCoords();" class="btn btn-outline-secondary px-1 radius-6">保存坐标点</button></td>
                 </tr>
             </table>
         </form>
@@ -107,19 +150,52 @@
         selectLngLatMode = 0;
     });
 
-    var rsuIcon = new TIcon("/images/circle_white_border.png", new TSize(16, 16));
+    var rsuIcon = new TIcon("/images/circle_white_border.png", new TSize(8, 8));
     @if(count($coords) > 0)
     @foreach($coords as $coord)
     addRoadRect({{$coord->lng1}}, {{$coord->lat1}}, {{$coord->lng2}}, {{$coord->lat2}}, 
             {{$coord->lng3}}, {{$coord->lat3}}, {{$coord->lng4}}, {{$coord->lat4}}, 
             {{$coord->id}}, {{sprintf("%.1f", $coord->angle)}}, {{$coord->lng}}, {{$coord->lat}},
-            {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}}, map);
+            {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}}, {{$coord->roadsectionno}}, map);
     @endforeach
     @endif
     
 var selectLngLatMode = 0;    
 function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, lng, lat,
-    maxlng, maxlat, minlng, minlat, map){
+    maxlng, maxlat, minlng, minlat, roadsectionno, map){
+        var content = "";
+        @if($searchshowid == "1")
+            content = id + ", " + roadsectionno;
+        @endif
+        
+        @if($searchshowangle == "1")
+            content = angle;
+        @endif
+        
+        if(content !== ""){
+            var config = {
+                text: content,
+                offset: new TPixel(0, 0),
+                position: point
+            }
+            var label = new TLabel(config)  
+            map.addOverLay(label);  
+            bdlabels.set(id, label);
+
+            TEvent.addListener(label, "click", function(p){  
+                showInfoWindow(bdlng1, bdlat1, lng1, lat1, id);
+            });  
+        }
+        
+        var pt = new TLngLat(lng, lat);
+        var marker = new TMarker(pt, {
+            icon: rsuIcon
+        });
+        marker.setZindex(0);
+        // 将标注添加到地图
+        map.addOverLay(marker);
+        bdmakers.set(id, marker);        
+        
         var latlng = coordtransform.wgs84togcj02(lng1, lat1);
         latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1])
         var bdlng1 = latlng[0]; var bdlat1 = latlng[1];
@@ -143,10 +219,9 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         points.push(new TLngLat(lng2, lat2));
         points.push(new TLngLat(lng3, lat3));
         points.push(new TLngLat(lng4, lat4));
-        var polygon = new TPolygon(points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.5, fillOpacity:0.5});
+        var polygon = new TPolygon(points, {strokeColor:"blue", strokeWeight:1, strokeOpacity:1, fillOpacity:0.5});
         
-        TEvent.addListener(polygon, "click", function(p){
-            if(polygon.isEditable()){
+        polygon.onChange(function(p){
                 polygon.disableEdit();
                 newPoints = polygon.getLngLats();
                 if(newPoints.length !== 4){
@@ -206,8 +281,12 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("更新坐标失败！");
                     }
-                });             
-                //alert(tmplog);                
+                });            
+        });
+        
+        TEvent.addListener(polygon, "click", function(p){
+            if(polygon.isEditable()){
+                            
             } else {
                 polygon.enableEdit();
             }
@@ -215,46 +294,6 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         
         map.addOverLay(polygon);
         polygons.set(id, polygon);
-        
-        var content = "";
-        if(getUrlParam("showid") === "1"){
-            content = id;
-        }
-        
-        if(getUrlParam("showangle") === "1"){
-            content = angle;
-        }
-        
-        if(content !== ""){
-            var config = {
-                text: content,
-                offset: new TPixel(0, 0),
-                position: point
-            }
-            var label = new TLabel(config)  
-            map.addOverLay(label);  
-//            label.setStyle({                              // 设置label的样式
-//                color: '#1b8e30',
-//                fontSize: '10px',
-//                padding: '3px',
-//                border: '1px solid #1E90FF'
-//            })
-            bdlabels.set(id, label);
-
-            TEvent.addListener(label, "click", function(p){  
-                showInfoWindow(bdlng1, bdlat1, lng1, lat1, id);
-            });  
-        }
-        
-//        latlng = coordtransform.wgs84togcj02(lng, lat);
-//        latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
-        var pt = new TLngLat(lng, lat);
-        var marker = new TMarker(pt, {
-            icon: rsuIcon
-        });
-        // 将标注添加到地图
-        map.addOverLay(marker);  
-        bdmakers.set(id, marker);
 }
 
 //坐标转换完之后的回调函数
@@ -325,6 +364,49 @@ function deleteOverlay(id){
                             });  
         }
     });  
+}
+
+var p1Icon = new TIcon("/images/icon_p1.png", new TSize(26, 26));
+var p2Icon = new TIcon("/images/icon_p2.png", new TSize(26, 26));
+var p3Icon = new TIcon("/images/icon_p3.png", new TSize(26, 26));
+var p4Icon = new TIcon("/images/icon_p4.png", new TSize(26, 26));
+var p1Marker, p2Marker, p3Marker, p4Marker;
+function addRoadSectionOnMap(){
+        var pt1 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00001);
+        p1Marker = new TMarker(pt1, {
+            icon: p1Icon
+        });
+        p1Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p1Marker);   
+        
+        var pt2 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00002);
+        p2Marker = new TMarker(pt2, {
+            icon: p2Icon
+        });
+        p2Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p2Marker);         
+        
+        var pt3 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00003);
+        p3Marker = new TMarker(pt3, {
+            icon: p3Icon
+        });
+        p3Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p3Marker);         
+        
+        var pt4 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00004);
+        p4Marker = new TMarker(pt4, {
+            icon: p4Icon
+        });
+        p4Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p4Marker);         
+}
+
+function saveMapCoords(){
+    
 }
 
 function showInputCoord(){

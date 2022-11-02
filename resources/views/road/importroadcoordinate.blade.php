@@ -55,7 +55,7 @@ function submitData(){
             
             <label for="laneno" class="col-sm-1 col-form-label">车道号</label>
             <div class="col-sm-3">
-                <input type="text" class="form-control" id="laneno" name="laneno" value="" placeholder="">
+                <input type="text" class="form-control" id="laneno" name="laneno" value="0" placeholder="">
             </div>
         </div>
         
