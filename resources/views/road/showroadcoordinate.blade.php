@@ -90,7 +90,7 @@
                         </select>
                     </td>
                     
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地图类型</td>
+                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地图类型{{$searchshowid}}</td>
                     <td class="search_td">
                         <select id="bdmap_type" class="form-control" onchange="onBdmapChange(this);">
                             <option value="0">街道地图</option>
@@ -98,7 +98,8 @@
                         </select>
                     </td> 
                     
-                    <td class="search_td"><button type="button" onclick="addRoadSectionOnMap();" class="btn btn-outline-secondary px-1 radius-6">地图增加路段</button></td>
+                    <td class="search_td"><button type="button" onclick="addRoadSectionOnMap();" class="btn btn-outline-secondary px-1 radius-6">初始标记</button></td>
+                    <td class="search_td"><button type="button" onclick="moveRoadMarkers();" class="btn btn-outline-secondary px-1 radius-6">移动标记</button></td>
                     <td class="search_td"><button type="button" onclick="saveMapCoords();" class="btn btn-outline-secondary px-1 radius-6">保存坐标点</button></td>
                 </tr>
             </table>
@@ -163,12 +164,13 @@
 var selectLngLatMode = 0;    
 function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, lng, lat,
     maxlng, maxlat, minlng, minlat, roadsectionno, map){
+        var point = new TLngLat(lng1, lat1);  // 创建点坐标  
         var content = "";
-        @if($searchshowid == "1")
+        @if($searchshowid == 1)
             content = id + ", " + roadsectionno;
         @endif
         
-        @if($searchshowangle == "1")
+        @if($searchshowangle == 1)
             content = angle;
         @endif
         
@@ -212,7 +214,7 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1])
         var bdlng4 = latlng[0]; var bdlat4 = latlng[1];
         
-        var point = new TLngLat(lng1, lat1);  // 创建点坐标  
+        
         map.centerAndZoom(point, 21);                 // 初始化地图，设置中心点坐标和地图级别  
         var points = [];
         points.push(new TLngLat(lng1, lat1));
@@ -281,7 +283,7 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         alert("更新坐标失败！");
                     }
-                });            
+                });
         });
         
         TEvent.addListener(polygon, "click", function(p){
@@ -366,47 +368,145 @@ function deleteOverlay(id){
     });  
 }
 
-var p1Icon = new TIcon("/images/icon_p1.png", new TSize(26, 26));
+var p1Icon = new TIcon("/images/icon_p1.png", new TSize(22, 28));
 var p2Icon = new TIcon("/images/icon_p2.png", new TSize(26, 26));
 var p3Icon = new TIcon("/images/icon_p3.png", new TSize(26, 26));
 var p4Icon = new TIcon("/images/icon_p4.png", new TSize(26, 26));
+
+var p5Icon = new TIcon("/images/icon_p5.png", new TSize(22, 28));
+var p6Icon = new TIcon("/images/icon_p6.png", new TSize(26, 26));
 var p1Marker, p2Marker, p3Marker, p4Marker;
+var p5p6Line;
+var p1234Line ;
 function addRoadSectionOnMap(){
-        var pt1 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00001);
-        p1Marker = new TMarker(pt1, {
-            icon: p1Icon
-        });
-        p1Marker.enableDragging();
-        // 将标注添加到地图
-        map.addOverLay(p1Marker);   
-        
-        var pt2 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00002);
-        p2Marker = new TMarker(pt2, {
-            icon: p2Icon
-        });
-        p2Marker.enableDragging();
-        // 将标注添加到地图
-        map.addOverLay(p2Marker);         
-        
-        var pt3 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00003);
-        p3Marker = new TMarker(pt3, {
-            icon: p3Icon
-        });
-        p3Marker.enableDragging();
-        // 将标注添加到地图
-        map.addOverLay(p3Marker);         
-        
-        var pt4 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00004);
-        p4Marker = new TMarker(pt4, {
-            icon: p4Icon
-        });
-        p4Marker.enableDragging();
-        // 将标注添加到地图
-        map.addOverLay(p4Marker);         
+    var pt1 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00003);
+    p1Marker = new TMarker(pt1, {
+        icon: p1Icon
+    });
+    p1Marker.enableDragging();
+    // 将标注添加到地图
+    map.addOverLay(p1Marker);   
+
+    var pt2 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00006);
+    p2Marker = new TMarker(pt2, {
+        icon: p2Icon
+    });
+    p2Marker.enableDragging();
+    // 将标注添加到地图
+    map.addOverLay(p2Marker);         
+
+    var pt3 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00009);
+    p3Marker = new TMarker(pt3, {
+        icon: p3Icon
+    });
+    p3Marker.enableDragging();
+    // 将标注添加到地图
+    map.addOverLay(p3Marker);         
+
+    var pt4 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00012);
+    p4Marker = new TMarker(pt4, {
+        icon: p4Icon
+    });
+    p4Marker.enableDragging();
+    // 将标注添加到地图
+    map.addOverLay(p4Marker);     
+    
+    var pt5 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00015);
+    p5Marker = new TMarker(pt5, {
+        icon: p5Icon
+    });
+    p5Marker.enableDragging();
+    // 将标注添加到地图
+    map.addOverLay(p5Marker); 
+    
+    var pt6 = new TLngLat(map.getCenter().getLng(), map.getCenter().getLat() - 0.00004);
+    p6Marker = new TMarker(pt6, {
+        icon: p6Icon
+    });
+    p6Marker.enableDragging();
+    // 将标注添加到地图
+    map.addOverLay(p6Marker);
+    
+    p5p6Points = [pt6, pt5];
+    p5p6Line = new TPolyline(p5p6Points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.8});
+    map.addOverLay(p5p6Line);
+    
+    TEvent.addListener(p1Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });
+    
+    TEvent.addListener(p2Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });
+    
+    TEvent.addListener(p3Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });
+    
+    TEvent.addListener(p4Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });    
+    
+    TEvent.addListener(p5Marker, "dragend", function(p){
+        p5p6Points = [new TLngLat(p6Marker.getLngLat().getLng(), p6Marker.getLngLat().getLat()), 
+                        new TLngLat(p5Marker.getLngLat().getLng(), p5Marker.getLngLat().getLat())];
+        p5p6Line.setLngLats(p5p6Points);            
+    });
+    
+    TEvent.addListener(p6Marker, "dragend", function(p){
+        p5p6Points = [new TLngLat(p6Marker.getLngLat().getLng(), p6Marker.getLngLat().getLat()), 
+                        new TLngLat(p5Marker.getLngLat().getLng(), p5Marker.getLngLat().getLat())];
+        p5p6Line.setLngLats(p5p6Points);            
+    });    
+}
+
+function drawP1234Line(){
+    //alert(p1Marker.getLngLat().getLng() + ", " + p1Marker.getLngLat().getLat());
+    var p1234Points = [new TLngLat(p1Marker.getLngLat().getLng(), p1Marker.getLngLat().getLat()), 
+                        new TLngLat(p2Marker.getLngLat().getLng(), p2Marker.getLngLat().getLat()),
+                        new TLngLat(p3Marker.getLngLat().getLng(), p3Marker.getLngLat().getLat()), 
+                        new TLngLat(p4Marker.getLngLat().getLng(), p4Marker.getLngLat().getLat()),
+                        new TLngLat(p1Marker.getLngLat().getLng(), p1Marker.getLngLat().getLat())];
+    if(p1234Line == null){
+        p1234Line = new TPolyline(p1234Points, {strokeColor:"red", strokeWeight:1, strokeOpacity:0.8});
+        map.addOverLay(p1234Line);
+    } else {
+        p1234Line.setLngLats(p1234Points);
+    }
 }
 
 function saveMapCoords(){
+    $.ajax({
+        type: "GET",
+        url: "addroadsectionmanually?p1lat=" + p1Marker.getLngLat().getLat() + "&p1lng=" + p1Marker.getLngLat().getLng() +
+                "&p2lat=" + p2Marker.getLngLat().getLat() + "&p2lng=" + p2Marker.getLngLat().getLng() +
+                "&p3lat=" + p3Marker.getLngLat().getLat() + "&p3lng=" + p3Marker.getLngLat().getLng() +
+                "&p4lat=" + p4Marker.getLngLat().getLat() + "&p4lng=" + p4Marker.getLngLat().getLng() +
+                "&p5lat=" + p5Marker.getLngLat().getLat() + "&p5lng=" + p5Marker.getLngLat().getLng() +
+                "&p6lat=" + p6Marker.getLngLat().getLat() + "&p6lng=" + p6Marker.getLngLat().getLng() +
+                "&roadid=" + getUrlParam("roadid"),
+        dataType: "json",
+        success: function (data) {
+            if(data.retcode === 1){
+                alert("更新坐标成功！");
+            } else {
+                alert("更新坐标失败！(" + data.retcode + ")");
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("更新坐标失败！");
+        }
+    });
+}
+
+function moveRoadMarkers(){
+    p1Marker.setLngLat(new TLngLat(p2Marker.getLngLat().getLng(), p2Marker.getLngLat().getLat()));
+    p4Marker.setLngLat(new TLngLat(p3Marker.getLngLat().getLng(), p3Marker.getLngLat().getLat()));
+    p6Marker.setLngLat(new TLngLat(p5Marker.getLngLat().getLng(), p5Marker.getLngLat().getLat()));
     
+    p2Marker.setLngLat(new TLngLat(p2Marker.getLngLat().getLng(), p2Marker.getLngLat().getLat() - 0.0001));
+    p3Marker.setLngLat(new TLngLat(p3Marker.getLngLat().getLng(), p3Marker.getLngLat().getLat() - 0.0001));
+    p5Marker.setLngLat(new TLngLat(p5Marker.getLngLat().getLng(), p5Marker.getLngLat().getLat() - 0.0001)); 
 }
 
 function showInputCoord(){

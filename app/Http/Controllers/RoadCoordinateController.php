@@ -516,11 +516,51 @@ class RoadCoordinateController extends Controller
         $p2lat = $request->p2lat; $p2lng = $request->p2lng;
         $p3lat = $request->p3lat; $p3lng = $request->p3lng;
         $p4lat = $request->p4lat; $p4lng = $request->p4lng;
+        $p5lat = $request->p5lat; $p5lng = $request->p5lng;
+        $p6lat = $request->p6lat; $p6lng = $request->p6lng;
         
         $maxlat = max($p1lat, $p2lat, $p3lat, $p4lat);
         $minlat = min($p1lat, $p2lat, $p3lat, $p4lat);
         $maxlng = max($p1lng, $p2lng, $p3lng, $p4lng);
         $minlng = min($p1lng, $p2lng, $p3lng, $p4lng); 
+        
+        $latunit = 1/110000; // 每米对应的纬度值 
+        $radianToAngle = 180 / pi(); //弧度转角度
+        $angleToRadian = pi() / 180; //角度转弧度
+        
+        $lngcha = abs($p5lng - $p6lng) * cos($p5lat * $angleToRadian);
+        $latcha = abs($p5lat - $p6lat);
+
+        $a = 0;
+        if($p5lat > $p6lat && $p5lng < $p6lng ){
+            $a = atan($lngcha / $latcha) ;
+            $angle = 360 - $a * $radianToAngle;                
+        } else if($p5lat < $p6lat && $p5lng < $p6lng){
+            $a = atan($latcha / $lngcha) ;
+            $angle = 270 - $a * $radianToAngle;
+        } else if($p5lat < $p6lat && $p5lng > $p6lng){
+            $a = atan($lngcha / $latcha) ;
+            $angle = 180 - $a * $radianToAngle;
+        } else if($p5lat > $p6lat && $p5lng > $p6lng){
+            $a = atan($latcha / $lngcha);
+            $angle = 90 - $a * $radianToAngle;
+        }
+
+        if($p5lat == $p6lat){
+            if($p5lng > $p6lng){
+                $angle = 90;
+            } else {
+                $angle = -90;
+            }
+        }
+
+        if($p5lng == $p6lng){
+            if($p5lat > $p6lat){
+                $angle = 0;
+            } else {
+                $angle = 180;
+            }
+        }        
         
         $roadcoord = new RoadCoordinate();
         $roadcoord->coordtype = 0;
@@ -540,6 +580,12 @@ class RoadCoordinateController extends Controller
         $roadcoord->maxlng = $maxlng;
         $roadcoord->minlat = $minlat;
         $roadcoord->minlng = $minlng;
+        $roadcoord->angle = $angle;
+        $roadcoord->angle1 = $a ;        
+        $roadcoord->lng = $p5lng;
+        $roadcoord->lat = $p5lat;
+        $roadcoord->altitude = 0;
+        $roadcoord->distance = $this->getDistance($p6lat, $p6lng, $p5lat, $p5lng) * 1000;
         $roadcoord->save();
         
         $arr = array("retcode"=>ret_success);
