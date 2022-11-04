@@ -28,6 +28,7 @@
 <div class="mb-lg-3">
     <div class="col-sm-12 col-md-12">
         <a href="addtrafficsign"><button type="button" class="btn btn-outline-success px-2 radius-6">新增交通标志</button></a>
+        <a href="sendrts2rsu"><button type="button" class="btn btn-outline-success px-2 radius-6">交通标志下发RSU</button></a>
     </div>
 </div>
 

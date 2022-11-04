@@ -75,6 +75,8 @@ Route::any('/addtrafficsignsave', "TrafficSignController@addTrafficSignSave");
 Route::any('/edittrafficsign', "TrafficSignController@editTrafficSign");
 Route::any('/edittrafficsignsave', "TrafficSignController@editTrafficSignSave");
 Route::any('/deletetrafficsign', "TrafficSignController@deleteTrafficSign");
+Route::any("/sendrts2rsu", "TrafficSignController@sendRts2Rsu");
+Route::any("/sendrts2rsusave", "TrafficSignController@sendRts2RsuSave");
 
 //*******************************数据查询***************************************
 Route::any('/anprevents', "DataController@anprEvents");

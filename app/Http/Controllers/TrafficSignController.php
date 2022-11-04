@@ -11,6 +11,8 @@ use App\RoadCoordinate;
 use Auth;
 use DB;
 
+require_once '../app/Constant.php';
+
 class TrafficSignController extends Controller
 {
     function index(Request $request){
@@ -141,4 +143,98 @@ class TrafficSignController extends Controller
         DB::delete("delete from trafficsigns where id=" . $request->id);
         return redirect("trafficsigns");
     }
+    
+
+    function sendRts2Rsu(Request $request){
+        $trafficsigns = TrafficSign::whereraw("trafficsigns.endtime > now()")
+                ->whereraw("id not in (select relatedid from rsisendrecords where sendtype=" . rsi_type_rts . ")")
+                ->get();
+        
+        $default_lat = env("dashboard_default_lat", 36.183753);
+        $default_lng = env("dashboard_default_lng", 120.339217);
+        $default_zoom = env("dashboard_map_defaultzoom", 15);         
+        
+        return view("/road/sendrts2rsu", [
+            "trafficsigns"=>$trafficsigns,
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,              
+        ]);
+    }
+    
+    function sendRts2RsuSave(Request $request){
+        $selRsu = $request->selectedRsu;
+        $rsus = DB::select("SELECT * FROM device_info_connect where device_id='" . $selRsu . "' order by con_datetime desc limit 1");
+        if(count($rsus) == 0){
+            echo "RSU在数据库中不存在！";
+            return ;
+        }
+        
+        if($rsus[0]->Is_online != "1"){
+            echo "设备" . $selRsu . "不在线！";
+            return;
+        }
+        
+        $inputsigns = $request->signs;
+        $searchsigns = "";
+        foreach($inputsigns as $sign){
+            if($searchsigns == ""){
+                $searchsigns = $sign;
+            } else {
+                $searchsigns = $searchsigns . "," . $sign;
+            }            
+        }
+        
+        if($searchsigns == ""){
+            echo "未选择事件！";
+            return;
+        }
+        
+        $maxreqno = DB::select("select max(reqno) as maxReqNo from (select convert(request_no, UNSIGNED INTEGER) AS reqno FROM device_info_request) as request");
+        $reqNo = $maxreqno[0]->maxReqNo + 1;
+        
+        $trafficsigns = TrafficSign::whereRaw("id in (" . $searchsigns . ")")
+                ->get();
+        
+        $rtes = array();
+        $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
+        foreach($trafficsigns as $sign){
+            $starttime = strtotime($sign->starttime);
+            $endtime = strtotime($sign->endtime);
+            
+            $startminute = round(($starttime - $yearstart) / 60);
+            $endminute = round(($endtime - $yearstart) / 60);
+            $nowminute = round((time() - $yearstart) / 60);
+            
+            $signPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$sign->tslng, "lat"=>$sign->tslat)), "offsetV"=>null);
+            $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
+            
+            $winfoitem = array("rtsId"=>$sign->id, "signType"=>$sign->tscid, 
+                "signPos"=>$signPos, "timeDetails"=>$timeDetails);
+            array_push($rtes, $winfoitem);
+        }
+        
+        $refpos = array("lat"=>floatval($rsus[0]->RSU_lat), "long"=>floatval($rsus[0]->RSU_lng), "elevation"=>0);
+        $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>$selRsu, "refPos"=>$refpos, "rtes"=>null, "rtss"=>$rtes);
+        $arr = array("type"=>"rts", "value"=>$rsivalue);
+        
+        $reqJson = json_encode($arr);
+//        echo $reqJson;
+        
+        $rtestarttime = strtotime($request->starttime);
+        $rteendtime = strtotime($request->endtime);
+        
+        $rtestarttime_minute = round(($rtestarttime - $yearstart) / 60);
+        $rteendtime_minute = round(($rteendtime - $yearstart) / 60);
+        
+        DB::update("update device_info_request set deleted=1 where request_type='RTS' and device_id='" . $selRsu . "'");
+        
+        $insertsql = "insert into device_info_request (log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
+            . " request_start_time, request_end_time ) values('" . $rsus[0]->log_radom . "', '"
+            . $selRsu . "', now(), 'RTS', '" . $reqNo . "', '" . $reqJson . "', " . $rtestarttime_minute . ", " . $rteendtime_minute . ")";
+        
+        DB::insert($insertsql);
+        
+        echo "下发成功！";
+    }    
 }

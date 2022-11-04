@@ -546,13 +546,13 @@ class WarningInfoController extends Controller
             
             $eventPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$winfo->startlng, "lat"=>$winfo->startlat)), "offsetV"=>null);
             $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
-            $winfoitem = array("rteId"=>1, "eventType"=>intval($winfo->teccode), "eventSource"=>$winfo->wisource, 
+            $winfoitem = array("rteId"=>$winfo->id, "eventType"=>intval($winfo->teccode), "eventSource"=>$winfo->wisource, 
                 "eventPos"=>$eventPos, "eventRadius"=>$winfo->wiradius, "timeDetails"=>$timeDetails);
             array_push($rtes, $winfoitem);
         }
         
         $refpos = array("lat"=>floatval($rsus[0]->RSU_lat), "long"=>floatval($rsus[0]->RSU_lng), "elevation"=>0);
-        $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>"RSU0001", "refPos"=>$refpos, "rtss"=>null, "rtes"=>$rtes);
+        $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>$selRsu, "refPos"=>$refpos, "rtss"=>null, "rtes"=>$rtes);
         $arr = array("type"=>"rte", "value"=>$rsivalue);
         
         $reqJson = json_encode($arr);
