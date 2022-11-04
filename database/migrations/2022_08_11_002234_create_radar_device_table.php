@@ -28,6 +28,7 @@ class CreateRadarDeviceTable extends Migration
             $table->double("validYposyLarge")->default(1000);
             $table->double("lat");
             $table->double("lng");
+            $table->timestamp("communicationtime")->nullable();
             $table->timestamps();
             
             $table->index(["macaddrint"]);

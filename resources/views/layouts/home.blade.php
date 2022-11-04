@@ -24,6 +24,7 @@
 	<link rel="stylesheet" href="assets/css/semi-dark.css" />
 	<link rel="stylesheet" href="assets/css/header-colors.css" />
         <script src="assets/js/jquery.min.js"></script>
+        <script src="js/zlzl.js"></script>
 	<title>RSU管理后台</title>
 </head>
 

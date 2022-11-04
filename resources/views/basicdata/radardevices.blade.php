@@ -40,7 +40,7 @@
                         <th >车道宽度</th>
                         <th >坐标</th>
                         <th >状态</th>
-                        <th >创建日期</th>
+                        <th >最后通讯</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -61,7 +61,7 @@
                         <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;"  data-bs-toggle="modal" onclick="showRadarPosition('{{$radar->devicecode}}', {{$radar->lng}}, {{$radar->lat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
                         <td>{{$radar->status == 1 ? "有效" : "无效"}}</td>                        
-                        <td >{{$radar->created_at}}</td>
+                        <td >{{$radar->communicationtime}}</td>
                         <td>
                              <div class="dropdown">
                                     <button class="btn btn-light border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
