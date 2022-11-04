@@ -205,6 +205,9 @@ class TrafficSignController extends Controller
             $startminute = round(($starttime - $yearstart) / 60);
             $endminute = round(($endtime - $yearstart) / 60);
             $nowminute = round((time() - $yearstart) / 60);
+            if($endminute > 527040){
+                $endminute = 527040;
+            }
             
             $signPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$sign->tslng, "lat"=>$sign->tslat)), "offsetV"=>null);
             $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);

@@ -42,7 +42,7 @@
     }
 </script>
 
-<h5 class="card-title">事件下发</h5>
+<h5 class="card-title">交通标志下发RSU</h5>
 <hr>
 
 <?php

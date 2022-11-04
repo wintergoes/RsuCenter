@@ -54,7 +54,7 @@
     }
 </script>
 
-<h5 class="card-title">事件下发</h5>
+<h5 class="card-title">事件下发RSU</h5>
 <hr>
 
 <?php
@@ -142,6 +142,7 @@ $maxendtime = "2000-01-01 00:00:00";
     </div>
 </div>
 
+@if (count($warninginfo) > 0)        
 <div class="row">
     <div class="col-12 col-lg-12 border-1">
         <div class="card radius-6  border-1">
@@ -187,6 +188,7 @@ $maxendtime = "2000-01-01 00:00:00";
         </div>
     </div>
 </div>
+@endif
 
 </form>
 <script>
