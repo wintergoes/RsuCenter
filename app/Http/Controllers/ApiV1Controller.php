@@ -944,7 +944,7 @@ class ApiV1Controller extends Controller
                 ->get();
         
         $roadareas = MapArea::orderBy("mapareas.id", "asc")
-                ->where("mapareas.id", ">", $maxrcid)
+                ->where("mapareas.id", ">", $maxareaid)
                 ->where("r.published", 1)
                 ->select("mapareas.id", "mapareas.areatype", "mapareas.roadid",
                         "mapareas.lat1", "mapareas.lng1", "mapareas.lat2", "mapareas.lng2", 
