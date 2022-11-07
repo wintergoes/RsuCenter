@@ -47,6 +47,7 @@
                                 <button class="btn btn-light border-dark border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                 <ul class="dropdown-menu" style="margin: 0px;">
                                     <li><a class="dropdown-item" href="showroadcoordinate?roadid={{$road->id}}">道路坐标维护</a></li>
+                                    <li><a class="dropdown-item" href="showroadareas?roadid={{$road->id}}">道路区域维护</a></li>
                                     <li><a class="dropdown-item" href="exportroadcoordinate?roadid={{$road->id}}">导出坐标</a></li>
                                     @if($road->published == 1)
                                     <li><a class="dropdown-item" href="unpublishroad?roadid={{$road->id}}">取消发布</a></li>

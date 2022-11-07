@@ -31,8 +31,8 @@ Route::any("/logs", "ApiV1Controller@logs");
 
 Route::any("/resetpassword", "ApiV1Controller@resetPassword");
 
-
 Route::any("/bdmapjs", "ApiV1Controller@bdmapJs");
+Route::any("/tdtmapjs", "ApiV1Controller@tdtmapJs");
 
 Route::any("/rsumgruploadfile", "ApiV1Controller@uploadFile");
 

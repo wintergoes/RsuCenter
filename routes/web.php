@@ -130,6 +130,12 @@ Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordina
 Route::any("/updateroadcoordinate", "RoadCoordinateController@updateRoadCoordinate");
 Route::any("/addroadsectionmanually", "RoadCoordinateController@addRoadSectionManually");
 
+Route::any("/showroadareas", "MapAreaController@index");
+Route::any("/addroadarea", "MapAreaController@addRoadArea");
+Route::any("/updateroadarea", "MapAreaController@updateRoadArea");
+Route::any("/addroadareasave", "MapAreaController@addRoadAreaSave");
+Route::any("/deleteroadarea", "MapAreaController@deleteRoadArea");
+
 //*******************************Apis***************************************
 Route::any('/homedatasummary', 'HomeController@dataSummary');
 Route::any('/homebdmapsummary', 'HomeController@bdmapSummary');

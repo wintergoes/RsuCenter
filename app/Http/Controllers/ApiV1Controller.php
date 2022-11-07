@@ -14,6 +14,7 @@ use App\SysToken;
 use App\Road;
 use App\RoadCoordinate;
 use App\RoadLink;
+use App\MapArea;
 use App\ObuRouteDetail;
 use App\ClockIn;
 use App\WarningRecord;
@@ -655,6 +656,27 @@ class ApiV1Controller extends Controller
         curl_close($ch);     
     }
     
+    function tdtmapJs(Request $request){
+        //1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
+        $ch = curl_init();
+        //2. 不管是get、post，跳过证书的验证
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $mapjsurl = "http://api.tianditu.gov.cn/api?v=3.0&tk=41a827605c36598489f9ddee196c176c";
+        if($request->maptype == "webgl"){
+            $mapjsurl .= "&type=webgl";
+        }
+        //3. 设置请求的服务器地址
+        curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+        
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+
+        curl_close($ch);     
+    }    
+    
     function uploadFile(Request $request){
         if(!file_exists(upload_folder)){
             mkdir(upload_folder, 0777, true);
@@ -885,6 +907,7 @@ class ApiV1Controller extends Controller
         
         $maxroadid = 0;
         $maxrcid = 0;
+        $maxareaid = 0;
         $maxroadlinkid = 0;
         
 //        if($request->maxroadid != ""){
@@ -893,6 +916,10 @@ class ApiV1Controller extends Controller
         
         if($request->maxrcid != ""){
             $maxrcid = $request->maxrcid;
+        }
+        
+        if($request->maxareaid != ""){
+            $maxareaid = $request->maxareaid;
         }
         
         if($request->maxroadlinkid != ""){
@@ -905,15 +932,27 @@ class ApiV1Controller extends Controller
                 ->get();
         
         $roadcoords = RoadCoordinate::orderBy("roadcoordinates.id", "asc")
-                ->where("roadcoordinates.id", ">", $maxrcid)
+                ->where("roadcoordinates.id", ">", $maxareaid)
                 ->where("r.published", 1)
-                ->select("roadcoordinates.id", "roadcoordinates.coordtype", "roadcoordinates.roadid", "roadcoordinates.laneno", "roadcoordinates.lanetype", 
+                ->select("roadcoordinates.id", "roadcoordinates.coordtype", "roadcoordinates.roadid", "roadcoordinates.roadsectionno",
+                        "roadcoordinates.laneno", "roadcoordinates.lanetype", 
                         "roadcoordinates.lat1", "roadcoordinates.lng1", "roadcoordinates.lat2", "roadcoordinates.lng2", 
                         "roadcoordinates.lat3", "roadcoordinates.lng3", "roadcoordinates.lat4", "roadcoordinates.lng4",
                         "roadcoordinates.maxlat", "roadcoordinates.maxlng", "roadcoordinates.minlat", "roadcoordinates.minlng", "roadcoordinates.lat", "roadcoordinates.lng",
                         "roadcoordinates.angle", "roadcoordinates.distance")
                 ->leftjoin("roads as r", "r.id", "=", "roadcoordinates.roadid")
                 ->get();
+        
+        $roadareas = MapArea::orderBy("mapareas.id", "asc")
+                ->where("mapareas.id", ">", $maxrcid)
+                ->where("r.published", 1)
+                ->select("mapareas.id", "mapareas.areatype", "mapareas.roadid",
+                        "mapareas.lat1", "mapareas.lng1", "mapareas.lat2", "mapareas.lng2", 
+                        "mapareas.lat3", "mapareas.lng3", "mapareas.lat4", "mapareas.lng4",
+                        "mapareas.maxlat", "mapareas.maxlng", "mapareas.minlat", "mapareas.minlng", "mapareas.lat", "mapareas.lng",
+                        "mapareas.angle", "mapareas.distance")
+                ->leftjoin("roads as r", "r.id", "=", "mapareas.roadid")
+                ->get();        
         
         $roadlinks = RoadLink::orderBy("roadlinks.id", "asc")
                 ->where("roadlinks.id", ">", $maxroadlinkid)
@@ -923,7 +962,7 @@ class ApiV1Controller extends Controller
                 ->get();
         
         $arr = array("retcode"=>ret_success, "roads"=>$roads, "roadcoords"=>$roadcoords, 
-            "roadlinks"=>$roadlinks);
+            "roadlinks"=>$roadlinks, "roadareas"=>$roadareas);
         return json_encode($arr);
     }
     

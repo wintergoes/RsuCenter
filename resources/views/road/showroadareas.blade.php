@@ -7,106 +7,54 @@
 <script type="text/javascript" src="js/coordtransform.js"></script>
 	<link rel="stylesheet" href="assets/plugins/notifications/css/lobibox.min.css" />
 	<script src="assets/plugins/notifications/js/lobibox.min.js"></script>
-<h5 class="card-title">路段坐标维护 [{{$road->roadname}}]</h5>
+<h5 class="card-title">道路关键区域维护 [{{$road->roadname}}]</h5>
 <hr>
 
 <div class="mb-lg-3">
     <div class="col-sm-12 col-md-12">
-        <a href="addroadcoordinate?roadid={{$road->id}}"><button type="button" class="btn btn-outline-success px-2 radius-6">新增坐标</button></a>
-        <a href="importroadcoordinate?roadid={{$road->id}}"><button type="button" class="btn btn-outline-success px-2 radius-6">导入坐标</button></a>
-        <a href="exportroadcoordinate?roadid={{$road->id}}"><button type="button" class="btn btn-outline-success px-2 radius-6">导出坐标</button></a>
+        <a href="addroadarea?roadid={{$road->id}}"><button type="button" class="btn btn-outline-success px-2 radius-6">新增区域</button></a>
     </div>
 </div>
 
 <div class="row mb-0">
         <form id="form1" class="form-horizontal" method="get" >
             {{ csrf_field() }} 
-            <input type="hidden" class="form-control" id="roadid" name="roadid" value="{{$searchroadid}}" placeholder="">
-            <table style="font-size: 12px; text-align: center; margin-bottom: 6px;" >
-                <tr> 
-                    <td class="search_td">车辆类型&nbsp;&nbsp;</td>
-                    <td class="search_td">
-                        <select name="lanetype" class="form-select"  >
-                            <option class="form-control" value="0" >全车道</option>
-                            <option class="form-control" value="1" >具体车道</option>
-                        </select>
-                    </td> 
-                    
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;车道号&nbsp;&nbsp;</td>
-                    <td class="search_td">
-                        <input type="text" class="form-control" id="laneno" name="laneno" placeholder="">
-                    </td>
-                    
-                    <td class="search_td">&nbsp;&nbsp;显示id&nbsp;&nbsp;</td>
-                    <td class="search_td">
-                        <select name="showid" class="form-select"  >
-                            <option class="form-control" value="0" {{$searchshowid == "0" ? "selected" : ""}}>否</option>
-                            <option class="form-control" value="1" {{$searchshowid == "1" ? "selected" : ""}} >是</option>
-                        </select>
-                    </td>
-                    <td class="search_td">&nbsp;&nbsp;显示角度&nbsp;&nbsp;</td>
-                    <td class="search_td">
-                        <select name="showangle" class="form-select"  >
-                            <option class="form-control" value="0" {{$searchshowangle == "0" ? "selected" : ""}}>否</option>
-                            <option class="form-control" value="1" {{$searchshowangle == "1" ? "selected" : ""}}>是</option>
-                        </select>
-                    </td>                    
-                    
-                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">显示坐标</button></td>
-                </tr>                  
-            </table>
-            
-            <table style="font-size: 12px; text-align: center; margin-bottom: 6px;" >
-                <tr>
-                    @foreach($sectionnos as $secno)
-                    <input type="checkbox" name="secnos[]" id="secno{{$secno->secno}}" value="{{$secno->secno}}"
-                           {{is_array($searchsecno) && in_array($secno->secno, $searchsecno) !== false ? "checked" : ""}}>{{$secno->secno}}
-                    @endforeach
-                </tr>                  
-            </table>
-            
-            <table style="font-size: 12px; text-align: center;" >                             
-                <tr>                   
-                    <td class="search_td">
-                        <input type="text" class="form-control" id="inputcoord" placeholder="经度,纬度">
-                    </td> 
-                    <td class="search_td">
-                        <select id="inputcoord_sys" class="form-control">
-                            <option value="0">WGS84</option>
-                            <option value="1">BD0911</option>
-                        </select>
-                    </td> 
-                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="showInputCoord();" class="btn btn-outline-secondary px-1 radius-6">定位点</button></td>
-                    
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript: selectLngLatMode=1;">拾取坐标</a></td>
-                    <td class="search_td">
-                        <input type="text" class="form-control" id="outputcoord" placeholder="">
-                    </td>
-                    <td class="search_td">
-                        <select id="getcoord_sys" class="form-control">
-                            <option value="0">WGS84</option>
-                            <option value="1" selected>BD0911</option>
-                        </select>
-                    </td>
-                    
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;地图类型{{$searchshowid}}</td>
-                    <td class="search_td">
-                        <select id="bdmap_type" class="form-control" onchange="onBdmapChange(this);">
-                            <option value="0">街道地图</option>
-                            <option value="1">卫星地图</option>
-                        </select>
-                    </td> 
-                    
-                    <td class="search_td"><button type="button" onclick="addRoadSectionOnMap();" class="btn btn-outline-secondary px-1 radius-6">初始标记</button></td>
-                    <td class="search_td"><button type="button" onclick="moveRoadMarkers();" class="btn btn-outline-secondary px-1 radius-6">移动标记</button></td>
-                    <td class="search_td"><button type="button" onclick="saveMapCoords();" class="btn btn-outline-secondary px-1 radius-6">保存坐标点</button></td>
-                </tr>
-            </table>
         </form>
 </div>
 
 <table class="table mb-0 table-borderless " style="width: 100%;">
     <tr>
+        <td>
+            @if (count($areas) > 0)        
+            <div class="col-sm-auto">           
+                <table class="table mb-0 table-hover table-bordered" >
+                    <thead>
+                        <tr role="row">
+                            <th >ID</th>
+                            <th >名称</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($areas as $area)
+                        <tr>
+                            <td>{{$area->id}}</td>
+                            <td>{{$area->areaname}}</td>
+                            <td>
+                                 <div class="dropdown">
+                                    <button class="btn btn-light border-dark border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
+                                    <ul class="dropdown-menu" style="margin: 0px;">
+                                        <li><a class="dropdown-item" href="deleteroadarea?roadid={{$road->id}}&areaid={{$area->id}}">删除</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach                            
+                    </tbody>
+                </table>
+            </div>
+            @endif               
+        </td>
         <td valign="top">
         <div id="bdmap_container" style="width: 100%; height: 1000px; min-width: 600px;">    
         </td>
@@ -151,28 +99,21 @@
     });
 
     var rsuIcon = new TIcon("/images/circle_white_border.png", new TSize(8, 8));
-    @if(count($coords) > 0)
-    @foreach($coords as $coord)
-    addRoadRect({{$coord->lng1}}, {{$coord->lat1}}, {{$coord->lng2}}, {{$coord->lat2}}, 
-            {{$coord->lng3}}, {{$coord->lat3}}, {{$coord->lng4}}, {{$coord->lat4}}, 
-            {{$coord->id}}, {{sprintf("%.1f", $coord->angle)}}, {{$coord->lng}}, {{$coord->lat}},
-            {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}}, {{$coord->roadsectionno}}, map);
+    @if(count($areas) > 0)
+    @foreach($areas as $area)
+    addRoadRect({{$area->lng1}}, {{$area->lat1}}, {{$area->lng2}}, {{$area->lat2}}, 
+            {{$area->lng3}}, {{$area->lat3}}, {{$area->lng4}}, {{$area->lat4}}, 
+            {{$area->id}}, {{sprintf("%.1f", $area->angle)}}, {{$area->lng}}, {{$area->lat}},
+            {{$area->maxlng}}, {{$area->maxlat}}, {{$area->minlng}}, {{$area->minlat}}, "{{$area->areaname}}", map);
     @endforeach
     @endif
     
 var selectLngLatMode = 0;    
 function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, lng, lat,
-    maxlng, maxlat, minlng, minlat, roadsectionno, map){
+    maxlng, maxlat, minlng, minlat, areaname, map){
         var point = new TLngLat(lng1, lat1);  // 创建点坐标  
-        var content = "";
-        @if($searchshowid == 1)
-            content = id + ", " + roadsectionno;
-        @endif
-        
-        @if($searchshowangle == 1)
-            content = angle;
-        @endif
-        
+        var content = areaname;
+
         if(content !== ""){
             var config = {
                 text: content,
@@ -213,7 +154,6 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1])
         var bdlng4 = latlng[0]; var bdlat4 = latlng[1];
         
-        
         map.centerAndZoom(point, 21);                 // 初始化地图，设置中心点坐标和地图级别  
         var points = [];
         points.push(new TLngLat(lng1, lat1));
@@ -229,58 +169,33 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
                     alert("数据错误，数据顶点不等于四个。");
                     return;
                 }
-//                var tmplog = "";
-//                for(var i = 0; i < newPoints.length; i++){
-//                    var newlatlng = coordtransform.bd09togcj02(newPoints[i].getLng(), newPoints[i].getLat());
-//                    newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                    newlng1 = newlatlng[0]; newlat1 = newlatlng[1];
-//                    tmplog = tmplog + newPoints[i].getLat() + "," + newPoints[i].getLng() + "\n=======" + newlat1 + ", " + newlng1 + "\n";
-//                }
-//                alert(tmplog);
-
+                
                 $.ajaxSetup({ 
                     headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
                 }); 
 
-//                var newlatlng = coordtransform.bd09togcj02(newPoints[0].getLng(), newPoints[0].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng1 = newlatlng[0]; newlat1 = newlatlng[1]; 
-
-//                newlatlng = coordtransform.bd09togcj02(newPoints[1].getLng(), newPoints[1].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng2 = newlatlng[0]; newlat2 = newlatlng[1];             
-
-//                newlatlng = coordtransform.bd09togcj02(newPoints[2].getLng(), newPoints[2].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng3 = newlatlng[0]; newlat3 = newlatlng[1];             
-
-//                newlatlng = coordtransform.bd09togcj02(newPoints[3].getLng(), newPoints[3].getLat());
-//                newlatlng = coordtransform.gcj02towgs84(newlatlng[0], newlatlng[1]);
-//                newlng4 = newlatlng[0]; newlat4 = newlatlng[1]; 
-                
                 newlat1 = newPoints[0].getLat(); newlng1 = newPoints[0].getLng();
                 newlat2 = newPoints[1].getLat(); newlng2 = newPoints[1].getLng();
                 newlat3 = newPoints[2].getLat(); newlng3 = newPoints[2].getLng();
                 newlat4 = newPoints[3].getLat(); newlng4 = newPoints[3].getLng();
                 
-
                 $.ajax({
                     type: "GET",
-                    url: "updateroadcoordinate?p1lat=" + newlat1 + "&p1lng=" + newlng1 +
+                    url: "updateroadarea?p1lat=" + newlat1 + "&p1lng=" + newlng1 +
                             "&p2lat=" + newlat2 + "&p2lng=" + newlng2 +
                             "&p3lat=" + newlat3 + "&p3lng=" + newlng3 +
                             "&p4lat=" + newlat4 + "&p4lng=" + newlng4 +
-                            "&coordid=" + id,
+                            "&areaid=" + id,
                     dataType: "json",
                     success: function (data) {
                         if(data.retcode === 1){
-                            alert("更新坐标成功！");
+                            alert("更新区域成功！");
                         } else {
-                            alert("更新坐标失败！(" + data.retcode + ")");
+                            alert("更新区域失败！(" + data.retcode + ")");
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        alert("更新坐标失败！");
+                        alert("更新区域失败！");
                     }
                 });
         });
@@ -366,6 +281,7 @@ function deleteOverlay(id){
         }
     });  
 }
+
 
 var p1Icon = new TIcon("/images/icon_p1.png", new TSize(22, 28));
 var p2Icon = new TIcon("/images/icon_p2.png", new TSize(26, 26));
@@ -475,10 +391,6 @@ function drawP1234Line(){
 }
 
 function saveMapCoords(){
-    $.ajaxSetup({ 
-        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
-    });     
-    
     $.ajax({
         type: "GET",
         url: "addroadsectionmanually?p1lat=" + p1Marker.getLngLat().getLat() + "&p1lng=" + p1Marker.getLngLat().getLng() +

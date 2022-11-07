@@ -23,6 +23,10 @@ define("coord_type_wgs84", 0);
 define("coord_type_gcj02", 1);
 define("coord_type_bd09", 2);
 
+define("area_type_undefined", 0);
+define("area_type_tollstation", 1);
+define("area_type_junction", 2);
+
 define("clockin_goto_work", 1);
 define("clockin_gooff_work", 1);
 

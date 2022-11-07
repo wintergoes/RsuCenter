@@ -31,7 +31,7 @@ class RoadCoordinateController extends Controller
         
         $coordinates = RoadCoordinate::orderBy("id", "desc")
                 ->where("roadid", $request->roadid)
-                ->paginate(50);
+                ->get();
         
         return view("/road/roadcoordinates", [
            "coordinates"=>$coordinates,
@@ -362,7 +362,7 @@ class RoadCoordinateController extends Controller
         $s = 2 * asin(sqrt(pow(sin($a / 2), 2)+cos($radLat1) * cos($radLat2) * pow(sin($b / 2), 2))) * 6378.137;
 
         return $s;
-    }    
+    }
     
     function showRoadCoordinate(Request $request){
         if($request->roadid == ""){
