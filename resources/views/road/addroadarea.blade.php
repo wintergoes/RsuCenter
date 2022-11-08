@@ -61,7 +61,7 @@ function submitData(){
             <label for="mobile" class="col-sm-2 col-form-label">选择标志</label>
             <div class="col-sm-6">
                 <select id="areatype" name="areatype" class="form-select">
-                    <option class="form-control" value="1"  >收费站</option>
+                    <option class="form-control" value="1" >收费站</option>
                     <option class="form-control" value="2" >交叉路口</option>
                 </select>
             </div>                                   

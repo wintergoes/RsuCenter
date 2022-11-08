@@ -932,7 +932,7 @@ class ApiV1Controller extends Controller
                 ->get();
         
         $roadcoords = RoadCoordinate::orderBy("roadcoordinates.id", "asc")
-                ->where("roadcoordinates.id", ">", $maxareaid)
+                ->where("roadcoordinates.id", ">", $maxrcid)
                 ->where("r.published", 1)
                 ->select("roadcoordinates.id", "roadcoordinates.coordtype", "roadcoordinates.roadid", "roadcoordinates.roadsectionno",
                         "roadcoordinates.laneno", "roadcoordinates.lanetype", 
