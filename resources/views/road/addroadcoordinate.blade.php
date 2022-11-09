@@ -5,11 +5,6 @@
 
 <script>
 function submitData(){
-    if($('#devicecode').val() === ''){
-        alert('预警名称不能为空！');
-        $('#devicecode').focus();
-        return;
-    }  
 
     $('#form1').submit();
 }
@@ -29,6 +24,7 @@ function submitData(){
 
     @if(isset($coord))
     <form class="form-horizontal" id="form1" method="post" action="/editroadcoordinatesave">
+        <input type="hidden" name="coordid" value="{{$coord->id}}">
     @else
     <form class="form-horizontal" id="form1" method="post" action="/addroadcoordinatesave">
     @endif
@@ -42,7 +38,7 @@ function submitData(){
             <label for="latlng1" class="col-sm-2 col-form-label">坐标1</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="latlng1" name="latlng1" onchange="showRoadOnMap();" value="{{$coord->lat1}},{{$coord->lng1}}">
+                <input type="text" class="form-control" id="latlng1" name="latlng1" readonly="readonly" onchange="showRoadOnMap();" value="{{$coord->lat1}},{{$coord->lng1}}">
                 @else
                 <input type="text" class="form-control" id="latlng1" name="latlng1" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
@@ -51,7 +47,7 @@ function submitData(){
             <label for="latlng2" class="col-sm-1 col-form-label">坐标2</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="latlng2" name="latlng2" onchange="showRoadOnMap();" value="{{$coord->lat2}},{{$coord->lng2}}">
+                <input type="text" class="form-control" id="latlng2" name="latlng2" readonly="readonly" onchange="showRoadOnMap();" value="{{$coord->lat2}},{{$coord->lng2}}">
                 @else
                 <input type="text" class="form-control" id="latlng2" name="latlng2" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
@@ -63,7 +59,7 @@ function submitData(){
             <label for="latlng3" class="col-sm-2 col-form-label">坐标3</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="latlng3" name="latlng3" onchange="showRoadOnMap();" value="{{$coord->lat3}},{{$coord->lng3}}">
+                <input type="text" class="form-control" id="latlng3" name="latlng3" readonly="readonly" onchange="showRoadOnMap();" value="{{$coord->lat3}},{{$coord->lng3}}">
                 @else
                 <input type="text" class="form-control" id="latlng3" name="latlng3" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
@@ -72,7 +68,7 @@ function submitData(){
             <label for="latlng4" class="col-sm-1 col-form-label">坐标4</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="latlng4" name="latlng4" onchange="showRoadOnMap();" value="{{$coord->lat4}},{{$coord->lng4}}">
+                <input type="text" class="form-control" id="latlng4" name="latlng4" readonly="readonly" onchange="showRoadOnMap();" value="{{$coord->lat4}},{{$coord->lng4}}">
                 @else
                 <input type="text" class="form-control" id="latlng4" name="latlng4" onchange="showRoadOnMap();" value="" placeholder="">
                 @endif
@@ -83,7 +79,7 @@ function submitData(){
             <label for="maxlat" class="col-sm-2 col-form-label">maxlat</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="maxlat" name="maxlat" value="{{$coord->maxlat}}">
+                <input type="text" class="form-control" id="maxlat" name="maxlat" readonly="readonly" value="{{$coord->maxlat}}">
                 @else
                 <input type="text" class="form-control" id="maxlat" name="maxlat" value="" placeholder="">
                 @endif
@@ -92,7 +88,7 @@ function submitData(){
             <label for="maxlng" class="col-sm-1 col-form-label">maxlng</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="maxlng" name="maxlng" value="{{$coord->maxlng}}">
+                <input type="text" class="form-control" id="maxlng" name="maxlng" readonly="readonly" value="{{$coord->maxlng}}">
                 @else
                 <input type="text" class="form-control" id="maxlng" name="maxlng" value="" placeholder="">
                 @endif
@@ -103,7 +99,7 @@ function submitData(){
             <label for="minlat" class="col-sm-2 col-form-label">minlat</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="minlat" name="minlat" value="{{$coord->minlat}}">
+                <input type="text" class="form-control" id="minlat" name="minlat" readonly="readonly" value="{{$coord->minlat}}">
                 @else
                 <input type="text" class="form-control" id="minlat" name="minlat" value="" placeholder="">
                 @endif
@@ -112,7 +108,7 @@ function submitData(){
             <label for="minlng" class="col-sm-1 col-form-label">minlng</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="minlng" name="minlng" value="{{$coord->minlng}}">
+                <input type="text" class="form-control" id="minlng" name="minlng" readonly="readonly" value="{{$coord->minlng}}">
                 @else
                 <input type="text" class="form-control" id="minlng" name="minlng" value="" placeholder="">
                 @endif
@@ -152,6 +148,35 @@ function submitData(){
                 <input type="text" class="form-control" id="angle" name="angle" value="" placeholder="">
                 @endif
             </div>
+            
+            <label for="laneno" class="col-sm-1 col-form-label">车道宽度(厘米)</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="lanewidth" name="lanewidth" value="{{$coord->lanewidth}}">
+                @else
+                <input type="text" class="form-control" id="lanewidth" name="lanewidth" value="" placeholder="">
+                @endif
+            </div>  
+        </div> 
+        
+        <div class="row mb-3">
+            <label for="angle" class="col-sm-2 col-form-label">车道数量</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="lanecount" name="lanecount" value="{{$coord->lanecount}}">
+                @else
+                <input type="text" class="form-control" id="lanecount" name="lanecount" value="" placeholder="">
+                @endif
+            </div>
+            
+            <label for="laneno" class="col-sm-1 col-form-label">应急车道</label>
+            <div class="col-sm-3">
+                @if(isset($coord))
+                <input type="text" class="form-control" id="emergencylane" name="emergencylane" value="{{$coord->emergencylane}}">
+                @else
+                <input type="text" class="form-control" id="emergencylane" name="emergencylane" value="" placeholder="">
+                @endif
+            </div>  
         </div>         
         
         <div class="row mb-3">

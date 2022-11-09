@@ -119,12 +119,12 @@ Route::any("/unpublishroad", "RoadController@unpublishRoad");
 //*******************************道路坐标***************************************
 Route::any("/roadcoordinates", "RoadCoordinateController@index");
 Route::any("/addroadcoordinate", "RoadCoordinateController@addRoadCoordinate");
-Route::any("/addroadcoordinatesave", "RoadCoordinateController@addRoadCoordinate");
+Route::any("/addroadcoordinatesave", "RoadCoordinateController@addRoadCoordinateSave");
 Route::any("/importroadcoordinate", "RoadCoordinateController@importRoadCoordinate");
 Route::any("/importroadcoordinatesave", "RoadCoordinateController@importRoadCoordinateSave");
 Route::any("/showroadcoordinate", "RoadCoordinateController@showRoadCoordinate");
 Route::any("/editroadcoordinate", "RoadCoordinateController@editRoadCoordinate");
-Route::any("/editroadcoordinatesave", "RoadCoordinateController@editRoadCoordinate");
+Route::any("/editroadcoordinatesave", "RoadCoordinateController@editRoadCoordinateSave");
 Route::any("/deleteroadcoordinate", "RoadCoordinateController@deleteRoadCoordinate");
 Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordinate");
 Route::any("/updateroadcoordinate", "RoadCoordinateController@updateRoadCoordinate");

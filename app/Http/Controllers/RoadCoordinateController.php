@@ -68,7 +68,29 @@ class RoadCoordinateController extends Controller
     }
 
     function editRoadCoordinateSave(Request $request){
+        if($request->coordid == ""){
+            return "缺少参数！";
+        }
         
+        $coordid = $request->coordid;
+        
+        $coords = RoadCoordinate::where("id", $coordid)
+                ->get();
+        
+        if(count($coords) == 0){
+            return "信息不存在！";
+        }
+        
+        $coords[0]->lanetype = $request->lanetype ;
+        $coords[0]->laneno = $request->laneno ;
+        $coords[0]->angle = $request->angle ;        
+        $coords[0]->lanecount = $request->lanecount ;
+        $coords[0]->lanewidth = $request->lanewidth ;
+        $coords[0]->emergencylane = $request->emergencylane ;
+        $coords[0]->save() ;
+        
+//        echo "llll";
+        return redirect("editroadcoordinate?coordid=" . $coordid);
     }    
     
     function deleteRoadCoordinate(Request $request){
