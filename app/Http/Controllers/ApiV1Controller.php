@@ -939,7 +939,7 @@ class ApiV1Controller extends Controller
                         "roadcoordinates.lat1", "roadcoordinates.lng1", "roadcoordinates.lat2", "roadcoordinates.lng2", 
                         "roadcoordinates.lat3", "roadcoordinates.lng3", "roadcoordinates.lat4", "roadcoordinates.lng4",
                         "roadcoordinates.maxlat", "roadcoordinates.maxlng", "roadcoordinates.minlat", "roadcoordinates.minlng", "roadcoordinates.lat", "roadcoordinates.lng",
-                        "roadcoordinates.angle", "roadcoordinates.distance")
+                        "roadcoordinates.angle", "roadcoordinates.distance", "roadcoordinates.lanewidth", "roadcoordinates.lanecount", "roadcoordinates.emergencylane")
                 ->leftjoin("roads as r", "r.id", "=", "roadcoordinates.roadid")
                 ->get();
         
