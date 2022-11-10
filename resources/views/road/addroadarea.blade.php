@@ -310,6 +310,117 @@ function onBdmapChange(obj){
     }
 }
 
+@if(isset($area))
+function addRoadSectionOnMapByDbData(){
+    var pt1 = new TLngLat({{$area->lng1}}, {{$area->lat1}});
+    map.centerAndZoom(pt1, 18);
+    if(p1Marker == null){
+        p1Marker = new TMarker(pt1, {
+            icon: p1Icon
+        });
+        map.addOverLay(p1Marker);   
+    } else {
+        p1Marker.setLngLat(pt1);
+    }
+    p1Marker.enableDragging();
 
+    var pt2 = new TLngLat({{$area->lng2}}, {{$area->lat2}});
+    if(p2Marker == null){
+        p2Marker = new TMarker(pt2, {
+            icon: p2Icon
+        });
+        p2Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p2Marker);    
+    } else {
+        p2Marker.setLngLat(pt2);
+    }
+
+    var pt3 = new TLngLat({{$area->lng3}}, {{$area->lat3}});
+    if(p3Marker == null){
+        p3Marker = new TMarker(pt3, {
+            icon: p3Icon
+        });
+        p3Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p3Marker);  
+    } else {
+        p3Marker.setLngLat(pt3);
+    }
+
+    var pt4 = new TLngLat({{$area->lng4}}, {{$area->lat4}});
+    if(p4Marker == null){
+        p4Marker = new TMarker(pt4, {
+            icon: p4Icon
+        });
+        p4Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p4Marker);     
+    } else {
+        p4Marker.setLngLat(pt4);
+    }
+    
+    var pt5 = new TLngLat({{$area->lng}}, {{$area->lat}});
+    if(p5Marker == null){
+        p5Marker = new TMarker(pt5, {
+            icon: p5Icon
+        });
+        p5Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p5Marker); 
+    } else {
+        p5Marker.setLngLat(pt5);
+    }
+    
+    var pt6 = new TLngLat({{$area->lng}}, {{$area->lat}});
+    if(p6Marker == null){
+        p6Marker = new TMarker(pt6, {
+            icon: p6Icon
+        });
+        p6Marker.enableDragging();
+        // 将标注添加到地图
+        map.addOverLay(p6Marker);
+    } else {
+        p6Marker.setLngLat(pt6);
+    }
+    
+    p5p6Points = [pt6, pt5];
+    if(p5p6Line == null){
+        p5p6Line = new TPolyline(p5p6Points, {strokeColor:"blue", strokeWeight:3, strokeOpacity:0.8});
+        map.addOverLay(p5p6Line);
+    } else {
+        p5p6Line.setLngLats(p5p6Points);
+    }
+    
+    TEvent.addListener(p1Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });
+    
+    TEvent.addListener(p2Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });
+    
+    TEvent.addListener(p3Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });
+    
+    TEvent.addListener(p4Marker, "dragend", function(p){
+       drawP1234Line(); 
+    });    
+    
+    TEvent.addListener(p5Marker, "dragend", function(p){
+        p5p6Points = [new TLngLat(p6Marker.getLngLat().getLng(), p6Marker.getLngLat().getLat()), 
+                        new TLngLat(p5Marker.getLngLat().getLng(), p5Marker.getLngLat().getLat())];
+        p5p6Line.setLngLats(p5p6Points);            
+    });
+    
+    TEvent.addListener(p6Marker, "dragend", function(p){
+        p5p6Points = [new TLngLat(p6Marker.getLngLat().getLng(), p6Marker.getLngLat().getLat()), 
+                        new TLngLat(p5Marker.getLngLat().getLng(), p5Marker.getLngLat().getLat())];
+        p5p6Line.setLngLats(p5p6Points);            
+    });    
+}    
+addRoadSectionOnMapByDbData();    
+@endif
 </script>    
 @endsection
