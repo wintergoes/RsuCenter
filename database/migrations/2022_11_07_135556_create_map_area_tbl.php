@@ -17,6 +17,9 @@ class CreateMapAreaTbl extends Migration
             $table->increments('id');
             $table->integer("roadid");
             $table->integer("areatype")->default(0);
+            $table->string("areaparam1", 100)->default("");
+            $table->string("areaparam2", 100)->default("");
+            $table->string("areaparam3", 100)->default("");
             $table->String("areaname", 100)->default("");
             $table->double("lat1");
             $table->double("lng1");

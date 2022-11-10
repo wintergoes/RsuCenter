@@ -132,8 +132,10 @@ Route::any("/addroadsectionmanually", "RoadCoordinateController@addRoadSectionMa
 
 Route::any("/showroadareas", "MapAreaController@index");
 Route::any("/addroadarea", "MapAreaController@addRoadArea");
-Route::any("/updateroadarea", "MapAreaController@updateRoadArea");
 Route::any("/addroadareasave", "MapAreaController@addRoadAreaSave");
+Route::any("/editroadarea", "MapAreaController@editRoadArea");
+Route::any("/editroadareasave", "MapAreaController@editRoadAreaSave");
+Route::any("/updateroadarea", "MapAreaController@updateRoadArea");
 Route::any("/deleteroadarea", "MapAreaController@deleteRoadArea");
 
 //*******************************Apis***************************************

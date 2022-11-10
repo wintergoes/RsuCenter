@@ -129,6 +129,9 @@ class MapAreaController extends Controller
         $area = new MapArea();
         $area->areatype = $request->areatype;
         $area->areaname = $request->areaname;
+        $area->areaparam1 = $request->areaparam1;
+        $area->areaparam2 = $request->areaparam2;
+        $area->areaparam3 = $request->areaparam3;
         $area->roadid = $roadid;
         $area->lat1 = $p1lat;
         $area->lng1 = $p1lng;
@@ -152,7 +155,62 @@ class MapAreaController extends Controller
         
         $arr = array("retcode"=>ret_success);
         return json_encode($arr);        
-    }  
+    }
+    
+    function editRoadArea(Request $request){
+        if($request->areaid == ""){
+            echo "缺少参数！";
+            return;
+        }
+        
+        $areas = MapArea::where("id", $request->areaid)
+                ->get();
+        
+        if(count($areas) == 0){
+            echo "区域信息不存在！";
+            return;
+        }
+        
+        $default_lat = env("home_default_lat", 36.183753);
+        $default_lng = env("home_default_lng", 120.339217);
+        $default_zoom = env("home_map_defaultzoom", 15);        
+        
+        return view("/road/addroadarea", [
+            "area"=>$areas[0],
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,     
+        ]);
+    }
+    
+    function editRoadAreaSave(Request $request){
+        if($request->areaid == ""){
+            echo "缺少参数！";
+            return;
+        }
+        
+        $areas = MapArea::where("id", $request->areaid)
+                ->get();
+        
+        if(count($areas) == 0){
+            echo "区域信息不存在！";
+            return;
+        }
+        
+        $area = $areas[0];
+        
+        $roadid = $request->roadid; 
+        
+        $area->areatype = $request->areatype;
+        $area->areaname = $request->areaname;
+        $area->areaparam1 = $request->areaparam1;
+        $area->areaparam2 = $request->areaparam2;
+        $area->areaparam3 = $request->areaparam3;
+        $area->roadid = $roadid;
+        $area->save();
+        
+        return redirect("showroadareas?roadid=" . $roadid);         
+    }    
     
     function updateRoadArea(Request $request){
         if($request->areaid == ""){

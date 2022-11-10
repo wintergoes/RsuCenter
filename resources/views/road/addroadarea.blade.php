@@ -16,6 +16,11 @@ function submitData(){
         return;
     } 
 
+    @if(isset($area))
+    $("#form1").submit();
+    return;
+    @endif
+
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
     }); 
@@ -50,7 +55,15 @@ function submitData(){
 
 <div class="row">
     <div class="col col-lg-9 mx-auto">
+    @if(isset($area))
+    <form class="form-horizontal" id="form1" method="post" action="/editroadareasave">
+    @else
     <form class="form-horizontal" id="form1" method="post" action="/addroadareasave">
+    @endif
+        @if(isset($area))
+        <input type="hidden" name="roadid" value="{{$area->roadid}}">
+        <input type="hidden" name="areaid" value="{{$area->id}}">
+        @endif
         {{ csrf_field() }}      
         <div>
             <!-- Display Validation Errors -->
@@ -61,8 +74,9 @@ function submitData(){
             <label for="mobile" class="col-sm-2 col-form-label">选择标志</label>
             <div class="col-sm-6">
                 <select id="areatype" name="areatype" class="form-select">
-                    <option class="form-control" value="1" >收费站</option>
-                    <option class="form-control" value="2" >交叉路口</option>
+                    <option class="form-control" value="1" {{isset($area) && $area->areatype == 1 ? "selected" : ""}}>收费站</option>
+                    <option class="form-control" value="2" {{isset($area) && $area->areatype == 2 ? "selected" : ""}}>交叉路口</option>
+                    <option class="form-control" value="3" {{isset($area) && $area->areatype == 3 ? "selected" : ""}}>分流路口</option>
                 </select>
             </div>                                   
         </div>
@@ -70,9 +84,46 @@ function submitData(){
         <div class="row mb-3">
             <label for="tsname" class="col-sm-2 col-form-label">区域名称</label>
             <div class="col-sm-6">
+                @if(isset($area))
+                <input type="text" class="form-control" id="areaname" name="areaname" value="{{$area->areaname}}" placeholder="请输入区域名称">
+                @else
                 <input type="text" class="form-control" id="areaname" name="areaname" placeholder="请输入区域名称">
+                @endif
             </div>
         </div>
+        
+        <div class="row mb-3">
+            <label for="tsname" class="col-sm-2 col-form-label">参数1</label>
+            <div class="col-sm-6">
+                @if(isset($area))
+                <input type="text" class="form-control" id="areaparam1" name="areaparam1" value="{{$area->areaparam1}}" placeholder="请输入参数1">
+                @else
+                <input type="text" class="form-control" id="areaparam1" name="areaparam1" placeholder="请输入参数1">
+                @endif
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="tsname" class="col-sm-2 col-form-label">参数2</label>
+            <div class="col-sm-6">
+                @if(isset($area))
+                <input type="text" class="form-control" id="areaparam2" name="areaparam2" value="{{$area->areaparam2}}" placeholder="请输入参数2">
+                @else
+                <input type="text" class="form-control" id="areaparam2" name="areaparam2" placeholder="请输入参数2">
+                @endif
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label for="tsname" class="col-sm-2 col-form-label">参数3</label>
+            <div class="col-sm-6">
+                @if(isset($area))
+                <input type="text" class="form-control" id="areaparam3" name="areaparam3" value="{{$area->areaparam3}}" placeholder="请输入参数3">
+                @else
+                <input type="text" class="form-control" id="areaparam3" name="areaparam3" placeholder="请输入参数3">
+                @endif
+            </div>
+        </div>        
         
         <div class="row mb-3" id="bdmap_ctrl_row">
             <table>
@@ -258,5 +309,7 @@ function onBdmapChange(obj){
         map.setMapType(TMAP_SATELLITE_MAP ); 
     }
 }
+
+
 </script>    
 @endsection

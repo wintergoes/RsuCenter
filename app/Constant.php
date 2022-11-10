@@ -26,6 +26,7 @@ define("coord_type_bd09", 2);
 define("area_type_undefined", 0);
 define("area_type_tollstation", 1);
 define("area_type_junction", 2);
+define("area_type_dversion_junction", 3);
 
 define("clockin_goto_work", 1);
 define("clockin_gooff_work", 1);
