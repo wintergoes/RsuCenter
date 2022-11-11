@@ -255,7 +255,7 @@ class RoadCoordinateController extends Controller
                 if($lng > $lastlng){
                     $angle = 90;
                 } else {
-                    $angle = -90;
+                    $angle = 270;
                 }
             }
             
@@ -572,7 +572,7 @@ class RoadCoordinateController extends Controller
             if($p5lng > $p6lng){
                 $angle = 90;
             } else {
-                $angle = -90;
+                $angle = 270;
             }
         }
 
