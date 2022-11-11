@@ -5,6 +5,9 @@
 
 <script>
 function submitData(){
+    if($("#lanecount").val() === ""){
+        $("#lanecount").val(0);
+    }
 
     $('#form1').submit();
 }
@@ -132,9 +135,9 @@ function submitData(){
             <label for="laneno" class="col-sm-1 col-form-label">车道号</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="laneno" name="laneno" value="{{$coord->laneno}}">
+                <input type="number" class="form-control" id="laneno" name="laneno" value="{{$coord->laneno}}">
                 @else
-                <input type="text" class="form-control" id="laneno" name="laneno" value="" placeholder="">
+                <input type="number" class="form-control" id="laneno" name="laneno" value="" placeholder="">
                 @endif
             </div>            
         </div>        
@@ -152,9 +155,9 @@ function submitData(){
             <label for="laneno" class="col-sm-1 col-form-label">车道宽度(厘米)</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="lanewidth" name="lanewidth" value="{{$coord->lanewidth}}">
+                <input type="number" class="form-control" id="lanewidth" name="lanewidth" value="{{$coord->lanewidth}}">
                 @else
-                <input type="text" class="form-control" id="lanewidth" name="lanewidth" value="" placeholder="">
+                <input type="number" class="form-control" id="lanewidth" name="lanewidth" value="" placeholder="">
                 @endif
             </div>  
         </div> 
@@ -163,18 +166,18 @@ function submitData(){
             <label for="angle" class="col-sm-2 col-form-label">车道数量</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="lanecount" name="lanecount" value="{{$coord->lanecount}}">
+                <input type="number" class="form-control" id="lanecount" name="lanecount" value="{{$coord->lanecount}}">
                 @else
-                <input type="text" class="form-control" id="lanecount" name="lanecount" value="" placeholder="">
+                <input type="number" class="form-control" id="lanecount" name="lanecount" value="" placeholder="">
                 @endif
             </div>
             
             <label for="laneno" class="col-sm-1 col-form-label">应急车道</label>
             <div class="col-sm-3">
                 @if(isset($coord))
-                <input type="text" class="form-control" id="emergencylane" name="emergencylane" value="{{$coord->emergencylane}}">
+                <input type="number" class="form-control" id="emergencylane" name="emergencylane" value="{{$coord->emergencylane}}">
                 @else
-                <input type="text" class="form-control" id="emergencylane" name="emergencylane" value="" placeholder="">
+                <input type="number" class="form-control" id="emergencylane" name="emergencylane" value="" placeholder="">
                 @endif
             </div>  
         </div>         

@@ -33,7 +33,8 @@ function submitData(){
                 "&p4lat=" + p4Marker.getLngLat().getLat() + "&p4lng=" + p4Marker.getLngLat().getLng() +
                 "&p5lat=" + p5Marker.getLngLat().getLat() + "&p5lng=" + p5Marker.getLngLat().getLng() +
                 "&p6lat=" + p6Marker.getLngLat().getLat() + "&p6lng=" + p6Marker.getLngLat().getLng() +
-                "&roadid=" + getUrlParam("roadid") + "&areaname=" + $("#areaname").val() + "&areatype=" + $("#areatype").find("option:selected").val() ,
+                "&roadid=" + getUrlParam("roadid") + "&areaname=" + $("#areaname").val() + "&areatype=" + $("#areatype").find("option:selected").val() +
+                "&areaparam1=" + $("#areaparam1").val() + "&areaparam2=" + $("#areaparam2").val() + "&areaparam3=" + $("#areaparam3").val(),
         dataType: "json",
         success: function (data) {
             if(data.retcode === 1){
