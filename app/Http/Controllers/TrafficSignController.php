@@ -209,7 +209,7 @@ class TrafficSignController extends Controller
                 $endminute = 527040;
             }
             
-            $signPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$sign->tslng, "lat"=>$sign->tslat)), "offsetV"=>null);
+            $signPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$sign->tslng * 1000000, "lat"=>$sign->tslat * 1000000)), "offsetV"=>null);
             $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
             
             $winfoitem = array("rtsId"=>$sign->id, "signType"=>$sign->tscid, 
@@ -217,7 +217,7 @@ class TrafficSignController extends Controller
             array_push($rtes, $winfoitem);
         }
         
-        $refpos = array("lat"=>floatval($rsus[0]->RSU_lat), "long"=>floatval($rsus[0]->RSU_lng), "elevation"=>0);
+        $refpos = array("lat"=>floatval($rsus[0]->RSU_lat * 1000000), "long"=>floatval($rsus[0]->RSU_lng * 1000000), "elevation"=>0);
         $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>$selRsu, "refPos"=>$refpos, "rtes"=>null, "rtss"=>$rtes);
         $arr = array("type"=>"rts", "value"=>$rsivalue);
         
