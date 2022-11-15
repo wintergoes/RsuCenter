@@ -56,9 +56,9 @@
                         <td>{{$radar->lanenumber}}</td>
                         <td>{{$radar->lanewidth == "" ? "-" : $radar->lanewidth}}</td>
                         @if($radar->lng == 0 || $radar->lat == 0)
-                        <td>未设置</td>
+                        <td align='center'>未设置</td>
                         @else
-                        <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;"  data-bs-toggle="modal" onclick="showRadarPosition('{{$radar->devicecode}}', {{$radar->lng}}, {{$radar->lat}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px; font-size: 14px;text-decoration:underline; color:blue;" data-bs-toggle="modal" onclick="showRadarPosition('{{$radar->devicecode}}', {{$radar->lng}}, {{$radar->lat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
                         <td>{{$radar->status == 1 ? "有效" : "无效"}}</td>                        
                         <td >{{$radar->communicationtime}}</td>

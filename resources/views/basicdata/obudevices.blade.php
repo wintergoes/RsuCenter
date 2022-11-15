@@ -41,9 +41,9 @@
                         <td>{{$obu->obulocalid}}</td>
                         <td>{{$obu->obustatus == 1 ? "有效" : "无效"}}</td>
                         @if($obu->obulongtitude == 0 || $obu->obulatitude == 0)
-                        <td>未设置</td>
+                        <td align='center'>未设置</td>
                         @else
-                        <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showObuPosition('{{$obu->obuid}}', {{$obu->obulongtitude}}, {{$obu->obulatitude}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        <td><button type="button" class="btn btn-transparent" style="font-size: 14px;text-decoration:underline; color:blue;" data-bs-toggle="modal" onclick="showObuPosition('{{$obu->obuid}}', {{$obu->obulongtitude}}, {{$obu->obulatitude}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
                         <td >{{$obu->created_at}}</td>
                         <td>
