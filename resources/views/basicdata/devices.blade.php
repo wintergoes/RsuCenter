@@ -14,19 +14,20 @@
     }
 </script>
 
-<h5 class="card-title">用户列表</h5>
+<h5 class="card-title">RSU设备列表</h5>
 <hr>
-
+<?php
+$commonctrl = new \App\Http\Controllers\CommonController();
+?>
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
         @if (count($devices) > 0)        
         <div class="col-sm-auto">           
-            <table class="table mb-0 table-hover table-bordered" >
+            <table class="table mb-0 table-hover table-bordered text-center" >
                 <thead>
                     <tr role="row">
-                        <th >ID</th>
                         <th >设备编号</th>
-                        <th >状态</th>
+                        <th >设备状态</th>
                         <th >坐标</th>
                         <th >通讯时间</th>
                         <th >创建日期</th>
@@ -36,102 +37,21 @@
                 <tbody>
                     @foreach($devices as $device)
                     <?php
-                    $errstr = "";
-                    if($device->cfg_f_dev_ID == 1){
-                        $errstr .= "，设备编号配置文件丢失"  ;
-                    } else if($device->cfg_f_dev_SF == 1){
-                        $errstr .= "，设备版本号配置文件丢失"  ;
-                    }else if($device->cfg_f_dev_HD == 1){
-                        $errstr .= "，设备硬件版本号配置文件丢失"  ;
-                    }else if($device->cfg_f_radar_IP == 1){
-                        $errstr .= "，雷视机IP地址配置文件丢失"  ;
-                    }else if($device->cfg_f_dev_POS == 1){
-                        $errstr .= "，设备坐标位置配置文件丢失"  ;
-                    }else if($device->cfg_f_monitor_IP == 1){
-                        $errstr .= "，设备上报监控信息主机IP配置文件丢失"  ;
-                    }else if($device->cfg_f_dev_IP == 1){
-                        $errstr .= "，设备IP配置文件丢失"  ;
-                    }else if($device->cfg_f_AID == 1){
-                        $errstr .= "，设备启动AID配置文件丢失"  ;
-                    }else if($device->cfg_f_resv_AID == 1){
-                        $errstr .= "，设备启动AID接收配置文件丢失"  ;
-                    }else if($device->cfg_f_RSI_HZ == 1){
-                        $errstr .= "，设备发射RSI频率配置文件丢失"  ;
-                    }else if($device->cfg_f_RSM_HZ == 1){
-                        $errstr .= "，设备发射RSM频率配置文件丢失"  ;
-                    }else if($device->cfg_f_RTE_HZ == 1){
-                        $errstr .= "，设备发射RTE频率配置文件丢失"  ;
-                    }else if($device->cfg_f_RTS_HZ == 1){
-                        $errstr .= "，设备发射RTS频率配置文件丢失"  ;
-                    }else if($device->cfg_f_SPAT_HZ == 1){
-                        $errstr .= "，设备发射SPAT频率配置文件丢失"  ;
-                    }else if($device->cfg_f_MAP_HZ == 1){
-                        $errstr .= "，设备发射MAP频率配置文件丢失"  ;
-                    }else if($device->cfg_f_update_START == 1){
-                        $errstr .= "，设备升级后动作配置文件丢失"  ;
-                    }else if($device->cfg_f_OTA_1 == 1){
-                        $errstr .= "，设备OTA升级文件1丢失"  ;
-                    }else if($device->cfg_f_OTA_2 == 1){
-                        $errstr .= "，设备OTA升级文件2丢失"  ;
-                    }else if($device->cfg_f_OTA_3 == 1){
-                        $errstr .= "，设备OTA升级文件3丢失"  ;
-                    }else if($device->cfg_f_OTA_4 == 1){
-                        $errstr .= "，设备OTA升级文件4丢失"  ;
-                    }else if($device->cfg_f_OTA_5 == 1){
-                        $errstr .= "，设备OTA升级文件5丢失"  ;
-                    }else if($device->cfg_f_OTA_6 == 1){
-                        $errstr .= "，设备OTA升级文件6丢失"  ;
-                    }else if($device->cfg_f_OTA_7 == 1){
-                        $errstr .= "，设备OTA升级文件7丢失"  ;
-                    }else if($device->cfg_f_OTA_VERIFY == 1){
-                        $errstr .= "，设备OTA验证文件丢失"  ;
-                    }else if($device->cfg_m_MF == 1){
-                        $errstr .= "，设备主模块下线"  ;
-                    }else if($device->cfg_m_REPROT == 1){
-                        $errstr .= "，设备汇报模块下线"  ;
-                    }else if($device->cfg_m_RRADAR == 1){
-                        $errstr .= "，雷达数据获取模块下线"  ;
-                    }else if($device->cfg_m_FRADAR == 1){
-                        $errstr .= "，RSM雷达数据发射模块下线"  ;
-                    }else if($device->cfg_m_OTA == 1){
-                        $errstr .= "，OTA升级模块下线"  ;
-                    }else if($device->cfg_m_RELAYRSM == 1){
-                        $errstr .= "，cfg_m_RELAYRSM"  ;
-                    }else if($device->cfg_m_RELAYRSI == 1){
-                        $errstr .= "，cfg_m_RELAYRSI"  ;
-                    }else if($device->cfg_c_GPS == 1){
-                        $errstr .= "，GPS无法连接"  ;
-                    }else if($device->cfg_c_ONLINE == 1){
-                        $errstr .= "，设备无法上网"  ;
-                    }else if($device->cfg_c_RADAR == 1){
-                        $errstr .= "，设备无法连接雷视设备"  ;
-                    }else if($device->cfg_c_MEC == 1){
-                        $errstr .= "，设备无法连接MEC"  ;
-                    }
-                    
-                    //echo $errstr;
-                    if($errstr == "，"){
-                        $errstr = "";
-                    } else {
-                        if($errstr != ""){
-                            $errstr = substr($errstr, 3);
-                        }
-                    }
+                    $errstr = $commonctrl->getRsuError($device, '<font color=red>', '</font><br/>');
                     ?>
                     <tr>
-                        <td>{{$device->id}}</td>
-                        <td>{{$device->devicecode}}</td>
+                        <td align='left'>{{$device->devicecode}}</td>
                         @if ($errstr != "")
-                        <td><a href="javascript:alert('{{$errstr}}');" >{{$device->score == "" ? "-" : $device->score}}</a></td>
+                        <td ><button type="button" class="btn btn-transparent" style="font-size: 14px;text-decoration:underline;" data-bs-toggle="modal" onclick='showRsuError("{{$device->devicecode}}", {{$device->score}}, "{!!$errstr!!}");' data-bs-target="#rsuErrorInfo">{!! $commonctrl->getRsuScoreStr($device->score) !!}</input></td>
                         @else
-                        <td>{{$device->score == "" ? "-" : $device->score}}</td>
+                        <td >{!! $commonctrl->getRsuScoreStr($device->score) !!}</td>
                         @endif
                         @if($device->rsulat ==0 || $device->rsulng == 0)
-                        <td>未设置</td>
+                        <td  >未设置</td>
                         @else
-                        <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showDevicePosition('{{$device->devicecode}}', {{$device->rsulng}}, {{$device->rsulat}})" data-bs-target="#exampleWarningModal">查看</button></td>
+                        <td><button type="button" class="btn btn-transparent" style="font-size: 14px;text-decoration:underline; color:blue;" data-bs-toggle="modal" onclick="showDevicePosition('{{$device->devicecode}}', {{$device->rsulng}}, {{$device->rsulat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
-                        <td>{{$device->con_datetime}}</td>
+                        <td>{{$device->con_datetime == "" ? "-" : $device->con_datetime}}</td>
                         <td>{{$device->created_at}}</td>
                         <td>
                              <div class="dropdown">
@@ -171,6 +91,27 @@
                             </div>
                     </div>
             </div>
+            
+            <div class="modal fade" id="rsuErrorInfo" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" >
+                            <div class="modal-content bg-light" >
+                                <div class="card radius-6 border-1">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <h6 class="mb-0 card-title">
+                                                    <i class="bx bx-devices"  id="rsuErrorTitle">
+                                                    </i>
+                                                    
+                                                </h6>
+                                            </div> 
+                                        </div> 
+                                        <div class="col-sm-12" id="rsuErrorContent" style='padding: 10px;'></div>    
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </div>            
         </div>
         @else
         <div class="col-sm-12">
@@ -214,6 +155,11 @@ function showDevicePosition(dcode, lng, lat){
         map.setCenter(pt);        
     });
 
+}
+
+function showRsuError(devicecode, score, errorstr){
+    $("#rsuErrorTitle").text(" [" + devicecode + "] 错误详情(" + score + ")");
+    $("#rsuErrorContent").html(errorstr);
 }
 </script>
 @endsection

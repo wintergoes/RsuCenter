@@ -342,4 +342,254 @@ class CommonController extends Controller
         
         return $resstr;
     }
+    
+    function getRsuError($device, $prefix, $suffix){
+        $errstr = "";
+        if($device->cfg_f_wfi_ID == 1){
+            $errstr .= $prefix . "wifi网络设备名称配置文件丢失"  . $suffix;
+        } 
+        
+        if($device->cfg_f_wfi_CID == 1){
+            $errstr .= $prefix . "wifi连接设备配置文件丢失"  . $suffix;
+        }        
+        
+        if($device->cfg_f_dev_ID == 1){
+            $errstr .= $prefix . "设备编号配置文件丢失"  . $suffix;
+        } 
+        
+        if($device->cfg_f_dev_SF == 1){
+            $errstr .= $prefix . "设备版本号配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_dev_HD == 1){
+            $errstr .= $prefix . "设备硬件版本号配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_radar_IP == 1){
+            $errstr .= $prefix . "雷视机IP地址配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_dev_POS == 1){
+            $errstr .= $prefix . "设备坐标位置配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_monitor_IP == 1){
+            $errstr .= $prefix . "设备上报监控信息主机IP配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_dev_IP == 1){
+            $errstr .= $prefix . "设备IP配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_AID == 1){
+            $errstr .= $prefix . "设备启动AID配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_resv_AID == 1){
+            $errstr .= $prefix . "设备启动AID接收配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_RSI_HZ == 1){
+            $errstr .= $prefix . "设备发射RSI频率配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_RSM_HZ == 1){
+            $errstr .= $prefix . "设备发射RSM频率配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_RTE_HZ == 1){
+            $errstr .= $prefix . "设备发射RTE频率配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_RTS_HZ == 1){
+            $errstr .= $prefix . "设备发射RTS频率配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_SPAT_HZ == 1){
+            $errstr .= $prefix . "设备发射SPAT频率配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_MAP_HZ == 1){
+            $errstr .= $prefix . "设备发射MAP频率配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_update_START == 1){
+            $errstr .= $prefix . "设备升级后动作配置文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_1 == 1){
+            $errstr .= $prefix . "设备OTA升级文件1丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_2 == 1){
+            $errstr .= $prefix . "设备OTA升级文件2丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_3 == 1){
+            $errstr .= $prefix . "设备OTA升级文件3丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_4 == 1){
+            $errstr .= $prefix . "设备OTA升级文件4丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_5 == 1){
+            $errstr .= $prefix . "设备OTA升级文件5丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_6 == 1){
+            $errstr .= $prefix . "设备OTA升级文件6丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_7 == 1){
+            $errstr .= $prefix . "设备OTA升级文件7丢失"  . $suffix;
+        }
+        
+        if($device->cfg_f_OTA_VERIFY == 1){
+            $errstr .= $prefix . "设备OTA验证文件丢失"  . $suffix;
+        }
+        
+        if($device->cfg_m_MF == 1){
+            $errstr .= $prefix . "设备主模块下线"  . $suffix;
+        }
+        
+        if($device->cfg_m_REPROT == 1){
+            $errstr .= $prefix . "设备汇报模块下线"  . $suffix;
+        }
+        
+        if($device->cfg_m_RBSM == 1){
+            $errstr .= $prefix . "BSM信息获取模块下线"  . $suffix;
+        }      
+        
+        if($device->cfg_m_RRSM == 1){
+            $errstr .= $prefix . "RSM信息获取模块下线"  . $suffix;
+        }
+        
+        if($device->cfg_m_WIFI == 1){
+            $errstr .= $prefix . "wifi连接模块下线"  . $suffix;
+        }          
+        
+        if($device->cfg_m_FBSM == 1){
+            $errstr .= $prefix . "BSM信息发射模块下线"  . $suffix;
+        }          
+        
+        if($device->cfg_m_RRADAR == 1){
+            $errstr .= $prefix . "雷达数据获取模块下线"  . $suffix;
+        }
+        
+        if($device->cfg_m_FRADAR == 1){
+            $errstr .= $prefix . "RSM雷达数据发射模块下线"  . $suffix;
+        }
+        
+        if($device->cfg_m_OTA == 1){
+            $errstr .= $prefix . "OTA升级模块下线"  . $suffix;
+        }
+        
+        if($device->cfg_m_RELAYRSM == 1){
+            $errstr .= $prefix . "cfg_m_RELAYRSM"  . $suffix;
+        }
+        
+        if($device->cfg_m_RELAYRSI == 1){
+            $errstr .= $prefix . "cfg_m_RELAYRSI"  . $suffix;
+        }
+        
+        if($device->cfg_c_GPS == 1){
+            $errstr .= $prefix . "GPS无法连接"  . $suffix;
+        }
+        
+        if($device->cfg_c_ONLINE == 1){
+            $errstr .= $prefix . "设备无法上网"  . $suffix;
+        }
+        
+        if($device->cfg_c_RADAR == 1){
+            $errstr .= $prefix . "设备无法连接雷视设备"  . $suffix;
+        }
+        
+        if($device->cfg_c_MOTION == 1){
+            $errstr .= $prefix . "设备无法连接运动设备"  . $suffix;
+        }        
+        
+        if($device->cfg_c_MEC == 1){
+            $errstr .= $prefix . "设备无法连接MEC"  . $suffix;
+        }
+        
+        if($device->cfg_f_OBU_CLOUD_KEY == 1){
+            $errstr .= $prefix . "设备位置鉴权字符串文件丢失"  . $suffix;
+        }     
+        
+        if($device->cfg_f_OBU_CLOUD_PORT == 1){
+            $errstr .= $prefix . "设备位置端口文件丢失"  . $suffix;
+        }   
+        
+        if($device->cfg_f_BSM_CLOUD_KEY == 1){
+            $errstr .= $prefix . "设备BSM鉴权字符串文件丢失"  . $suffix;
+        }     
+        
+        if($device->cfg_f_BSM_CLOUD_PORT == 1){
+            $errstr .= $prefix . "设备BSM端口文件丢失"  . $suffix;
+        } 
+
+        if($device->cfg_f_RSM_CLOUD_KEY == 1){
+            $errstr .= $prefix . "设备RSM鉴权字符串文件丢失"  . $suffix;
+        }     
+        
+        if($device->cfg_f_RSM_CLOUD_PORT == 1){
+            $errstr .= $prefix . "设备RSM端口文件丢失"  . $suffix;
+        } 
+
+        if($device->cfg_f_RSI_CLOUD_KEY == 1){
+            $errstr .= $prefix . "设备RSI鉴权字符串文件丢失"  . $suffix;
+        }     
+        
+        if($device->cfg_f_RSI_CLOUD_PORT == 1){
+            $errstr .= $prefix . "设备RSI端口文件丢失"  . $suffix;
+        } 
+        
+        if($device->cfg_f_zabbix_IP == 1){
+            $errstr .= $prefix . "设备连接zabbix文件丢失"  . $suffix;
+        } 
+        
+        if($device->cfg_f_ROI == 1){
+            $errstr .= $prefix . "设备设置ROI区域文件丢失"  . $suffix;
+        } 
+
+        if($device->cfg_m_CLOUD == 1){
+            $errstr .= $prefix . "设备云服务连接模块下线"  . $suffix;
+        } 
+
+        if($device->cfg_m_CURL == 1){
+            $errstr .= $prefix . "设备雷视触发模块下线"  . $suffix;
+        } 
+
+        if($device->cfg_m_RELAYRSI == 1){
+            $errstr .= $prefix . "设备RSI接收模块下线"  . $suffix;
+        } 
+
+        if($device->cfg_c_ZABBIX == 1){
+            $errstr .= $prefix . "设备无法连接zabbix服务"  . $suffix;
+        }          
+
+        //echo $errstr;
+        if($errstr == $prefix . $suffix){
+            $errstr = "";
+        } else {
+//            if($errstr != ""){
+//                $errstr = substr($errstr, 3);
+//            }
+        }
+        
+        return $errstr;
+    }
+    
+    function getRsuScoreStr($score){
+        if($score == 0){
+            return "<font color=green>正常</font>";
+        } else if($score > 0 && $score <= 30){
+            return "<font color=Coral>轻微错误</font>";
+        } else if($score > 30 && $score <= 50){
+            return "<font color=OrangeRed>中等错误</font>";
+        } else {
+            return "<font color=DarkRed>严重错误</font>";
+        }
+    }
 }

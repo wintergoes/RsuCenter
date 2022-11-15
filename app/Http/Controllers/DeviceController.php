@@ -16,6 +16,19 @@ class DeviceController extends Controller{
     }
     
     public function index(Request $request){
+        $rsustatus = DB::select("select device_ID from RSU_status");
+        foreach($rsustatus as $rsu){
+            $checkdevices = Device::where("devicecode", $rsu->device_ID)
+                    ->select("id")
+                    ->get();
+            
+            if(count($checkdevices) == 0){
+                $newdevice = new Device();
+                $newdevice->devicecode = $rsu->device_ID;
+                $newdevice->save();
+            }
+        }
+        
         $devices = Device::orderBy('devices.created_at', 'asc')
                 ->select('devices.id',  'devices.devicecode', 'devices.created_at',
                         'devices.rsulat', 'devices.rsulng',
