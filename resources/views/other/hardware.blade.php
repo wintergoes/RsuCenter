@@ -169,7 +169,7 @@
                             @foreach($updateres as $res)
                             @if(($res->devicetype == 1 && strpos($hw->device_ID, "v2x")===0) ||
                                 ($res->devicetype == 2 && strpos($hw->device_ID, "RSU")===0))
-                            <option value="{{$res->id}}" {{$hw->resource_id == $res->id ? 'selected' : ""}}>{{$res->resource_name}}</option>
+                            <option value="{{$res->resource_id}}" {{$hw->resource_id == $res->resource_id ? 'selected' : ""}}>{{$res->resource_name}}</option>
                             @endif
                             @endforeach
                             </select>
