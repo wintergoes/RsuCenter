@@ -80,6 +80,7 @@ $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 $l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));
 $l2_devices = in_array($currentpath, array("devices", "editdevice", "rsusettings"));
 $l2_obudevices = in_array($currentpath, array("obudevices"));
+$l2_obuhardwares = in_array($currentpath, array("obuhardwares"));
 $l2_radardevices = in_array($currentpath, array("radardevices", "addradardevice", "editradardevice"));
 $l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
 $l2_hwupdate = in_array($currentpath, array('hardware', 'hwupdateres', 'addhwupdateres'));
@@ -184,7 +185,8 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
                                             <li {!! $l2_usergroups ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="usergroups"><i class="bx bx-right-arrow-alt" ></i>用户组管理</a></li>
                                             <li {!! $l2_users ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="users"><i class="bx bx-right-arrow-alt" ></i>人员管理</a></li>
                                             <li {!! $l2_devices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devices"><i class="bx bx-right-arrow-alt"></i>RSU管理</a></li>
-                                            <li {!! $l2_obudevices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obudevices"><i class="bx bx-right-arrow-alt"></i>OBU管理</a></li>
+                                            <li {!! $l2_obudevices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obudevices"><i class="bx bx-right-arrow-alt"></i>OBU平板管理</a></li>
+                                            <li {!! $l2_obuhardwares ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="obuhardwares"><i class="bx bx-right-arrow-alt"></i>OBU硬件管理</a></li>
                                             <li {!! $l2_radardevices ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="radardevices"><i class="bx bx-right-arrow-alt"></i>雷视设备管理</a></li>
 					</ul>
 				</li>                                

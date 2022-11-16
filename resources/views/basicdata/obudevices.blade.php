@@ -14,7 +14,7 @@
     }
 </script>
 
-<h5 class="card-title">OBU设备列表</h5>
+<h5 class="card-title">OBU平板列表</h5>
 <hr>
 
 <div  class="dataTables_wrapper dt-bootstrap5">
@@ -26,9 +26,11 @@
                     <tr role="row">
                         <th >ID</th>
                         <th >OBUID</th>
-                        <th >硬件标识</th>
+                        <th >终端ID</th>
+                        <th >OBU硬件</th>
                         <th >状态</th>
                         <th >最后坐标</th>
+                        <th >备注</th>
                         <th >创建日期</th>
                         <th>操作</th>
                     </tr>
@@ -39,18 +41,20 @@
                         <td >{{$obu->id}}</td>
                         <td>{{$obu->obuid}}</td>
                         <td>{{$obu->obulocalid}}</td>
+                        <td>{{$obu->obuhardware == "" ? "-" : $obu->obuhardware}}</td>
                         <td>{{$obu->obustatus == 1 ? "有效" : "无效"}}</td>
                         @if($obu->obulongtitude == 0 || $obu->obulatitude == 0)
                         <td align='center'>未设置</td>
                         @else
                         <td><button type="button" class="btn btn-transparent" style="font-size: 14px;text-decoration:underline; color:blue;" data-bs-toggle="modal" onclick="showObuPosition('{{$obu->obuid}}', {{$obu->obulongtitude}}, {{$obu->obulatitude}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
+                        <td>{{$obu->oburemark == "" ? "-" : $obu->oburemark}}</td>
                         <td >{{$obu->created_at}}</td>
                         <td>
                              <div class="dropdown">
                                     <button class="btn btn-light border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                     <ul class="dropdown-menu" style="margin: 0px;">
-                                                <li><a class="dropdown-item" href="editobudevice?userid={{$obu->id}}">编辑</a></li>
+                                                <li><a class="dropdown-item" href="editobudevice?obuid={{$obu->id}}">编辑</a></li>
                                                 <li><a class="dropdown-item" href="javascript:confirmDelete({{$obu->id}});">删除</a></li>
                                     </ul>
                             </div>

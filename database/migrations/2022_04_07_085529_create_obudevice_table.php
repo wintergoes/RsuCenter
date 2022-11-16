@@ -21,7 +21,9 @@ class CreateObudeviceTable extends Migration
             $table->double("obulatitude")->default(0);
             $table->double("obulongtitude")->default(0);
             $table->float("obudirection")->default(0);
+            $table->string("obuhardware", 50)->default("");
             $table->timestamp("positiontime");
+            $table->string("oburemark", 200)->default("");
             $table->timestamps();
             
             $table->index(["obuid", "obustatus"]);

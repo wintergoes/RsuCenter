@@ -46,7 +46,10 @@ Route::any("/getrsuonline", "DeviceController@getRsuOnline");
 //***************************OBU设备管理****************************************
 Route::any('/obudevices', 'ObuDeviceController@index');
 Route::any('/obuvideos', 'UploadFileController@obuVideos');
+Route::any("/editobudevice", "ObuDeviceController@editObuDevice");
+Route::any("/editobudevicesave", "ObuDeviceController@editObuDeviceSave");
 Route::any('/deleteobudevice', 'ObuDeviceController@deleteObuDevice');
+Route::any('/obuhardwares', 'ObuDeviceController@obuHardwares');
 
 //***************************雷视设备管理****************************************
 Route::any('/radardevices', 'RadarDeviceController@index');

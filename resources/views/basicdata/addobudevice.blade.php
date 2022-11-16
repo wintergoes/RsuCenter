@@ -33,6 +33,7 @@ function getPosition(flag){
 
     @if(isset($obudevice))
     <form class="form-horizontal" id="form1" method="post" action="/editobudevicesave">
+        <input type="hidden" name="id" value="{{$obudevice->id}}" />
     @else
     <form class="form-horizontal" id="form1" method="post" action="/addobudevicesave">
     @endif
@@ -46,13 +47,29 @@ function getPosition(flag){
             <label for="obuid" class="col-sm-2 col-form-label">设备编码</label>
             <div class="col-sm-6">
                 @if(isset($obudevice))
-                <input type="hidden" name="id" value="{{$obudevice->id}}" />
+                
                 <input type="text" class="form-control" id="obuid" name="obuid" readonly value="{{$obudevice->obuid}}">
                 @else
                 <input type="text" class="form-control" id="obuid" name="obuid" placeholder="请输入设备编码">
                 @endif
             </div>
         </div>
+        
+        <div class="row mb-3">
+            <label for="obuhardware" class="col-sm-2 col-form-label">OBU硬件</label>
+            <div class="col-sm-6">
+                <select name="obuhardware" class="form-select"  >
+                    <option class="form-control" value="" >无</option>
+                    @foreach($obuhardwares as $obuhw)
+                    @if(isset($obudevice))
+                    <option class="form-control" value="{{$obuhw->device_ID}}" {{$obuhw->device_ID == $obudevice->obuhardware ? "selected" : ""}}>{{$obuhw->device_ID}}</option>
+                    @else
+                    <option class="form-control" value="{{$obuhw->device_ID}}" >{{$obuhw->device_ID}}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div>
+        </div>        
 
         <div class="row mb-3">
             <label for="obulatitude" class="col-sm-2 col-form-label">坐标</label>
@@ -76,7 +93,27 @@ function getPosition(flag){
                 <input type="button" class="form-control" onclick="getPosition(0);" value="拾取"></button>
             </div>            
         </div>
+        
+        <div class="row mb-3">
+            <label for="oburemark" class="col-sm-2 col-form-label">备注</label>
+            <div class="col-sm-6">
+                @if(isset($obudevice))
+                <input type="text" class="form-control" id="oburemark" name="oburemark" value="{{$obudevice->oburemark}}">
+                @else
+                <input type="text" class="form-control" id="oburemark" name="oburemark" placeholder="请输入设备编码">
+                @endif
+            </div>
+        </div>        
 
+        <div class="row mb-3">
+            <label for="obustatus" class="col-sm-2 col-form-label">状态</label>
+            <div class="col-sm-2">
+                <select name="obustatus" class="form-select">
+                    <option class="form-control" value="1" {{isset($obudevice) && $obudevice->obustatus == 1 ? "selected" : ""}}>有效</option>
+                    <option class="form-control" value="0" {{isset($obudevice) && $obudevice->obustatus == 0 ? "selected" : ""}}>无效</option>
+                </select>
+            </div>           
+        </div>        
         
         <div class="row mb-3" style="visibility: hidden; height: 500px; display: none;" id="bdmap_row">
             <div class="col-sm-12" id="bdmap_container"></div>           
@@ -111,8 +148,8 @@ map.addEventListener("rightclick", function(e){
     tmplat = e.point.lat;//维度
     //alert(tmplng + " " + tmplng);
     
-    document.getElementById('rsulat').value = tmplat.toFixed(6);
-    document.getElementById('rsulng').value = tmplng.toFixed(6);
+    document.getElementById('obulatitude').value = tmplat.toFixed(6);
+    document.getElementById('obulongtitude').value = tmplng.toFixed(6);
     
     document.getElementById("bdmap_row").style.visibility = 'hidden';
     document.getElementById("bdmap_row").style.display = 'none';    

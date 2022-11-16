@@ -9,7 +9,7 @@
     <div class="col col-lg-9 mx-auto">
         <div class="alert border-0 border-start border-5 border-info alert-dismissible fade show py-2">
                 <div class="d-flex align-items-center">
-                        <div class="font-35 text-info"><i class="bx bx-info-square"></i>
+                        <div class="font-35 text-info m-3"><i class="bx bx-info-square"></i>
                         </div>
                         <div class="row">                        
                                 <div>{{$simplemessage}}</div>
