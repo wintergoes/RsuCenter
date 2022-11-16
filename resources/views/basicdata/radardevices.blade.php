@@ -41,6 +41,7 @@
                         <th >坐标</th>
                         <th >状态</th>
                         <th >最后通讯</th>
+                        <th >备注</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -62,6 +63,7 @@
                         @endif
                         <td>{{$radar->status == 1 ? "有效" : "无效"}}</td>                        
                         <td >{{$radar->communicationtime}}</td>
+                        <td>{{$radar->radarremark == "" ? "-" : $radar->radarremark}}</td>
                         <td>
                              <div class="dropdown">
                                     <button class="btn btn-light border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>

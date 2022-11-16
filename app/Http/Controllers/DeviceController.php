@@ -31,7 +31,7 @@ class DeviceController extends Controller{
         
         $devices = Device::orderBy('devices.created_at', 'asc')
                 ->select('devices.id',  'devices.devicecode', 'devices.created_at',
-                        'devices.rsulat', 'devices.rsulng',
+                        'devices.rsulat', 'devices.rsulng', 'devices.rsuremark',
                         "rstatus.*")
                 ->leftjoin("RSU_status as rstatus", "rstatus.device_ID", "=", "devices.devicecode");
         
@@ -73,6 +73,7 @@ class DeviceController extends Controller{
         
         $devices[0]->rsulat = $request->rsulat;
         $devices[0]->rsulng = $request->rsulng;
+        $devices[0]->rsuremark = $request->rsuremark;
         $devices[0]->save();
         
         return redirect("/devices");        

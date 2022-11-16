@@ -77,6 +77,16 @@ function getPosition(flag){
             </div>            
         </div>
 
+        <div class="row mb-3">
+            <label for="rsuremark" class="col-sm-2 col-form-label">备注</label>
+            <div class="col-sm-6">
+                @if(isset($device))
+                <input type="text" class="form-control" id="rsuremark" name="rsuremark" value="{{$device->rsuremark}}">
+                @else
+                <input type="text" class="form-control" id="rsuremark" name="rsuremark" placeholder="请输入备注信息">
+                @endif
+            </div>
+        </div>        
         
         <div class="row mb-3" style="visibility: hidden; height: 500px; display: none;" id="bdmap_row">
             <div class="col-sm-12" id="bdmap_container">

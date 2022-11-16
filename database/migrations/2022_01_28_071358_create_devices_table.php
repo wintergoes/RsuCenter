@@ -18,6 +18,7 @@ class CreateDevicesTable extends Migration
             $table->string("devicecode", 20);
             $table->double("rsulat")->default(0);
             $table->double("rsulng")->default(0);
+            $table->string("rsuremark", 200)->default("");
             $table->timestamps();
             
             $table->index(["devicecode"]);

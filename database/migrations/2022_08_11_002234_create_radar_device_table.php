@@ -29,6 +29,7 @@ class CreateRadarDeviceTable extends Migration
             $table->double("lat");
             $table->double("lng");
             $table->timestamp("communicationtime")->nullable();
+            $table->string("radarremark", 200)->default("");
             $table->timestamps();
             
             $table->index(["macaddrint"]);

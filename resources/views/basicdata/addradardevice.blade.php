@@ -181,6 +181,17 @@ function onSelectTecChild(){
         </div>
         
         <div class="row mb-3">
+            <label for="radarremark" class="col-sm-2 col-form-label">备注</label>
+            <div class="col-sm-6">
+                @if(isset($device))
+                <input type="text" class="form-control" id="radarremark" name="radarremark" value="{{$device->radarremark}}">
+                @else
+                <input type="text" class="form-control" id="radarremark" name="radarremark" placeholder="请输入备注信息">
+                @endif
+            </div>
+        </div>         
+        
+        <div class="row mb-3">
             <label for="status" class="col-sm-2 col-form-label">状态</label>
             <div class="col-sm-2">
                 <select name="status" class="form-select">

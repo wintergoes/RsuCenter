@@ -30,6 +30,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         <th >设备状态</th>
                         <th >坐标</th>
                         <th >通讯时间</th>
+                        <th >备注</th>
                         <th >创建日期</th>
                         <th>操作</th>
                     </tr>
@@ -52,6 +53,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                         <td><button type="button" class="btn btn-transparent" style="font-size: 14px;text-decoration:underline; color:blue;" data-bs-toggle="modal" onclick="showDevicePosition('{{$device->devicecode}}', {{$device->rsulng}}, {{$device->rsulat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         @endif
                         <td>{{$device->con_datetime == "" ? "-" : $device->con_datetime}}</td>
+                        <td>{{$device->rsuremark == "" ? "-" : $device->rsuremark}}</td>
                         <td>{{$device->created_at}}</td>
                         <td>
                              <div class="dropdown">

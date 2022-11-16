@@ -63,6 +63,7 @@ class RadarDeviceController extends Controller
         $rdevice->validYPosLarge = $request->validYposLarge;
         $rdevice->lat = $request->lat == "" ? 0 : $request->lat;
         $rdevice->lng = $request->lng == "" ? 0 : $request->lng;
+        $rdevice->radarremark = $request->radarremark;
         $rdevice->save();
         
         return redirect("radardevices");
@@ -111,6 +112,7 @@ class RadarDeviceController extends Controller
         $rdevice->validYPosLarge = $request->validYposLarge;
         $rdevice->lat = $request->lat;
         $rdevice->lng = $request->lng;
+        $rdevice->radarremark = $request->radarremark;
         $rdevice->save();
         
         return redirect("radardevices");        
