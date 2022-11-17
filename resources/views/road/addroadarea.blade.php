@@ -10,6 +10,16 @@
 
 <script>
 function submitData(){
+    if(p1Marker == null || p2Marker == null){
+        alert("请标记区域点！")
+        return;
+    }
+    
+    if($("#areatype").find("option:selected").val() === "0"){
+        alert('请选择区域类型！');
+        return;        
+    }
+    
     if($('#areaname').val() === ''){
         alert('区域名称不能为空！');
         $('#areaname').focus();
@@ -50,8 +60,11 @@ function submitData(){
     });
 }
 </script>
-
-<h5 class="card-title">道理管理 > 新增区域</h5>
+@if(isset($area))
+<h5 class="card-title">道理管理 > 编辑区域 【{{$area->areaname}}】</h5>
+@else
+<h5 class="card-title">道理管理 > 新增区域 【{{$road->roadname}}】</h5>
+@endif
 <hr>
 
 <div class="row">
@@ -75,9 +88,12 @@ function submitData(){
             <label for="mobile" class="col-sm-2 col-form-label">选择标志</label>
             <div class="col-sm-6">
                 <select id="areatype" name="areatype" class="form-select">
+                    <option class="form-control" value="0" {{isset($area) && $area->areatype == 0 ? "selected" : ""}}>请选择区域类型</option>
                     <option class="form-control" value="1" {{isset($area) && $area->areatype == 1 ? "selected" : ""}}>收费站</option>
                     <option class="form-control" value="2" {{isset($area) && $area->areatype == 2 ? "selected" : ""}}>交叉路口</option>
                     <option class="form-control" value="3" {{isset($area) && $area->areatype == 3 ? "selected" : ""}}>分流路口</option>
+                    <option class="form-control" value="4" {{isset($area) && $area->areatype == 4 ? "selected" : ""}}>道路入口</option>
+                    <option class="form-control" value="5" {{isset($area) && $area->areatype == 5 ? "selected" : ""}}>道路出口</option>
                 </select>
             </div>                                   
         </div>
@@ -156,6 +172,21 @@ function submitData(){
     <div>
 </div>
 
+    
+<div class="alert border-0 border-start border-5 border-info alert-dismissible fade show py-2">
+        <div class="d-flex align-items-center">
+                <div class="font-35 text-info"><i class="bx bx-info-square"></i>
+                </div>
+            <div class="ms-3" style="display: block;">
+                        <h6 class="mb-0 text-info">说明</h6>
+                </div>
+
+        </div>
+            <div>
+                        <p>1. 一共需要取四个点，四个点要按顺时针的方向取。</p>
+                        <p>2. 第一个点到第二个点的指向代表道路运行方向。</p>                
+            </div>    
+</div>    
 <script type="text/javascript" >
     var latlng = coordtransform.bd09togcj02({{$default_lng}}, {{$default_lat}});
     latlng = coordtransform.gcj02towgs84(latlng[0], latlng[1])

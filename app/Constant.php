@@ -24,9 +24,11 @@ define("coord_type_gcj02", 1);
 define("coord_type_bd09", 2);
 
 define("area_type_undefined", 0);
-define("area_type_tollstation", 1);
-define("area_type_junction", 2);
-define("area_type_dversion_junction", 3);
+define("area_type_tollstation", 1); //收费站
+define("area_type_junction", 2);  //交叉路口，合流路口，参数1：语音播报信息，参数2：相交叉的路的id，多个id以英文逗号分隔
+define("area_type_dversion_junction", 3); //分流路口
+define("area_type_entry", 4); //入口，参数1：上一路段的id，多个道路以逗号分隔
+define("area_type_exit", 5); //出口，参数1：下一路段的道路id
 
 define("clockin_goto_work", 1);
 define("clockin_gooff_work", 1);

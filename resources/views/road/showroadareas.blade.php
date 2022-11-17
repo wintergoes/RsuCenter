@@ -63,10 +63,13 @@
 </table>
 
 <script>
+    var latlng = coordtransform.bd09togcj02({{$default_lng}}, {{$default_lat}});
+    latlng = coordtransform.gcj02towgs84(latlng[0], latlng[1])    
+    
     //初始化地图对象
     var map=new TMap("bdmap_container");
     //设置显示地图的中心点和级别
-    map.centerAndZoom(new TLngLat(116.296286, 39.984241), 18);
+    map.centerAndZoom(new TLngLat(latlng[0], latlng[1]), 14);
      //允许鼠标滚轮缩放地图
     map.enableHandleMouseScroll();
     map.setMapType(TMAP_SATELLITE_MAP);

@@ -20,7 +20,9 @@ class MapAreaController extends Controller
     
     function index(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $searchroadid = $request->roadid;
@@ -29,31 +31,43 @@ class MapAreaController extends Controller
                 ->get();
         
         if(count($roads) == 0){
-            return "道路信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);;
         }
         
         $areas = MapArea::where("roadid", $searchroadid)
                 ->orderBy("id", "desc")
                 ->get();
         
+        $default_lat = env("home_default_lat", 36.183753);
+        $default_lng = env("home_default_lng", 120.339217);
+        $default_zoom = env("home_map_defaultzoom", 15);        
+        
         return view("/road/showroadareas", [
             "areas"=>$areas,
-            "road"=>$roads[0]
+            "road"=>$roads[0],
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,  
         ]);
     }
     
     function addRoadArea(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $searchroadid = $request->roadid;
-        
         $roads = Road::where("id", $searchroadid)
                 ->get();
         
         if(count($roads) == 0){
-            return "道路信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }
         
         $default_lat = env("home_default_lat", 36.183753);
@@ -159,16 +173,18 @@ class MapAreaController extends Controller
     
     function editRoadArea(Request $request){
         if($request->areaid == ""){
-            echo "缺少参数！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $areas = MapArea::where("id", $request->areaid)
                 ->get();
         
         if(count($areas) == 0){
-            echo "区域信息不存在！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"区域信息不存在！",
+            ]);
         }
         
         $default_lat = env("home_default_lat", 36.183753);
@@ -185,16 +201,18 @@ class MapAreaController extends Controller
     
     function editRoadAreaSave(Request $request){
         if($request->areaid == ""){
-            echo "缺少参数！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $areas = MapArea::where("id", $request->areaid)
                 ->get();
         
         if(count($areas) == 0){
-            echo "区域信息不存在！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"区域信息不存在！",
+            ]);
         }
         
         $area = $areas[0];

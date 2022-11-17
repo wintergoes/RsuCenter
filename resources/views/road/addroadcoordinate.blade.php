@@ -211,7 +211,7 @@ function submitData(){
                         <p>1. 一共需要取四个点，四个点要按顺时针的方向取。</p>
                         <p>2. 第一个点到第二个点的指向代表道路运行方向。</p>                
             </div>    
-</div>    
+</div>
 <script>
     var map = new BMapGL.Map("bdmap_container", {
        coordsType: 5 // coordsType指定输入输出的坐标类型，3为gcj02坐标，5为bd0ll坐标，默认为5。
