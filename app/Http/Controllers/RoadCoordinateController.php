@@ -364,6 +364,31 @@ class RoadCoordinateController extends Controller
         return json_encode($arr);
     }
     
+    function updateAllRoadCoordinateProperties(Request $request){
+        $coords = RoadCoordinate::orderBy("id", "asc")
+                ->get();
+        
+        foreach($coords as $coord){
+            $p1lat = $coord->lat1; $p1lng = $coord->lng1;
+            $p2lat = $coord->lat2; $p2lng = $coord->lng2;
+            $p3lat = $coord->lat3; $p3lng = $coord->lng3;
+            $p4lat = $coord->lat4; $p4lng = $coord->lng4;
+
+            $maxlat = max($p1lat, $p2lat, $p3lat, $p4lat);
+            $minlat = min($p1lat, $p2lat, $p3lat, $p4lat);
+            $maxlng = max($p1lng, $p2lng, $p3lng, $p4lng);
+            $minlng = min($p1lng, $p2lng, $p3lng, $p4lng);  
+            
+            $coord->maxlat = $maxlat;
+            $coord->minlat = $minlat;
+            $coord->maxlng = $maxlng;
+            $coord->minlng = $minlng;
+            $coord->save();
+        }
+        
+        echo "处理完成！";
+    }
+    
     /**
      * @param $lat1
      * @param $lng1

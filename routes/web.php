@@ -132,6 +132,7 @@ Route::any("/deleteroadcoordinate", "RoadCoordinateController@deleteRoadCoordina
 Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordinate");
 Route::any("/updateroadcoordinate", "RoadCoordinateController@updateRoadCoordinate");
 Route::any("/addroadsectionmanually", "RoadCoordinateController@addRoadSectionManually");
+Route::any("/updateallroadcoordinateproperties", "RoadCoordinateController@updateAllRoadCoordinateProperties");
 
 Route::any("/showroadareas", "MapAreaController@index");
 Route::any("/addroadarea", "MapAreaController@addRoadArea");
