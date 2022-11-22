@@ -278,33 +278,33 @@ function showRoadOnMap(){
     $("#minlat").val(minlat.toFixed(6));
     $("#minlng").val(minlng.toFixed(6));
     
-    var angle = 0;
-    if(islatlng){
-//        if(latlng2[1] < latlng1[1]){
-//            angle = 180;
-//        }
+//    var angle = 0;
+//    if(islatlng){
+////        if(latlng2[1] < latlng1[1]){
+////            angle = 180;
+////        }
+////        
+////        angle = angle + Math.atan((latlng2[0] - latlng1[0])/ (latlng2[1] - latlng1[1]));
+//    } else {             
+//        lngdistance = getDistances(latlng2[1], latlng2[0], latlng2[1], latlng1[0]);
+//        latdistance = getDistances(latlng1[1], latlng1[0], latlng2[1], latlng1[0]);
+//        //alert(lngdistance.distance + "  " + latdistance.distance);
+//        angle = angle + Math.atan(lngdistance.distance / latdistance.distance);
 //        
-//        angle = angle + Math.atan((latlng2[0] - latlng1[0])/ (latlng2[1] - latlng1[1]));
-    } else {             
-        lngdistance = getDistances(latlng2[1], latlng2[0], latlng2[1], latlng1[0]);
-        latdistance = getDistances(latlng1[1], latlng1[0], latlng2[1], latlng1[0]);
-        //alert(lngdistance.distance + "  " + latdistance.distance);
-        angle = angle + Math.atan(lngdistance.distance / latdistance.distance);
-        
-        if(latlng2[0] > latlng1[0]){
-            if(latlng2[1] < latlng1[1]){
-                angle = angle + Math.PI / 2;
-            }
-        } else {
-            if(latlng2[1] < latlng1[1]){
-                angle = angle + Math.PI;
-            } else {
-                angle = Math.PI * 2 - angle ;
-            }
-        }
-    }
-    angle = angle * 180 / Math.PI;
-    $('#angle').val(angle.toFixed(2));
+//        if(latlng2[0] > latlng1[0]){
+//            if(latlng2[1] < latlng1[1]){
+//                angle = angle + Math.PI / 2;
+//            }
+//        } else {
+//            if(latlng2[1] < latlng1[1]){
+//                angle = angle + Math.PI;
+//            } else {
+//                angle = Math.PI * 2 - angle ;
+//            }
+//        }
+//    }
+//    angle = angle * 180 / Math.PI;
+//    $('#angle').val(angle.toFixed(2));
     
     var points = [];
     points.push(new BMapGL.Point(latlng1[0], latlng1[1]));
