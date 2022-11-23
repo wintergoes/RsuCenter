@@ -33,7 +33,7 @@ class DeviceController extends Controller{
                 ->select('devices.id',  'devices.devicecode', 'devices.created_at',
                         'devices.rsulat', 'devices.rsulng', 'devices.rsuremark',
                         "rstatus.*")
-                ->leftjoin("RSU_status as rstatus", "rstatus.device_ID", "=", "devices.devicecode");
+                ->leftjoin("RSU_status as rstatus", DB::raw("CONVERT(rstatus.device_ID USING utf8) COLLATE utf8_unicode_ci"), "=", "devices.devicecode");
         
         $devices = $devices->get();
   
