@@ -678,11 +678,13 @@ class ApiV1Controller extends Controller
     }    
     
     function uploadFile(Request $request){
-        if(!file_exists(upload_folder)){
-            mkdir(upload_folder, 0777, true);
+        $uploadfolder = env("upload_folder");
+        
+        if(!file_exists($uploadfolder)){
+            mkdir($uploadfolder, 0777, true);
         }
         
-        $base_path = upload_folder;
+        $base_path = $uploadfolder;
         
         if($request->filetype == upd_file_obu_picture){
             $base_path .= "obuimages/" ;

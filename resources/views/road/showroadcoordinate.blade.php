@@ -181,6 +181,7 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
             }
             var label = new TLabel(config);
             label.setFontSize(3);
+            label.setOpacity(0.5);
             map.addOverLay(label);  
             bdlabels.set(id, label);
 
