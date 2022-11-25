@@ -85,18 +85,22 @@ class UserController extends Controller
     }    
     
     public function editUser(Request $request){
-       $userid = $request->userid;
+        $userid = $request->userid;
        
-       if($userid == ""){
-           return "缺少参数！";
-       }
+        if($userid == ""){
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
+        }
        
-       $users = User::where("id", $userid)
+        $users = User::where("id", $userid)
                ->get();
        
-       if(count($users) == 0){
-           return "用户不存在！";
-       }
+        if(count($users) == 0){
+            return view('/other/simplemessage', [
+                'simplemessage'=>"用户不存在！",
+            ]);
+        }
        
         $usergroups  = UserGroup::orderBy("id", "desc")
                 ->select("id", "groupname")
@@ -110,18 +114,22 @@ class UserController extends Controller
 
     
     public function editUserSave(Request $request){
-       $userid = $request->userid;
+        $userid = $request->userid;
        
-       if($userid == ""){
-           return "缺少参数！";
-       }
+        if($userid == ""){
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
+        }
        
-       $users = User::where("id", $userid)
+        $users = User::where("id", $userid)
                ->get();
        
-       if(count($users) == 0){
-           return "用户不存在！";
-       }
+        if(count($users) == 0){
+            return view('/other/simplemessage', [
+                'simplemessage'=>"用户不存在！",
+            ]);
+        }
         
         $user = $users[0];
         $user->usergroup = $request->usergroup;
@@ -153,9 +161,16 @@ class UserController extends Controller
         if(Auth::once(['username' => $request->user()->username, 'password' => $request->oldpass])){
             $request->user()->password = bcrypt($request->newpass);
             $request->user()->save();
-            return "密码修改成功! <a href='/'>点击返回首页</a>";
+            
+            return view('/other/simplemessage', [
+                'simplemessage'=>"密码修改成功！",
+                'backurl'=>"/",
+                'backtext'=>"返回首页"
+            ]); 
         }else{
-            return "旧密码错误!";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"旧密码错误！",
+            ]);
         }
     }
     

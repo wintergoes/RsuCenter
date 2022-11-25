@@ -77,15 +77,17 @@ class TrafficSignController extends Controller
     
     function editTrafficSign(Request $request){
         if($request->id == ""){
-            echo "缺少参数！";
-            return ;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $trafficsigns = TrafficSign::where("id", $request->id)
                 ->get();
         if(count($trafficsigns) == 0){
-            echo "数据不存在！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"数据不存在！",
+            ]);
         }
         
         $roadsStart = RoadCoordinate::where("roadcoordinates.minlat", "<", $trafficsigns[0]->tslat)
@@ -109,15 +111,17 @@ class TrafficSignController extends Controller
     
     function editTrafficSignSave(Request $request){
         if($request->id == ""){
-            echo "缺少参数！";
-            return ;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $trafficsigns = TrafficSign::where("id", $request->id)
                 ->get();
         if(count($trafficsigns) == 0){
-            echo "数据不存在！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"数据不存在！",
+            ]);
         }
         
         $ts = $trafficsigns[0];
@@ -136,8 +140,9 @@ class TrafficSignController extends Controller
     
     function deleteTrafficSign(Request $request){
         if($request->id == ""){
-            echo "缺少参数！";
-            return ;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         DB::delete("delete from trafficsigns where id=" . $request->id);
@@ -166,13 +171,15 @@ class TrafficSignController extends Controller
         $selRsu = $request->selectedRsu;
         $rsus = DB::select("SELECT * FROM device_info_connect where device_id='" . $selRsu . "' order by con_datetime desc limit 1");
         if(count($rsus) == 0){
-            echo "RSU在数据库中不存在！";
-            return ;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"RSU在数据库中不存在！",
+            ]); 
         }
         
         if($rsus[0]->Is_online != "1"){
-            echo "设备" . $selRsu . "不在线！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备" . $selRsu . "不在线！",
+            ]);
         }
         
         $inputsigns = $request->signs;
@@ -186,8 +193,9 @@ class TrafficSignController extends Controller
         }
         
         if($searchsigns == ""){
-            echo "未选择事件！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"您没有选择事件！",
+            ]);
         }
         
         $maxreqno = DB::select("select max(reqno) as maxReqNo from (select convert(request_no, UNSIGNED INTEGER) AS reqno FROM device_info_request) as request");
@@ -238,6 +246,8 @@ class TrafficSignController extends Controller
         
         DB::insert($insertsql);
         
-        echo "下发成功！";
+        return view('/other/simplemessage', [
+            'simplemessage'=>"下发成功！",
+        ]);
     }    
 }

@@ -35,7 +35,9 @@ class RoadController extends Controller
                 ->get();
         
         if(count($roadcheck) >0 ){
-            return "路段名称已存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"路段名称已存在！",
+            ]);
         }
         
         $road = new Road();
@@ -48,15 +50,17 @@ class RoadController extends Controller
 
     function editRoad(Request $request){
         if($request->roadid == ""){
-            echo "缺少参数！";
-            return ;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $roads = Road::where("id", $request->roadid)
                 ->get();
         if(count($roads) == 0){
-            echo "数据不存在！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"数据不存在！",
+            ]);
         }
         
         return view("/road/addroad", [
@@ -66,15 +70,17 @@ class RoadController extends Controller
 
     function editRoadSave(Request $request){
         if($request->roadid == ""){
-            echo "缺少参数！";
-            return ;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $roads = Road::where("id", $request->roadid)
                 ->get();
         if(count($roads) == 0){
-            echo "数据不存在！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"数据不存在！",
+            ]);
         } 
         
         $road = $roads[0];
@@ -87,7 +93,9 @@ class RoadController extends Controller
 
     function deleteRoad(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         DB::delete("delete from roads where id=" . $request->roadid);
@@ -100,7 +108,9 @@ class RoadController extends Controller
     
     function unpublishRoad(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         DB::update("update roads set published=0 where id=" . $request->roadid);
@@ -110,7 +120,9 @@ class RoadController extends Controller
     
     function publishRoad(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         DB::update("update roads set published=1 where id=" . $request->roadid);

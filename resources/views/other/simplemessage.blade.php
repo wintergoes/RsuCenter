@@ -15,8 +15,8 @@
                                 <div>{{$simplemessage}}</div>
                         </div>
                     
-                        @if(isset($backurl1))
-                            <a href="{{$backurl1}}">{{$backtext1}}</a>    
+                        @if(isset($backurl))
+                            <a href="{{$backurl}}">{{$backtext}}</a>    
                         @else
                             <a href="javascript:history.back(-1);">返回</a>
                         @endif                    

@@ -19,14 +19,18 @@ class RoadCoordinateController extends Controller
     
     function index(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $roads = Road::where("id", $request->roadid)
                 ->get();
         
         if(count($roads) == 0){
-            return "道路信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }
         
         $coordinates = RoadCoordinate::orderBy("id", "desc")
@@ -50,7 +54,9 @@ class RoadCoordinateController extends Controller
 
     function editRoadCoordinate(Request $request){
         if($request->coordid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $coordid = $request->coordid;
@@ -59,7 +65,9 @@ class RoadCoordinateController extends Controller
                 ->get();
         
         if(count($coords) == 0){
-            return "信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }
         
         return view("/road/addroadcoordinate", [
@@ -69,7 +77,9 @@ class RoadCoordinateController extends Controller
 
     function editRoadCoordinateSave(Request $request){
         if($request->coordid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $coordid = $request->coordid;
@@ -78,7 +88,9 @@ class RoadCoordinateController extends Controller
                 ->get();
         
         if(count($coords) == 0){
-            return "信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }
         
         $coords[0]->lanetype = $request->lanetype ;
@@ -95,12 +107,16 @@ class RoadCoordinateController extends Controller
     
     function deleteRoadCoordinate(Request $request){
         if($request->coordid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
 
         RoadCoordinate::where("id", $request->coordid)->delete();
         
-        return "删除成功！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"删除成功！",
+            ]);
     }
     
     function importRoadCoordinate(Request $request){
@@ -108,7 +124,9 @@ class RoadCoordinateController extends Controller
                 ->get();
         
         if(count($roads) == 0){
-            return "道路信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }        
         
         return view("/road/importroadcoordinate", [
@@ -122,8 +140,9 @@ class RoadCoordinateController extends Controller
         $roadid = $request->roadid;
         
         if($roadid == 0 || $roadid == ""){
-            echo "缺少参数！";
-            return;
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $laneno = 0;
@@ -413,7 +432,9 @@ class RoadCoordinateController extends Controller
     
     function showRoadCoordinate(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $searchroadid = $request->roadid;
@@ -455,7 +476,9 @@ class RoadCoordinateController extends Controller
                 ->get();
         
         if(count($roads) == 0){
-            return "道路信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }        
         
         $coords = RoadCoordinate::where("roadid", $searchroadid)
@@ -493,7 +516,9 @@ class RoadCoordinateController extends Controller
     
     function exportRoadCoordinate(Request $request){
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $roadid = $request->roadid;
@@ -502,7 +527,9 @@ class RoadCoordinateController extends Controller
                 ->get();
         
         if(count($roads) == 0){
-            return "道路信息不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"道路信息不存在！",
+            ]);
         }         
         
         $coords = RoadCoordinate::where("roadid", $roadid)
@@ -512,7 +539,9 @@ class RoadCoordinateController extends Controller
                 ->get();
         
         if(count($coords) == 0){
-            return "无坐标数据！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"无坐标数据！",
+            ]);
         }
         
         $exportpath = "temp/" ;
@@ -545,7 +574,9 @@ class RoadCoordinateController extends Controller
         $lanetype = 0;
         
         if($request->roadid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $roadid = $request->roadid;        

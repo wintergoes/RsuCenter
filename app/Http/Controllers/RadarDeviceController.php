@@ -41,7 +41,9 @@ class RadarDeviceController extends Controller
                 ->get();
         
         if(count($rdevices) > 0){
-            return "设备编码已存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备编码已存在！",
+            ]);
         }
         
         $lanenumber = $request->lanenumber;
@@ -71,14 +73,18 @@ class RadarDeviceController extends Controller
     
     function editRadarDevice(Request $request){
         if($request->id == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]); 
         }
         
         $radars = RadarDevice::where("id", $request->id)
                 ->get();
         
         if(count($radars) == 0){
-            return "设备不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备不存在！",
+            ]);
         }
         
         return view("/basicdata/addradardevice", [
@@ -88,14 +94,18 @@ class RadarDeviceController extends Controller
     
     function editRadarDeviceSave(Request $request){
         if($request->id == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $radars = RadarDevice::where("id", $request->id)
                 ->get();
         
         if(count($radars) == 0){
-            return "设备不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备不存在！",
+            ]);
         }
         
         $rdevice = $radars[0];
@@ -120,7 +130,9 @@ class RadarDeviceController extends Controller
     
     function deleteRadarDevice(Request $request){
         if($request->id == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         DB::delete("delete from radardevices where id=" . $request->id);

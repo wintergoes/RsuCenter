@@ -44,14 +44,18 @@ class DeviceController extends Controller{
     
     function editRsuDevice(Request $request){
         if($request->id == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $devices = Device::where("id", $request->id)
                 ->get();
         
         if(count($devices) == 0){
-            return "设备不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备不存在！",
+            ]); 
         }
         
         return view("/basicdata/adddevice", [
@@ -61,14 +65,18 @@ class DeviceController extends Controller{
     
     function editRsuDeviceSave(Request $request){
         if($request->id == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]); 
         }
         
         $devices = Device::where("id", $request->id)
                 ->get();
         
         if(count($devices) == 0){
-            return "设备不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备不存在！",
+            ]); 
         }
         
         $devices[0]->rsulat = $request->rsulat;
@@ -87,13 +95,17 @@ class DeviceController extends Controller{
     
     function rsuSettings(Request $request){
         if($request->id == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $devices = Device::where("id", $request->id)
                 ->get();
         if(count($devices) == 0){
-            return "设备不存在！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"设备不存在！",
+            ]);
         }
         
         return view("/basicdata/rsusettings", [

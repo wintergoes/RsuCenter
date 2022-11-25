@@ -165,7 +165,9 @@ class HardwareUpdateController extends Controller
     
     function deleteHardware(Request $request){
         if($request->log_radom == ""){
-            return "缺少参数！";           
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);        
         }
         
         DB::delete("delete from device_log where log_radom=" . $request->log_radom);
@@ -283,7 +285,9 @@ class HardwareUpdateController extends Controller
     
     function deleteUpdateResourceSave(Request $request){
         if($request->id == ""){
-            return "缺少参数！";           
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]); 
         }
         
         DB::delete("delete from update_resource where id=" . $request->id);

@@ -131,7 +131,9 @@ class DeviceLogController extends Controller
         
     function logfileContent(Request $request){
         if($request->filename == "" || $request->devicecode == "" || $request->deviceid == ""){
-            return "缺少参数！";
+            return view('/other/simplemessage', [
+                'simplemessage'=>"缺少参数！",
+            ]);
         }
         
         $devicecode = $request->devicecode;
