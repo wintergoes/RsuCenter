@@ -87,6 +87,14 @@ Route::any('/anprdetail', "DataController@anprDetail");
 Route::any('/aidevents', "DataController@aidEvents");
 Route::any('/aiddetail', "DataController@aidDetail");
 
+//**************************数据api接口用户管理*******************************
+Route::any('/dataapiclients', 'DataApiClientController@index');
+Route::any('/adddataapiclient', 'DataApiClientController@addDataApiClient');
+Route::any('/adddataapiclientsave', 'DataApiClientController@addDataApiClientSave');
+Route::any('/editdataapiclient', 'DataApiClientController@editDataApiClient');
+Route::any('/editdataapiclientsave', 'DataApiClientController@editDataApiClientSave');
+Route::any('/deletedataapiclient', 'DataApiClientController@deleteDataApiClient');
+
 //*******************************统计分析***************************************
 Route::any('/clockins', "ClockInController@index");
 
