@@ -27,6 +27,8 @@ Route::any("/checkupdate", "ApiV1Controller@checkUpdate");
 
 Route::any("/clientlogin", "ApiV1Controller@clientLogin");
 
+Route::any("updateforecast", "ApiV1Controller@updateForecast");
+
 Route::any("/logs", "ApiV1Controller@logs");
 
 Route::any("/resetpassword", "ApiV1Controller@resetPassword");

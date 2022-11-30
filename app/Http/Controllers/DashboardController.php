@@ -12,6 +12,7 @@ use App\WarningInfo;
 use App\RoadCoordinate;
 use App\RadarDevice;
 use App\UploadFile;
+use App\Forecast;
 
 use DB;
 
@@ -228,6 +229,15 @@ class DashboardController extends Controller
         
         $arr = array("retcode"=>ret_success, "rsudevices"=>$rdevices, "obudevices"=>$odevices,
             "warnings"=>$warnings, "radars"=>$radars);
+        return json_encode($arr);
+    }
+    
+    function getForecast(Request $request){
+        $forecasts = Forecast::orderBy("id", "desc")
+                ->limit(1)
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "forecast"=>$forecasts[0]);
         return json_encode($arr);
     }
 }

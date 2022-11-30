@@ -19,6 +19,7 @@ use App\ObuRouteDetail;
 use App\ClockIn;
 use App\WarningRecord;
 use App\VehicleFlow;
+use App\Forecast;
 
 use App\AidEvent;
 use App\AnprEvent;
@@ -1306,4 +1307,96 @@ class ApiV1Controller extends Controller
         $arr = array("retcode"=>ret_success);
         return json_encode($arr);
     }    
+    
+    function updateForecast(Request $request){
+//        $host = "https://iweather.market.alicloudapi.com";
+//        $path = "/gps";
+//        $method = "GET";
+//        $appcode = env("fushukeji_appcode");
+//        $headers = array();
+//        array_push($headers, "Authorization:APPCODE " . $appcode);
+//        $querys = "from=gps&lat=" . env("dashboard_default_lat") . "&lng=" . env("dashboard_default_lng") . "&needday=1";
+//        $bodys = "";
+//        $url = $host . $path . "?" . $querys;
+//        
+//        //echo $appcode;
+//        echo $url;
+//
+//        $curl = curl_init();
+//        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+//        curl_setopt($curl, CURLOPT_URL, $url);
+//        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+//        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($curl, CURLOPT_HEADER, true);
+//        if (1 == strpos("$".$host, "https://"))
+//        {
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+//        }
+//        $res = curl_exec($curl);
+//        echo $res;
+        
+        
+        $host = "https://iweather.market.alicloudapi.com";
+        $path = "/address";
+        $method = "GET";
+        $appcode = env("fushukeji_appcode");
+        $headers = array();
+        array_push($headers, "Authorization:APPCODE " . $appcode);
+        $querys = "area=%E6%9D%8E%E6%B2%A7&needday=1&city=%E9%9D%92%E5%B2%9B&prov=%E5%B1%B1%E4%B8%9C";
+        $bodys = "";
+        $url = $host . $path . "?" . $querys;
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        if (1 == strpos("$".$host, "https://"))
+        {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+//        var_dump(curl_exec($curl));         
+        $res = curl_exec($curl);
+        curl_close($curl);
+        
+        $resary = explode("\r\n\r\n", $res);
+        if(count($resary) <= 1){
+            echo "返回错误！";
+            return;
+        }
+        
+        echo $resary[1];
+        $resjson = json_decode($resary[1]);
+        if($resjson->ret != 200){
+            echo "返回码不是200！";
+            return;            
+        }
+        
+        $forecast = new Forecast();
+        $forecast->weather = $resjson->data->now->detail->weather;
+        $forecast->weathercode = $resjson->data->now->detail->weather_code;
+        $forecast->temperature = $resjson->data->now->detail->temperature;
+        $forecast->temphigh = $resjson->data->now->city->day_air_temperature;
+        $forecast->templow = $resjson->data->now->city->night_air_temperature;
+        $forecast->humidity = str_replace("%", "", $resjson->data->now->detail->humidity);
+        $forecast->windpower = str_replace("级", "", $resjson->data->now->detail->wind_power);
+        $forecast->winddirection = $resjson->data->now->detail->wind_direction;
+        $forecast->windspeed = $resjson->data->now->detail->wind_speed;
+        $forecast->visibility = $resjson->data->now->detail->njd;
+        $forecast->air_pm25 = $resjson->data->now->detail->aqi_pm25;
+        $forecast->sun_begin = $resjson->data->now->detail->sun_begin;
+        $forecast->sun_end = $resjson->data->now->detail->sun_end;
+        $forecast->created_at = $resjson->data->now->update_time;
+        $forecast->save();
+
+        echo "更新成功！";
+//        echo $resjson->data->now->detail->wind_direction;
+//        echo $tqjson;
+//        echo $res;
+    }
 }

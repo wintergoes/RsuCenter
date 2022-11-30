@@ -175,6 +175,7 @@ Route::any("/dashboardvehicles", "DashboardController@dashboardVehicles");
 Route::any("/dashboardradarvision", "DashboardController@dashboardRadarVision");
 Route::any("/dashboardgetnewobuvideo", "DashboardController@getObuNewVideo");
 Route::any('/dashboardbdmapsummary', 'DashboardController@bdmapSummary');
+Route::any('/dashboardforecast', 'DashboardController@getForecast');
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");

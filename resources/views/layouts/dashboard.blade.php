@@ -213,17 +213,17 @@
 <body style="width: 100%; height: 100%">
 <div id='dashboard_left' style="position:relative;width: 100%; height: 100%; ">
     <div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
-    <div id="dashboard_title">
+    <div id="dashboard_title" style="z-index: 100;">
         <div style="float: left;"><img src="images/dashboard/dashboard_title.png"></div>
         <div>
                              <table class="forecast_tbl">
                                  <tr>
                                      <td style="width: 120px;"><span id='datespan'></span></td>   
-                                     <td><span id='weekday'>星期四</span> <img src="images/dashboard/sunshine.png"></td>
-                                     <td><img src="images/dashboard/wendu.png"/><br>温度 30</td>
-                                     <td><img src="images/dashboard/shidu.png"/><br>湿度 23hPa</td>
-                                     <td><img src="images/dashboard/fengli.png"/><br>风力 62Km/h</td>
-                                     <td><img src="images/dashboard/fengxiang.png"/><br>风向 东南</td>
+                                     <td><span id='weekday'>星期四</span> <img width="32" height="32" id="weathericon" src="images/dashboard/sunshine.png"></td>
+                                     <td><img src="images/dashboard/wendu.png"/><br><span id="forecast_temperature">温度 -</span></td>
+                                     <td><img src="images/dashboard/shidu.png"/><br><span id="forecast_humidity">湿度 -</span></td>
+                                     <td><img src="images/dashboard/fengli.png"/><br><span id="forecast_windpower">风力 -</span></td>
+                                     <td><img src="images/dashboard/fengxiang.png"/><br><span id="forecast_winddirection">风向 -</span></td>
                                  </tr>                    
                              </table>
             </div>
@@ -2564,6 +2564,28 @@ function showDataSummary(){
     });    
 }
 
+function updateForecast(){
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
+    $.ajax({
+        type: "GET",
+        url: "dashboardforecast",
+        dataType: "json",
+        success: function (data) {
+            $('#weathericon').attr("src", "images/fushutianqi/" + data.forecast.weathercode + ".png");
+            $('#forecast_temperature').html("<span title = '" + data.forecast.created_at + "'>温度 " + data.forecast.temperature + "°C</span>"); 
+            $('#forecast_humidity').text("湿度 " + data.forecast.humidity + "%");  
+            $('#forecast_windpower').text("风力 " + data.forecast.windpower + "级");  
+            $('#forecast_winddirection').text("风向 " + data.forecast.winddirection);  
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            
+        }
+    });    
+}
+
 //const canvas = document.querySelector('#radar_canvas');
 //const ctx = canvas.getContext('2d');
 function drawCircle() {
@@ -2643,6 +2665,7 @@ function refreshAll(){
     getWeekDay();
     showDate();    
     showDataSummary();
+    updateForecast();
 }
 refreshAll();
 showVehicles();
