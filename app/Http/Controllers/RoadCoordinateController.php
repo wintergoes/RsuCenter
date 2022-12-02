@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\RoadCoordinate;
 use App\Road;
+use App\RoadLink;
 
 use DB;
 
@@ -482,6 +483,15 @@ class RoadCoordinateController extends Controller
         }        
         
         $coords = RoadCoordinate::where("roadid", $searchroadid)
+                ->select("roadcoordinates.id","roadcoordinates.coordtype","roadcoordinates.roadid","roadcoordinates.roadsectionno",
+                        "roadcoordinates.laneno","roadcoordinates.lanetype","roadcoordinates.lat1","roadcoordinates.lng1",
+                        "roadcoordinates.lat2","roadcoordinates.lng2","roadcoordinates.lat3","roadcoordinates.lng3",
+                        "roadcoordinates.lat4","roadcoordinates.lng4","roadcoordinates.maxlat","roadcoordinates.minlat",
+                        "roadcoordinates.maxlng","roadcoordinates.minlng","roadcoordinates.angle","roadcoordinates.angle1",
+                        "roadcoordinates.lng","roadcoordinates.lat","roadcoordinates.altitude","roadcoordinates.distance","roadcoordinates.lanewidth",
+                        "roadcoordinates.lanecount","roadcoordinates.emergencylane","roadcoordinates.created_at",
+                        DB::raw("ifnull(linkstattbl.linkcount, 0) as linkcount"))
+                ->leftjoin(DB::raw("(select count(id) as linkcount,rcid from roadlinks group by rcid) as linkstattbl"), "linkstattbl.rcid", "=", "roadcoordinates.id")
                 ->orderBy("id", "desc");
         
         if($searchlanetype != "" && $searchlanetype != "0"){
@@ -669,4 +679,91 @@ class RoadCoordinateController extends Controller
         $arr = array("retcode"=>ret_success);
         return json_encode($arr);        
     }
+             
+    function setupRoadLinks(Request $request){
+        return view("/road/setuproadlinks");
+    }
+    
+    function setupRoadLinkSave(Request $request){
+        if($request->pointlast != "" && $request->pointnext != "" && $request->pointlast != $request->pointnext){                      
+            $coordslast = RoadCoordinate::where("id", $request->pointlast)
+                    ->select("id", "roadid")
+                    ->get();
+            
+            if(count($coordslast) == 0){
+                echo "id: " . $request->pointlast . "不存在！<br/>";
+            }
+            
+            $coordsnext = RoadCoordinate::where("id", $request->pointnext)
+                    ->select("id", "roadid")
+                    ->get();
+            
+            if(count($coordsnext) == 0){
+                echo "id: " . $request->pointnext . "不存在！<br/>";
+            }
+            
+            $links = RoadLink::where("rcid", $request->pointlast)
+                    ->select("id")
+                    ->where("linkrcid", $request->pointnext)
+                    ->get();
+            
+            if(count($links) > 0){
+                echo "roadlink已存在！ LastID:" . $request->pointlast . ", NextID: " . $request->pointnext . "<br/>";                
+            } else {
+                $newlink = new RoadLink();
+                $newlink->roadid = $coordslast[0]->roadid;
+                $newlink->rcid = $request->pointlast;
+                $newlink->linkroadid = $coordsnext[0]->roadid;
+                $newlink->linkrcid = $request->pointnext;
+                $newlink->linktype = 1;
+                $newlink->save();
+                echo "新增RoadLink！ LastID:" . $request->pointlast . ", NextID: " . $request->pointnext. "<br/>";    
+            }
+        }
+        
+        if($request->multistart != "" && $request->multiend != ""){
+            for($i = $request->multistart ; $i < $request->multiend ; $i++){
+                $last = $i;
+                $next = $i + 1;
+                $coordslast = RoadCoordinate::where("id", $last)
+                        ->select("id", "roadid")
+                        ->get();
+
+                if(count($coordslast) == 0){
+                    echo "id: " . $last . "不存在！<br/>";
+                    continue;
+                }
+
+                $coordsnext = RoadCoordinate::where("id", $next)
+                        ->select("id", "roadid")
+                        ->get();
+
+                if(count($coordsnext) == 0){
+                    echo "id: " . $i . "不存在！<br/>";
+                    continue;
+                }
+
+                $links = RoadLink::where("rcid", $last)
+                        ->select("id")
+                        ->where("linkrcid", $next)
+                        ->get();
+
+                if(count($links) > 0){
+                    echo "roadlink已存在！ LastID:" . $last . ", NextID: " . $next. "<br/>";  
+                    continue;
+                } else {
+                    $newlink = new RoadLink();
+                    $newlink->roadid = $coordslast[0]->roadid;
+                    $newlink->rcid = $last;
+                    $newlink->linkroadid = $coordsnext[0]->roadid;
+                    $newlink->linkrcid = $next;
+                    $newlink->linktype = 1;
+                    $newlink->save();
+                    echo "新增RoadLink！ LastID:" . $last . ", NextID: " . $next . "<br/>";    
+                }                
+            }
+        }
+        
+        echo "<a href='setuproadlinks'>返回</a>";
+    }    
 }

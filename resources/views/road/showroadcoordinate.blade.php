@@ -156,30 +156,45 @@
     addRoadRect({{$coord->lng1}}, {{$coord->lat1}}, {{$coord->lng2}}, {{$coord->lat2}}, 
             {{$coord->lng3}}, {{$coord->lat3}}, {{$coord->lng4}}, {{$coord->lat4}}, 
             {{$coord->id}}, {{sprintf("%.1f", $coord->angle)}}, {{$coord->lng}}, {{$coord->lat}},
-            {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}}, {{$coord->roadsectionno}}, map);
+            {{$coord->maxlng}}, {{$coord->maxlat}}, {{$coord->minlng}}, {{$coord->minlat}}, {{$coord->roadsectionno}}, 
+            {{$coord->linkcount}}, map);
     @endforeach
     @endif
     
 var selectLngLatMode = 0;    
 function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, lng, lat,
-    maxlng, maxlat, minlng, minlat, roadsectionno, map){
+    maxlng, maxlat, minlng, minlat, roadsectionno, linkcount, map){
         var point = new TLngLat(lng1, lat1);  // 创建点坐标  
         var content = "";
+        
+        var polygonFillColor = "white";
+        
+        if(linkcount === 0){
+            polygonFillColor = "red";
+        }
+
+        if(linkcount > 1){
+            polygonFillColor = "purple";
+        }        
+        
         @if($searchshowid == 1)
-            content = id + ", " + roadsectionno;
+            content = id + "," + linkcount;
         @endif
         
         @if($searchshowangle == 1)
             content = angle;
         @endif
         
+        var labelpoint = new TLngLat(minlng + (maxlng - minlng) /  2, minlat + (maxlat - minlat) / 2); 
+        
         if(content !== ""){
             var config = {
                 text: content,
-                offset: new TPixel(0, 0),
-                position: point
+                offset: new TPixel(0, 20),
+                position: labelpoint
             }
             var label = new TLabel(config);
+            label.setTitle(content);
             label.setFontSize(3);
             label.setOpacity(0.5);
             map.addOverLay(label);  
@@ -222,7 +237,7 @@ function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, 
         points.push(new TLngLat(lng2, lat2));
         points.push(new TLngLat(lng3, lat3));
         points.push(new TLngLat(lng4, lat4));
-        var polygon = new TPolygon(points, {strokeColor:"blue", strokeWeight:1, strokeOpacity:1, fillOpacity:0.5});
+        var polygon = new TPolygon(points, {strokeColor:"blue", fillColor: polygonFillColor, strokeWeight:1, strokeOpacity:1, fillOpacity:0.5});
         
         polygon.onChange(function(p){
                 polygon.disableEdit();

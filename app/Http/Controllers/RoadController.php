@@ -101,6 +101,7 @@ class RoadController extends Controller
         DB::delete("delete from roads where id=" . $request->roadid);
         DB::delete("delete from roadcoordinates where roadid=" . $request->roadid);
         DB::delete("delete from roadlinks where roadid=" . $request->roadid);
+        DB::delete("delete from mapareas where roadid=" . $request->roadid);
         DB::delete("delete from roadlinks where linkroadid=" . $request->roadid);
         
         return redirect("/roads");

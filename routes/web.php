@@ -141,6 +141,8 @@ Route::any("/exportroadcoordinate", "RoadCoordinateController@exportRoadCoordina
 Route::any("/updateroadcoordinate", "RoadCoordinateController@updateRoadCoordinate");
 Route::any("/addroadsectionmanually", "RoadCoordinateController@addRoadSectionManually");
 Route::any("/updateallroadcoordinateproperties", "RoadCoordinateController@updateAllRoadCoordinateProperties");
+Route::any("/setuproadlinks", "RoadCoordinateController@setupRoadLinks");
+Route::any("/setuproadlinksave", "RoadCoordinateController@setupRoadLinkSave");
 
 Route::any("/showroadareas", "MapAreaController@index");
 Route::any("/addroadarea", "MapAreaController@addRoadArea");
