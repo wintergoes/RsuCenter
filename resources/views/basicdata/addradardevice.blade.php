@@ -166,14 +166,14 @@ function onSelectTecChild(){
             <label for="lat" class="col-sm-2 col-form-label">Y坐标范围</label>
             <div class="col-sm-2">
                 @if(isset($radardevice))
-                <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" value="{{$radardevice->validYposSmall}}">
+                <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" value="{{$radardevice->validYPosSmall}}">
                 @else
                 <input type="text" class="form-control" id="validYposSmall" name="validYposSmall" value="-1000" placeholder="">
                 @endif
             </div>
             <div class="col-sm-2">
                 @if(isset($radardevice))
-                <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" value="{{$radardevice->validYposLarge}}">
+                <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" value="{{$radardevice->validYPosLarge}}">
                 @else
                 <input type="text" class="form-control" id="validYposLarge" name="validYposLarge" value="1000" placeholder="">
                 @endif

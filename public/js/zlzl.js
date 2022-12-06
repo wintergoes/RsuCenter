@@ -141,3 +141,16 @@ function HashMap(){
     }
 }
 
+
+function getRsuScoreStr(score){
+    if(score == 0){
+        return "<font color=green>正常</font>";
+    } else if(score > 0 && score <= 30){
+        return "<font color=Coral>轻微错误</font>";
+    } else if(score > 30 && score <= 50){
+        return "<font color=OrangeRed>中等错误</font>";
+    } else {
+        return "<font color=DarkRed>严重错误</font>";
+    }
+}
+

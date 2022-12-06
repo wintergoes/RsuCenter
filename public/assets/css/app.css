@@ -39,14 +39,14 @@ a {
 }
 
 .sidebar-header {
-	width: 250px;
 	height: 60px;
+        margin-right: 10px;
 	display: flex;
 	align-items: center;
 	position: fixed;
 	top: 0;
 	bottom: 0;
-	padding: 0 15px;
+	padding: 0 15px 0 0;
 	z-index: 5;
 	background-clip: padding-box;
 }

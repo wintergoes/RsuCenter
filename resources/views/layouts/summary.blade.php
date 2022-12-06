@@ -255,8 +255,8 @@ function updateBdMapSummary(){
                     offset: new BMapGL.Size(0, -10)
                 });
                 
-                if(rsuobj.score < 80){
-                    var label = new BMapGL.Label(rsuobj.devicecode + " <a href='devices' target='_blank'><font color='#d77f43'>设备异常</font></a>", {       // 创建文本标注
+                if(rsuobj.score < 80 && rsuobj.score > 0){
+                    var label = new BMapGL.Label(rsuobj.devicecode + " <a href='devices' target='_blank'>" + getRsuScoreStr(rsuobj.score) + "</a>", {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
                         offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
                     })    
@@ -339,7 +339,7 @@ function updateBdMapSummary(){
                         position: pt,                          // 设置标注的地理位置
                         offset: new BMapGL.Size(-60, -110)           // 设置标注的偏移量
                     })    
-                    label.setStyle({border: "1px dotted rgb(230 230 230)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#ffffff"});
+                    label.setStyle({border: "2px dotted #ffffff", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#ef7d65"});
                     label.enableMassClear();
 //                    radarLabels.push(label);
                     marker.setLabel(label);                      

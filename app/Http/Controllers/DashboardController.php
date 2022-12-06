@@ -202,7 +202,7 @@ class DashboardController extends Controller
     function bdmapSummary(Request $request){
         $rdevices = Device::orderBy("devices.id")
                 ->select("devices.id", "devices.devicecode", "devices.rsulat", "devices.rsulng", "rsu_s.score")
-                ->leftjoin("RSU_status as rsu_s", "rsu_s.device_ID", "=", "devices.devicecode")
+                ->leftjoin("RSU_status as rsu_s", DB::raw("CONVERT(rsu_s.device_ID USING utf8) COLLATE utf8_unicode_ci"), "=", "devices.devicecode")
                 ->get();
         
         $odevices = ObuDevice::orderBy("id")

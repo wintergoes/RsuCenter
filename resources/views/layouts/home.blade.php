@@ -25,7 +25,7 @@
 	<link rel="stylesheet" href="assets/css/header-colors.css" />
         <script src="assets/js/jquery.min.js"></script>
         <script src="js/zlzl.js"></script>
-	<title>RSU管理后台</title>
+	<title>车路协同V2X智能云控平台</title>
 </head>
 
 <body>
@@ -77,9 +77,9 @@ $l2_devicelogs = in_array($currentpath, array("devicelogs", "devicelogfileconten
 $l2_bsmlogs = in_array($currentpath, array('bsmlogs', 'bsmlogfilecontent'));
 $l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
 
-$l2_users = in_array($currentpath, array("users", "adduser", "edituser", "resetpassword"));
+$l2_users = in_array($currentpath, array("users", "adduser", "addusersave", "edituser", "resetpassword"));
 $l2_devices = in_array($currentpath, array("devices", "editdevice", "rsusettings"));
-$l2_obudevices = in_array($currentpath, array("obudevices"));
+$l2_obudevices = in_array($currentpath, array("obudevices", "editobudevice"));
 $l2_obuhardwares = in_array($currentpath, array("obuhardwares"));
 $l2_radardevices = in_array($currentpath, array("radardevices", "addradardevice", "editradardevice"));
 $l2_usergroups = in_array($currentpath, array("usergroups", "addusergroup", "editusergroup"));;
@@ -200,9 +200,9 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
                             <nav class="navbar navbar-expand">
                     <div class="sidebar-header">
                         <div>
-                                <h4 class="logo-text"><img src="images/site_title_icon.png" alt="RSU管理后台"></h4>
+                                <h4 class="logo-text"><img src="images/site_title.png" alt="车路协同V2X智能云控平台"></h4>
                         </div>
-                        <div class="toggle-icon ms-auto logo-text"><i class='bx bx-arrow-to-left'></i>
+                        <div class="toggle-icon ms-auto logo-text"><i style="margin-left: 10px;" id="switchicon" class='bx bx-arrow-to-left' onclick="switchIconClick();"></i>
                         </div>
                     </div>                                    
                     <div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
@@ -254,7 +254,7 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
 		<!--End Back To Top Button-->
                     <footer class="page-footer">
-                            <p class="mb-0">Copyright © 2022. 中路智链 All right reserved.</p>
+                            <p class="mb-0">Copyright © 2022. 中路智链科技集团有限公司 All right reserved.</p>
                     </footer>
                 </div>
 	<!--end wrapper-->
@@ -274,4 +274,14 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 	<script src="assets/js/app.js"></script>
 </body>
 
+
+<script >
+function switchIconClick(){
+    if($("#switchicon").attr("class") === "bx bx-arrow-to-left"){
+        $("#switchicon").attr("class", "bx bx-arrow-to-right");
+    } else {
+        $("#switchicon").attr("class", "bx bx-arrow-to-left");
+    }
+}
+</script>
 </html>
