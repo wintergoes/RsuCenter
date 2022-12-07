@@ -24,7 +24,7 @@
                     <td class="search_td">
                         <select name="vehicletype" id="vehicletype" class="form-select" ></select>                        
                     </td>
-                    <td class="search_td">雷视设备：&nbsp;&nbsp;</td>
+                    <td class="search_td">&nbsp;&nbsp;雷视设备：&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="radarmac" id="radarmac" class="form-select" >
                             <option value="-1"  {{"-1" == $searchradar ? "selected" : ""}}>不限</option>
@@ -32,7 +32,7 @@
                             <option value="{{$radar->macaddrint}}" {{$radar->macaddrint == $searchradar ? "selected" : ""}}>{{$radar->devicecode}}</option>
                             @endforeach
                         </select>                        
-                    </td>                   
+                    </td>
                     <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>                    
                 </tr>              
             </table>

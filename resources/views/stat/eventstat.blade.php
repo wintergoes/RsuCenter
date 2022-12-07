@@ -70,7 +70,7 @@
                                                     <div class="d-flex align-items-center">
                                                             <div class="tab-icon"><i class="bx bx-table font-18 me-1"></i>
                                                             </div>
-                                                            <div class="tab-title">事件类型列表</div>
+                                                            <div class="tab-title">事件按日统计列表</div>
                                                     </div>
                                             </a>
                                     </li>
@@ -207,6 +207,7 @@ function drawChart(){
             }
             eventTrendChart = new Chart(ctx, {
             type: 'bar',
+            backgroundColor: '#ffffff',
             data: {
               labels: data.labels,
               datasets: esdataset

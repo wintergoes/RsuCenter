@@ -9,6 +9,7 @@ use App\User;
 use App\RoadCoordinate;
 use App\Road;
 use App\TrafficEventClass;
+use App\ObuDevice;
 
 use Auth;
 use DB;
@@ -380,11 +381,16 @@ class WarningInfoController extends Controller
         
         if($searchtodate == ""){
             $searchtodate = date('Y-m-d',time());
-        }         
+        }
+        
+        $obus = ObuDevice::orderBy("id", "desc")
+                ->select("id", "obuid")
+                ->get();
         
         return view("/stat/warningrecordstat", [
             "searchfromdate"=>$searchfromdate,
-            "searchtodate"=>$searchtodate
+            "searchtodate"=>$searchtodate,
+            "obus"=>$obus,
         ]);        
     }
     
@@ -405,12 +411,25 @@ class WarningInfoController extends Controller
         
         if($searchtodate == ""){
             $searchtodate = date('Y-m-d',time());
-        }          
+        }
+        
+        $searchobuid = "-1";
+        if($request->has("obuid")){
+            $searchobuid = $request->obuid;
+        }
+        
+        $obufilter = "select count(id) as wrcount, date(created_at) as wrdate from warningrecords group by date(created_at)";
+        if($searchobuid != "-1"){
+            $obufilter = " select obuid, count(id) as wrcount, date(created_at) as wrdate from warningrecords where obuid=" . $searchobuid . " group by obuid, date(created_at) ";
+        }        
         
         $sqlstr = "select d.ddate,ifnull(wrstat.wrcount,0)as wrcount from tbldates d "
-                . " left join (select count(id) as wrcount, date(created_at) as wrdate from warningrecords group by date(created_at)) wrstat on wrstat.wrdate=d.ddate "
-                . " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' order by d.ddate;";
+                . " left join (" . $obufilter . ") wrstat on wrstat.wrdate=d.ddate "
+                . " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' ";
+        
+        $sqlstr .= " order by d.ddate;";
         $countstat = DB::select($sqlstr);
+        //echo $sqlstr;
         
         $dates = DB::select("select ddate from tbldates where ddate>='" . $searchfromdate . "' and ddate<='" . $searchtodate . "' ");
         $labels = array();
@@ -439,11 +458,22 @@ class WarningInfoController extends Controller
         
         if($searchtodate == ""){
             $searchtodate = date('Y-m-d',time());
-        }        
+        }
+        
+        $searchobuid = "-1";
+        if($request->has("obuid")){
+            $searchobuid = $request->obuid;
+        }
+        
+        $obufilter = "";
+        if($searchobuid != "-1"){
+            $obufilter = " and wr.obuid=" . $searchobuid;
+        }
         
         $sqlstr = "select count(wr.id) as wcount,tp.tecparentcode, tp.tecname from warningrecords wr "
                 . " left join trafficeventclasses tp on tp.teccode=wr.eventtype "
-                . " where date(wr.created_at)>='" . $searchfromdate . "' and date(wr.created_at)<='" . $searchtodate . "' group by tp.tecparentcode, tp.tecname ;";
+                . " where date(wr.created_at)>='" . $searchfromdate . "' and date(wr.created_at)<='" . $searchtodate . "' "
+                . $obufilter . " group by tp.tecparentcode, tp.tecname ;";
         
         $eventtypesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventtypesummary);
@@ -467,12 +497,23 @@ class WarningInfoController extends Controller
         
         if($searchtodate == ""){
             $searchtodate = date('Y-m-d',time());
+        }
+        
+        $searchobuid = "-1";
+        if($request->has("obuid")){
+            $searchobuid = $request->obuid;
+        }
+        
+        $obufilter = "";
+        if($searchobuid != "-1"){
+            $obufilter = " and wr.obuid=" . $searchobuid;
         }        
         
         $sqlstr = "select count(wr.id) as scount,wr.eventsource, "
                 . " case wr.eventsource when 1 then '交警' when 2 then '政府' when 3 then '气象部门' "
                 . " when 4 then '互联网' when 5 then '本地检测' else '未知' end as sourcename from warningrecords wr  "
-                . " where date(wr.created_at)>='" . $searchfromdate . "' and date(wr.created_at)<='" . $searchtodate . "' group by wr.eventsource ;";
+                . " where date(wr.created_at)>='" . $searchfromdate . "' and date(wr.created_at)<='" . $searchtodate . "' "
+                . $obufilter . " group by wr.eventsource ;";
         
         $eventsourcesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventsourcesummary);

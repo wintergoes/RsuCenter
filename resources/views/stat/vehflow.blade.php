@@ -107,7 +107,7 @@
 				<div class="d-flex align-items-center">
 					<div>
 						<h6 class="mb-3">
-							<b>车流量分时段统计图</b>
+							<b>车流量时段统计图</b>
 						</h6>
 					</div>
 				</div>                            

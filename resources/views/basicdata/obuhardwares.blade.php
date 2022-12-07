@@ -35,7 +35,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                 <tbody>
                     @foreach($obuhardwares as $hw)
                     <?php
-                    $errstr = $commonctrl->getRsuError($hw, '<font color=red>', '</font><br/>');
+                    $errstr = $commonctrl->getObuError($hw, '<font color=red>', '</font><br/>');
                     ?>
                     <tr>
                         <td align='left'>{{$hw->device_ID}}</td>

@@ -46,6 +46,8 @@ class ObuRouteController extends Controller
         $searchlocationtype = "-1";
         if($request->has("locationtype")){
             $searchlocationtype = $request->locationtype;
+        } else {
+            $searchlocationtype = "1";
         }
         
         $obus = ObuDevice::orderBy("id", "desc")

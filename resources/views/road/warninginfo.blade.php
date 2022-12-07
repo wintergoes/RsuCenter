@@ -27,7 +27,7 @@
 
 <div class="mb-lg-3">
     <div class="col-sm-12 col-md-12">
-        <a href="addwarninginfo"><button type="button" class="btn btn-outline-success px-2 radius-6">新增事件</button></a>
+        <a href="addwarninginfo"><button type="button" class="btn btn-outline-success px-2 radius-6">新增交通事件</button></a>
         <a href="sendrte2rsu"><button type="button" class="btn btn-outline-success px-2 radius-6">事件下发RSU</button></a>
     </div>
 </div>
@@ -64,8 +64,8 @@
                 <thead>
                     <tr role="row">
                         <th >ID</th>
-                        <th >预警名称</th>
-                        <th >起始坐标</th>
+                        <th >事件名称</th>
+                        <th >事件坐标</th>
                         <th >影响半径</th>
                         <th >开始时间</th>
                         <th >结束时间</th>

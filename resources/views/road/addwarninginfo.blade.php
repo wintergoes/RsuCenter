@@ -120,7 +120,7 @@ function onSelectTecChild(){
         </div>         
 
         <div class="row mb-3">
-            <label for="winame" class="col-sm-2 col-form-label">预警内容</label>
+            <label for="winame" class="col-sm-2 col-form-label">事件名称</label>
             <div class="col-sm-6">
                 @if(isset($winfo))
                 <input type="hidden" name="id" value="{{$winfo->id}}" />
@@ -132,7 +132,7 @@ function onSelectTecChild(){
         </div>
         
         <div class="row mb-3">
-            <label for="realname" class="col-sm-2 col-form-label">起始坐标</label>
+            <label for="realname" class="col-sm-2 col-form-label">事件坐标</label>
             <div class="col-sm-2">
                 @if(isset($winfo))
                 <input type="text" class="form-control" id="startlat" name="startlat" value="{{$winfo->startlat}}">

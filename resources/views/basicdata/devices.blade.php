@@ -59,7 +59,6 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                              <div class="dropdown">
                                 <button class="btn btn-light border-dark border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                 <ul class="dropdown-menu" style="margin: 0px;">
-                                    <li><a class="dropdown-item" href="rsusettings?id={{$device->id}}">远程设置</a></li>
                                     <li><a class="dropdown-item" href="devicelogs?devicecode={{$device->id}}">系统日志</a></li>
                                     <li><a class="dropdown-item" href="bsmlogs?devicecode={{$device->id}}">BSM日志</a></li>
                                     <li><a class="dropdown-item" href="editdevice?id={{$device->id}}">编辑</a></li>
