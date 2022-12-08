@@ -298,10 +298,10 @@
 
                 <td>
                     <div style='z-index: 10; '>
-                        <div class="item_container" style="width: 430px; height: 260px; 
+                        <div class="item_container" style="width: 460px; height: 260px; 
                              background: url('images/dashboard/device_background.png') no-repeat;
                                  background-size:100% 100%; ">
-                            <div>
+                            <div style="text-align: left;">
                                 <span>事件统计</span>
                                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
                             </div>
@@ -2108,6 +2108,93 @@ function showEvents(){
     });
 }
 
+function showRadarAidEvents(){
+    var constpiecolors = ["#13F9F9", "#2EA1FF", "#2B68FA", "#DA3097", '#59a4ff', '#ffbd2a', '#b37feb', '#4ace82', '#ff745c', '#26d0ff', '#f6cc00', '#c04ee6'];
+    var eventdateset = [];
+    var eventdataitem = {};
+    var labels = [];
+    var eventdata = [];
+    var piecolors = [];
+    var eventitemcount = 0;
+    $.getJSON("dashboardaideventjson?statday=" + eventReqDay,function(data){
+        eventReqCount++;
+        var tbl = document.getElementById("traffic_event_table");
+        var rows = tbl.rows; //获取表格的行数
+
+        for (var i = rows.length - 1; i > 0 ; i--) {
+            tbl.deleteRow(i);    
+        }
+
+        var maxid = Math.min(4, data["aidevents"].length);
+        for(var i=0;i<maxid;i++){
+            var tr=tbl.insertRow(i+1);
+            tr.className = "tr_content";
+                        //添加单元格
+            var cell0=tr.insertCell(0);
+            cell0.innerHTML = data["aidevents"][i]["plate"];
+            var cell1=tr.insertCell(1);
+            cell1.innerHTML=hkEvent2Str(data["aidevents"][i]["aidevent"]);
+            var cell2=tr.insertCell(2);
+            cell2.innerHTML=data["aidevents"][i]["eventtime"]; 
+        }
+
+        if(data["aideventsummary"] !== null){
+            eventitemcount = data["aideventsummary"].length;
+        }
+        for(var i = 0; i < data["aideventsummary"].length; i++){
+            labels.push(hkEvent2Str(data["aideventsummary"][i].aidevent));
+            eventdata.push(data["aideventsummary"][i].wcount);
+            piecolors.push(constpiecolors[i]);
+        }
+        
+        eventdataitem["data"] = eventdata;
+        eventdataitem["backgroundColor"] = piecolors;
+        eventdataitem["borderColor"] = 'rgba(0, 0, 0, 0)';
+        eventdataitem["borderWidth"] = 8;
+        eventdataitem["borderAlign"] = 'inner';
+        eventdateset.push(eventdataitem);
+
+//        if(eventChart){    
+//            eventChart.clear();
+//            eventChart.destroy();
+//        }
+        if(eventitemcount === 0){
+            $("#chart_events_container").html('<br/><br/>暂无数据。');
+        } else {
+            $("#chart_events_container").html('<canvas id="chart_events" width="80" height="80"></canvas>');
+
+            eventChart = new Chart(document.getElementById("chart_events"), {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: eventdateset,
+                        scaleFontColor : "red",
+                        scaleLineColor: "red",
+                        scaleLineWidth: 8, 
+                    },
+                    options: {               
+                        maintainAspectRatio: false,
+                        startAngle: 45,
+                        title: {
+                                display: false,
+                                text: ''
+                        },
+                        legend: {
+                            position: 'bottom',
+                            display: true,
+                                labels: {
+                                    boxWidth:8
+                                }
+                        },
+                        animation: {
+                            duration: 0,
+                        }
+                    }
+            });        
+        }        
+    });
+}
+
 var vehflowChart;
 var vehflowReqCount = 0;
 function showVehFlowChartByDay(reqcount){
@@ -2660,7 +2747,8 @@ function refreshAll(){
     
     hideBd();
     updateBdMapSummary();
-    showEvents();
+    //showEvents();
+    showRadarAidEvents();
     showVehFlowChart();
     getWeekDay();
     showDate();    

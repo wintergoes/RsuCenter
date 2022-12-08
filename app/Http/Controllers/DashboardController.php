@@ -130,6 +130,28 @@ class DashboardController extends Controller
         return json_encode($arr);        
     }
     
+    function dashboardAidEventJson(Request $request){
+        $latestevents = DB::select("select plate, aidevent, time(eventtime) as eventtime from aidevents order by id desc limit 7");
+        
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-" . $request->statday . " day"));
+        }
+
+        $searchtodate = date('Y-m-d',time());
+        
+        $sqlstr = "select count(aidevents.id) as wcount,aidevents.aidevent from aidevents "
+                . " where date(aidevents.eventtime)>='" . $searchfromdate . "' and date(aidevents.eventtime)<='" . $searchtodate . "' group by aidevents.aidevent ;";
+        
+        $eventtypesummary = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "aideventsummary"=>$eventtypesummary, "aidevents"=>$latestevents);
+        return json_encode($arr);          
+    }
+    
     function dashboardTestLatlng(Request $request){
         $coords = RoadCoordinate::where("roadid", 14)
                 ->select("lat", "lng")
