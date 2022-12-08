@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
 
 class UploadFileController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }    
+ 
     function obuVideos(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){

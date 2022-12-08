@@ -15,6 +15,10 @@ require_once '../app/Constant.php';
 
 class TrafficSignController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }    
+ 
     function index(Request $request){
         $signs = TrafficSign::orderBy("trafficsigns.id", "desc")
                 ->select("trafficsigns.id", "trafficsigns.tscid", "trafficsigns.tsname", "trafficsigns.tslat", 
