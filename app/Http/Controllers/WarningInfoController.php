@@ -125,8 +125,9 @@ class WarningInfoController extends Controller
         $roadsStart = RoadCoordinate::where("roadcoordinates.minlat", "<", $winfo->startlat)
                 ->where("roadcoordinates.maxlat", ">", $winfo->startlat)
                 ->where("roadcoordinates.minlng", "<", $winfo->startlng)
-                ->where("roadcoordinates.maxlng", ">", $winfo->startlng)               
-                ->select("r.roadname", "roadcoordinates.lanetype", "roadcoordinates.laneno")
+                ->where("roadcoordinates.maxlng", ">", $winfo->startlng)    
+                ->where("r.published", "1")
+                ->select("r.roadname", "r.published", "roadcoordinates.lanetype", "roadcoordinates.laneno")
                 ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")                
                 ->distinct()
                 ->get();        
@@ -134,8 +135,9 @@ class WarningInfoController extends Controller
         $roadsEnd = RoadCoordinate::where("roadcoordinates.minlat", "<", $winfo->stoplat)
                 ->where("roadcoordinates.maxlat", ">", $winfo->stoplat)
                 ->where("roadcoordinates.minlng", "<", $winfo->stoplng)
-                ->where("roadcoordinates.maxlng", ">", $winfo->stoplng)               
-                ->select("r.roadname", "roadcoordinates.lanetype", "roadcoordinates.laneno")
+                ->where("roadcoordinates.maxlng", ">", $winfo->stoplng) 
+                ->where("r.published", "1")
+                ->select("r.roadname", "r.published", "roadcoordinates.lanetype", "roadcoordinates.laneno")
                 ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")
                 ->distinct()
                 ->get();                

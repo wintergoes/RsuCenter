@@ -47,7 +47,7 @@ class ManagerApiController extends Controller
                 ->where("roadcoordinates.maxlat", ">", $request->lat)
                 ->where("roadcoordinates.minlng", "<", $request->lng)
                 ->where("roadcoordinates.maxlng", ">", $request->lng)               
-                ->select("r.roadname", "roadcoordinates.lanetype", "roadcoordinates.laneno")
+                ->select("r.roadname", "r.published", "roadcoordinates.lanetype", "roadcoordinates.laneno")
                 ->leftjoin("roads as r", "roadcoordinates.roadid", "=", "r.id")
                 ->distinct()
                 ->get();

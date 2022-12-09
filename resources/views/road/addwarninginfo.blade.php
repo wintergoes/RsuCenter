@@ -163,6 +163,7 @@ function onSelectTecChild(){
             <div class="col-sm-5" id="startExtraInfoContent">
                 <ul>
                     @foreach($roadsStart as $road)
+                    @if($road->published == "1")
                     <li>{{$road->roadname}}
                     @if($road->lanetype == 0)
                     ，全车道
@@ -170,6 +171,7 @@ function onSelectTecChild(){
                     ，{{$road->laneno}}车道
                     @endif
                     </li>
+                    @endif
                     @endforeach
                 </ul>
             </div>
@@ -214,7 +216,7 @@ function onSelectTecChild(){
                 <input type="text" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  autocomplete="off" id="endtime" name="endtime" value="" placeholder="请输入结束时间">
                 @endif
             </div>
-        </div>        
+        </div>
         
         <div class="row mb-3">
             <label for="wistatus" class="col-sm-2 col-form-label">状态</label>
@@ -295,6 +297,9 @@ map.addEventListener("rightclick", function(e){
             } else {
                 addHtml = "<div>此坐标可能在以下路段上：</div><ul>";
                 for(i = 0; i < data.roads.length; i++){
+                    if(data.roads[i].published !== 1){
+                        continue;
+                    }
                     addHtml += "<li>" + data.roads[i].roadname; 
                     if(data.roads[i].lanetype === 1){
                         addHtml += "，第" + data.roads[i].laneno + "车道";
