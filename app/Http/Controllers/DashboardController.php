@@ -24,7 +24,6 @@ class DashboardController extends Controller
             ->get();
         
         $radars = RadarDevice::orderBy("id", "desc")
-                ->limit(6)
                 ->get();
         
         $default_lat = env("dashboard_default_lat", 36.183753);

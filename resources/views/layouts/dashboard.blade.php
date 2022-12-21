@@ -356,7 +356,7 @@ var radarVideoMap = new HashMap();
     
 @if(env("dashboard_video_type") == "obu")    
 <div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
-     background-color: rgba(100, 0, 0, 0);  font-size: 12px; ">
+     background-color: rgba(100, 0, 0, 0);  font-size: 12px; overflow-x: auto; overflow-y: hidden; ">
                 <?php
                 $videocount = 0;
                 ?>
@@ -384,12 +384,12 @@ var radarVideoMap = new HashMap();
 </div>
 @else
 <div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
-     background-color: rgba(100, 0, 0, 0);  font-size: 12px; z-index: 10;">
+     background-color: rgba(100, 0, 0, 0);  font-size: 12px; z-index: 10; overflow-x: auto; overflow-y: hidden; display: inline-block; height: 230px; width: {{count($radars) * 275}}px;"> <!-- -->
                 <?php
                 $videocount = 0;
                 ?>
                 @foreach($radars as $radar)
-                <div style="float: left; margin-right: 10px;">
+                <div style="float: left; margin-right: 10px; display: inline-block;">
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
                          background-size: 100% 100%; width: 260px; height: 155px; padding: 6px;">
                         <video  muted="muted" controls id="radarvideo{{$radar->id}}" src="{{$radar->videostreamaddress}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none">
@@ -409,11 +409,11 @@ var radarVideoMap = new HashMap();
                 </div>
                 <?php
                 $videocount++;
-                if($videocount == 7){
-                    break;
-                }
+//                if($videocount == 7){
+//                    break;
+//                }
                 ?>
-                @endforeach        
+                @endforeach 
 </div>
 @endif
 <script>
@@ -1880,16 +1880,20 @@ function updateBdMapSummary(){
                             + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
                             + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr;
                 
+                var radarYoffset = -10;
+                if(radarobj.devicecode === 'LS00114' || radarobj.devicecode === 'LS00115'){
+                    radarYoffset = 90;
+                }
                 var marker = radarDeviceMap.get(radarobj.id);
                 if(marker === null){
                     marker = new BMapGL.Marker(pt, {
                         icon: radarIcon,
-                        offset: new BMapGL.Size(0, -10)
+                        offset: new BMapGL.Size(0, radarYoffset)
                     });
                     
                     var label = new BMapGL.Label(labelstr, {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, -110)           // 设置标注的偏移量
+                        offset: new BMapGL.Size(-60, radarYoffset-100)           // 设置标注的偏移量
                     })    
                     label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
                     label.enableMassClear();
@@ -2351,10 +2355,10 @@ function resizePage(){
     $("#dashboard_left").width(window.innerWidth);
     
     if(window.innerWidth < 1400){
-        $("#obu_videos").css('display', 'none');
+        //$("#obu_videos").css('display', 'none');
     } else {
         //$("#dashboard_left").width(window.innerWidth - $("#obu_videos").width() - 32);
-        $("#obu_videos").css('display', '');
+        //$("#obu_videos").css('display', '');
     }
 }
 
