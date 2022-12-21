@@ -38,7 +38,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
-
+        $this->mapDataApiRoutes();
         //
     }
 
@@ -76,4 +76,15 @@ class RouteServiceProvider extends ServiceProvider
             require base_path('routes/api.php');
         });
     }
+    
+    protected function mapDataApiRoutes()
+    {
+        Route::group([
+            'middleware' => 'api',
+            'namespace' => $this->namespace,
+            'prefix' => 'dataapi',
+        ], function ($router) {
+            require base_path('routes/dataapi.php');
+        });
+    }    
 }

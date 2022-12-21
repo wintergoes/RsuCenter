@@ -49,6 +49,7 @@ Route::any("/registerobu", "ApiV1Controller@registerObu");
 Route::any("/getroadinfo", 'ApiV1Controller@getRoadInfo');
 
 
+
 //***************************雷视相关*****************************************
 Route::any("/uploadaidevents", "ApiV1Controller@uploadAidEvents");
 Route::any("/uploadanprevents", "ApiV1Controller@uploadAnprEvents");

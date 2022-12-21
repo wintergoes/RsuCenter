@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use DB;
 
+use App\ObuDevice;
+use App\ObuRouteDetail;
+use App\DataApiClient;
+
 define("dataapi_ret_success", 1);
 define("dataapi_ret_error", -1);
 
@@ -18,6 +22,25 @@ define("dataapi_ret_not_exist", 10012);  //数据不存在
 
 class DataApiController extends Controller
 {
+    function getObus(Request $request){
+        $chkapiclient = $this->checkApiClient($request);
+        if($chkapiclient instanceof DataApiClient){
+            
+        } else {
+            return $chkapiclient;
+        }        
+        
+        $obus = ObuDevice::orderby("id", "desc")
+                ->get();
+        
+        $arr = array("retcode"=>dataapi_ret_success, "obus"=>$obus);
+        return json_encode($arr);
+    }
+    
+    function getObuRoute(Request $request){
+        
+    }    
+    
     function checkIpAddress(){
         $fromip = $_SERVER['REMOTE_ADDR'];
         
@@ -40,10 +63,10 @@ class DataApiController extends Controller
         }
         
         $clients = DataApiClient::where('id', $request->clientid)
-                ->select('dackey', 'dacdevices')
+                ->select('clientkey')
                 ->get();
         
-        if(count($clients) == 0 || $clients[0]->dackey != $request->clientkey){
+        if(count($clients) == 0 || $clients[0]->clientkey != $request->clientkey){
             $arr = array("retcode"=>dataapi_no_auth, "retmsg"=>"无效的接口客户!");
             return json_encode($arr);              
         }
