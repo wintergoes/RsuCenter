@@ -66,7 +66,7 @@ $l1_stat = $l2_eventstat | $l2_clockins | $l2_oburoute | $l2_vehflowstat | $l2_w
 
 $l2_trafficsign = in_array($currentpath, array("trafficsigns", "addtrafficsign", "edittrafficsign", "sendrts2rsu"));
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo", "sendrte2rsu"));
-$l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave"));
+$l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave", "showroadcoordinate"));
 $l1_road = $l2_warninginfo | $l2_road | $l2_trafficsign;
 
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));

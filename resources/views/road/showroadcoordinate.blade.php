@@ -538,23 +538,21 @@ function showInputCoord(){
     dwTranslateCallback = function (data){
       if(data.status === 0) {
         var pointConvert = new BMapGL.Point(data.points[0].lng, data.points[0].lat);  // 创建点坐标  
-        map.centerAndZoom(pointConvert, 18);                 // 初始化地图，设置中心点坐标和地图级别           
-        var inputmarker = new BMapGL.Marker(pointConvert, {});
-        // 将标注添加到地图
-        map.addOverlay(inputmarker)  
+        map.centerAndZoom(new TLngLat(data.points[0].lng, data.points[0].lat), 18);                 // 初始化地图，设置中心点坐标和地图级别           
+        var marker = new TMarker(new TLngLat(data.points[0].lng, data.points[0].lat));
+        map.addOverLay(marker);
       }
-    }       
+    }   
     
     if($("#inputcoord_sys").val() === "0"){
+        map.centerAndZoom(new TLngLat(latlng[0],latlng[1]), 18);
+        var marker = new TMarker(new TLngLat(latlng[0],latlng[1]));
+        map.addOverLay(marker); 
+    } else {
         var points = [];
         points.push(point);
         var convertor = new BMapGL.Convertor();
         convertor.translate(points, COORDINATES_WGS84, COORDINATES_BD09, dwTranslateCallback, 100);    
-    } else {
-        map.centerAndZoom(point);
-        var inputmarker = new BMapGL.Marker(point, {});
-        // 将标注添加到地图
-        map.addOverlay(inputmarker)        
     }
 }
 
