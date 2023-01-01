@@ -20,6 +20,7 @@ use App\ClockIn;
 use App\WarningRecord;
 use App\VehicleFlow;
 use App\Forecast;
+use App\MapFixedArea;
 
 use App\AidEvent;
 use App\AnprEvent;
@@ -912,6 +913,7 @@ class ApiV1Controller extends Controller
         $maxrcid = 0;
         $maxareaid = 0;
         $maxroadlinkid = 0;
+        $maxfixedareaid = 0;
         
 //        if($request->maxroadid != ""){
 //            $maxroadid = $request->maxroadid;
@@ -927,6 +929,10 @@ class ApiV1Controller extends Controller
         
         if($request->maxroadlinkid != ""){
             $maxroadlinkid = $request->maxroadlinkid;
+        }
+        
+        if($request->maxmapfixedareaid != ""){
+            $maxfixedareaid = $request->maxmapfixedareaid;
         }
         
         $roads = Road::orderBy("id", "asc")
@@ -957,7 +963,11 @@ class ApiV1Controller extends Controller
                         "mapareas.maxlat", "mapareas.maxlng", "mapareas.minlat", "mapareas.minlng", "mapareas.lat", "mapareas.lng",
                         "mapareas.angle", "mapareas.distance")
                 ->leftjoin("roads as r", "r.id", "=", "mapareas.roadid")
-                ->get();        
+                ->get(); 
+        
+        $mapfixedareas = MapFixedArea::orderBy("id")
+                ->where("id", ">", $maxfixedareaid)
+                ->get();
         
         $roadlinks = RoadLink::orderBy("roadlinks.id", "asc")
                 ->where("roadlinks.id", ">", $maxroadlinkid)
@@ -967,7 +977,7 @@ class ApiV1Controller extends Controller
                 ->get();
         
         $arr = array("retcode"=>ret_success, "roads"=>$roads, "roadcoords"=>$roadcoords, 
-            "roadlinks"=>$roadlinks, "roadareas"=>$roadareas);
+            "roadlinks"=>$roadlinks, "roadareas"=>$roadareas, "mapfixedareas"=>$mapfixedareas);
         return json_encode($arr);
     }
     

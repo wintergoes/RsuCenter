@@ -152,6 +152,14 @@ Route::any("/editroadareasave", "MapAreaController@editRoadAreaSave");
 Route::any("/updateroadarea", "MapAreaController@updateRoadArea");
 Route::any("/deleteroadarea", "MapAreaController@deleteRoadArea");
 
+Route::any("/mapfixedareas", "MapFixedAreaController@index");
+Route::any("/addmapfixedarea", "MapFixedAreaController@addMapFixedArea");
+Route::any("/addmapfixedareasave", "MapFixedAreaController@addMapFixedAreaSave");
+Route::any("/editmapfixedarea", "MapFixedAreaController@editMapFixedArea");
+Route::any("/editmapfixedareasave", "MapFixedAreaController@editMapFixedAreaSave");
+Route::any("/updatemapfixedarea", "MapFixedAreaController@updateMapFixedArea");
+Route::any("/deletemapfixedarea", "MapFixedAreaController@deleteMapFixedArea");
+
 //*******************************Apis***************************************
 Route::any('/homedatasummary', 'HomeController@dataSummary');
 Route::any('/homebdmapsummary', 'HomeController@bdmapSummary');
