@@ -56,14 +56,7 @@
                 </tr>                  
             </table>
             
-            <table style="font-size: 12px; text-align: center; margin-bottom: 6px;" >
-                <tr>
-                    @foreach($sectionnos as $secno)
-                    <input type="checkbox" name="secnos[]" id="secno{{$secno->secno}}" value="{{$secno->secno}}"
-                           {{is_array($searchsecno) && in_array($secno->secno, $searchsecno) !== false ? "checked" : ""}}>{{$secno->secno}}
-                    @endforeach
-                </tr>                  
-            </table>
+
             
             <table style="font-size: 12px; text-align: center;" >                             
                 <tr>                   

@@ -102,15 +102,6 @@
         selectLngLatMode = 0;
     });
 
-    var rsuIcon = new TIcon("/images/circle_white_border.png", new TSize(8, 8));
-    @if(count($fixedareas) > 0)
-    @foreach($fixedareas as $area)
-    addRoadRect({{$area->lng1}}, {{$area->lat1}}, {{$area->lng2}}, {{$area->lat2}}, 
-            {{$area->lng3}}, {{$area->lat3}}, {{$area->lng4}}, {{$area->lat4}}, 
-            {{$area->id}}, {{sprintf("%.1f", $area->angle)}}, {{$area->lng}}, {{$area->lat}},
-            {{$area->maxlng}}, {{$area->maxlat}}, {{$area->minlng}}, {{$area->minlat}}, "{{$area->areaname}}", map);
-    @endforeach
-    @endif
     
 var selectLngLatMode = 0;    
 function addRoadRect(lng1, lat1, lng2, lat2, lng3, lat3, lng4, lat4, id, angle, lng, lat,
