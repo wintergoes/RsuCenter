@@ -301,6 +301,7 @@ class VehicleFlowController extends Controller
                 . " where  date(aidevents.eventtime)>='" . $searchfromdate . "' and date(aidevents.eventtime)<='" . $searchtodate . "' "
                 . " group by DATE_FORMAT(aidevents.eventtime, '%H') " ;
 
+        //echo $sqlstr;
         $arr = DB::select($sqlstr);
         $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
     

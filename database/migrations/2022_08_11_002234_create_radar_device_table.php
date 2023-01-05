@@ -26,6 +26,7 @@ class CreateRadarDeviceTable extends Migration
             $table->integer("status")->default(1);
             $table->double("validYPosSmall")->default(-1000);
             $table->double("validYPosLarge")->default(1000);
+            $table->float("roadangle")->default(0);
             $table->double("lat");
             $table->double("lng");
             $table->timestamp("communicationtime")->nullable();

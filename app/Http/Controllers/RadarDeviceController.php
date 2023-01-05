@@ -63,6 +63,7 @@ class RadarDeviceController extends Controller
         $rdevice->status = $request->status;
         $rdevice->validYPosSmall = $request->validYposSmall;
         $rdevice->validYPosLarge = $request->validYposLarge;
+        $rdevice->roadangle = $request->roadangle;
         $rdevice->lat = $request->lat == "" ? 0 : $request->lat;
         $rdevice->lng = $request->lng == "" ? 0 : $request->lng;
         $rdevice->radarremark = $request->radarremark;
@@ -120,6 +121,7 @@ class RadarDeviceController extends Controller
         $rdevice->status = $request->status;
         $rdevice->validYPosSmall = $request->validYposSmall;
         $rdevice->validYPosLarge = $request->validYposLarge;
+        $rdevice->roadangle = $request->roadangle;
         $rdevice->lat = $request->lat;
         $rdevice->lng = $request->lng;
         $rdevice->radarremark = $request->radarremark;

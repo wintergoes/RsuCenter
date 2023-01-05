@@ -233,8 +233,14 @@ function showVehFlowChart(){
             for(var k = 1; k < 24; k++){
                 clabels.push(k + ":00");
                 var haveHour = false;
+                var kstr = "";
+                if(k < 10){
+                    kstr = "0" + k.toString();
+                } else {
+                    kstr = k.toString();
+                } 
                 for(var i=0;i<data["vehflow"].length;i++){
-                    if(data["vehflow"][i]["vfhour"] === k.toString()){
+                    if(data["vehflow"][i]["vfhour"] === kstr){
                         cvalues.push(data["vehflow"][i]["vehcount"]);
                         haveHour = true;
                         break;
@@ -310,8 +316,14 @@ function drawVehFlowHourStat(){
         for(var k = 1; k < 24; k++){
             clabels.push(k + ":00");
             var haveHour = false;
+            var kstr = "";
+            if(k < 10){
+                kstr = "0" + k.toString();
+            } else {
+                kstr = k.toString();
+            }             
             for(var i=0;i<data["vehflow"].length;i++){
-                if(data["vehflow"][i]["vfhour"] === k.toString()){
+                if(data["vehflow"][i]["vfhour"] === kstr){
                     cvalues.push(data["vehflow"][i]["vehcount"]);
                     haveHour = true;
                     break;

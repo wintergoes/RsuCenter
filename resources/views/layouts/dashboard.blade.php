@@ -361,11 +361,11 @@ var radarVideoMap = new HashMap();
                 $videocount = 0;
                 ?>
                 @foreach($obus as $obu)
-                <div style="float: left; margin-right: 10px;">
+                <div style="float: left; margin-right: 0px;">
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
-                         background-size: 100% 100%; width: 220px; height: 155px; padding: 6px;">
-                        <video autoplay="autoplay" onended="onVideoEnded({{$obu->id}})" id="video{{$obu->id}}" muted="muted" controls class="card-img-top">
-                            <source src="dashboardgetnewobuvideo?obuid={{$obu->id}}" type="video/mp4">
+                         background-size: 100% 100%; width: 160px; height: 90px; padding: 6px;">
+                        <video autoplay="autoplay" onended="onVideoEnded({{$obu->id}})" id="video{{$obu->id}}" muted="muted" controls class="card-img-top" style="width: 180px; height: 90px; ">
+                            <source src="dashboardgetnewobuvideo?obuid={{$obu->id}}" type="video/mp4" >
                         </video>
                     </div>
                     <div  style="padding: 3px;">
@@ -376,7 +376,7 @@ var radarVideoMap = new HashMap();
                 </div>
                 <?php
                 $videocount++;
-                if($videocount == 7){
+                if($videocount == 6){
                     break;
                 }
                 ?>
@@ -389,10 +389,10 @@ var radarVideoMap = new HashMap();
                 $videocount = 0;
                 ?>
                 @foreach($radars as $radar)
-                <div style="float: left; margin-right: 10px; display: inline-block;">
+                <div style="float: right; margin-right: 10px; display: inline-block;">
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
-                         background-size: 100% 100%; width: 260px; height: 155px; padding: 6px;">
-                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" src="{{$radar->videostreamaddress}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none">
+                         background-size: 100% 100%; width: 200px; height: 126px; padding: 6px; padding-top: 0px;">
+                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" src="{{$radar->videostreamaddress}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none" width="180px" height="120px">
                             <source  type="video/mp4">
                         </video>
                         <script>
@@ -1881,7 +1881,7 @@ function updateBdMapSummary(){
                             + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr;
                 
                 var radarYoffset = -10;
-                if(radarobj.devicecode === 'LS00114' || radarobj.devicecode === 'LS00115'){
+                if(radarobj.devicecode === 'LS00114' || radarobj.devicecode === 'LS00111'){
                     radarYoffset = 90;
                 }
                 var marker = radarDeviceMap.get(radarobj.id);
@@ -2402,7 +2402,7 @@ function hideBd(){
 
 var coords = [];
 var coordindex = 0;
-var carIcon = new BMapGL.Icon("/images/caricon_white.png", new BMapGL.Size(24, 24));
+var carIcon = new BMapGL.Icon("/images/caricon_white.png", new BMapGL.Size(16, 16));
 var humanIcon = new BMapGL.Icon("/images/human_icon.png", new BMapGL.Size(24, 24));
 var carmaker;
 function showTestVehs(){

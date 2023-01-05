@@ -181,10 +181,21 @@ function onSelectTecChild(){
         </div>
         
         <div class="row mb-3">
+            <label for="roadangle" class="col-sm-2 col-form-label">道路角度</label>
+            <div class="col-sm-6">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="roadangle" name="roadangle" value="{{$radardevice->roadangle}}">
+                @else
+                <input type="text" class="form-control" id="roadangle" name="roadangle" placeholder="请输入道路角度（以正北为0顺时针旋转）">
+                @endif
+            </div>
+        </div>        
+        
+        <div class="row mb-3">
             <label for="radarremark" class="col-sm-2 col-form-label">备注</label>
             <div class="col-sm-6">
-                @if(isset($device))
-                <input type="text" class="form-control" id="radarremark" name="radarremark" value="{{$device->radarremark}}">
+                @if(isset($radardevice))
+                <input type="text" class="form-control" id="radarremark" name="radarremark" value="{{$radardevice->radarremark}}">
                 @else
                 <input type="text" class="form-control" id="radarremark" name="radarremark" placeholder="请输入备注信息">
                 @endif

@@ -4,7 +4,7 @@
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
-<h5 class="card-title">OBU视频</h5>
+<h5 class="card-title">雷视历史视频</h5>
 <hr>
 
 <div class="row mb-4">
