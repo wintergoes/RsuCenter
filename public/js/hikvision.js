@@ -227,7 +227,13 @@ function hkEvent2Str(str){
             break;
         case "lowVisibility":
             resstr = "能见度低";
-            break;            
+            break; 
+        case "dragRacing":
+            resstr = "飚车";
+            break; 
+        case "unknown":
+            resstr = "其他";
+            break;             
         default:
             resstr = str;
     }

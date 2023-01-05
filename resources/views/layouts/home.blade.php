@@ -59,10 +59,11 @@ $ll_data = $l2_radar_anpr | $l2_radar_aidevents;
 
 $l2_oburoute = in_array($currentpath, array("oburoute"));
 $l2_eventstat = in_array($currentpath, array("eventstat"));
+$l2_radareventstat = in_array($currentpath, array("radareventstat"));
 $l2_clockins = in_array($currentpath, array("clockins"));
 $l2_vehflowstat = in_array($currentpath, array("vehflowstat"));
 $l2_warningrecordstat = in_array($currentpath, array("warningrecordstat"));
-$l1_stat = $l2_eventstat | $l2_clockins | $l2_oburoute | $l2_vehflowstat | $l2_warningrecordstat;
+$l1_stat = $l2_eventstat | $l2_radareventstat | $l2_clockins | $l2_oburoute | $l2_vehflowstat | $l2_warningrecordstat;
 
 $l2_trafficsign = in_array($currentpath, array("trafficsigns", "addtrafficsign", "edittrafficsign", "sendrts2rsu"));
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo", "sendrte2rsu"));
@@ -123,10 +124,11 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 						<div class="menu-title">统计分析</div>
 					</a>
 					<ul>
-                                            <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>交通事件统计</a></li>                                            
+                                            <li {!! $l2_vehflowstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="vehflowstat"><i class="bx bx-right-arrow-alt" ></i>车流量统计</a></li>
+                                            <li {!! $l2_radareventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="radareventstat"><i class="bx bx-right-arrow-alt" ></i>雷视事件统计</a></li>                                            
+                                            <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>录入事件统计</a></li>                                            
                                             <li {!! $l2_warningrecordstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warningrecordstat"><i class="bx bx-right-arrow-alt" ></i>预警记录统计</a></li>
                                             <li {!! $l2_oburoute ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="oburoute"><i class="bx bx-right-arrow-alt" ></i>车辆运行轨迹</a></li>
-                                            <li {!! $l2_vehflowstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="vehflowstat"><i class="bx bx-right-arrow-alt" ></i>车流量统计</a></li>
                                             <li {!! $l2_clockins ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="clockins"><i class="bx bx-right-arrow-alt" ></i>考勤打卡记录</a></li>                                            
 					</ul>
 				</li>

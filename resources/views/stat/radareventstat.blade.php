@@ -3,6 +3,7 @@
 @section('content')
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script language="javascript" type="text/javascript" src="/js/hikvision.js"></script>
 
 
 <script src="assets/js/pace.min.js"></script>
@@ -20,7 +21,7 @@
 	<script src="assets/plugins/raphael/raphael-min.js"></script>
 	<script src="assets/plugins/morris/js/morris.js"></script>
 
-<h5 class="card-title">录入事件信息统计</h5>
+<h5 class="card-title">雷视事件信息统计</h5>
 <hr>
 
 <div class="row">
@@ -106,6 +107,25 @@
 			</div>
 		</div>
 	</div>
+    
+	<div class="col-12 col-lg-6">
+		<div class="card radius-6">
+			<div class="card-body">
+				<div class="d-flex align-items-center">
+					<div>
+						<h6 class="mb-3">
+							<b>事件分时段统计图</b>
+						</h6>
+					</div>
+				</div>                            
+                            
+				<div id="chart11" style="height:320px;">
+                                    <canvas id="chart_vehflow_hours" ></canvas>
+				</div>
+			</div>
+		</div>
+	</div>    
+    
 	<div class="col-12 col-lg-6">
 		<div class="card radius-6">
 			<div class="card-body">
@@ -123,24 +143,7 @@
 			</div>
 		</div>
 	</div>
-    
-	<div class="col-12 col-lg-6">
-		<div class="card radius-6">
-			<div class="card-body">
-				<div class="d-flex align-items-center">
-					<div>
-						<h6 class="mb-3">
-							<b>事件来源占比统计</b>
-						</h6>
-					</div>
-				</div>                            
-                            
-				<div style="height:320px;">
-                                    <canvas id="chartEventSource" ></canvas>
-				</div>
-			</div>
-		</div>
-	</div>    
+       
 </div>
 
 
@@ -159,9 +162,13 @@ function drawChart(){
     
     $.ajax({
         type: "POST",
-        url: "eventtrendsummary?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
-        dataType: "json",
-        success: function (data) {
+        url: "radareventtrendsummary?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
+        dataType: "text",
+        success: function (datatext) {
+            var khpos = datatext.indexOf("{");
+            var newtext = datatext.substr(khpos, datatext.length);
+            //alert(newtext);
+            data = JSON.parse(newtext);
             var esdataset = [];
                     //获取table表格对象
             var ta=document.getElementById("eventtrendtbl");
@@ -206,7 +213,7 @@ function drawChart(){
                 eventTrendChart.destroy();
             }
             eventTrendChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             backgroundColor: '#ffffff',
             data: {
               labels: data.labels,
@@ -217,7 +224,7 @@ function drawChart(){
                 maintainAspectRatio: false,
                 legend: {
                     position: 'bottom',
-                    display: true,
+                    display: false,
                         labels: {
                             boxWidth:8
                         }
@@ -239,6 +246,7 @@ function drawChart(){
             });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert(textStatus);
         }
     });
 }
@@ -272,9 +280,13 @@ function drawEventTypeStat(){
     
     $.ajax({
         type: "POST",
-        url: "eventtypestatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
-        dataType: "json",
-        success: function (data) {
+        url: "radareventtypestatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
+        dataType: "text",
+        success: function (datatext) {
+            var khpos = datatext.indexOf("{");
+            var newtext = datatext.substr(khpos, datatext.length);
+            //alert(newtext);
+            data = JSON.parse(newtext);            
             var etdataset = [];
             var etlabels = [];
             
@@ -282,7 +294,7 @@ function drawEventTypeStat(){
             var hoverbgcolor = [];
             var summarydata = [];
             for(var i = 0; i < data.summary.length; i++){
-                etlabels.push(data.summary[i].tecname);
+                etlabels.push(hkEvent2Str(data.summary[i].aidevent));
                 
                 bgcolor[i] = barcolors[i];
                 hoverbgcolor[i] = barhovercolors[i];
@@ -322,82 +334,90 @@ function drawEventTypeStat(){
                   });    
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
+            
             setTimeout("drawEventTypeStat()", 3000);
         }
     });
 }
 
-var eventSourceChart;
-function drawEventSourceStat(){
-    var ctx = document.getElementById("chartEventSource").getContext('2d');
-    var barcolors = ['#88d73e', '#ff8da2', '#936cff', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
-    var barhovercolors = ['#88d700', '#ff8d00', '#936c00', '#ffac3f', '#59bfff', '#ff957c', '#3ed7ad', '#c04ee6'];
+
+var vehflowHourChart;
+function drawRadarEventHourStat(){
+    var ctx = document.getElementById("chart_vehflow_hours").getContext('2d');
+    var barcolors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
+    var barhovercolors = ['#6991cc', '#c89752', '#977abd', '#6daa7e', '#c47566', '#63aecd', '#c5ad4d', '#995cb9', '#b5b3b4', '#6dc0ae'];
 
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
-    });    
+    }); 
     
-    $.ajax({
-        type: "POST",
-        url: "eventsourcestatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
-        dataType: "json",
-        success: function (data) {
-            var etdataset = [];
-            var etlabels = [];
-            
-            var bgcolor = [];
-            var hoverbgcolor = [];
-            var summarydata = [];
-            for(var i = 0; i < data.summary.length; i++){
-                etlabels.push(data.summary[i].sourcename);
-                
-                bgcolor[i] = barcolors[i];
-                hoverbgcolor[i] = barhovercolors[i];
-                summarydata[i] = data.summary[i].scount;
-            }
-            
-            var etdataitem = {};
-            etdataitem["backgroundColor"] = bgcolor;
-            etdataitem["hoverBackgroundColor"] = hoverbgcolor;            
-            etdataitem["data"] = summarydata;
-            etdataset.push(etdataitem);
-            
-            if(eventSourceChart){
-                eventSourceChart.clear();
-                eventSourceChart.destroy();
-            }
-            eventSourceChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: etlabels,
-                        datasets: etdataset,
+    var chartoptions = {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false,
                     },
-                    options: {
-                        maintainAspectRatio: false,
-                        cutoutPercentage: 0,
-                        legend: {
-                          position: 'left',
-                          display: true,
-                        labels: {
-                            boxWidth:8
+                    tooltips: {
+                      displayColors:false,
+                    },	
+                    scales: {
+                        xAxes: [{
+                              barPercentage: .66
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
                             }
-                        },
-                        tooltips: {
-                            displayColors:false,
-                        },
+                        }]                        
                     }
-                  });    
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            setTimeout("drawEventTypeStat()", 3000);
+    };    
+    
+    $.getJSON("vehflowhourstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),function(data){
+        var clabels = [];
+        var cvalues = [];
+
+        for(var k = 1; k < 24; k++){
+            clabels.push(k + ":00");
+            var haveHour = false;
+            for(var i=0;i<data["vehflow"].length;i++){
+                if(data["vehflow"][i]["vfhour"] === k.toString()){
+                    cvalues.push(data["vehflow"][i]["vehcount"]);
+                    haveHour = true;
+                    break;
+                }                                    
+            }
+
+            if(!haveHour){
+                cvalues.push(0);
+            }
         }
-    });
+
+        const data1 = {
+            labels: clabels,
+            datasets: [{
+               data: cvalues,
+               backgroundColor: "#88d73e",
+               pointRadius :"0",
+               pointHoverRadius:"0",
+               borderWidth: 3                            
+           }]
+        };
+
+        if(vehflowHourChart){
+            vehflowHourChart.clear();
+            vehflowHourChart.destroy();
+        }
+        vehflowHourChart = new Chart(ctx, {
+           type: "bar",
+           data: data1,
+           options: chartoptions
+       });    
+   });
 }
     
 function drawAllChart(){
     drawChart(); 
     drawEventTypeStat();
-    drawEventSourceStat();    
+    drawRadarEventHourStat();    
 }
 
 drawAllChart();

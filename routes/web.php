@@ -97,6 +97,10 @@ Route::any('/deletedataapiclient', 'DataApiClientController@deleteDataApiClient'
 
 //*******************************统计分析***************************************
 Route::any('/clockins', "ClockInController@index");
+Route::any("/radareventstat", "VehicleFlowController@radarEventStat");
+Route::any("/radareventtrendsummary", "VehicleFlowController@radarEventTrendSummary");
+Route::any("/radareventtypestatjson", "VehicleFlowController@radarEventTypeStatJson");
+Route::any("/radareventhourstat", "VehicleFlowController@radarEventHourStatJson");
 
 Route::any("/eventstat", "WarningInfoController@eventStat");
 Route::any("/eventtrendsummary", "WarningInfoController@eventTrendSummary");
