@@ -96,7 +96,8 @@ class RoadCoordinateController extends Controller
         
         $coords[0]->lanetype = $request->lanetype ;
         $coords[0]->laneno = $request->laneno ;
-        $coords[0]->angle = $request->angle ;        
+        $coords[0]->angle = $request->angle ; 
+        $coords[0]->angle1 = $request->angle * pi() / 180; 
         $coords[0]->lanecount = $request->lanecount ;
         $coords[0]->lanewidth = $request->lanewidth ;
         $coords[0]->emergencylane = $request->emergencylane ;

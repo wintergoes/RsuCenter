@@ -29,7 +29,7 @@
                     </td>                    
                     <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;日期&nbsp;&nbsp;</td>
                     <td class="search_td">
-                        <input name="fromdate1111" type="hidden" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="8" value="{{$searchfromdate}}"/>
+                        <input name="fromdate_hd" type="hidden" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="8" value="{{$searchfromdate}}"/>
                         <select name="fromdate" id="fromdate" class="form-select" style="width: 160px">
                             @foreach($validdates as $validdate)
                             <option class="form-control" value="{{$validdate->vdate}}" {{$searchfromdate == $validdate->vdate ? "selected" : ""}}>{{$validdate->vdate}}</option>

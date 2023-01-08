@@ -38,6 +38,7 @@ class CreateRoadcoordinatesTable extends Migration
             $table->double("lat");            
             $table->double("altitude");            
             $table->double("distance");
+            $table->string("rcparam", 50);
             $table->smallInteger("lanewidth")->default(375);
             $table->tinyInteger("lanecount")->default(0);
             $table->tinyInteger("emergencylane")->default(0);

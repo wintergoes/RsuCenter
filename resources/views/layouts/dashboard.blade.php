@@ -391,8 +391,8 @@ var radarVideoMap = new HashMap();
                 @foreach($radars as $radar)
                 <div style="float: right; margin-right: 10px; display: inline-block;">
                     <div style="background: url('images/dashboard/video_background.png') no-repeat; 
-                         background-size: 100% 100%; width: 200px; height: 126px; padding: 6px; padding-top: 0px;">
-                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" src="{{$radar->videostreamaddress}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none" width="180px" height="120px">
+                         background-size: 100% 100%; width: 200px; height: 123px; padding: 6px; padding-top: 0px; vertical-align: center;">
+                        <video  muted="muted" controls id="radarvideo{{$radar->id}}" src="{{$radar->videostreamaddress}}" error="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" onended="onRadarVideoEnded({{$radar->id}}, '{{$radar->videostreamaddress}}')" class="card-img-top" preload="none" height="120px">
                             <source  type="video/mp4">
                         </video>
                         <script>

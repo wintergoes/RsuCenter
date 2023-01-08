@@ -167,7 +167,7 @@
                             <table id='tbl{{$hw->log_radom}}' {!!$hw->resource_id != "" ? "style='visibility:hidden;display: none;'" : ""!!}><tr><td>
                                 <select name="updateselector{{$hw->log_radom}}" id="updateselector{{$hw->log_radom}}"  class="form-select"  style="width: 200px">
                             @foreach($updateres as $res)
-                            @if(($res->devicetype == 1 && strpos($hw->device_ID, "v2x")===0) ||
+                            @if(($res->devicetype == 1 && strpos($hw->device_ID, "V2X")===0) ||
                                 ($res->devicetype == 2 && strpos($hw->device_ID, "RSU")===0))
                             <option value="{{$res->resource_id}}" {{$hw->resource_id == $res->resource_id ? 'selected' : ""}}>{{$res->resource_name}}</option>
                             @endif

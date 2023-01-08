@@ -18,6 +18,7 @@ use App\MapArea;
 use App\ObuRouteDetail;
 use App\ClockIn;
 use App\WarningRecord;
+use App\WarningInfo;
 use App\VehicleFlow;
 use App\Forecast;
 use App\MapFixedArea;
@@ -378,7 +379,7 @@ class ApiV1Controller extends Controller
     
     function checkUpdate(Request $request){
         if($request->appKey == "cn.chibc.v2xapp"){
-            $newapkfile = "update/v2xapp/v2x_release_1.0_vc1.apk";
+            $newapkfile = "update/v2xapp/v2x_release_1.0.0_vc1.apk";
             $newversionname = "1.0.1";
             $newversioncode = 2;
             $modifycontent = "1. Bug修复；";
@@ -392,7 +393,7 @@ class ApiV1Controller extends Controller
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
             "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
             "modifyContent"=>$modifycontent,
-            "downloadUrl"=>"http://114.116.195.168/" . $newapkfile,
+            "downloadUrl"=>"http://47.104.69.149/" . $newapkfile,
             "apkSize"=>  filesize($newapkfile) / 1024,
             "apkMd5"=>  md5_file($newapkfile));
         
@@ -948,7 +949,7 @@ class ApiV1Controller extends Controller
                         "roadcoordinates.lat1", "roadcoordinates.lng1", "roadcoordinates.lat2", "roadcoordinates.lng2", 
                         "roadcoordinates.lat3", "roadcoordinates.lng3", "roadcoordinates.lat4", "roadcoordinates.lng4",
                         "roadcoordinates.maxlat", "roadcoordinates.maxlng", "roadcoordinates.minlat", "roadcoordinates.minlng", "roadcoordinates.lat", "roadcoordinates.lng",
-                        "roadcoordinates.angle", "roadcoordinates.distance", "roadcoordinates.lanewidth", "roadcoordinates.lanecount", "roadcoordinates.emergencylane")
+                        "roadcoordinates.angle", "roadcoordinates.distance", "roadcoordinates.rcparam", "roadcoordinates.lanewidth", "roadcoordinates.lanecount", "roadcoordinates.emergencylane")
                 ->leftjoin("roads as r", "r.id", "=", "roadcoordinates.roadid")
                 ->get();
         
@@ -1410,6 +1411,77 @@ class ApiV1Controller extends Controller
 //        echo $res;
     }
     
-    
-
+    function sendAllRteToRsi(Request $request){
+        if($request->rsudevice == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"雷视设备为空！");
+            return json_encode($arr);
+        }
+        
+        $selRsu = $request->rsudevice;
+        $rsus = DB::select("SELECT * FROM device_info_connect where device_id='" . $selRsu . "' order by con_datetime desc limit 1");
+        if(count($rsus) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"RSU设备不在数据库中！");
+            return json_encode($arr);
+        }
+        
+        if($rsus[0]->Is_online != "1"){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"RSU设备不在线" . $selRsu . "！");
+            return json_encode($arr);
+        }
+        
+        $maxreqno = DB::select("select max(reqno) as maxReqNo from (select convert(request_no, UNSIGNED INTEGER) AS reqno FROM device_info_request) as request");
+        $reqNo = $maxreqno[0]->maxReqNo + 1;
+        
+        $winfos = WarningInfo::whereraw("warninginfo.endtime > now()")
+                ->get();
+        
+        if(count($winfos) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"没有有效的事件！");
+            return json_encode($arr);            
+        }
+        
+        $rtes = array();
+        $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
+        foreach($winfos as $winfo){
+            $starttime = strtotime($winfo->starttime);
+            $endtime = strtotime($winfo->endtime);
+            
+            $startminute = round(($starttime - $yearstart) / 60);
+            $endminute = round(($endtime - $yearstart) / 60);
+            $nowminute = round((time() - $yearstart) / 60);
+            if($endminute > 527040){
+                $endminute = 527040;
+            }            
+            
+            $eventPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$winfo->startlng * 1000000, "lat"=>$winfo->startlat * 1000000)), "offsetV"=>null);
+            $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
+            $winfoitem = array("rteId"=>$winfo->id, "eventType"=>intval($winfo->teccode), "eventSource"=>$winfo->wisource, 
+                "eventPos"=>$eventPos, "eventRadius"=>$winfo->wiradius, "timeDetails"=>$timeDetails);
+            array_push($rtes, $winfoitem);
+        }
+        
+        $refpos = array("lat"=>floatval($rsus[0]->RSU_lat * 1000000), "long"=>floatval($rsus[0]->RSU_lng * 1000000), "elevation"=>0);
+        $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>$request->rsudevice, "refPos"=>$refpos, "rtss"=>null, "rtes"=>$rtes);
+        $arr = array("type"=>"rte", "value"=>$rsivalue);
+        
+        $reqJson = json_encode($arr);
+//        echo $reqJson;
+        
+        $rtestarttime = strtotime($request->starttime);
+        $rteendtime = strtotime($request->endtime);
+        
+        $rtestarttime_minute = round(($rtestarttime - $yearstart) / 60);
+        $rteendtime_minute = round(($rteendtime - $yearstart) / 60);
+        
+        DB::update("update device_info_request set deleted=1 where request_type='RTE' and device_id='" . $request->rsudevice . "'");
+        
+        $insertsql = "insert into device_info_request (log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
+            . " request_start_time, request_end_time ) values('" . $rsus[0]->log_radom . "', '"
+            . $selRsu . "', now(), 'RTE', '" . $reqNo . "', '" . $reqJson . "', " . $rtestarttime_minute . ", " . $rteendtime_minute . ")";
+        
+        DB::insert($insertsql);  
+        
+        $arr = array("retcode"=>ret_success, "reqjson"=>$reqJson);
+        return json_encode($arr);        
+    }
 }
