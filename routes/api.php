@@ -44,12 +44,14 @@ Route::any("/getmanagers", 'ApiV1Controller@getManagers');
 Route::any("/uploadlocations", 'ApiV1Controller@uploadLocations');
 Route::any("/uploadwarningrecords", 'ApiV1Controller@uploadWarningRecords');
 
+
+
 Route::any("/clientclockin", 'ApiV1Controller@clientClockIn');
 Route::any("/getclockinhistory", 'ApiV1Controller@getClockInHistory');
 //***************************OBU相关*****************************************
 Route::any("/registerobu", "ApiV1Controller@registerObu");
-Route::any("/getroadinfo", 'ApiV1Controller@getRoadInfo');
-
+Route::any("/getroadinfo", 'ApiV1Controller@getRoadInfo'); //为其他服务器或者终端提供数据
+Route::any("/updateroadsinfo", "ApiV1Controller@updateRoadsInfo"); //从其他服务器往本服务器更新
 
 
 //***************************雷视相关*****************************************

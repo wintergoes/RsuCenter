@@ -11,17 +11,19 @@ use App\Device;
 use App\UploadFile;
 use App\ObuDevice;
 use App\SysToken;
+
 use App\Road;
 use App\RoadCoordinate;
 use App\RoadLink;
 use App\MapArea;
+use App\MapFixedArea;
+
 use App\ObuRouteDetail;
 use App\ClockIn;
 use App\WarningRecord;
 use App\WarningInfo;
 use App\VehicleFlow;
 use App\Forecast;
-use App\MapFixedArea;
 
 use App\AidEvent;
 use App\AnprEvent;
@@ -29,6 +31,7 @@ use App\TpsEvent;
 use App\TpsLaneEvent;
 use App\TpsRealtimeEvent;
 use App\VehDetection;
+
 
 use DB;
 use Auth;
@@ -1483,5 +1486,87 @@ class ApiV1Controller extends Controller
         
         $arr = array("retcode"=>ret_success, "reqjson"=>$reqJson);
         return json_encode($arr);        
+    }
+    
+    function updateRoadsInfo(Request $request){
+        //1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
+        $ch = curl_init();
+        //2. 不管是get、post，跳过证书的验证
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $mapjsurl = "http://47.104.69.149/api/getroadinfo";
+        //3. 设置请求的服务器地址
+        curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+        
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+       
+        $roaddata = json_decode($result);
+        
+        if($roaddata->retcode == 1){
+            DB::select("truncate table roads");
+            DB::select("truncate table roadcoordinates");
+            DB::select("truncate table roadlinks");
+            DB::select("truncate table roads");
+            
+            for($i = 0; $i < count($roaddata->roads); $i++){
+                $road = new Road();
+                $road->id = $roaddata->roads[$i]->id;
+                $road->roadname = $roaddata->roads[$i]->roadname;
+                $road->remark = $roaddata->roads[$i]->remark;
+                $road->save();
+            }
+            
+            for($i = 0; $i < count($roaddata->roadcoords); $i++){
+                $servercoord = $roaddata->roadcoords[$i];
+                
+                $roadcoord = new RoadCoordinate();
+                $roadcoord->id = $servercoord->id;
+                $roadcoord->coordtype = $servercoord->coordtype;
+                $roadcoord->roadid = $servercoord->roadid;
+                $roadcoord->roadsectionno = $servercoord->roadsectionno;
+                $roadcoord->laneno = $servercoord->laneno;
+                $roadcoord->lanetype = $servercoord->lanetype;
+                $roadcoord->lat1 = $servercoord->lat1;
+                $roadcoord->lng1 = $servercoord->lng1;
+                $roadcoord->lat2 = $servercoord->lat2;
+                $roadcoord->lng2 = $servercoord->lng2;
+                $roadcoord->lat3 = $servercoord->lat3;
+                $roadcoord->lng3 = $servercoord->lng3;
+                $roadcoord->lat4 = $servercoord->lat4;
+                $roadcoord->lng4 = $servercoord->lng4;
+                $roadcoord->maxlat = $servercoord->maxlat;
+                $roadcoord->maxlng = $servercoord->maxlng;
+                $roadcoord->minlat = $servercoord->minlat;
+                $roadcoord->minlng = $servercoord->minlng;
+                $roadcoord->lat = $servercoord->lat;
+                $roadcoord->lng = $servercoord->lng;
+                $roadcoord->altitude = 0;
+                $roadcoord->angle = $servercoord->angle;
+                $roadcoord->angle1 = $servercoord->angle * 3.1415926 / 180;
+                $roadcoord->distance = $servercoord->distance;
+                $roadcoord->rcparam = $servercoord->rcparam;
+                $roadcoord->lanewidth = $servercoord->lanewidth;
+                $roadcoord->lanecount = $servercoord->lanecount;
+                $roadcoord->emergencylane = $servercoord->emergencylane;
+                $roadcoord->save();
+            }
+            
+            for($i = 0; $i < count($roaddata->roadlinks); $i++){
+                $serverlink = $roaddata->roadlinks[$i];
+                
+                $newlink = new RoadLink();
+                $newlink->id = $serverlink->id;
+                $newlink->roadid = $serverlink->roadid;
+                $newlink->rcid = $serverlink->rcid;
+                $newlink->linkroadid = $serverlink->linkroadid;
+                $newlink->linkrcid = $serverlink->linkrcid;
+                $newlink->linktype = $serverlink->linktype;
+                $newlink->save();
+            }
+        }
+        
+        echo "更新成功！<a href='/roads' target='_blank'>点击跳转</a>";
     }
 }

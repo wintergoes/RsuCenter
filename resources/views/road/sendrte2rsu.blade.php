@@ -261,8 +261,8 @@ function showRsuOnMap(tscid, tsname, lng, lat){
     //                mapRsu.centerAndZoom(point, 15); 
     //                mapRsu.setCenter(point);
 
-                    var pt = new BMapGL.Point(rsuobj.RSU_lng, rsuobj.RSU_lat);
-                    var marker = new BMapGL.Marker(pt, {
+                    //var pt = new BMapGL.Point(rsuobj.RSU_lng, rsuobj.RSU_lat);
+                    var marker = new BMapGL.Marker(point, {
                         icon: rsuIcon,
                         offset: new BMapGL.Size(0, -10)
                     });
