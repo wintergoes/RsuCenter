@@ -233,7 +233,10 @@ function hkEvent2Str(str){
             break; 
         case "unknown":
             resstr = "其他";
-            break;             
+            break;   
+        case "notKeepDistance":
+            resstr = "未保持车距";
+            break;        
         default:
             resstr = str;
     }
@@ -388,4 +391,13 @@ function fillAidEventSelect(selecterid, selectedAidEvent){
     $("#" + selecterid).append(optstr);
     optstr = "<option value='singleVehicleBreakdown' " + (selectedAidEvent === "singleVehicleBreakdown" ? "selected" : "") + ">单车抛锚</option>";
     $("#" + selecterid).append(optstr);
+    
+    optstr = "<option value='lowVisibility' " + (selectedAidEvent === "lowVisibility" ? "selected" : "") + ">低能见度</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='fogDetection' " + (selectedAidEvent === "fogDetection" ? "selected" : "") + ">浓雾</option>";
+    $("#" + selecterid).append(optstr);    
+    optstr = "<option value='illegalParking' " + (selectedAidEvent === "illegalParking" ? "selected" : "") + ">违停</option>";
+    $("#" + selecterid).append(optstr);
+    optstr = "<option value='construction' " + (selectedAidEvent === "construction" ? "selected" : "") + ">道路施工</option>";
+    $("#" + selecterid).append(optstr);        
 }

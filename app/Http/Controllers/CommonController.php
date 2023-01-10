@@ -335,6 +335,12 @@ class CommonController extends Controller
                 break;
             case "lowVisibility":
                 $resstr = "能见度低";
+                break;  
+            case "unknown":
+                $resstr = "其他";
+                break;             
+            case "notKeepDistance":
+                $resstr = "未保持车距";
                 break;            
             default:
                 $resstr = $str;

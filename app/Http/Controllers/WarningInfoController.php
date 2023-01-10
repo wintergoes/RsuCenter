@@ -45,7 +45,7 @@ class WarningInfoController extends Controller
                         "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
                         "warninginfo.wiradius", "warninginfo.starttime", "warninginfo.endtime", 
                         "u.realname",
-                        "tec.tecparentcode as tecpcode", "warninginfo.teccode")
+                        "tec.tecparentcode as tecpcode", "warninginfo.teccode", DB::raw("warninginfo.endtime>now() as timevalid"))
                 ->leftjoin("users as u", "warninginfo.wicreator", "=", "u.id")
                 ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode");
         

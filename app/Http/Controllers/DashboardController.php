@@ -52,11 +52,11 @@ class DashboardController extends Controller
     function dashboardSummary(Request $request){
         $stats = DB::select("select * from (select " . ret_success . " as ret_code) as ret,"
                 . "(select count(id) as warncount from warninginfo where endtime>now() and wistatus=1) as warnstat,"
-                . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat,"
-                . "(select count(id) as warnrecordcount from warningrecords where date(created_at)=date(now())) as warnrecordstat,"
-                . "(select count(id) as speedcount from aidevents where aidevent='speed' and date(eventtime)=date(now())) as speedstat,"
-                . "(select count(id) as lowspeedcount from aidevents where aidevent='lowSpeed' and date(eventtime)=date(now())) as lowspeedstat,"
-                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='abandonedObject' and date(eventtime)=date(now())) as abandonedobjectstat");
+                . "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
+                . "(select count(id) as warnrecordcount from warningrecords where created_at>=date(now())) as warnrecordstat,"
+                . "(select count(id) as speedcount from aidevents where aidevent='speed' and eventtime>=date(now())) as speedstat,"
+                . "(select count(id) as lowspeedcount from aidevents where aidevent='lowSpeed' and eventtime>=date(now())) as lowspeedstat,"
+                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='abandonedObject' and eventtime>=date(now())) as abandonedobjectstat");
         
         return json_encode($stats);        
     }
@@ -70,6 +70,8 @@ class DashboardController extends Controller
         $searchtodate = date('Y-m-d',time());
         
         if($reqcount != 0){
+            $reqcount = $reqcount - 1;
+            $reqcount = 0 - $reqcount;
             $searchfromdate = "";
             if($request->has("fromdate")){
                 $searchfromdate = $request->fromdate;
@@ -81,14 +83,14 @@ class DashboardController extends Controller
 
             $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
                     . " left join vehicleflow vf on date(vf.created_at)=d.ddate "
-                    . " where  d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' "
+                    . " where  d.ddate>=date_add(current_date, interval " . $reqcount . " day) and d.ddate< date_add(current_date(), interval 1 day) "
                     . " group by d.ddate " ;
 
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
         } else {
             $sqlstr = " select count(vf.id) as vehcount,hour(vf.created_at) as vfhour from  vehicleflow vf "
-                    . " where  date(vf.created_at)>='" . $searchtodate . "' and date(vf.created_at)<='" . $searchtodate . "' "
+                    . " where  vf.created_at>=current_date() and vf.created_at<date_add(current_date(), interval 1 day) "
                     . " group by hour(vf.created_at) " ;
 
             $arr = DB::select($sqlstr);
@@ -132,19 +134,24 @@ class DashboardController extends Controller
     function dashboardAidEventJson(Request $request){
         $latestevents = DB::select("select plate, aidevent, time(eventtime) as eventtime from aidevents order by id desc limit 7");
         
-        $searchfromdate = "";
-        if($request->has("fromdate")){
-            $searchfromdate = $request->fromdate;
+        $statday = $request->statday;
+        if($statday == ""){
+            $statday = 0;
         }
-
-        if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-" . $request->statday . " day"));
-        }
-
-        $searchtodate = date('Y-m-d',time());
+        
+//        $searchfromdate = "";
+//        if($request->has("fromdate")){
+//            $searchfromdate = $request->fromdate;
+//        }
+//
+//        if($searchfromdate == ""){
+//            $searchfromdate = date('Y-m-d',strtotime("-" . $request->statday . " day"));
+//        }
+//
+//        $searchtodate = date('Y-m-d',time());
         
         $sqlstr = "select count(aidevents.id) as wcount,aidevents.aidevent from aidevents "
-                . " where date(aidevents.eventtime)>='" . $searchfromdate . "' and date(aidevents.eventtime)<='" . $searchtodate . "' group by aidevents.aidevent ;";
+                . " where aidevents.eventtime>=current_date() and aidevents.eventtime<=date_add(current_date(), interval 1 day) group by aidevents.aidevent ;";
         
         $eventtypesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "aideventsummary"=>$eventtypesummary, "aidevents"=>$latestevents);
@@ -178,28 +185,28 @@ class DashboardController extends Controller
         return json_encode($arr);
     }
     
-    function dashboardRadarVision(Request $request){        
-        $radars = RadarDevice::orderBy("id", "desc")
-                ->get();
-        
-        if(count($radars) == 0){
-            $arr = array("retcode"=>ret_error, "retmsg"=>"没有雷视设备！");
-            return json_encode($arr);
-        }
-        
-        $searchdate = date("Y-m-d H:i:s" , strtotime("-100 hour"));
-        //echo $searchdate;
-        
-        $sqlstr = "select vd.uuid, vd.targettype, vd.targetid, vd.plateno, vd.speed, vd.laneno, "
-                . "vd.positionx, vd.positiony, vd.radardetected, vd.detecttime from "
-                . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
-                . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
-                . "where maxtime.maxtime > '" . $searchdate . "' and vd.macaddr=" . $radars[0]->macaddrint; // and targettype='vehicle'
-        $vehicles = DB::select($sqlstr);
-        
-        $arr = array("retcode"=>ret_success, "radar"=>$radars[0], "vehicles"=>$vehicles);
-        return json_encode($arr);
-    } 
+//    function dashboardRadarVision(Request $request){        
+//        $radars = RadarDevice::orderBy("id", "desc")
+//                ->get();
+//        
+//        if(count($radars) == 0){
+//            $arr = array("retcode"=>ret_error, "retmsg"=>"没有雷视设备！");
+//            return json_encode($arr);
+//        }
+//        
+//        $searchdate = date("Y-m-d H:i:s" , strtotime("-100 hour"));
+//        //echo $searchdate;
+//        
+//        $sqlstr = "select vd.uuid, vd.targettype, vd.targetid, vd.plateno, vd.speed, vd.laneno, "
+//                . "vd.positionx, vd.positiony, vd.radardetected, vd.detecttime from "
+//                . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection group by macaddr, targetid) maxtime  "
+//                . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
+//                . "where maxtime.maxtime > '" . $searchdate . "' and vd.macaddr=" . $radars[0]->macaddrint; // and targettype='vehicle'
+//        $vehicles = DB::select($sqlstr);
+//        
+//        $arr = array("retcode"=>ret_success, "radar"=>$radars[0], "vehicles"=>$vehicles);
+//        return json_encode($arr);
+//    } 
     
     function getObuNewVideo(Request $request){
         if($request->obuid == ""){
@@ -232,7 +239,7 @@ class DashboardController extends Controller
         
         $warnings = WarningInfo::orderBy("id")
                 ->select("winame", "startlat", "startlng", "stoplat", "stoplng")
-                ->where("created_at", ">=", date("Y-m-d"))
+                ->where(DB::raw("endtime > now()"))
                 ->where("wistatus", "1")
                 ->get();
         
@@ -241,7 +248,7 @@ class DashboardController extends Controller
                 . " tpsr.laneno, tpsr.lanestate, tpsr.macaddr from "
                 . " (select macaddr, max(eventtime) as eventtime from tpsrealtimeevents  group by macaddr) as tpsmax "
                 . " left join tpsrealtimeevents tpsr on tpsr.eventtime=tpsmax.eventtime) as tpsr1 on rd.macaddrint=tpsr1.macaddr"
-                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where vehspeed<>0 and date(eventtime)=date(now()) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
+                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where vehspeed>0 and eventtime>=date(now()) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
         $radars = DB::select($radarsql);
 //        $radars = RadarDevice::orderBy("id")
 //                ->where("status", "1")

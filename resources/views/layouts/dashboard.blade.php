@@ -1753,6 +1753,7 @@ function updateBdMapSummary(){
         url: "dashboardbdmapsummary",
         dataType: "json",
         success: function (data) {
+            setTimeout('updateBdMapSummary()', 60000); 
 //            for(var i = 0; i < rsumarkers.length; i++){
 //                map.removeOverlay(rsumarkers[i]);
 //            }
@@ -1981,11 +1982,10 @@ function updateBdMapSummary(){
 //                    // 将标注添加到地图
 //                    map.addOverlay(marker);                    
 //                }
-            }            
-            //setTimeout('updateBdMapSummary()', 10000);    
+            }              
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            //setTimeout('updateBdMapSummary()', 10000);    
+            setTimeout('updateBdMapSummary()', 60000);    
         }
     });
 }
@@ -2629,6 +2629,9 @@ function showVehicles(){
             $("#test").html(nowdate);
         }
         setTimeout("showVehicles()", 500);
+    }).fail( function(d,textStatus,error) {
+        setTimeout("showVehicles()", 500);
+        console.error("getJSON Failed,status: " + textStatus + ",error: "+error)
     }); 
 }
 
@@ -2750,7 +2753,7 @@ function refreshAll(){
     setTimeout('refreshAll()', 5000);
     
     hideBd();
-    updateBdMapSummary();
+    
     //showEvents();
     showRadarAidEvents();
     showVehFlowChart();
@@ -2761,6 +2764,7 @@ function refreshAll(){
 }
 refreshAll();
 showVehicles();
+updateBdMapSummary();
 //showTestVehs();
 </script>
 </body>

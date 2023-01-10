@@ -85,7 +85,11 @@
                         <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;"  data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$winfo->wiradius}}米</td>
                         <td>{{$winfo->starttime}}</td>
+                        @if($winfo->timevalid == 0)
+                        <td><font color="red">{{$winfo->endtime}}</font></td>
+                        @else
                         <td>{{$winfo->endtime}}</td>
+                        @endif
                         <td>{{$commonctrl->eventSource2Str($winfo->wisource)}}</td>
                         <td>{{$winfo->realname}}</td>
                         <td>{{$winfo->wistatus == 1 ? "有效" : "无效"}}</td>
