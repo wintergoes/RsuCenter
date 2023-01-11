@@ -1443,9 +1443,15 @@ class ApiV1Controller extends Controller
             return json_encode($arr);            
         }
         
+        $minstarttime = "2050-01-01 00:00:00";
+        $maxendtime = "2000-01-01 00:00:00";
+        
         $rtes = array();
         $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
         foreach($winfos as $winfo){
+            $minstarttime = min($minstarttime, $winfo->starttime);
+            $maxendtime = max($maxendtime, $winfo->endtime);            
+            
             $starttime = strtotime($winfo->starttime);
             $endtime = strtotime($winfo->endtime);
             
@@ -1470,17 +1476,19 @@ class ApiV1Controller extends Controller
         $reqJson = json_encode($arr);
 //        echo $reqJson;
         
-        $rtestarttime = strtotime($request->starttime);
-        $rteendtime = strtotime($request->endtime);
+        $rtestarttime = strtotime($minstarttime);
+        $rteendtime = strtotime($maxendtime);
         
         $rtestarttime_minute = round(($rtestarttime - $yearstart) / 60);
         $rteendtime_minute = round(($rteendtime - $yearstart) / 60);
+//        echo $rtestarttime_minute . ", " . $rteendtime_minute;
         
         DB::update("update device_info_request set deleted=1 where request_type='RTE' and device_id='" . $request->rsudevice . "'");
         
         $insertsql = "insert into device_info_request (log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
             . " request_start_time, request_end_time ) values('" . $rsus[0]->log_radom . "', '"
             . $selRsu . "', now(), 'RTE', '" . $reqNo . "', '" . $reqJson . "', " . $rtestarttime_minute . ", " . $rteendtime_minute . ")";
+//        echo $insertsql;
         
         DB::insert($insertsql);  
         

@@ -57,7 +57,7 @@ class DataController extends Controller
                 ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "aidevents.macaddr");
         
         if($searchfromdate != ""){
-            $aidevents = $aidevents->whereraw("date(aidevents.eventtime) >='" . $searchfromdate . "'");
+            $aidevents = $aidevents->whereraw("aidevents.eventtime >='" . $searchfromdate . "'");
         }
         
         if($searchtodate != ""){

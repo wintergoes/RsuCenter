@@ -52,7 +52,7 @@ class TrafficSignController extends Controller
         
         $lng = 0;
         if($request->tslng != ""){
-            $lat = $request->tslng;
+            $lng = $request->tslng;
         }
         
         $starttime = "";

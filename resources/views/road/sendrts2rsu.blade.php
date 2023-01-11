@@ -241,7 +241,7 @@ function showRsuOnMap(tscid, tsname, lng, lat){
                     var tmplng = latlng[0];
                     var tmplat = latlng[1];      
 
-                    var point = new BMapGL.Point(tmplat, tmplng);  // 创建点坐标  
+                    var point = new BMapGL.Point(tmplng, tmplat);  // 创建点坐标  
     //                mapRsu.centerAndZoom(point, 15); 
     //                mapRsu.setCenter(point);
 
