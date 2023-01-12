@@ -82,7 +82,7 @@ class DashboardController extends Controller
             }
 
             $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
-                    . " left join vehicleflow vf on date(vf.created_at)=d.ddate "
+                    . " left join vehicleflow vf on vf.created_at between d.ddate and date_add(d.ddate, interval 1 day) "
                     . " where  d.ddate>=date_add(current_date, interval " . $reqcount . " day) and d.ddate< date_add(current_date(), interval 1 day) "
                     . " group by d.ddate " ;
 

@@ -29,6 +29,10 @@ class DataController extends Controller
             $searchtodate = $request->todate ;
         } 
         
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }
+        
         $searchlicenseplate = "";
         if($request->has("licenseplate")){
             $searchlicenseplate = $request->licenseplate;
@@ -49,20 +53,22 @@ class DataController extends Controller
             $searchradar = $request->radarmac;
         }
 
-        $aidevents = AidEvent::orderBY("aidevents.id", "desc")
+        $aidevents = AidEvent::orderBY("aidevents.eventtime", "desc")
                 ->select("rd.devicecode", "aidevents.id", "aidevents.plate", "aidevents.relatedlaneno", 
                         "aidevents.aidevent", "aidevents.eventtime", "aidevents.platecolor", "aidevents.vehtype",
                         "aidevents.vehcolor", "aidevents.vehspeed", "aidevents.longitude", "aidevents.latitude",
                         "aidevents.detectionpicnumber")
                 ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "aidevents.macaddr");
         
-        if($searchfromdate != ""){
-            $aidevents = $aidevents->whereraw("aidevents.eventtime >='" . $searchfromdate . "'");
-        }
+//        if($searchfromdate != ""){
+//            $aidevents = $aidevents->whereraw("aidevents.eventtime >='" . $searchfromdate . "'");
+//        }
+//        
+//        if($searchtodate != ""){
+//            $aidevents = $aidevents->whereraw("date(aidevents.eventtime) <= '" . $searchtodate . "'");
+//        }
         
-        if($searchtodate != ""){
-            $aidevents = $aidevents->whereraw("date(aidevents.eventtime) <= '" . $searchtodate . "'");
-        }
+        $aidevents = $aidevents->whereraw("aidevents.eventtime between '" . $searchfromdate . "' and date_add('" . $searchtodate . "', interval 1 day)");
         
         if($searchlicenseplate != ""){
             $aidevents = $aidevents->where("aidevents.plate", "like", "%". $searchlicenseplate . "%");
@@ -135,6 +141,10 @@ class DataController extends Controller
             $searchtodate = $request->todate ;
         } 
         
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }          
+        
         $searchlicenseplate = "";
         if($request->has("licenseplate")){
             $searchlicenseplate = $request->licenseplate;
@@ -150,7 +160,7 @@ class DataController extends Controller
             $searchradar = $request->radarmac;
         }        
         
-        $anprevents = AnprEvent::orderBY("anprevents.id", "desc")
+        $anprevents = AnprEvent::orderBY("anprevents.eventtime", "desc")
                 ->select("rd.devicecode", "anprevents.id", "anprevents.eventtime",
                         "anprevents.licenseplate", "anprevents.lineno", "anprevents.confidencelevel",
                         "anprevents.platecolor", "anprevents.vehicleType", "anprevents.vehtype1",
@@ -158,13 +168,15 @@ class DataController extends Controller
                         "anprevents.vehpicnum")
                 ->leftjoin("radardevices as rd", "rd.macaddrint", "=", "anprevents.macaddr");
         
-        if($searchfromdate != ""){
-            $anprevents = $anprevents->whereraw(" date(anprevents.eventtime) >= '" . $searchfromdate . "'") ;
-        }
+//        if($searchfromdate != ""){
+//            $anprevents = $anprevents->whereraw(" date(anprevents.eventtime) >= '" . $searchfromdate . "'") ;
+//        }
+//        
+//        if($searchtodate != ""){
+//            $anprevents = $anprevents->whereraw("anprevents.eventtime <='" . $searchtodate . "'");
+//        }
         
-        if($searchtodate != ""){
-            $anprevents = $anprevents->whereraw("anprevents.eventtime <='" . $searchtodate . "'");
-        }
+        $anprevents = $anprevents->whereraw("anprevents.eventtime between '" . $searchfromdate . "' and date_add('" . $searchtodate . "', interval 1 day)");
         
         if($searchlicenseplate != ""){
             $anprevents = $anprevents->where("anprevents.licenseplate", "like", "%". $searchlicenseplate . "%");
