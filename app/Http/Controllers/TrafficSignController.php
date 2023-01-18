@@ -224,7 +224,9 @@ class TrafficSignController extends Controller
             $signPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$sign->tslng * 1000000, "lat"=>$sign->tslat * 1000000)), "offsetV"=>null);
             $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
             
-            $winfoitem = array("rtsId"=>$sign->id, "signType"=>$sign->tscid, 
+            $rtsid = $sign->id % 255;
+            
+            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, 
                 "signPos"=>$signPos, "timeDetails"=>$timeDetails);
             array_push($rtes, $winfoitem);
         }
