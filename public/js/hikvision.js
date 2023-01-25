@@ -395,8 +395,6 @@ function fillAidEventSelect(selecterid, selectedAidEvent){
     optstr = "<option value='lowVisibility' " + (selectedAidEvent === "lowVisibility" ? "selected" : "") + ">低能见度</option>";
     $("#" + selecterid).append(optstr);
     optstr = "<option value='fogDetection' " + (selectedAidEvent === "fogDetection" ? "selected" : "") + ">浓雾</option>";
-    $("#" + selecterid).append(optstr);    
-    optstr = "<option value='illegalParking' " + (selectedAidEvent === "illegalParking" ? "selected" : "") + ">违停</option>";
     $("#" + selecterid).append(optstr);
     optstr = "<option value='construction' " + (selectedAidEvent === "construction" ? "selected" : "") + ">道路施工</option>";
     $("#" + selecterid).append(optstr);        
