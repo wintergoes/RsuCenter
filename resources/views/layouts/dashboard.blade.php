@@ -59,7 +59,7 @@
 	<script src="assets/plugins/chartjs/js/Chart.min.js"></script> 
         
         <script type="text/javascript" src="js/coordtransform.js"></script>
-	<title>RSU管理后台</title>
+	<title>车路协同V2X智能云控平台</title>
         
     <style type="text/css">
         html,body {
@@ -1802,7 +1802,9 @@ function updateBdMapSummary(){
             for(var i = 0; i < data.rsudevices.length; i++){
                 rsuobj = data.rsudevices[i];
                 
-                let pt = new BMapGL.Point(rsuobj.rsulng, rsuobj.rsulat);
+                var rsulatlng = coordtransform.wgs84togcj02(rsuobj.rsulng, rsuobj.rsulat - 0.0006);
+                rsulatlng = coordtransform.gcj02tobd09(rsulatlng[0], rsulatlng[1]);                 
+                let pt = new BMapGL.Point(rsulatlng[0], rsulatlng[1]);
                 var marker = new BMapGL.Marker(pt, {
                     icon: rsuIcon,
                     offset: new BMapGL.Size(0, -10)
@@ -1811,7 +1813,7 @@ function updateBdMapSummary(){
                 if(rsuobj.score < 80){
                     var label = new BMapGL.Label(rsuobj.devicecode + " <a href='devices' target='_blank'><font color='#d77f43'>设备异常</font></a>", {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
+                        offset: new BMapGL.Size(-60, 0)           // 设置标注的偏移量
                     })    
                     label.setStyle({border: "1px solid rgb(75 139 88)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
                     marker.setLabel(label); 
@@ -1882,8 +1884,10 @@ function updateBdMapSummary(){
                             + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr;
                 
                 var radarYoffset = -10;
+                var labelYoffset = -110;
                 if(radarobj.devicecode === 'LS00114' || radarobj.devicecode === 'LS00111'){
                     radarYoffset = 90;
+                    labelYoffset = 100;
                 }
                 var marker = radarDeviceMap.get(radarobj.id);
                 if(marker === null){
@@ -1894,7 +1898,7 @@ function updateBdMapSummary(){
                     
                     var label = new BMapGL.Label(labelstr, {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, radarYoffset-100)           // 设置标注的偏移量
+                        offset: new BMapGL.Size(-60, labelYoffset)           // 设置标注的偏移量
                     })    
                     label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
                     label.enableMassClear();
