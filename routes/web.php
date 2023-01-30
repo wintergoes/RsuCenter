@@ -42,6 +42,7 @@ Route::any('/editdevice', 'DeviceController@editRsuDevice');
 Route::any('/editdevicesave', 'DeviceController@editRsuDeviceSave');
 Route::any('/deletedevice', 'DeviceController@deleteDevice');
 Route::any("/getrsuonline", "DeviceController@getRsuOnline");
+Route::any("/rsusendrecords", "DeviceController@rsuSendRecords");
 
 //***************************OBU设备管理****************************************
 Route::any('/obudevices', 'ObuDeviceController@index');

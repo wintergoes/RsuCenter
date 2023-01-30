@@ -76,7 +76,8 @@ $l1_videos = $l2_obuvideos | $l2_radarvideos;
 
 $l2_devicelogs = in_array($currentpath, array("devicelogs", "devicelogfilecontent"));
 $l2_bsmlogs = in_array($currentpath, array('bsmlogs', 'bsmlogfilecontent'));
-$l1_logmanager = $l2_devicelogs || $l2_bsmlogs;
+$l2_rsusendrecords = in_array($currentpath, array('rsusendrecords'));
+$l1_logmanager = $l2_devicelogs || $l2_bsmlogs || $l2_rsusendrecords;
 
 $l2_users = in_array($currentpath, array("users", "adduser", "addusersave", "edituser", "resetpassword"));
 $l2_devices = in_array($currentpath, array("devices", "editdevice", "rsusettings"));
@@ -169,10 +170,9 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 						<div class="menu-title">日志管理</div>
 					</a>
 					<ul>
-						<li {!! $l2_devicelogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devicelogs"><i class="bx bx-right-arrow-alt"></i>系统日志</a>
-						</li>
-						<li {!! $l2_bsmlogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="bsmlogs?logtype=1"><i class="bx bx-right-arrow-alt"></i>BSM日志</a>
-						</li>
+						<li {!! $l2_devicelogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="devicelogs"><i class="bx bx-right-arrow-alt"></i>系统日志</a></li>
+						<li {!! $l2_bsmlogs ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="bsmlogs?logtype=1"><i class="bx bx-right-arrow-alt"></i>BSM日志</a></li>
+                                                <li {!! $l2_rsusendrecords ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="rsusendrecords"><i class="bx bx-right-arrow-alt"></i>RSU下发记录</a></li>
 					</ul>
 				</li>
                                 

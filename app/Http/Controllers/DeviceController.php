@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Device;
+use App\DeviceInfoRequest;
 
 use DB;
 
@@ -118,5 +119,20 @@ class DeviceController extends Controller{
         
         $arr = array("retcode"=>ret_success, "rsus"=>$rsus);
         return json_encode($arr);
+    }
+    
+    function rsuSendRecords(Request $request){
+        $devicereqs = DeviceInfoRequest::orderBy("request_datetime", "desc")
+                ->select("log_radom", "device_id", "request_datetime", "modify_datetime",
+                        "request_type", "request_no", "request_JSON", "request_start_time",
+                        DB::raw("date_add(DATE_FORMAT(concat(year(now()),'-01-01'),'%Y-%m-01'), interval request_start_time minute) as request_start_time_time"),
+                        "request_end_time",
+                        DB::raw("date_add(DATE_FORMAT(concat(year(now()),'-01-01'),'%Y-%m-01'), interval request_end_time minute) as request_end_time_time"),
+                        "return_JSON", "deleted")
+                ->paginate(20);
+        
+        return view("/basicdata/rsusendrecords", [
+            "devicerequests"=>$devicereqs
+        ]);
     }
 }
