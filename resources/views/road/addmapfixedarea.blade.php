@@ -73,6 +73,8 @@ function submitData(){
             <div class="col-sm-6">
                 <select id="areatype" name="areatype" class="form-select">
                     <option class="form-control" value="0" {{isset($area) && $area->areatype == 0 ? "selected" : ""}}>请选择区域类型</option>
+                    <option class="form-control" value="1" {{isset($area) && $area->areatype == 1 ? "selected" : ""}}>陆地</option>
+                    <option class="form-control" value="2" {{isset($area) && $area->areatype == 2 ? "selected" : ""}}>海洋</option>
                 </select>
             </div>                                   
         </div>
@@ -154,6 +156,7 @@ function submitData(){
                     </td>
                     <td>
                         <button type="button" onclick="addRoadSectionOnMap();" class="btn btn-outline-secondary px-1 radius-6">初始标记</button>
+                        <label class="col-sm-4 col-form-label"></label>
                         <button type="button" class="btn btn-outline-primary px-2" onclick="submitData();">保存修改</button>
                     </td>
                 </tr>

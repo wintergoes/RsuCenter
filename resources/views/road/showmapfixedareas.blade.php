@@ -30,8 +30,9 @@
                 <table class="table mb-0 table-hover table-bordered" >
                     <thead>
                         <tr role="row">
-                            <th >ID</th>
-                            <th >名称</th>
+                            <th>ID</th>
+                            <th>类型</th>
+                            <th>名称</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -39,13 +40,23 @@
                         @foreach($fixedareas as $area)
                         <tr>
                             <td>{{$area->id}}</td>
+                            
+                            @if($area->areatype == 1)
+                            <td>陆地</td>
+                            @elseif($area->areatype == 2)
+                            <td>海洋</td>
+                            @else
+                            <td>未设置</td>
+                            @endif
+                            
+                            
                             <td>{{$area->areaname}}</td>
                             <td>
                                  <div class="dropdown">
                                     <button class="btn btn-light border-dark border-0 dropdown-toggle px-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">操作</button>
                                     <ul class="dropdown-menu" style="margin: 0px;">
                                         <li><a class="dropdown-item" href="editmapfixedarea?areaid={{$area->id}}">编辑</a></li>
-                                        <li><a class="dropdown-item" href="deletemapfixedarea?areaid={{$area->id}}">删除</a></li>
+                                        <li><a class="dropdown-item" onclick="return confirm('确定删除这个区域吗？');" href="deletemapfixedarea?areaid={{$area->id}}">删除</a></li>
                                     </ul>
                                 </div>
                             </td>
