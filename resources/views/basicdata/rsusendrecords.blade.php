@@ -3,19 +3,56 @@
 @section('content')
 <script type="text/javascript" src="/api/bdmapjs?maptype=webgl"></script>   
 <script src="js/zlzl.js"></script>
+<script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
+<script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="js/coordtransform.js"></script>  
-<script>
-    function confirmDelete(gtid){
-        if(confirm('确定删除这个雷视设备吗？') == false){
-            return;
-        }
-        
-        window.location.href= 'deleteradardevice?id=' + gtid;
-    }
-</script>
 
 <h5 class="card-title">RSU下发记录</h5>
 <hr>
+
+
+<div class="row mb-4">
+        <form id="form1" class="form-horizontal" method="get" >
+            {{ csrf_field() }}
+            <table style="font-size: 12px; text-align: center;" >
+                <tr>                   
+                    <td class="search_td">日期 自&nbsp;&nbsp;</td>
+                    <td class="search_td"><input name="fromdate" id="fromdate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchfromdate}}"/></td>
+                    <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
+                    <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
+                    <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
+                    <td class="search_td">&nbsp;&nbsp;RSU：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="rsudevice" id="rsudevice" class="form-select" >
+                            <option value="-1"  {{"-1" == $searchrsudevice ? "selected" : ""}}>不限</option>
+                            @foreach ($devices as $device)
+                            <option value="{{$device->devicecode}}" {{$device->devicecode == $searchrsudevice ? "selected" : ""}}>{{$device->devicecode}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    
+                    <td class="search_td">&nbsp;&nbsp;returnJson：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="returnjsonStatus" id="returnjsonStatus" class="form-select" >
+                            <option value="-1"  {{"-1" == $searchreturnjsonstatus ? "selected" : ""}}>不限</option>
+                            <option value="1"  {{"1" == $searchreturnjsonstatus ? "selected" : ""}}>空</option>
+                            <option value="0"  {{"0" == $searchreturnjsonstatus ? "selected" : ""}}>非空</option>
+                        </select>                        
+                    </td>                    
+                    
+                    <td class="search_td">&nbsp;&nbsp;删除标志：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="deleteflag" id="deleteflag" class="form-select" >
+                            <option value="-1"  {{"-1" == $searchdeleteflag ? "selected" : ""}}>不限</option>
+                            <option value="1"  {{"1" == $searchdeleteflag ? "selected" : ""}}>是</option>
+                            <option value="0"  {{"0" == $searchdeleteflag ? "selected" : ""}}>否</option>
+                        </select>                        
+                    </td>
+                    <td class="search_td"><button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>                    
+                </tr>              
+            </table>
+        </form>
+</div>
 
 <div  class="dataTables_wrapper dt-bootstrap5">
     <div class="row">
@@ -96,7 +133,8 @@
    
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
-    {{ $devicerequests->appends([])->links() }}  
+    {{ $devicerequests->appends(["fromdate"=>$searchfromdate, "todate"=>$searchtodate, "deleteflag"=>$searchdeleteflag,
+            "returnjsonstatus"=>$searchreturnjsonstatus])->links() }}  
     </div> 
     </nav>
 </div>
@@ -106,6 +144,8 @@ formatPagelinks();
 </script>
 @endif
 
-
+<script>
+fillQuickDateSelector("quickdateselector", "fromdate", "todate");
+</script>
 
 @endsection

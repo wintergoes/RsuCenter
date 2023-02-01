@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Device;
 use App\DeviceInfoRequest;
+use App\RadarDevice;
 
 use DB;
 
@@ -122,17 +123,86 @@ class DeviceController extends Controller{
     }
     
     function rsuSendRecords(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+        
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',time());
+        }        
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        } 
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }
+        
+        $searchrsudevice = "-1";
+        if($request->has("rsudevice")){
+            $searchrsudevice = $request->rsudevice;
+        } 
+        
+        $searchdeleteflag = "-1";
+        if($request->has("deleteflag")){
+            $searchdeleteflag = $request->deleteflag;
+        }
+        
+        $searchreturnjsonstatus = "-1";
+        if($request->has("returnjsonStatus")){
+            $searchreturnjsonstatus = $request->returnjsonStatus;
+        }
+        
         $devicereqs = DeviceInfoRequest::orderBy("request_datetime", "desc")
                 ->select("log_radom", "device_id", "request_datetime", "modify_datetime",
                         "request_type", "request_no", "request_JSON", "request_start_time",
                         DB::raw("date_add(DATE_FORMAT(concat(year(now()),'-01-01'),'%Y-%m-01'), interval request_start_time minute) as request_start_time_time"),
                         "request_end_time",
                         DB::raw("date_add(DATE_FORMAT(concat(year(now()),'-01-01'),'%Y-%m-01'), interval request_end_time minute) as request_end_time_time"),
-                        "return_JSON", "deleted")
-                ->paginate(20);
+                        "return_JSON", "deleted");
+        
+        echo $searchfromdate . ",  "  . $searchtodate;
+        if($searchfromdate != ""){
+            $devicereqs = $devicereqs->where("request_datetime", ">=", $searchfromdate);
+        }
+        
+        if($searchtodate != ""){
+            $devicereqs = $devicereqs->where("request_datetime", "<", $searchtodate . " 23:59:59");
+        }
+        
+        if($searchrsudevice != "-1"){
+            $devicereqs = $devicereqs->where("device_id", $searchrsudevice);
+        }
+        
+        if($searchdeleteflag != "-1"){
+            $devicereqs = $devicereqs->where("deleted", $searchdeleteflag);
+        }
+        
+        if($searchreturnjsonstatus != "-1"){
+            if($searchreturnjsonstatus == "1"){
+                $devicereqs = $devicereqs->wherenull("return_JSON");
+            } else {
+                $devicereqs = $devicereqs->wherenotnull("return_JSON");
+            }
+        }
+        
+        $devicereqs = $devicereqs->paginate(20);
+        
+        $devices = Device::orderBy("id", "asc")
+                ->select("id", "devicecode")
+                ->get();        
         
         return view("/basicdata/rsusendrecords", [
-            "devicerequests"=>$devicereqs
+            "devicerequests"=>$devicereqs,
+            "devices"=>$devices,
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate,
+            "searchrsudevice"=>$searchrsudevice,
+            "searchdeleteflag"=>$searchdeleteflag,
+            "searchreturnjsonstatus"=>$searchreturnjsonstatus
         ]);
     }
 }
