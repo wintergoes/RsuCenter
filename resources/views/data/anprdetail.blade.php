@@ -44,7 +44,7 @@ $commonctrl = new \App\Http\Controllers\CommonController();
                     @for($i = 0; $i < $anprevent->vehpicnum; $i++)
                     <tr>
                         <td>图片{{$i+1}}</td>
-                        <td><a href="radarpictures/{{date("Ymd", strtotime($anprevent->eventtime))}}/anpr_{{$anprevent->id}}_{{$i+1}}.jpg" target="_blank"><img style="max-width: 600px;" src="radarpictures/{{date("Ymd", strtotime($anprevent->eventtime))}}/anpr_{{$anprevent->id}}_{{$i+1}}.jpg" /></a></td>
+                        <td><a href="{{$radar_video_root_path}}/radarpictures/{{date("Ymd", strtotime($anprevent->eventtime))}}/anpr_{{$anprevent->id}}_{{$i+1}}.jpg" target="_blank"><img style="max-width: 600px;" src="{{$radar_video_root_path}}/radarpictures/{{date("Ymd", strtotime($anprevent->eventtime))}}/anpr_{{$anprevent->id}}_{{$i+1}}.jpg" /></a></td>
                     </tr>
                     @endfor
                 </tbody>

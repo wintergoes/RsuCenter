@@ -121,8 +121,11 @@ class DataController extends Controller
             return;            
         }
         
+        $radar_video_root_path = env("radar_video_root_path");
+        
         return view("/data/aiddetail", [
-           "aidevent"=>$aidevents[0] 
+            "aidevent"=>$aidevents[0],
+            "radar_video_root_path"=>$radar_video_root_path
         ]);
     }
     
@@ -224,9 +227,12 @@ class DataController extends Controller
             echo "记录不存在！";
             return;            
         }
+                
+        $radar_video_root_path = env("radar_video_root_path");
         
         return view("/data/anprdetail", [
-           "anprevent"=>$anprevents[0] 
+            "anprevent"=>$anprevents[0],
+            "radar_video_root_path"=>$radar_video_root_path
         ]);
     }
 }
