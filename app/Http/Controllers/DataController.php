@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\AnprEvent;
 use App\AidEvent;
 use App\RadarDevice;
+use App\Forecast;
 
 class DataController extends Controller
 {
@@ -146,7 +147,7 @@ class DataController extends Controller
         
         if($searchtodate == ""){
             $searchtodate = date('Y-m-d',time());
-        }          
+        }
         
         $searchlicenseplate = "";
         if($request->has("licenseplate")){
@@ -233,6 +234,44 @@ class DataController extends Controller
         return view("/data/anprdetail", [
             "anprevent"=>$anprevents[0],
             "radar_video_root_path"=>$radar_video_root_path
+        ]);
+    }
+    
+    function forecast(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+        
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',time());
+        }        
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        } 
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }
+        
+        $forecast = Forecast::orderBy("id", "desc");
+        
+        if($searchfromdate != ""){
+            $forecast = $forecast->where("created_at", ">=", $searchfromdate);
+        }
+        
+        if($searchtodate != ""){
+            $forecast = $forecast->where("created_at", "<", $searchtodate . " 23:59:59");
+        }
+        
+        $forecast = $forecast->paginate(30);
+        
+        return view("/data/forecast", [
+            "forecast"=>$forecast,
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate
         ]);
     }
 }

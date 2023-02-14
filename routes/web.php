@@ -87,6 +87,7 @@ Route::any('/anprevents', "DataController@anprEvents");
 Route::any('/anprdetail', "DataController@anprDetail");
 Route::any('/aidevents', "DataController@aidEvents");
 Route::any('/aiddetail', "DataController@aidDetail");
+Route::any('/forecast', "DataController@forecast");
 
 //**************************数据api接口用户管理*******************************
 Route::any('/dataapiclients', 'DataApiClientController@index');

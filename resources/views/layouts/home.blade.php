@@ -55,7 +55,8 @@ $l2_appts = in_array($currentpath, array("recycleappts", "recycleapptstatus"));
 
 $l2_radar_anpr = in_array($currentpath, array("anprevents", "anprdetail"));
 $l2_radar_aidevents = in_array($currentpath, array("aidevents", "aiddetail"));
-$ll_data = $l2_radar_anpr | $l2_radar_aidevents;
+$l2_forecast = in_array($currentpath, array("forecast"));
+$ll_data = $l2_radar_anpr | $l2_radar_aidevents | $l2_forecast;
 
 $l2_oburoute = in_array($currentpath, array("oburoute"));
 $l2_eventstat = in_array($currentpath, array("eventstat"));
@@ -113,7 +114,8 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
 					</a>
 					<ul>
                                             <li {!! $l2_radar_anpr ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="anprevents"><i class="bx bx-right-arrow-alt" ></i>车辆识别查询</a></li>
-                                            <li {!! $l2_radar_aidevents ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="aidevents"><i class="bx bx-right-arrow-alt" ></i>雷视事件检测</a></li>
+                                            <li {!! $l2_radar_aidevents ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="aidevents"><i class="bx bx-right-arrow-alt" ></i>雷视事件查询</a></li>
+                                            <li {!! $l2_forecast ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="forecast"><i class="bx bx-right-arrow-alt" ></i>气象数据查询</a></li>
 					</ul>
 				</li>                                
                                 
