@@ -52,17 +52,17 @@
                     <tr>
                         <td>{{$fcast->id}}</td>
                         <td>{{$fcast->weather}}</td>
-                        <td>{{$fcast->temperature}}</td>
-                        <td>{{$fcast->templow}} ~ {{$fcast->temphigh}}</td>
+                        <td>{{$fcast->temperature}}°C</td>
+                        <td>{{$fcast->templow}}°C ~ {{$fcast->temphigh}}°C</td>
                         
                         <td>{{$fcast->humidity}}</td>
-                        <td>{{$fcast->windpower}}</td>
+                        <td>{{$fcast->windpower}}级</td>
                         <td>{{$fcast->winddirection}}</td>
                         <td>{{$fcast->windspeed}}</td>                        
                         
                         <td>{{$fcast->visibility}}</td>
                         
-                        <td>{{$fcast->pressure}}</td>
+                        <td>{{$fcast->pressure}}kPa</td>
                         <td>{{$fcast->air}}</td>
                         <td>{{$fcast->sun_begin}}</td>
                         <td>{{$fcast->sun_end}}</td>                         
