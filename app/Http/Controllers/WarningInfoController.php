@@ -45,9 +45,10 @@ class WarningInfoController extends Controller
                         "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
                         "warninginfo.wiradius", "warninginfo.wipriority", "warninginfo.starttime", "warninginfo.endtime", 
                         "u.realname",
-                        "tec.tecparentcode as tecpcode", "warninginfo.teccode", DB::raw("warninginfo.endtime>now() as timevalid"))
+                        "tec.tecparentcode as tecpcode", "warninginfo.teccode", "tec.tecname", DB::raw("tecp.tecname as tecpname"), DB::raw("warninginfo.endtime>now() as timevalid"))
                 ->leftjoin("users as u", "warninginfo.wicreator", "=", "u.id")
-                ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode");
+                ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode")
+                ->leftjoin("trafficeventclasses as tecp", "tec.tecparentcode", "=", "tecp.teccode");
         
         if($searchfromdate != ""){
             $winfos = $winfos->where("warninginfo.created_at", ">=" , $searchfromdate . " 00:00:00");

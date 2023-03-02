@@ -64,6 +64,8 @@
                 <thead>
                     <tr role="row">
                         <th >ID</th>
+                        <th >事件分类</th>
+                        <th >事件子类</th>
                         <th >事件名称</th>
                         <th >事件坐标</th>
                         <th >影响半径</th>
@@ -82,6 +84,8 @@
                     @foreach($warninginfo as $winfo)
                     <tr>
                         <td>{{$winfo->id}}</td>
+                        <td>{{$winfo->tecpname}}</td>
+                        <td>{{$winfo->tecname}}({{$winfo->teccode}})</td>                        
                         <td>{{$winfo->winame}}</td>
                         <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;"  data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$winfo->wiradius}}米</td>
