@@ -60,6 +60,7 @@ class RadarDeviceController extends Controller
         $rdevice->macaddrint = $this->mac_to_int($request->macaddress);
         $rdevice->lanenumber = $lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
+        $rdevice->emergency_laneno = $request->emergency_laneno;
         $rdevice->status = $request->status;
         $rdevice->validYPosSmall = $request->validYposSmall;
         $rdevice->validYPosLarge = $request->validYposLarge;
@@ -118,6 +119,7 @@ class RadarDeviceController extends Controller
         $rdevice->macaddrint = $this->mac_to_int($request->macaddress);
         $rdevice->lanenumber = $request->lanenumber;
         $rdevice->lanewidth = $request->lanewidth;
+        $rdevice->emergency_laneno = $request->emergency_laneno;
         $rdevice->status = $request->status;
         $rdevice->validYPosSmall = $request->validYposSmall;
         $rdevice->validYPosLarge = $request->validYposLarge;

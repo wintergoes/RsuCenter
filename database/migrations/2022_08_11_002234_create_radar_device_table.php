@@ -23,6 +23,7 @@ class CreateRadarDeviceTable extends Migration
             $table->string("videostreamaddress", "100")->default("");
             $table->integer("lanenumber")->default(0);
             $table->string("lanewidth", 100)->default("");
+            $table->tinyInteger("emergency_laneno")->default(0);
             $table->integer("status")->default(1);
             $table->double("validYPosSmall")->default(-1000);
             $table->double("validYPosLarge")->default(1000);

@@ -137,7 +137,18 @@ function onSelectTecChild(){
                 <input type="text" class="form-control" id="lanewidth" name="lanewidth" placeholder="请输入所有车道的宽度，以英文逗号分隔，格式：3.6,3.6">
                 @endif
             </div>
-        </div>        
+        </div>   
+        
+        <div class="row mb-3">
+            <label for="emergency_laneno" class="col-sm-2 col-form-label">应急车道号</label>
+            <div class="col-sm-6">
+                @if(isset($radardevice))
+                <input type="number" class="form-control" id="emergency_laneno" max="10" min="0" name="emergency_laneno" value="{{$radardevice->emergency_laneno}}" placeholder="">
+                @else
+                <input type="number" class="form-control" id="emergency_laneno" max="10" min="0" name="emergency_laneno" placeholder="">
+                @endif
+            </div>
+        </div>         
         
         <div class="row mb-3">
             <label for="lat" class="col-sm-2 col-form-label">设备坐标</label>
