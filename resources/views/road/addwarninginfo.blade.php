@@ -189,12 +189,23 @@ function onSelectTecChild(){
             <label for="wiradius" class="col-sm-2 col-form-label">影响半径(米)</label>
             <div class="col-sm-6">
                 @if(isset($winfo))
-                <input type="number" class="form-control" id="wiradius" name="wiradius" value="{{$winfo->wiradius}}">
+                <input type="number" class="form-control" id="wiradius" min="0" name="wiradius" value="{{$winfo->wiradius}}">
                 @else
-                <input type="number" class="form-control" id="wiradius" name="wiradius" placeholder="请输入影响半径">
+                <input type="number" class="form-control" id="wiradius" min="0" name="wiradius" placeholder="请输入影响半径">
                 @endif
             </div>
         </div>
+        
+        <div class="row mb-3">
+            <label for="wipriority" class="col-sm-2 col-form-label">优先级(0-7)</label>
+            <div class="col-sm-6">
+                @if(isset($winfo))
+                <input type="number" class="form-control" id="wipriority" max="7" min="0" name="wipriority" value="{{$winfo->wipriority}}">
+                @else
+                <input type="number" class="form-control" id="wipriority" max="7" min="0" name="wipriority" placeholder="">
+                @endif
+            </div>
+        </div>        
         
         <div class="row mb-3">
             <label for="starttime" class="col-sm-2 col-form-label">开始时间</label>

@@ -43,7 +43,7 @@ class WarningInfoController extends Controller
                 ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
                         "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
                         "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
-                        "warninginfo.wiradius", "warninginfo.starttime", "warninginfo.endtime", 
+                        "warninginfo.wiradius", "warninginfo.wipriority", "warninginfo.starttime", "warninginfo.endtime", 
                         "u.realname",
                         "tec.tecparentcode as tecpcode", "warninginfo.teccode", DB::raw("warninginfo.endtime>now() as timevalid"))
                 ->leftjoin("users as u", "warninginfo.wicreator", "=", "u.id")
@@ -96,6 +96,7 @@ class WarningInfoController extends Controller
         $winfo->wisource = $request->wisource;
         $winfo->wicreator = Auth::user()->id;
         $winfo->wiradius = $request->wiradius;
+        $winfo->wipriority = $request->wipriority;
         $winfo->starttime = $request->starttime;
         $winfo->endtime = $request->endtime;
         $winfo->save();
@@ -112,7 +113,7 @@ class WarningInfoController extends Controller
                 ->select("warninginfo.id", "warninginfo.winame", "warninginfo.startlat",  "warninginfo.wistatus",
                         "warninginfo.startlng", "warninginfo.stoplat", "warninginfo.stoplng",
                         "warninginfo.wicreator", "warninginfo.created_at", "warninginfo.wisource", 
-                        "warninginfo.wiradius", "warninginfo.starttime", "warninginfo.endtime", 
+                        "warninginfo.wiradius", "warninginfo.wipriority", "warninginfo.starttime", "warninginfo.endtime", 
                         "tec.tecparentcode", "warninginfo.teccode")                
                 ->leftjoin("trafficeventclasses as tec", "warninginfo.teccode", "=", "tec.teccode")
                 ->get();
@@ -181,6 +182,7 @@ class WarningInfoController extends Controller
         $winfo->wisource = $request->wisource;
         $winfo->wicreator = Auth::user()->id;
         $winfo->wiradius = $request->wiradius;
+        $winfo->wipriority = $request->wipriority;
         $winfo->starttime = $request->starttime;
         $winfo->endtime = $request->endtime;        
         $winfo->save();

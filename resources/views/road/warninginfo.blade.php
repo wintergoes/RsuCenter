@@ -67,6 +67,7 @@
                         <th >事件名称</th>
                         <th >事件坐标</th>
                         <th >影响半径</th>
+                        <th >优先级</th>
                         <th >开始时间</th>
                         <th >结束时间</th>
                         <th >来源</th>
@@ -84,6 +85,7 @@
                         <td>{{$winfo->winame}}</td>
                         <td><button type="button" class="btn btn-transparent" style="padding: 0px; margin: 0px;"  data-bs-toggle="modal" onclick="showDevicePosition('{{$winfo->teccode}}', '{{$winfo->winame}}', {{$winfo->startlng}}, {{$winfo->startlat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$winfo->wiradius}}米</td>
+                        <td>{{$winfo->wipriority}}</td>
                         <td>{{$winfo->starttime}}</td>
                         @if($winfo->timevalid == 0)
                         <td><font color="red">{{$winfo->endtime}}</font></td>
@@ -91,7 +93,7 @@
                         <td>{{$winfo->endtime}}</td>
                         @endif
                         <td>{{$commonctrl->eventSource2Str($winfo->wisource)}}</td>
-                        <td>{{$winfo->realname}}</td>
+                        <td>{{$winfo->realname == "" ? "-" : $winfo->realname}}</td>
                         <td>{{$winfo->wistatus == 1 ? "有效" : "无效"}}</td>
                         <td>{{$winfo->created_at}}</td>
                         <td>

@@ -21,6 +21,7 @@ class CreateWarninginfoTable extends Migration
             $table->tinyInteger("wistatus")->defult(0);
             $table->tinyInteger("wisource")->default(0); //预警信息来源，1-人工，10-气象接口，20-交通接口
             $table->integer("wicreator")->default(0); //预警信息添加者
+            $table->tinyInteger("wipriority")->default(0); //事件优先级，0-7
             $table->double("startlat")->default(0);
             $table->double("startlng")->default(0);
             $table->double("stoplat")->default(0);
