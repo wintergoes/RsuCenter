@@ -1467,7 +1467,7 @@ class ApiV1Controller extends Controller
             $eventPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$winfo->startlng * 1000000, "lat"=>$winfo->startlat * 1000000)), "offsetV"=>null);
             $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
             $winfoitem = array("rteId"=>$rteid, "eventType"=>intval($winfo->teccode), "eventSource"=>$winfo->wisource, 
-                "eventPos"=>$eventPos, "eventRadius"=>$winfo->wiradius, "timeDetails"=>$timeDetails);
+                "eventPos"=>$eventPos, "eventRadius"=>$winfo->wiradius, "priority"=>$winfo->wipriority, "timeDetails"=>$timeDetails);
             array_push($rtes, $winfoitem);
         }
         

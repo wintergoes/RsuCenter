@@ -28,6 +28,10 @@ function submitData(){
         return;
     }
     
+    if($('#wipriority').val() === ''){
+        $('#wipriority').val(0);
+    }    
+    
     if($('#starttime').val() === '' || $('#endtime').val() === ''){
         alert('起始时间不能为空！');
         $('#starttime').focus();
@@ -202,7 +206,7 @@ function onSelectTecChild(){
                 @if(isset($winfo))
                 <input type="number" class="form-control" id="wipriority" max="7" min="0" name="wipriority" value="{{$winfo->wipriority}}">
                 @else
-                <input type="number" class="form-control" id="wipriority" max="7" min="0" name="wipriority" placeholder="">
+                <input type="number" class="form-control" id="wipriority" max="7" min="0" name="wipriority" value="0" placeholder="">
                 @endif
             </div>
         </div>        
