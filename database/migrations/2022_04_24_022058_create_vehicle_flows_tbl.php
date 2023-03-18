@@ -23,7 +23,7 @@ class CreateVehicleFlowsTbl extends Migration
             $table->integer("obuid")->default(0)->nullable();
             $table->timestamps();
             
-            $table->index(["obuid", "vehtype"]);
+            $table->index(["obuid", "vehtype", "vehbrand"]);
         });
     }
 
