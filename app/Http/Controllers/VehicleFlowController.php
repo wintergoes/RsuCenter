@@ -99,7 +99,7 @@ class VehicleFlowController extends Controller
         
 
         $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(vf.created_at, '%H') as vfhour from  vehicleflow vf "
-                . " where  date(vf.created_at)>='" . $searchfromdate . "' and date(vf.created_at)<='" . $searchtodate . "' "
+                . " where vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
                 . " group by DATE_FORMAT(vf.created_at, '%H') " ;
 
         $arr = DB::select($sqlstr);
@@ -130,7 +130,7 @@ class VehicleFlowController extends Controller
         
 
         $sqlstr = " select count(vf.vehtype) as vehtypecount, vf.vehtype from  vehicleflow vf "
-                . " where  date(vf.created_at)>='" . $searchfromdate . "' and date(vf.created_at)<='" . $searchtodate . "' "
+                . " where vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
                 . " group by vf.vehtype order by vehtypecount desc  " ;
 
         $arr = DB::select($sqlstr);
@@ -161,7 +161,7 @@ class VehicleFlowController extends Controller
         
 
         $sqlstr = " select count(vf.vehbrand) as vehbrandcount, vf.vehbrand from  vehicleflow vf "
-                . " where  date(vf.created_at)>='" . $searchfromdate . "' and date(vf.created_at)<='" . $searchtodate . "' "
+                . " where  vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
                 . " group by vf.vehbrand order by vehbrandcount desc limit 10" ;
 
         $arr = DB::select($sqlstr);
@@ -219,9 +219,9 @@ class VehicleFlowController extends Controller
 
         $sqlstr = " select ifnull(w1count,0) as eventcount,d.ddate from tbldates d " 
 
-                . " left join (select count(id) as w1count, date(eventtime) as w1date from aidevents w "
-                . " where  date(w.eventtime)>='" . $searchfromdate . "' and date(w.eventtime)<='" . $searchtodate . "' "
-                . " group by date(w.eventtime)) w1 on w1.w1date=d.ddate " 
+                . " left join (select count(id) as w1count, eventtime_date as w1date from aidevents w "
+                . " where  w.eventtime_date>='" . $searchfromdate . "' and w.eventtime_date<='" . $searchtodate . "' "
+                . " group by w.eventtime_date) w1 on w1.w1date=d.ddate " 
                 . " where d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' order by d.ddate;";
 
         //echo $sqlstr;
@@ -265,7 +265,7 @@ class VehicleFlowController extends Controller
         }
         
         $sqlstr = "select count(id) as wcount, aidevent from aidevents " 
-            . " where date(eventtime)>='" . $searchfromdate . "' and date(eventtime)<='" . $searchtodate . "' group by aidevent ;";
+            . " where date(eventtime)>='" . $searchfromdate . "' and date(eventtime)<='" . $searchtodate . "' group by aidevent order by wcount desc ;";
         
 //        $sqlstr = "select count(w.id) as wcount,tec.tecparentcode, tp.tecname from warninginfo w "
 //                . " left join trafficeventclasses tec on tec.teccode=w.teccode "
@@ -297,9 +297,9 @@ class VehicleFlowController extends Controller
         } 
         
 
-        $sqlstr = " select count(aidevents.id) as vehcount,DATE_FORMAT(aidevents.eventtime, '%H') as aidhour from  aidevents  "
+        $sqlstr = " select count(aidevents.id) as vehcount,eventtime_h as aidhour from  aidevents  "
                 . " where  date(aidevents.eventtime)>='" . $searchfromdate . "' and date(aidevents.eventtime)<='" . $searchtodate . "' "
-                . " group by DATE_FORMAT(aidevents.eventtime, '%H') " ;
+                . " group by eventtime_h " ;
 
         //echo $sqlstr;
         $arr = DB::select($sqlstr);
