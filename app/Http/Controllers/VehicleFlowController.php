@@ -265,7 +265,7 @@ class VehicleFlowController extends Controller
         }
         
         $sqlstr = "select count(id) as wcount, aidevent from aidevents " 
-            . " where date(eventtime)>='" . $searchfromdate . "' and date(eventtime)<='" . $searchtodate . "' group by aidevent order by wcount desc ;";
+            . " where eventtime_date>='" . $searchfromdate . "' and eventtime_date<='" . $searchtodate . "' group by aidevent order by wcount desc ;";
         
 //        $sqlstr = "select count(w.id) as wcount,tec.tecparentcode, tp.tecname from warninginfo w "
 //                . " left join trafficeventclasses tec on tec.teccode=w.teccode "
@@ -298,7 +298,7 @@ class VehicleFlowController extends Controller
         
 
         $sqlstr = " select count(aidevents.id) as vehcount,eventtime_h as aidhour from  aidevents  "
-                . " where  date(aidevents.eventtime)>='" . $searchfromdate . "' and date(aidevents.eventtime)<='" . $searchtodate . "' "
+                . " where  aidevents.eventtime_date>='" . $searchfromdate . "' and aidevents.eventtime_date<='" . $searchtodate . "' "
                 . " group by eventtime_h " ;
 
         //echo $sqlstr;
