@@ -21,7 +21,7 @@
 	<script src="assets/plugins/raphael/raphael-min.js"></script>
 	<script src="assets/plugins/morris/js/morris.js"></script>
 
-<h5 class="card-title">车流量统计</h5>
+<h5 class="card-title">车辆识别统计</h5>
 <hr>
 
 <div class="row">
@@ -59,7 +59,7 @@
 				<div class="d-flex align-items-center">
                                         <div>
 						<h6 class="mb-3">
-                                                    <b>车流量趋势图</b>
+                                                    <b>车辆识别趋势图</b>
 						</h6>
 					</div>
 
@@ -107,7 +107,7 @@
 				<div class="d-flex align-items-center">
 					<div>
 						<h6 class="mb-3">
-							<b>车流量时段统计图</b>
+							<b>车辆识别时段统计图</b>
 						</h6>
 					</div>
 				</div>                            
