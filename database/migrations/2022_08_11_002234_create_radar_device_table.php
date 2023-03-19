@@ -32,6 +32,8 @@ class CreateRadarDeviceTable extends Migration
             $table->double("lng");
             $table->timestamp("communicationtime")->nullable();
             $table->string("radarremark", 200)->default("");
+            $table->integer("maxtpsrealtimeid")->default(0);
+            $table->integer("maxtpsid")->default(0);
             $table->timestamps();
             
             $table->index(["macaddrint"]);
