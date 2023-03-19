@@ -60,16 +60,16 @@ class VehicleFlowController extends Controller
         
         if($searchfromdate != $searchtodate){
             $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
-                    . " left join vehicleflow vf on date(vf.created_at)=d.ddate "
+                    . " left join vehicleflow vf on create_date=d.ddate "
                     . " where  d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' "
                     . " group by d.ddate " ;
 
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
         } else {
-            $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(vf.created_at, '%H') as vfhour from  vehicleflow vf "
-                    . " where  date(vf.created_at)>='" . $searchtodate . "' and date(vf.created_at)<='" . $searchtodate . "' "
-                    . " group by DATE_FORMAT(vf.created_at, '%H') " ;
+            $sqlstr = " select count(vf.id) as vehcount,vf.create_hour as vfhour from  vehicleflow vf "
+                    . " where  create_date='" . $searchtodate . "' and create_date='" . $searchtodate . "' "
+                    . " group by vf.create_hour " ;
 
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
@@ -98,9 +98,9 @@ class VehicleFlowController extends Controller
         } 
         
 
-        $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(vf.created_at, '%H') as vfhour from  vehicleflow vf "
+        $sqlstr = " select count(vf.id) as vehcount, vf.create_hour as vfhour from  vehicleflow vf "
                 . " where vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
-                . " group by DATE_FORMAT(vf.created_at, '%H') " ;
+                . " group by vf.create_hour " ;
 
         $arr = DB::select($sqlstr);
         $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
@@ -130,7 +130,7 @@ class VehicleFlowController extends Controller
         
 
         $sqlstr = " select count(vf.vehtype) as vehtypecount, vf.vehtype from  vehicleflow vf "
-                . " where vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
+                . " where vf.create_date>='" . $searchfromdate . "' and vf.create_date<='" . $searchtodate . "' "
                 . " group by vf.vehtype order by vehtypecount desc  " ;
 
         $arr = DB::select($sqlstr);
@@ -161,7 +161,7 @@ class VehicleFlowController extends Controller
         
 
         $sqlstr = " select count(vf.vehbrand) as vehbrandcount, vf.vehbrand from  vehicleflow vf "
-                . " where  vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
+                . " where  vf.create_date>='" . $searchfromdate . "' and vf.create_date<='" . $searchtodate . "' "
                 . " group by vf.vehbrand order by vehbrandcount desc limit 10" ;
 
         $arr = DB::select($sqlstr);

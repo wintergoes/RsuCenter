@@ -21,6 +21,8 @@ class CreateVehicleFlowsTbl extends Migration
             $table->string("vehtype")->default(0)->nullable();
             $table->string("vehbrand")->default("")->nullable();
             $table->integer("obuid")->default(0)->nullable();
+            $table->date("create_date")->storedAs("date(created_at)")->default("2000-01-01");
+            $table->string("create_hour", 2)->storedAs("date_format(created_at, '%H')")->default("00");
             $table->timestamps();
             
             $table->index(["obuid", "vehtype", "vehbrand"]);
