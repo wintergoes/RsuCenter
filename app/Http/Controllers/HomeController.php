@@ -46,9 +46,9 @@ class HomeController extends Controller
                 . "(select count(id) as rsucount from devices) as rsustat, "
                 . "(select count(id) as obucount from obudevices) as obustat,"
                 . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat,"
-                . "(select count(id) as vehflowcount from vehicleflow where date(created_at)=date(now())) as vehflowstat,"
-                . "(select count(id) as aidcount from aidevents where date(eventtime)=date(now())) as aidstat,"
-                . "(select count(id) as warnrecordcount from warningrecords where date(created_at)=date(now())) as warnrecordstat");
+                . "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
+                . "(select count(id) as aidcount from aidevents where eventtime_date=date(now())) as aidstat,"
+                . "(select count(id) as warnrecordcount from warningrecords where created_at>=date(now())) as warnrecordstat");
         
         return json_encode($stats);
     }
@@ -81,7 +81,7 @@ class HomeController extends Controller
     }
     
     function homeAidEvents(Request $request){
-        $sqlstr = "select eventtime, aidevent, plate from aidevents where date(eventtime)=date(now()) order by id desc"; //
+        $sqlstr = "select eventtime, aidevent, plate from aidevents where eventtime_date=date(now()) order by id desc"; //
         
         $aidevents = DB::select($sqlstr);
         

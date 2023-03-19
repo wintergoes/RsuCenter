@@ -54,9 +54,9 @@ class DashboardController extends Controller
                 . "(select count(id) as warncount from warninginfo where endtime>now() and wistatus=1) as warnstat,"
                 . "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
                 . "(select count(id) as warnrecordcount from warningrecords where created_at>=date(now())) as warnrecordstat,"
-                . "(select count(id) as speedcount from aidevents where aidevent='speed' and eventtime>=date(now())) as speedstat,"
-                . "(select count(id) as lowspeedcount from aidevents where aidevent='lowSpeed' and eventtime>=date(now())) as lowspeedstat,"
-                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='abandonedObject' and eventtime>=date(now())) as abandonedobjectstat");
+                . "(select count(id) as speedcount from aidevents where aidevent='speed' and eventtime_date=date(now())) as speedstat,"
+                . "(select count(id) as lowspeedcount from aidevents where aidevent='lowSpeed' and eventtime_date=date(now())) as lowspeedstat,"
+                . "(select count(id) as abandonedobjectcount from aidevents where aidevent='abandonedObject' and eventtime_date=date(now())) as abandonedobjectstat");
         
         return json_encode($stats);        
     }
@@ -244,11 +244,10 @@ class DashboardController extends Controller
                 ->get();
         
         $radarsql = "select rd.id, rd.devicecode, rd.lanenumber, rd.status, rd.lat, rd.lng, tpsr1.timeheadway, tpsr1.spaceheadway, "
-                . " tpsr1.laneno, tpsr1.lanestate, tblavgspeed.avgspeed from radardevices rd left join (select tpsr.timeheadway, tpsr.spaceheadway, "
-                . " tpsr.laneno, tpsr.lanestate, tpsr.macaddr from "
-                . " (select macaddr, max(eventtime) as eventtime from tpsrealtimeevents  group by macaddr) as tpsmax "
-                . " left join tpsrealtimeevents tpsr on tpsr.eventtime=tpsmax.eventtime) as tpsr1 on rd.macaddrint=tpsr1.macaddr"
-                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where vehspeed>0 and eventtime>=date(now()) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
+                . " tpsr1.laneno, tpsr1.lanestate, tblavgspeed.avgspeed from radardevices rd "
+                . " left join tpsrealtimeevents  as tpsr1 on rd.maxtpsrealtimeid=tpsr1.id "
+                . " left join (select macaddr,avg(vehspeed) as avgspeed from anprevents where vehspeed>0 and eventtime>=date_add(now(), interval -5 minute) group by macaddr) as tblavgspeed on tblavgspeed.macaddr=rd.macaddrint ";
+//        return $radarsql;
         $radars = DB::select($radarsql);
 //        $radars = RadarDevice::orderBy("id")
 //                ->where("status", "1")
