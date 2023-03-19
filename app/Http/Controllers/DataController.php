@@ -180,7 +180,7 @@ class DataController extends Controller
 //            $anprevents = $anprevents->whereraw("anprevents.eventtime <='" . $searchtodate . "'");
 //        }
         
-        $anprevents = $anprevents->whereraw("anprevents.eventtime between '" . $searchfromdate . "' and date_add('" . $searchtodate . "', interval 1 day)");
+        $anprevents = $anprevents->whereraw("anprevents.eventtime between '" . $searchfromdate . "' and '" . $searchtodate . "'");
         
         if($searchlicenseplate != ""){
             $anprevents = $anprevents->where("anprevents.licenseplate", "like", "%". $searchlicenseplate . "%");

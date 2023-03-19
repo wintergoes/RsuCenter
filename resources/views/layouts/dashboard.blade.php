@@ -2625,6 +2625,7 @@ function showVehicles(){
         
         var nowdate = new Date();
         for(var i = vehMap.values().length - 1; i >= 0 ; i--){
+//            console.log(vehMap.values()[i].uuid + "," + vehMap.values()[i].detecttime + ", " + nowdate);
             var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
             if(timecha > 3  * 1000){
                 map.removeOverlay(vehMap.values()[i].marker);
