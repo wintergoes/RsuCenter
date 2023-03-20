@@ -149,6 +149,10 @@ class DataController extends Controller
             $searchtodate = date('Y-m-d',time());
         }
         
+        if(strlen($searchtodate) == 10){
+            $searchtodate .= " 23:59:59";
+        }
+        
         $searchlicenseplate = "";
         if($request->has("licenseplate")){
             $searchlicenseplate = $request->licenseplate;
