@@ -245,8 +245,8 @@
                         </div>
                         <table height="85%">
                             <tr>
-                                <td class="summary_stat_title_td">今日车流量</td>
-                                <td class="summary_stat_title_td">今日道路事件</td>
+                                <td class="summary_stat_title_td">今日车辆识别</td>
+                                <td class="summary_stat_title_td">今日交通事件</td>
                                 <td class="summary_stat_title_td">今日预警次数</td>                     
                             </tr>
                             <tr>
@@ -2451,7 +2451,7 @@ function showTestVehs(){
     setTimeout("showTestVehs()", 1000);
 }
 
-function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, positiony, id){
+function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, detecttime, positiony, id, radarcode){
     this.uuid = uuid;
     this.plateno = plateno;
     this.targetid = targetid;
@@ -2463,6 +2463,7 @@ function Vehicle(uuid, plateno, targetid, targettype, speed, laneno, lng, lat, d
     this.detecttime = detecttime;
     this.positiony = positiony;
     this.dbid = id;
+    this.radarcode = radarcode;
     
     this.setMarker = function(marker){
         this.marker = marker;
@@ -2547,7 +2548,7 @@ function showVehicles(){
                 var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
                     data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
                     data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
-                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);                 
+                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"], data["vehicles"][i]["devicecode"]);                 
                 
                 vehMap.put(vehuuid, veh);
                 //alert(veh.lng + "  " + veh.lat);
@@ -2625,7 +2626,10 @@ function showVehicles(){
         
         var nowdate = new Date();
         for(var i = vehMap.values().length - 1; i >= 0 ; i--){
-//            console.log(vehMap.values()[i].uuid + "," + vehMap.values()[i].detecttime + ", " + nowdate);
+            if(vehMap.values()[i].radarcode === "LS00110"){
+//               console.log(vehMap.values()[i].uuid + "," + vehMap.values()[i].detecttime + ", " + nowdate);
+            }
+            
             var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
             if(timecha > 3  * 1000){
                 map.removeOverlay(vehMap.values()[i].marker);
