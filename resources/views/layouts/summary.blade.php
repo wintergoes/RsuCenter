@@ -13,7 +13,7 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0">
-                            今日车流量
+                            今日车辆识别
                         </p>
                         <h4 class="my-1 text-info" id="vehflow">
                             0台
@@ -33,7 +33,7 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            雷视识别事件
+                            今日雷视识别事件
                         </p>
                         <h4 class="my-1 text-info" id="aidcount">
                             0
@@ -248,8 +248,10 @@ function updateBdMapSummary(){
             //map.clearOverlays();
             for(var i = 0; i < data.rsudevices.length; i++){
                 rsuobj = data.rsudevices[i];
-                
-                let pt = new BMapGL.Point(rsuobj.rsulng, rsuobj.rsulat);
+                                
+                var rsulatlng = coordtransform.wgs84togcj02(rsuobj.rsulng, rsuobj.rsulat);
+                rsulatlng = coordtransform.gcj02tobd09(rsulatlng[0], rsulatlng[1]);   
+                let pt = new BMapGL.Point(rsulatlng[0], rsulatlng[1]);
                 var marker = new BMapGL.Marker(pt, {
                     icon: rsuIcon,
                     offset: new BMapGL.Size(0, -10)
@@ -328,16 +330,23 @@ function updateBdMapSummary(){
                             + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
                             + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr;
                 
+                var radarYoffset = -10;
+                var labelYoffset = -110;
+                if(radarobj.devicecode === 'LS00114' || radarobj.devicecode === 'LS00111'){
+                    radarYoffset = 90;
+                    labelYoffset = 100;
+                }                
+                
                 var marker = radarDeviceMap.get(radarobj.id);
                 if(marker === null){
                     marker = new BMapGL.Marker(pt, {
                         icon: radarIcon,
-                        offset: new BMapGL.Size(0, -10)
+                        offset: new BMapGL.Size(0, radarYoffset)
                     });
                     
                     var label = new BMapGL.Label(labelstr, {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, -110)           // 设置标注的偏移量
+                        offset: new BMapGL.Size(-60, labelYoffset)           // 设置标注的偏移量
                     })    
                     label.setStyle({border: "2px dotted #ffffff", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#ef7d65"});
                     label.enableMassClear();
