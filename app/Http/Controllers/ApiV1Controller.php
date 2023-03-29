@@ -1579,4 +1579,198 @@ class ApiV1Controller extends Controller
         
         echo "更新成功！<a href='/roads' target='_blank'>点击跳转</a>";
     }
+    
+    function getObus(Request $request){
+        $obus = ObuDevice::orderBy("id", "asc")
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "obus"=>$obus);        
+        return json_encode($arr);
+    }
+    
+    function getObuRoute(Request $request){
+        if($request->maxid == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
+        
+        $maxid = $request->maxid;
+        $routes = ObuRouteDetail::orderBy("id", "asc")
+                ->where("id", ">", $maxid)
+                ->limit(1000)
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "routecount"=>count($routes), "routes"=>$routes);
+        return json_encode($arr);
+    }
+    
+    function getWarningRecords(Request $request){
+        if($request->maxid == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
+        
+        $maxid = $request->maxid;  
+        $warnrecords = WarningRecord::orderBy("id", "asc")
+                ->where("id", ">", $maxid)
+                ->limit(1000)
+                ->get(); 
+        
+        $arr = array("retcode"=>ret_success, "warningrecordcount"=>count($warnrecords), "warningrecords"=>$warnrecords);
+        return json_encode($arr);
+    }
+    
+    function updateObuAndRouteFromRemote(Request $request){
+//1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
+        $ch = curl_init();
+        //2. 不管是get、post，跳过证书的验证
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        $mapjsurl = "http://47.104.69.149/api/getobus";
+        //3. 设置请求的服务器地址
+        curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+        
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($ch);
+        curl_close($ch);
+       
+        DB::select("truncate table obudevices"); 
+        $obus = json_decode($result);
+        for($i = 0; $i < count($obus->obus); $i++){
+            $newobu = new ObuDevice();
+            $newobu->id = $obus->obus[$i]->id;
+            $newobu->obuid = $obus->obus[$i]->obuid;
+            $newobu->obulocalid = $obus->obus[$i]->obulocalid;
+            $newobu->obustatus = $obus->obus[$i]->obustatus;
+            $newobu->obulatitude = $obus->obus[$i]->obulatitude;
+            $newobu->obulongtitude = $obus->obus[$i]->obulongtitude;
+            $newobu->obudirection = $obus->obus[$i]->obudirection;
+            $newobu->obuhardware = $obus->obus[$i]->obuhardware;
+            $newobu->positiontime = $obus->obus[$i]->positiontime;
+            $newobu->oburemark = $obus->obus[$i]->oburemark;
+            $newobu->created_at = $obus->obus[$i]->created_at;
+            $newobu->updated_at = $obus->obus[$i]->updated_at;
+            $newobu->save();
+        }
+        
+        echo "更新了 " . count($obus->obus) . " 个OBU!</br>";
+        
+        $maxrouteids = DB::select("select ifnull(max(id), 0) as maxid from oburoutedetails ");
+        $maxrouteid = $maxrouteids[0]->maxid;
+        
+        $loopcount = 0;
+        $udproutecount = 0;
+        while (true){
+            $loopcount++;
+            if($loopcount > 50){
+                break;
+            }
+            $ch = curl_init();
+            //2. 不管是get、post，跳过证书的验证
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            $mapjsurl = "http://47.104.69.149/api/getoburoute?maxid=" . $maxrouteid;
+            //3. 设置请求的服务器地址
+            curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            
+            $routejson = json_decode($result);
+            if($routejson->retcode != 1){
+                break;
+            }
+            
+            if($routejson->routecount == 0){
+                break;
+            }
+            
+            DB::beginTransaction();
+            for($i = 0; $i < $routejson->routecount; $i++){
+                try{
+                    $newroute = new ObuRouteDetail();
+                    $newroute->id = $routejson->routes[$i]->id;
+                    $newroute->routeid = $routejson->routes[$i]->routeid;
+                    $newroute->obuid = $routejson->routes[$i]->obuid;
+                    $newroute->managerid = $routejson->routes[$i]->managerid;
+                    $newroute->lat = $routejson->routes[$i]->lat;
+                    $newroute->lng = $routejson->routes[$i]->lng;
+                    $newroute->altitude = $routejson->routes[$i]->altitude;
+                    $newroute->direction = $routejson->routes[$i]->direction;
+                    $newroute->distance = $routejson->routes[$i]->distance;
+                    $newroute->locationtype = $routejson->routes[$i]->locationtype;
+                    $newroute->flag = $routejson->routes[$i]->flag;
+                    $newroute->loctime = $routejson->routes[$i]->loctime;
+                    $newroute->created_at = $routejson->routes[$i]->created_at;
+                    $newroute->updated_at = $routejson->routes[$i]->updated_at;
+                    $newroute->save();
+                    $udproutecount++;
+                } catch (Exception $ex) {
+
+                }                
+                
+                $maxrouteid = $routejson->routes[$i]->id;
+            }
+            DB::commit();
+        }
+        echo "更新了 " . $udproutecount . " 个坐标!</br>";
+        
+        $maxWRids = DB::select("select ifnull(max(id), 0) as maxid from warningrecords ");
+        $maxWRid = $maxWRids[0]->maxid;
+        $loopcount = 0;
+        $udpwrcount = 0;
+        while (true){
+            $loopcount++;
+            if($loopcount > 50){
+                break;
+            }
+            $ch = curl_init();
+            //2. 不管是get、post，跳过证书的验证
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            $mapjsurl = "http://47.104.69.149/api/getwarningrecords?maxid=" . $maxWRid;
+            //3. 设置请求的服务器地址
+            curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            
+            $wrjson = json_decode($result);
+            if($wrjson->retcode != 1){
+                break;
+            }
+            
+            if($wrjson->warningrecordcount == 0){
+                break;
+            }
+            
+            DB::beginTransaction();
+            for($i = 0; $i < $wrjson->warningrecordcount; $i++){
+                try {
+                    $newwr = new WarningRecord();
+                    $newwr->id = $wrjson->warningrecords[$i]->id;
+                    $newwr->obuid = $wrjson->warningrecords[$i]->obuid;
+                    $newwr->eventid = $wrjson->warningrecords[$i]->eventid;
+                    $newwr->eventtype = $wrjson->warningrecords[$i]->eventtype;
+                    $newwr->eventsource = $wrjson->warningrecords[$i]->eventsource;
+                    $newwr->eventstarttime = $wrjson->warningrecords[$i]->eventstarttime;
+                    $newwr->eventlat = $wrjson->warningrecords[$i]->eventlat;
+                    $newwr->eventlng = $wrjson->warningrecords[$i]->eventlng;
+                    $newwr->obulat = $wrjson->warningrecords[$i]->obulat;
+                    $newwr->obulng = $wrjson->warningrecords[$i]->obulng;
+                    $newwr->obualt = $wrjson->warningrecords[$i]->obualt;
+                    $newwr->created_at = $wrjson->warningrecords[$i]->created_at;
+                    $newwr->save();
+                    $udpwrcount++;
+                } catch (Exception $ex) {
+                    
+                }                
+                $maxWRid = $wrjson->warningrecords[$i]->id;
+            }
+            DB::commit();       
+        }
+        echo "更新了 " . $udpwrcount . " 个预警记录!</br>"; 
+    }
 }

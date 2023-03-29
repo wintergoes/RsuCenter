@@ -122,6 +122,7 @@ Route::any("/vehflowbrandstatjson", "VehicleFlowController@vehflowBrandStatJson"
 
 Route::any("/oburoute", "ObuRouteController@obuRoute");
 Route::any("/getroutevaliddates", "ObuRouteController@getRouteValidDate");
+Route::any("/getoburoutejson", "ObuRouteController@getObuRouteJson");
 
 //*******************************道路管理***************************************
 Route::any("/roads", "RoadController@index");
@@ -149,6 +150,7 @@ Route::any("/addroadsectionmanually", "RoadCoordinateController@addRoadSectionMa
 Route::any("/updateallroadcoordinateproperties", "RoadCoordinateController@updateAllRoadCoordinateProperties");
 Route::any("/setuproadlinks", "RoadCoordinateController@setupRoadLinks");
 Route::any("/setuproadlinksave", "RoadCoordinateController@setupRoadLinkSave");
+Route::any("/showconnectrsm", "RoadCoordinateController@showConnectRsm");
 
 Route::any("/showroadareas", "MapAreaController@index");
 Route::any("/addroadarea", "MapAreaController@addRoadArea");

@@ -26,7 +26,9 @@
                             <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
                             @endforeach
                         </select>
-                    </td>                    
+                    </td>  
+                </tr>
+                <tr>
                     <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;日期&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <input name="fromdate_hd" type="hidden" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="8" value="{{$searchfromdate}}"/>
@@ -66,8 +68,14 @@
     <div class="col-12 col-lg-12 ">
         <div class="card radius-6 border-1">
             <div class="card-body">
-                <div id="bdmap_container" style="width: 100%; height: 660px">
-                </div>                    
+                <table style="width: 100%;"> 
+                    <tr>
+                        <td>
+                            <div id="bdmap_container" style="width: 100%; height: 660px"></div>       
+                        </td>
+                    </tr>
+                </table>
+                             
             </div>
         </div>
     </div>
@@ -107,10 +115,7 @@ var latlng = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
 
 points.push(pt);
-var rbdataitem = [];
-rbdataitem.push(latlng[0]);
-rbdataitem.push(latlng[1]);
-rbdata.push(rbdataitem);
+
 <?php 
 if($pcounter == 0){
 ?>
@@ -133,6 +138,13 @@ $pcounter++;
 
 ?>
 @endforeach
+
+
+//var rbdataitem = [];
+//rbdataitem.push(latlng[0]);
+//rbdataitem.push(latlng[1]);
+//rbdata.push(rbdataitem);
+
 
 var view = new mapvgl.View({
     map: map
@@ -231,6 +243,7 @@ function showValidDates(){
                     optstr += ">" + data.vdates[i].vdate + "</option>";
                     $("#fromdate").append(optstr);
                 }
+                
             }            
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {

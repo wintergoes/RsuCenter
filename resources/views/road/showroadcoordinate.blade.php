@@ -323,7 +323,7 @@ function addPoint(lat, lng){
     });
     
     // 将标注添加到地图
-    map.addOverlay(marker);
+    map.addOveray(marker);
 }
 
 function showInfoWindow(bdlng, bdlat, lng, lat, id){

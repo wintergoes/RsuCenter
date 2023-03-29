@@ -44,7 +44,10 @@ Route::any("/getmanagers", 'ApiV1Controller@getManagers');
 Route::any("/uploadlocations", 'ApiV1Controller@uploadLocations');
 Route::any("/uploadwarningrecords", 'ApiV1Controller@uploadWarningRecords');
 
-
+Route::any("/getobus", "ApiV1Controller@getObus");
+Route::any("/getoburoute", "ApiV1Controller@getObuRoute");
+Route::any("/getwarningrecords", "ApiV1Controller@getWarningRecords");
+Route::any("/updateobuandroutefromremote", "ApiV1Controller@updateObuAndRouteFromRemote");
 
 Route::any("/clientclockin", 'ApiV1Controller@clientClockIn');
 Route::any("/getclockinhistory", 'ApiV1Controller@getClockInHistory');

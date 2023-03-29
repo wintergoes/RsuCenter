@@ -138,7 +138,11 @@ class DataController extends Controller
         
         if($searchfromdate == ""){
             $searchfromdate = date('Y-m-d',time());
-        }        
+        }
+        
+        if(strlen($searchfromdate) == 10){
+            $searchfromdate = $searchfromdate . " 00:00:00";
+        }
 
         $searchtodate = "";
         if($request->has("todate")){

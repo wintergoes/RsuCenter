@@ -766,5 +766,9 @@ class RoadCoordinateController extends Controller
         }
         
         echo "<a href='setuproadlinks'>返回</a>";
-    }    
+    }
+    
+    function showConnectRsm(Request $request){
+        return view("/road/showconnectrsm");
+    }
 }
