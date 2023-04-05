@@ -39,7 +39,7 @@
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
-                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6"><div class="spinner-border spinner-border-sm" role="status" id="loadinganimation"> <span class="visually-hidden">Loading...</span></div>查询</button></td>
                     
                 </tr>
             </table>
@@ -244,9 +244,14 @@ function drawChart(){
                     }
                 }
             });
+            
+            eventCharFinished = true;
+            checkAllFinished()  
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert(textStatus);
+            eventCharFinished = true;
+            checkAllFinished()                
+//            alert(textStatus);
         }
     });
 }
@@ -332,10 +337,13 @@ function drawEventTypeStat(){
                         },
                     }
                   });    
+                  
+            eventTypeStatFinished = true;
+            checkAllFinished()
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            
-            setTimeout("drawEventTypeStat()", 3000);
+            eventTypeStatFinished = true;
+            checkAllFinished() 
         }
     });
 }
@@ -417,10 +425,31 @@ function drawRadarEventHourStat(){
            data: data1,
            options: chartoptions
        });    
+       
+       eventHourStatFinished = true;
+       checkAllFinished();
    });
 }
+
+function checkAllFinished(){
+    if(eventCharFinished && eventTypeStatFinished && eventHourStatFinished){
+//    if(vehBrandStatFinished){
+        document.getElementById("loadinganimation").style.visibility = 'hidden';
+        document.getElementById("loadinganimation").style.display = 'none'; 
+    }
+}
     
+var eventCharFinished = false;
+var eventTypeStatFinished = false;
+var eventHourStatFinished = false;
 function drawAllChart(){
+    eventCharFinished = false;
+    eventTypeStatFinished = false;
+    eventHourStatFinished = false;    
+    
+    document.getElementById("loadinganimation").style.visibility = 'visible';
+    document.getElementById("loadinganimation").style.display = '';     
+    
     drawChart(); 
     drawEventTypeStat();
     drawRadarEventHourStat();    

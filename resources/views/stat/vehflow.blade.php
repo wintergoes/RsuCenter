@@ -39,7 +39,9 @@
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
-                    <td class="search_td">&nbsp;&nbsp;<button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
+                    <td class="search_td">&nbsp;&nbsp;
+                        <button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6"><div class="spinner-border spinner-border-sm" role="status" id="loadinganimation"> <span class="visually-hidden">Loading...</span></div>查询</button>
+                    </td>
                     
                 </tr>
             </table>
@@ -274,6 +276,9 @@ function showVehFlowChart(){
                options: chartoptions
            });            
         }
+        
+        vehflowFinished = true;
+        checkAllFinished(); 
    });
 }
 
@@ -355,6 +360,9 @@ function drawVehFlowHourStat(){
            data: data1,
            options: chartoptions
        });    
+       
+            vehFlowHourStatFinished = true;
+            checkAllFinished();       
    });
 }
 
@@ -418,9 +426,12 @@ function drawVehTypeStat(){
                         },
                     }
                   });    
+            vehTypeStatFinished = true;
+            checkAllFinished();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            setTimeout("drawEventTypeStat()", 3000);
+            vehTypeStatFinished = true;
+            checkAllFinished();
         }
     });
 }
@@ -484,15 +495,39 @@ function drawVehBrandStat(){
                             displayColors:false,
                         },
                     }
-                  });    
+                  });  
+                  
+            vehBrandStatFinished = true;
+            checkAllFinished();
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            setTimeout("drawEventTypeStat()", 3000);
+            vehBrandStatFinished = true;
+            checkAllFinished();
         }
     });
 }
-    
+
+function checkAllFinished(){
+    if(vehflowFinished && vehFlowHourStatFinished && vehTypeStatFinished && vehBrandStatFinished){
+//    if(vehBrandStatFinished){
+        document.getElementById("loadinganimation").style.visibility = 'hidden';
+        document.getElementById("loadinganimation").style.display = 'none'; 
+    }
+}
+
+var vehflowFinished = false;
+var vehFlowHourStatFinished = false;
+var vehTypeStatFinished = false;
+var vehBrandStatFinished = false;
 function drawAllChart(){
+    vehflowFinished = false;
+    vehFlowHourStatFinished = false;
+    vehTypeStatFinished = false;
+    vehBrandStatFinished = false;    
+    
+    document.getElementById("loadinganimation").style.visibility = 'visible';
+    document.getElementById("loadinganimation").style.display = '';    
+    
     showVehFlowChart(); 
     drawVehFlowHourStat();
     drawVehTypeStat(); 
