@@ -330,10 +330,10 @@ class WarningInfoController extends Controller
             $searchtodate = date('Y-m-d',time());
         }        
         
-        $sqlstr = "select count(w.id) as wcount,tec.tecparentcode, tp.tecname from warninginfo w "
+        $sqlstr = "select count(w.id) as wcount,tec.tecparentcode, ifnull(tp.tecname, '其他') as tecname from warninginfo w "
                 . " left join trafficeventclasses tec on tec.teccode=w.teccode "
                 . " left join trafficeventclasses tp on tp.teccode=tec.tecparentcode "
-                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by tec.tecparentcode, tp.tecname ;";
+                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "'  group by tec.tecparentcode, tp.tecname order by wcount desc;";
         
         $eventtypesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventtypesummary);
@@ -362,7 +362,7 @@ class WarningInfoController extends Controller
         $sqlstr = "select count(w.id) as scount,w.wisource, "
                 . " case w.wisource when 1 then '交警' when 2 then '政府' when 3 then '气象部门' "
                 . " when 4 then '互联网' when 5 then '本地检测' else '未知' end as sourcename from warninginfo w  "
-                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by w.wisource ;";
+                . " where date(w.created_at)>='" . $searchfromdate . "' and date(w.created_at)<='" . $searchtodate . "' group by w.wisource order by scount desc;";
         
         $eventsourcesummary = DB::select($sqlstr);
         $arr = array("retcode"=>ret_success, "summary"=>$eventsourcesummary);
