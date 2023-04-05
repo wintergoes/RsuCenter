@@ -110,41 +110,6 @@ var routeErrorLargeSpeedIcon = new BMapGL.Icon("/images/route_error_largespeed.p
 
 var points = [];
 var rbdata = [];
-@foreach($routes as $route)
-var latlng = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
-latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
-
-points.push(pt);
-
-<?php 
-if($pcounter == 0){
-?>
-                var makerstart = new BMapGL.Marker(new BMapGL.Point(latlng[0], latlng[1]), {
-                    icon: routeStartIcon
-                });
-                map.addOverlay(makerstart);
-<?php
-}
-
-if($pcounter == count($routes) - 1){
-?>
-                var makerend = new BMapGL.Marker(new BMapGL.Point(latlng[0], latlng[1]), {
-                    icon: routeEndIcon
-                });
-                map.addOverlay(makerend);   
-<?php
-}
-$pcounter++; 
-
-?>
-@endforeach
-
-
-//var rbdataitem = [];
-//rbdataitem.push(latlng[0]);
-//rbdataitem.push(latlng[1]);
-//rbdata.push(rbdataitem);
-
 
 var view = new mapvgl.View({
     map: map
@@ -161,31 +126,66 @@ var rbdatas = [{
             coordinates: rbdata
         }
 }];
-//lineLayer.setData(rbdatas);
 
-@if(count($routes) > 0)
-//var polyline = new BMapGL.Polyline(points, {strokeColor:"blue", strokeWeight:5, strokeOpacity:1});
-//map.addOverlay(polyline);
-@endif
-
+<?php
+$routecounter = 0;
+?>
 @foreach($routes as $route)
-var latlng = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
-latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
 
-var pt = new BMapGL.Point(latlng[0], latlng[1]);
-var marker = new BMapGL.Marker(pt, {
-    icon: obuIcon
-});
-@if($route->flag == 2)
-marker.setIcon(routeErrorIcon);
-@endif
+<?php 
+if($routecounter == 0){
+?>
+    var latlngStart = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
+    latlngStart = coordtransform.gcj02tobd09(latlngStart[0], latlngStart[1]);
+    var makerstart = new BMapGL.Marker(new BMapGL.Point(latlngStart[0], latlngStart[1]), {
+        icon: routeStartIcon
+    });
+    map.addOverlay(makerstart);
+<?php
+}
 
-@if($route->flag == 3)
-marker.setIcon(routeErrorLargeSpeedIcon);
-@endif
-// 将标注添加到地图
-map.addOverlay(marker); 
+if($routecounter == count($routes) - 1){
+?>
+    var latlngEnd = coordtransform.wgs84togcj02({{$route->lng}}, {{$route->lat}});
+    latlngEnd = coordtransform.gcj02tobd09(latlngEnd[0], latlngEnd[1]);    
+    var makerend = new BMapGL.Marker(new BMapGL.Point(latlngEnd[0], latlngEnd[1]), {
+        icon: routeEndIcon
+    });
+    map.addOverlay(makerend);   
+<?php
+}
+?>
+
+<?php
+if(($routecounter % 10 != 0) && $route->locationtype == 1){
+    $routecounter++;
+    continue;
+}
+?>
+addObuIcon({{$route->lng}}, {{$route->lat}}, {{$route->flag}});
+<?php
+$routecounter++;
+?>
 @endforeach
+
+function addObuIcon(lng, lat, routeflag){
+    var latlng = coordtransform.wgs84togcj02(lng, lat);
+    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
+
+    var pt = new BMapGL.Point(latlng[0], latlng[1]);
+    var marker = new BMapGL.Marker(pt, {
+        icon: obuIcon
+    });
+    if(routeflag === 2){
+        marker.setIcon(routeErrorIcon);
+    }
+
+    if(routeflag === 3){
+        marker.setIcon(routeErrorLargeSpeedIcon);
+    }
+    // 将标注添加到地图
+    map.addOverlay(marker);     
+}
 
 function showAlert(){
     Lobibox.notify('warning', {

@@ -19,6 +19,8 @@ class ObuRouteController extends Controller
     }
     
     function obuRoute(Request $request){
+//        echo "oburoute";
+//        return;
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
@@ -28,12 +30,12 @@ class ObuRouteController extends Controller
             $searchfromdate = date('Y-m-d',time()) ;
         }
         
-        $searchfromtime = "00:00";
+        $searchfromtime = "08:00";
         if($request->has("fromtime")){
             $searchfromtime = $request->fromtime;
         }
         
-        $searchtotime = "23:59";
+        $searchtotime = "18:00";
         if($request->has("totime")){
             $searchtotime = $request->totime;
         } 
@@ -60,7 +62,7 @@ class ObuRouteController extends Controller
             }
         }
         
-        $validdates = DB::select("select distinct(date(created_at)) as vdate from oburoutedetails where obuid=" . $searchobu . " order by vdate desc");
+        $validdates = DB::select("select distinct(create_date) as vdate from oburoutedetails where obuid=" . $searchobu . " order by vdate desc");
         
         $default_lat = env("home_default_lat", 36.183753);
         $default_lng = env("home_default_lng", 120.339217); 
@@ -137,7 +139,7 @@ class ObuRouteController extends Controller
     }
     
     function getRouteValidDate(Request $request){
-        $validdates = DB::select("select distinct(date(created_at)) as vdate from oburoutedetails where obuid=" . $request->obuid . " order by vdate desc");
+        $validdates = DB::select("select distinct(create_date) as vdate from oburoutedetails where obuid=" . $request->obuid . " order by vdate desc");
         $arr = array("retcode"=>ret_success, "vdates"=>$validdates);
         return json_encode($arr);
     }
