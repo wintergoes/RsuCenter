@@ -84,7 +84,6 @@ class ApiV1Controller extends Controller
         }
         
         $devices = Device::where("devicecode", $request->devicecode)
-		->orderBy("lineno", "desc")
                 ->select("id")
                 ->get();
         
