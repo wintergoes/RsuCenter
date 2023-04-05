@@ -77,7 +77,13 @@ class ObuRouteController extends Controller
             $routes = $routes->where("locationtype", $searchlocationtype);
         }
         
+        // 临时逻辑，数据太多，经常查询错误，暂时屏蔽掉一些数据
+        if($searchlocationtype == 1){
+            $routes = $routes->whereraw("id % 20 = 0");
+        }
+        
         $routes = $routes->get();
+//        return count($routes);
         
         return view("/stat/oburoute", [
             "routes"=>$routes,

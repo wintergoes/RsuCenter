@@ -157,10 +157,10 @@ if($routecounter == count($routes) - 1){
 ?>
 
 <?php
-if(($routecounter % 10 != 0) && $route->locationtype == 1){
-    $routecounter++;
-    continue;
-}
+//if(($routecounter % 10 != 0) && $route->locationtype == 1){
+//    $routecounter++;
+//    continue;
+//}
 ?>
 addObuIcon({{$route->lng}}, {{$route->lat}}, {{$route->flag}});
 <?php
