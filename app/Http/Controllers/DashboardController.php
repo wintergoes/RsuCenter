@@ -170,15 +170,16 @@ class DashboardController extends Controller
     
     function dashboardVehicles(Request $request){
         $searchdate = date("Y-m-d H:i:s" , strtotime("-3 second"));
+        $searchsecond = "-3";
         
 //        echo $searchdate;
         
         $sqlstr = "select vd.macaddr, vd.id, vd.uuid, vd.targettype, vd.targetid, vd.longitude, vd.latitude, vd.plateno, vd.speed, vd.laneno, "
                 . "vd.radardetected, vd.vehrotation, vd.detecttime, vd.positiony, vd.vehicletype, rd.devicecode from "
-                . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection where detecttime > '" . $searchdate . "' group by macaddr, targetid) maxtime  "
+                . "(select macaddr, targetid, max(detecttime) as maxtime from vehdetection where detecttime > date_add(now(), interval " . $searchsecond . " second) group by macaddr, targetid) maxtime  "
                 . "left join vehdetection vd on vd.detecttime=maxtime.maxtime and vd.targetid=maxtime.targetid "
                 . "left join radardevices as rd on rd.macaddrint=vd.macaddr "
-                . "where maxtime.maxtime > '" . $searchdate . "' "; // and targettype='vehicle'
+                . "where maxtime.maxtime > date_add(now(), interval " . $searchsecond . " second) "; // and targettype='vehicle'
         $vehicles = DB::select($sqlstr);
 //        echo $sqlstr;
         $arr = array("retcode"=>ret_success, "vehicles"=>$vehicles, "searchdate"=>$searchdate);

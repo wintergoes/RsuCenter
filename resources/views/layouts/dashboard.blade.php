@@ -2498,7 +2498,7 @@ var vehMap = new HashMap();
 var radarMacMap = new HashMap();
 var borderColors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
 function showVehicles(){   
-    $.getJSON("dashboardvehicles",function(data){
+    $.getJSON("realtimevehicles.html?t=" + Math.round(new Date()),function(data){
         var tbl = document.getElementById("tbl_realtime_vehicles");
         var rows = tbl.rows; //获取表格的行数
 
