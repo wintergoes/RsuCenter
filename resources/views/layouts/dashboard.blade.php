@@ -1818,6 +1818,14 @@ function updateBdMapSummary(){
                     label.setStyle({border: "1px solid rgb(75 139 88)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
                     marker.setLabel(label); 
                     marker.setIcon(rsuErrorIcon);
+                } else {
+                    var label = new BMapGL.Label(rsuobj.devicecode, {       // 创建文本标注
+                        position: pt,                          // 设置标注的地理位置
+                        offset: new BMapGL.Size(-40, 0)           // 设置标注的偏移量
+                    })    
+                    label.setStyle({border: "1px solid rgb(75 139 88)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
+                    marker.setLabel(label); 
+                    marker.setIcon(rsuErrorIcon);                    
                 }
                 marker.setTitle(rsuobj.devicecode);
                 rsumarkers.push(marker);

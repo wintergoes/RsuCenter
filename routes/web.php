@@ -215,6 +215,9 @@ Route::any("importgps2directiondata", "test\Gps2DirctionController@importData");
 Route::any("showgps2directiondata", "test\Gps2DirctionController@showData");
 Route::any("deletegps2directiondata", "test\Gps2DirctionController@deleteData");
 
+//***************************工具*****************************************
+Route::any("/dataplayback", "ToolsController@dataPlayback");
+
 Route::any("/mqtttest", function(){
     return view("/other/mqtttest");
 });
