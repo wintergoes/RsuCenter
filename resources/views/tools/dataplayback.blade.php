@@ -89,13 +89,16 @@ function showRsm(str){
     for(var i = 0; i < (rsmjson.value.participants.length); i++){
 //        alert(rsmjson.value.participants[i].lat + ", " + rsmjson.value.participants[i].lng);
         var part = rsmjson.value.participants[i];
+        var oltitle = "plate: " +
+                part.plateno + "\nptcId: " + part.ptcId +
+                "\nspeed: " + (part.speed * 0.072) + "\n__lat: " + part.lat + "\n__lng: " + part.lng;
         var searchol = rsmHashMap.get(part.ptcId);
         if(searchol){
             searchol.setLngLat(new TLngLat(part.lng / 10, part.lat / 10));
+            searchol.setTitle(oltitle);
             console.log(part.ptcId + " exist");
         } else{
-            var ol = addPoint(part.lat / 10, part.lng / 10, "plate: " +
-                part.plateno + "\nptcId: " + part.ptcId + "\n__lat: " + part.lat + "\n__lng: " + part.lng, false, rsmIcon);
+            var ol = addPoint(part.lat / 10, part.lng / 10, oltitle, false, rsmIcon);
             rsmoverlays.push(ol);        
             rsmHashMap.put(part.ptcId, ol);
             console.log(part.ptcId + " is not exist");
