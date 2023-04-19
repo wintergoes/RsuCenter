@@ -40,7 +40,7 @@ class UploadFileController extends Controller
         
         $obuvideos = UploadFile::orderBy("uploadfiles.id", "desc")
                 ->where("uploadfiles.filetype", upd_file_obu_video)
-                ->select("o.id as obuid", "o.obuid as obucode", "uploadfiles.filename")
+                ->select("uploadfiles.id", "o.id as obuid", "o.obuid as obucode", "uploadfiles.filename")
                 ->leftjoin("obudevices as o", "o.id", "=", "uploadfiles.obuid");
         
         if($searchobu != ""){
@@ -68,5 +68,33 @@ class UploadFileController extends Controller
             "searchtodate"=>$searchtodate,
             "searchobu"=>$searchobu
         ]);
+    }
+    
+    function deleteObuVideo(Request $request){
+        if($request->fileid == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
+        
+        $files = UploadFile::where("id", $request->fileid)
+                ->get();
+        
+        if(count($files) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"文件不存在！");
+            return json_encode($arr);            
+        }
+        
+        DB::delete("delete from uploadfiles where id=" . $request->fileid);
+        $obuvideofile = "uploadfiles/obuvideos/" . $files[0]->obuid . "/" . $files[0]->filename;
+        try {
+            if(file_exists($obuvideofile)){
+                unlink($obuvideofile);         
+            }
+        } catch (Exception $ex) {
+            
+        }
+        
+        $arr = array("retcode"=>ret_success, "retmsg"=>"删除成功！");
+        return json_encode($arr);        
     }
 }

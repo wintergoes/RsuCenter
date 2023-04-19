@@ -47,6 +47,7 @@ Route::any("/rsusendrecords", "DeviceController@rsuSendRecords");
 //***************************OBU设备管理****************************************
 Route::any('/obudevices', 'ObuDeviceController@index');
 Route::any('/obuvideos', 'UploadFileController@obuVideos');
+Route::any('/deleteobuvideo', 'UploadFileController@deleteObuVideo');
 Route::any("/editobudevice", "ObuDeviceController@editObuDevice");
 Route::any("/editobudevicesave", "ObuDeviceController@editObuDeviceSave");
 Route::any('/deleteobudevice', 'ObuDeviceController@deleteObuDevice');

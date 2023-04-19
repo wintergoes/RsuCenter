@@ -40,12 +40,12 @@
                     @foreach($obuvideos as $video)
                     <div class="col">
                         <div class="">
-                            <video muted="muted" controls class="card-img-top">
+                            <video muted="muted" controls class="card-img-top" id='obu_video_{{$video->id}}'>
                                 <source src="{{env("obu_video_path")}}{{$video->obuid}}/{{$video->filename}}" type="video/mp4">
                             </video>
                             <div class="card-body text-center">
                                 <p class="card-title">
-                                    {{$video->obucode}} - {{$video->filename}}
+                                    {{$video->obucode}} - {{$video->filename}} <img src="images/delete_video.png" width="20" height="20" onclick="deleteObuVideo('{{$video->id}}', '{{$video->filename}}');" style="cursor:pointer;"/>
                                 </p>
                             </div>
                         </div>
@@ -96,6 +96,33 @@ for(var i = 0; i < spanobjs.length; i++){
     spanobjs[i].className = "page-link";
 }
 //alert(objs[0].innerText);
+
+function deleteObuVideo(fileid, filename){
+    if(confirm("确定要删除视频文件 "  + filename + "吗?") === false){
+        return;
+    }
+    
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
+    $.ajax({
+        type: "GET",
+        url: "deleteobuvideo?fileid=" + fileid,
+        dataType: "json",
+        success: function (data) {
+            if(data.retcode === 1){
+                var videoctrl = document.getElementById("obu_video_" + fileid);
+                videoctrl.src = "images/video_deleted.mp4";
+            } else {
+                alert("删除失败！");
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("删除失败1！");
+        }
+    });        
+}
 </script>
 @endif
 
