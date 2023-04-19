@@ -38,6 +38,8 @@ use Auth;
 
 require_once '../app/Constant.php';
 
+define("remote_server", "http://47.104.69.149/");
+
 class ApiV1Controller extends Controller
 {
     function getLog(Request $request){
@@ -395,7 +397,7 @@ class ApiV1Controller extends Controller
         $arr = array("code"=>"0", "version"=>"null", "updateStatus"=>1,
             "versionCode"=>$newversioncode, "versionName"=>$newversionname, 
             "modifyContent"=>$modifycontent,
-            "downloadUrl"=>"http://47.104.69.149/" . $newapkfile,
+            "downloadUrl"=>remote_server . $newapkfile,
             "apkSize"=>  filesize($newapkfile) / 1024,
             "apkMd5"=>  md5_file($newapkfile));
         
@@ -1503,7 +1505,7 @@ class ApiV1Controller extends Controller
         //2. 不管是get、post，跳过证书的验证
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        $mapjsurl = "http://47.104.69.149/api/getroadinfo";
+        $mapjsurl = remote_server . "/api/getroadinfo";
         //3. 设置请求的服务器地址
         curl_setopt($ch, CURLOPT_URL, $mapjsurl);
         
@@ -1619,13 +1621,29 @@ class ApiV1Controller extends Controller
         return json_encode($arr);
     }
     
+    function getUploadFiles(Request $request){
+        if($request->maxid == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }
+        
+        $maxid = $request->maxid;
+        $uploadfiles = UploadFile::orderBy("id", "asc")
+                ->where("id", ">", $maxid)
+                ->limit(1000)
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "uploadfilecount"=>count($uploadfiles), "uploadfiles"=>$uploadfiles);
+        return json_encode($arr);        
+    }
+    
     function updateObuAndRouteFromRemote(Request $request){
 //1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
         $ch = curl_init();
         //2. 不管是get、post，跳过证书的验证
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        $mapjsurl = "http://47.104.69.149/api/getobus";
+        $mapjsurl = remote_server . "/api/getobus";
         //3. 设置请求的服务器地址
         curl_setopt($ch, CURLOPT_URL, $mapjsurl);
         
@@ -1668,7 +1686,7 @@ class ApiV1Controller extends Controller
             //2. 不管是get、post，跳过证书的验证
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-            $mapjsurl = "http://47.104.69.149/api/getoburoute?maxid=" . $maxrouteid;
+            $mapjsurl = remote_server ."/api/getoburoute?maxid=" . $maxrouteid;
             //3. 设置请求的服务器地址
             curl_setopt($ch, CURLOPT_URL, $mapjsurl);
 
@@ -1728,7 +1746,7 @@ class ApiV1Controller extends Controller
             //2. 不管是get、post，跳过证书的验证
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-            $mapjsurl = "http://47.104.69.149/api/getwarningrecords?maxid=" . $maxWRid;
+            $mapjsurl = remote_server . "/api/getwarningrecords?maxid=" . $maxWRid;
             //3. 设置请求的服务器地址
             curl_setopt($ch, CURLOPT_URL, $mapjsurl);
 
@@ -1771,5 +1789,61 @@ class ApiV1Controller extends Controller
             DB::commit();       
         }
         echo "更新了 " . $udpwrcount . " 个预警记录!</br>"; 
+        
+        $maxUploadfileids = DB::select("select ifnull(max(id), 0) as maxid from uploadfiles ");
+        $maxUploadFileid = $maxUploadfileids[0]->maxid;
+        $loopcount = 0;
+        $udpfilecount = 0;
+        while (true){
+            $loopcount++;
+            if($loopcount > 50){
+                break;
+            }
+            $ch = curl_init();
+            //2. 不管是get、post，跳过证书的验证
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            $mapjsurl = remote_server . "/api/getuploadfiles?maxid=" . $maxUploadFileid;
+            //3. 设置请求的服务器地址
+            curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            
+            $filejson = json_decode($result);
+            if($filejson->retcode != 1){
+                break;
+            }
+            
+            if($filejson->uploadfilecount == 0){
+                break;
+            }
+            
+            DB::beginTransaction();
+            for($i = 0; $i < $filejson->uploadfilecount; $i++){
+                try {
+                    $newfile = new UploadFile();
+                    $newfile->id = $filejson->uploadfiles[$i]->id;
+                    $newfile->obuid = $filejson->uploadfiles[$i]->obuid;
+                    $newfile->uploader = 0;
+                    $newfile->filetype = $filejson->uploadfiles[$i]->filetype;
+                    $newfile->filename = $filejson->uploadfiles[$i]->filename;
+                    $newfile->filesize = $filejson->uploadfiles[$i]->filesize;
+                    $newfile->medialen = $filejson->uploadfiles[$i]->medialen;
+                    $newfile->filemd5 = $filejson->uploadfiles[$i]->filemd5;
+                    $newfile->fileremark = $filejson->uploadfiles[$i]->fileremark;
+                    $newfile->created_at = $filejson->uploadfiles[$i]->created_at;
+                    $newfile->updated_at = $filejson->uploadfiles[$i]->updated_at;
+                    $newfile->save();
+                    $udpfilecount++;
+                } catch (Exception $ex) {
+                    
+                }                
+                $maxUploadFileid = $filejson->uploadfiles[$i]->id;
+            }
+            DB::commit();       
+        }
+        echo "更新了 " . $udpfilecount . " 个文件!</br>";         
     }
 }

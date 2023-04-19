@@ -41,7 +41,7 @@
                     <div class="col">
                         <div class="">
                             <video muted="muted" controls class="card-img-top">
-                                <source src="uploadfiles/obuvideos/{{$video->obuid}}/{{$video->filename}}" type="video/mp4">
+                                <source src="{{env("obu_video_path")}}{{$video->obuid}}/{{$video->filename}}" type="video/mp4">
                             </video>
                             <div class="card-body text-center">
                                 <p class="card-title">
