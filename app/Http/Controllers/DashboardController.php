@@ -51,7 +51,7 @@ class DashboardController extends Controller
     
     function dashboardSummary(Request $request){
         $stats = DB::select("select * from (select " . ret_success . " as ret_code) as ret,"
-                . "(select count(id) as warncount from warninginfo where endtime>now() and wistatus=1) as warnstat,"
+                . "(select count(id) as warncount from warninginfo where starttime>date(now()) and wistatus=1) as warnstat,"
                 . "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
                 . "(select count(id) as warnrecordcount from warningrecords where created_at>=date(now())) as warnrecordstat,"
                 . "(select count(id) as speedcount from aidevents where aidevent='speed' and eventtime_date=date(now())) as speedstat,"
