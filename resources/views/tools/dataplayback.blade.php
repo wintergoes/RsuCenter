@@ -169,6 +169,7 @@ function realPlayBack(){
         showRsm(linestr);
     }     
     
+    playbackinterval = $("#playbackinterval").val();
     playbackindex++;
     if(playbackindex < datalines.length && playpaused === false){
         setTimeout("realPlayBack()", playbackinterval);
