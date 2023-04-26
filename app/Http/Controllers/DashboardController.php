@@ -240,7 +240,7 @@ class DashboardController extends Controller
         
         $warnings = WarningInfo::orderBy("id")
                 ->select("winame", "startlat", "startlng", "stoplat", "stoplng")
-                ->where(DB::raw("endtime > now()"))
+                ->whereraw("endtime > now()")
                 ->where("wistatus", "1")
                 ->get();
         
