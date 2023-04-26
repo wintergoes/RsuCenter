@@ -186,7 +186,7 @@ function showDevicePosition(tscid, tsname, lng, lat){
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
     
     map.addEventListener("tilesloaded",function(){
-        $("#map_title").text(tsname + " 位置信息");
+        $("#map_title").text(tsname + " (" + lng.toFixed(6) + ", " + lat.toFixed(6) + ")");
         map.clearOverlays();
                        
                      
