@@ -117,8 +117,8 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
                                             <li {!! $l2_radar_anpr ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="anprevents"><i class="bx bx-right-arrow-alt" ></i>车辆识别查询</a></li>
                                             <li {!! $l2_radar_aidevents ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="aidevents"><i class="bx bx-right-arrow-alt" ></i>雷视事件查询</a></li>
                                             <li {!! $l2_forecast ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="forecast"><i class="bx bx-right-arrow-alt" ></i>气象数据查询</a></li>
-                                            <li {!! $l2_oburoute ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="oburoute"><i class="bx bx-right-arrow-alt" ></i>车辆运行轨迹</a></li>
-                                            <li {!! $l2_clockins ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="clockins"><i class="bx bx-right-arrow-alt" ></i>考勤打卡记录</a></li>      
+                                            <li {!! $l2_clockins ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="clockins"><i class="bx bx-right-arrow-alt" ></i>用车打卡记录</a></li>      
+                                            <li {!! $l2_oburoute ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="oburoute"><i class="bx bx-right-arrow-alt" ></i>车辆运行轨迹</a></li>                                            
 					</ul>
 				</li>                                
                                 

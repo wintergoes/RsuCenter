@@ -32,7 +32,7 @@ class ClockInController extends Controller
             $searchuserid = $request->userid;
         }
         
-        $sqlstr = "select c.clockindate,c.userid,u.realname, sb.sbtime,xb.xbtime from (select distinct(date(created_at)) as clockindate,userid from clockins) as c "
+        $sqlstr = "select c.clockindate,c.userid,u.realname, 1 as obuid, sb.sbtime,xb.xbtime from (select distinct(date(created_at)) as clockindate,userid from clockins) as c "
                 . " left join (select min(created_at) sbtime,  userid as sbuserid from clockins where citype=1 group by date(created_at),userid) as sb "
                 . " on date(sb.sbtime)=c.clockindate and sb.sbuserid=c.userid "
                 . " left join (select max(created_at) as xbtime,userid as xbuserid from clockins where citype=2 group by date(created_at), userid ) as xb "

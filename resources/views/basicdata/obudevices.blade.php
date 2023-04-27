@@ -29,6 +29,7 @@
                         <th >终端ID</th>
                         <th >OBU硬件</th>
                         <th >状态</th>
+                        <th >关联车辆</th>
                         <th >最后坐标</th>
                         <th >备注</th>
                         <th >创建日期</th>
@@ -43,6 +44,7 @@
                         <td>{{$obu->obulocalid}}</td>
                         <td>{{$obu->obuhardware == "" ? "-" : $obu->obuhardware}}</td>
                         <td>{{$obu->obustatus == 1 ? "有效" : "无效"}}</td>
+                        <td>{{$obu->plateno == "" ? "-" : $obu->plateno}}</td>
                         @if($obu->obulongtitude == 0 || $obu->obulatitude == 0)
                         <td align='center'>未设置</td>
                         @else

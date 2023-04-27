@@ -791,7 +791,31 @@ class ApiV1Controller extends Controller
         return json_encode ( $array ); 
     }
     
+    function updateObuInfo(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }
+        
+        $obus = ObuDevice::where("id", $request->obuid)
+                ->get();
+        if(count($obus) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"OBU不存在！");
+            return json_encode($arr);            
+        }
+        
+        $obus[0]->plateno = $request->plateno;
+        $obus[0]->save();
+        
+        $arr = array("retcode"=>ret_success, "retmsg"=>"更新成功！");
+        return json_encode($arr);           
+    }
+    
     function obuApiAuth(Request $request){
+        if($request->obuid == ""){
+            return false;
+        }
+        
         return true;
     }
     
@@ -991,9 +1015,9 @@ class ApiV1Controller extends Controller
     }
     
     function clientClockIn(Request $request){
-        if($this->userApiAuth($request) === false){
+        if($this->obuApiAuth($request) === false){
             $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
-            return json_encode($arr);            
+            return json_encode($arr);
         }
         
         $clockin = new ClockIn();
@@ -1659,6 +1683,7 @@ class ApiV1Controller extends Controller
             $newobu->obuid = $obus->obus[$i]->obuid;
             $newobu->obulocalid = $obus->obus[$i]->obulocalid;
             $newobu->obustatus = $obus->obus[$i]->obustatus;
+            $newobu->plateno = $obus->obus[$i]->plateno;
             $newobu->obulatitude = $obus->obus[$i]->obulatitude;
             $newobu->obulongtitude = $obus->obus[$i]->obulongtitude;
             $newobu->obudirection = $obus->obus[$i]->obudirection;

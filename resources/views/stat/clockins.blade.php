@@ -4,7 +4,7 @@
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
-<h5 class="card-title">考勤统计</h5>
+<h5 class="card-title">用车打卡</h5>
 <hr>
 
 <div class="row mb-4">
@@ -41,14 +41,14 @@
                     <tr role="row">
                         <th >姓名</th>
                         <th >日期</th>
-                        <th >上班时间</th>
-                        <th >下班时间</th>
+                        <th >上车时间</th>
+                        <th >下车时间</th>
                     </tr>
                 </thead>            
                 <tbody>
                     @foreach($clockins as $ci)
                     <tr>
-                        <td>{{$ci->realname}}</td>
+                        <td>{{$ci->realname == "" ? "-" : $ci->realname}}</td>
                         <td>{{$ci->clockindate}}</td>
                         @if ($ci->sbtime == "")
                         <td><font color="red">未打卡</font></td>
@@ -61,6 +61,7 @@
                         @else
                         <td>{{$ci->xbtime}}</td>
                         @endif                        
+                        <!--<td><a href="oburoute?obudevice={{$ci->obuid}}&fromdate={{substr($ci->sbtime, 0, 9)}}&locationtype=1&fromtime={{substr($ci->sbtime, 11, 8)}}&totime={{substr($ci->xbtime, 11, 8)}}" target="_blank">运行轨迹</a></td>-->
                     </tr>
                     @endforeach
                 </tbody>
