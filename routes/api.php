@@ -51,7 +51,9 @@ Route::any("/getuploadfiles", "ApiV1Controller@getUploadFiles");
 Route::any("/updateobuandroutefromremote", "ApiV1Controller@updateObuAndRouteFromRemote");
 
 Route::any("/clientclockin", 'ApiV1Controller@clientClockIn');
+Route::any("/clientclockinV2", 'ApiV1Controller@clientClockInV2');
 Route::any("/getclockinhistory", 'ApiV1Controller@getClockInHistory');
+Route::any("/getclockinhistoryV2", 'ApiV1Controller@getClockInHistoryV2');
 //***************************OBU相关*****************************************
 Route::any("/registerobu", "ApiV1Controller@registerObu");
 Route::any("/updateobuinfo", "ApiV1Controller@updateObuInfo");

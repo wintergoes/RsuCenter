@@ -20,6 +20,7 @@ use App\MapFixedArea;
 
 use App\ObuRouteDetail;
 use App\ClockIn;
+use App\ClockInFull;
 use App\WarningRecord;
 use App\WarningInfo;
 use App\VehicleFlow;
@@ -1035,6 +1036,47 @@ class ApiV1Controller extends Controller
         return json_encode($arr);
     }
     
+    function clientClockInV2(Request $request){
+        if($this->obuApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);
+        }
+        
+        if($request->citype == 1){
+            $clockin = new ClockInFull();
+        } else {
+            $clockins = ClockInFull::where("id", $request->startid)
+                    ->get();
+            
+            if(count($clockins) == 0){
+                $arr = array("retcode"=>ret_error, "retmsg"=>"该条上车打卡记录不存在！");
+                return json_encode($arr);                
+            }
+            
+            $clockin = $clockins[0];
+        }
+        $clockin->userid = $request->userid;
+        if($request->obuid != ""){
+            $clockin->relatedid = $request->obuid;
+        }
+        
+        if($request->citype == 1){
+            $clockin->cistarttime = date('Y-m-d H:i:s',time());
+            $clockin->cistartlat = $request->cilat;
+            $clockin->cistartlng = $request->cilng;
+            $clockin->cistartalt = $request->cialt;
+        } else {
+            $clockin->ciendtime = date('Y-m-d H:i:s', time());
+            $clockin->ciendlat = $request->cilat;
+            $clockin->ciendlng = $request->cilng;
+            $clockin->ciendalt = $request->cialt;            
+        }
+        $clockin->save();
+        
+        $arr = array("retcode"=>ret_success, "clockin"=>$clockin);
+        return json_encode($arr);
+    }    
+    
     function getClockInHistory(Request $request){
         if($this->userApiAuth($request) === false){
             $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
@@ -1064,6 +1106,30 @@ class ApiV1Controller extends Controller
         $arr = array("retcode"=>ret_success, "clockins"=>$clockins);
         return json_encode($arr);
     }
+    
+    function getClockInHistoryV2(Request $request){
+        if($this->userApiAuth($request) === false){
+            $arr = array("retcode"=>ret_invalid_auth, "retmsg"=>"验证失败！");
+            return json_encode($arr);            
+        }
+
+        $sqlstr = "select * from clockinfull c where 1=1 ";
+        
+        if($request->userid != ""){
+            $sqlstr .= " and c.userid=" . $request->userid;
+        }
+        
+        if($request->obuid != ""){
+            $sqlstr .= " and c.relatedid=" . $request->obuid;
+        }
+        
+        $sqlstr .= " order by c.id desc, c.userid; ";
+        
+        $clockins = DB::select($sqlstr);
+        
+        $arr = array("retcode"=>ret_success, "clockins"=>$clockins);
+        return json_encode($arr);
+    }    
     
     function uploadAidEvents(Request $request){
         $jsondata = $request->jsondata;
