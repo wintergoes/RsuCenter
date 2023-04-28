@@ -17,15 +17,16 @@
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;人员&nbsp;&nbsp;</td>
+                    
+                    <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
-                        <select name="userid" class="form-select" >
-                            <option class="form-control" value="-1" {{$searchuserid == -1 ? "selected" : ""}}>不限</option>
-                            @foreach($users as $user)
-                            <option class="form-control" value="{{$user->id}}" {{$searchuserid == $user->id ? "selected" : ""}}>{{$user->realname}}</option>
+                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 160px">
+                            <option class="form-control" value="-1" >不限</option>
+                            @foreach($obus as $obu)
+                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
                             @endforeach
                         </select>
-                    </td>                    
+                    </td>                      
                     <td class="search_td">&nbsp;&nbsp;<button type="submit" class="btn btn-outline-secondary px-1 radius-6">查询</button></td>
                 </tr>
             </table>
@@ -40,28 +41,24 @@
                 <thead>
                     <tr role="row">
                         <th >姓名</th>
-                        <th >日期</th>
+                        <th >OBU</th>
+                        <th >车牌号</th>
                         <th >上车时间</th>
                         <th >下车时间</th>
+                        <th >运行轨迹</th>
+                        <th >行车视频</th>
                     </tr>
                 </thead>            
                 <tbody>
                     @foreach($clockins as $ci)
                     <tr>
                         <td>{{$ci->realname == "" ? "-" : $ci->realname}}</td>
-                        <td>{{$ci->clockindate}}</td>
-                        @if ($ci->sbtime == "")
-                        <td><font color="red">未打卡</font></td>
-                        @else
-                        <td>{{$ci->sbtime}}</td>
-                        @endif
-
-                        @if ($ci->xbtime == "")
-                        <td><font color="red">未打卡</font></td>
-                        @else
-                        <td>{{$ci->xbtime}}</td>
-                        @endif                        
-                        <!--<td><a href="oburoute?obudevice={{$ci->obuid}}&fromdate={{substr($ci->sbtime, 0, 9)}}&locationtype=1&fromtime={{substr($ci->sbtime, 11, 8)}}&totime={{substr($ci->xbtime, 11, 8)}}" target="_blank">运行轨迹</a></td>-->
+                        <td >{{$ci->obuid}}</td>
+                        <td >{{$ci->plateno == "" ? "-" : $ci->plateno}}</td>
+                        <td>{{$ci->cistarttime}}</td>
+                        <td>{{$ci->ciendtime == "" ? "-" : $ci->ciendtime}}</td>                   
+                        <td><a href="oburoute?obudevice={{$ci->obuintid}}&fromdate={{substr($ci->cistarttime, 0, 10)}}&locationtype=1&fromtime={{substr($ci->cistarttime, 11, 5)}}&totime={{substr($ci->ciendtime, 11, 5)}}" target="_blank">运行轨迹</a></td>
+                        <td><a href="obuvideos?obudevice={{$ci->obuintid}}&fromdate={{$ci->cistarttime}}&locationtype=1&todate={{$ci->ciendtime}}" target="_blank">行车视频</a></td>
                     </tr>
                     @endforeach
                 </tbody>

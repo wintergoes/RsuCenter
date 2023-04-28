@@ -22,6 +22,7 @@
                     <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 160px">
+                            <option class="form-control" value="-1" >不限</option>
                             @foreach($obus as $obu)
                             <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
                             @endforeach
@@ -38,7 +39,7 @@
                             @endforeach
                         </select>                        
                     </td>
-                    
+<!--                    
                     <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;坐标类型&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="locationtype" id="locationtype" class="form-select" style="width: 100px">
@@ -47,7 +48,7 @@
                             <option class="form-control" value="0" {{$searchlocationtype == 0 ? "selected" : ""}}>GPS</option>
                             <option class="form-control" value="1" {{$searchlocationtype == 1 ? "selected" : ""}}>RTK</option>
                         </select>                        
-                    </td>
+                    </td>-->
                     
                     <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;时间&nbsp;&nbsp;</td>
                     <td class="search_td">

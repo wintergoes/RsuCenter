@@ -46,6 +46,7 @@ Route::any("/uploadwarningrecords", 'ApiV1Controller@uploadWarningRecords');
 
 Route::any("/getobus", "ApiV1Controller@getObus");
 Route::any("/getoburoute", "ApiV1Controller@getObuRoute");
+Route::any("/getclockins", "ApiV1Controller@getClockIns");
 Route::any("/getwarningrecords", "ApiV1Controller@getWarningRecords");
 Route::any("/getuploadfiles", "ApiV1Controller@getUploadFiles");
 Route::any("/updateobuandroutefromremote", "ApiV1Controller@updateObuAndRouteFromRemote");

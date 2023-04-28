@@ -1727,6 +1727,22 @@ class ApiV1Controller extends Controller
         return json_encode($arr);        
     }
     
+    function getClockIns(Request $request){
+        if($request->maxid == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"缺少参数！");
+            return json_encode($arr);
+        }    
+        
+        $maxid = $request->maxid;
+        $clockinfull = ClockInFull::orderBy("id", "asc")
+                ->where("id", ">", $maxid)
+                ->limit(1000)
+                ->get();
+        
+        $arr = array("retcode"=>ret_success, "clockincount"=>count($clockinfull), "clockins"=>$clockinfull);
+        return json_encode($arr);
+    }
+    
     function updateObuAndRouteFromRemote(Request $request){
 //1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
         $ch = curl_init();
@@ -1935,6 +1951,64 @@ class ApiV1Controller extends Controller
             }
             DB::commit();       
         }
-        echo "更新了 " . $udpfilecount . " 个文件!</br>";         
+        
+        $maxClockInids = DB::select("select ifnull(max(id), 0) as maxid from clockinfull ");
+        $maxClockInid = $maxClockInids[0]->maxid;
+        $loopcount = 0;
+        $udpclockcount = 0;
+        while (true){
+            $loopcount++;
+            if($loopcount > 50){
+                break;
+            }
+            $ch = curl_init();
+            //2. 不管是get、post，跳过证书的验证
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            $mapjsurl = remote_server . "/api/getclockins?maxid=" . $maxClockInid;
+            //3. 设置请求的服务器地址
+            curl_setopt($ch, CURLOPT_URL, $mapjsurl);
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            
+            $clockinjson = json_decode($result);
+            if($clockinjson->retcode != 1){
+                break;
+            }
+            
+            if($clockinjson->clockincount == 0){
+                break;
+            }
+            
+            DB::beginTransaction();
+            for($i = 0; $i < $clockinjson->clockincount; $i++){
+                try {
+                    $ci = new ClockInFull();
+                    $ci->id = $clockinjson->clockins[$i]->id;
+                    $ci->userid = $clockinjson->clockins[$i]->userid;
+                    $ci->cisource = $clockinjson->clockins[$i]->cisource;
+                    $ci->relatedid = $clockinjson->clockins[$i]->relatedid;
+                    $ci->cistarttime = $clockinjson->clockins[$i]->cistarttime;
+                    $ci->cistartlat = $clockinjson->clockins[$i]->cistartlat;
+                    $ci->cistartlng = $clockinjson->clockins[$i]->cistartlng;
+                    $ci->cistartalt = $clockinjson->clockins[$i]->cistartalt;
+                    $ci->ciendtime = $clockinjson->clockins[$i]->ciendtime;
+                    $ci->ciendlat = $clockinjson->clockins[$i]->ciendlat;
+                    $ci->ciendlng = $clockinjson->clockins[$i]->ciendlng;
+                    $ci->ciendalt = $clockinjson->clockins[$i]->ciendalt;                    
+                    $ci->created_at = $clockinjson->clockins[$i]->created_at;
+                    $ci->updated_at = $clockinjson->clockins[$i]->updated_at;
+                    $ci->save();
+                    $udpclockcount++;
+                } catch (Exception $ex) {
+                    
+                }                
+                $maxClockInid = $clockinjson->clockins[$i]->id;
+            }
+            DB::commit();       
+        }        
+        echo "更新了 " . $udpclockcount . " 个打卡记录!</br>";         
     }
 }

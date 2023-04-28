@@ -45,7 +45,7 @@ class ObuRouteController extends Controller
             $searchobu = $request->obudevice;
         }
         
-        $searchlocationtype = "-1";
+        $searchlocationtype = "1";
         if($request->has("locationtype")){
             $searchlocationtype = $request->locationtype;
         } else {
@@ -65,7 +65,7 @@ class ObuRouteController extends Controller
         $validdates = DB::select("select distinct(create_date) as vdate from oburoutedetails where obuid=" . $searchobu . " order by vdate desc");
         
         $default_lat = env("home_default_lat", 36.183753);
-        $default_lng = env("home_default_lng", 120.339217); 
+        $default_lng = env("home_default_lng", 120.339217);
         
         $routes = ObuRouteDetail::orderBy("id", "asc")
                 ->select("lat", "lng", "locationtype", "flag")
@@ -79,7 +79,7 @@ class ObuRouteController extends Controller
         
         // 临时逻辑，数据太多，经常查询错误，暂时屏蔽掉一些数据
         if($searchlocationtype == 1){
-            $routes = $routes->whereraw("id % 20 = 0");
+//            $routes = $routes->whereraw("id % 20 = 0");
         }
         
         $routes = $routes->get();

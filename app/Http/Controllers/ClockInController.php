@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\ClockIn;
-
+use App\ClockInFull;
 use App\User;
+use App\ObuDevice;
 
 use DB;
 
@@ -21,51 +22,50 @@ class ClockInController extends Controller
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
         }
+        
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d', time());
+        }
 
         $searchtodate = "";
         if($request->has("todate")){
             $searchtodate = $request->todate ;
         } 
         
-        $searchuserid = "";
-        if($request->has("userid")){
-            $searchuserid = $request->userid;
+        $searchobu = "";
+        if($request->has("obuid")){
+            $searchobu = $request->obuid;
         }
         
-        $sqlstr = "select c.clockindate,c.userid,u.realname, 1 as obuid, sb.sbtime,xb.xbtime from (select distinct(date(created_at)) as clockindate,userid from clockins) as c "
-                . " left join (select min(created_at) sbtime,  userid as sbuserid from clockins where citype=1 group by date(created_at),userid) as sb "
-                . " on date(sb.sbtime)=c.clockindate and sb.sbuserid=c.userid "
-                . " left join (select max(created_at) as xbtime,userid as xbuserid from clockins where citype=2 group by date(created_at), userid ) as xb "
-                . " on date(xb.xbtime)=c.clockindate and xb.xbuserid=c.userid "
-                . " left join users as u on u.id=c.userid where 1=1 ";
-        
+        $clockins = ClockInFull::orderBy("clockinfull.id", "desc")
+                ->select("clockinfull.id", "clockinfull.cistarttime", "clockinfull.ciendtime", "od.plateno",
+                        "od.obuid", "od.id as obuintid")
+                ->leftjoin("obudevices as od", "od.id", "=", "clockinfull.relatedid");
+  
         if($searchfromdate != ""){
-            $sqlstr .= " and c.clockindate >='" . $searchfromdate . "'";
+            $clockins = $clockins->where("clockinfull.created_at", ">=", $searchfromdate );
         }
         
         if($searchtodate != ""){
-            $sqlstr .= " and c.clockindate <='" . $searchtodate . "'";
+            $clockins = $clockins->where("clockinfull.created_at", "<=", $searchtodate);
         }
         
-        if($searchuserid != "" && $searchuserid != "-1"){
-            $sqlstr .= " and c.userid=" . $searchuserid;
+        if($searchobu != "-1" && $searchobu != ""){
+            $clockins = $clockins->where("clockinfull.relatedid", $searchobu);
         }
         
-        $sqlstr .=  " order by c.clockindate desc ";
-        
-        $clockins = DB::select($sqlstr);
-        
-        $users = User::orderBy("id", "asc")
-                ->where("username", "<>", "admin")
-                ->select("id", "realname")
+        $clockins = $clockins->get();
+
+        $obus = ObuDevice::orderBy("id", "desc")
+                ->select("id", "obuid", "plateno")
                 ->get();
         
         return view("/stat/clockins", [
             "clockins"=>$clockins,
-            "users"=>$users,
+            "obus"=>$obus,
+            "searchobu"=>$searchobu,
             "searchfromdate"=>$searchfromdate,
-            "searchtodate"=>$searchtodate,
-            "searchuserid"=>$searchuserid
+            "searchtodate"=>$searchtodate
         ]);
     }
 }
