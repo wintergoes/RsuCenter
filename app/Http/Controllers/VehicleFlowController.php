@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 require_once "../app/Constant.php";
 
+use App\RadarDevice;
+
 use DB;
 
 class VehicleFlowController extends Controller
@@ -14,7 +16,7 @@ class VehicleFlowController extends Controller
         $this->middleware('auth');
     }     
     
-    function vehflowStat(Request $request){
+    function vehicleStat(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
@@ -33,13 +35,13 @@ class VehicleFlowController extends Controller
             $searchtodate = date('Y-m-d',time());
         }       
         
-        return view("/stat/vehflow", [
+        return view("/stat/vehiclestat", [
             "searchfromdate"=>$searchfromdate,
             "searchtodate"=>$searchtodate
         ]);
     }
     
-    function vehflowStatJson(Request $request){
+    function vehicleStatJson(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
@@ -78,7 +80,7 @@ class VehicleFlowController extends Controller
         return json_encode($arr_vehflows);
     }
     
-    function vehflowHourStatJson(Request $request){
+    function vehicleHourStatJson(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
@@ -97,19 +99,17 @@ class VehicleFlowController extends Controller
             $searchtodate = date('Y-m-d',time());
         } 
         
-
         $sqlstr = " select count(vf.id) as vehcount, vf.create_hour as vfhour from  vehicleflow vf "
                 . " where vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
                 . " group by vf.create_hour " ;
 
         $arr = DB::select($sqlstr);
-        $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
-    
+        $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
         
         return json_encode($arr_vehflows);
-    } 
+    }     
 
-    function vehflowTypeStatJson(Request $request){
+    function vehicleTypeStatJson(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
@@ -128,19 +128,17 @@ class VehicleFlowController extends Controller
             $searchtodate = date('Y-m-d',time());
         } 
         
-
         $sqlstr = " select count(vf.vehtype) as vehtypecount, vf.vehtype from  vehicleflow vf "
                 . " where vf.create_date>='" . $searchfromdate . "' and vf.create_date<='" . $searchtodate . "' "
                 . " group by vf.vehtype order by vehtypecount desc  " ;
 
         $arr = DB::select($sqlstr);
         $arr_vehflows = array("retcode"=>ret_success, "vehtypes"=>$arr);                        
-    
-        
+            
         return json_encode($arr_vehflows);
     }
     
-    function vehflowBrandStatJson(Request $request){
+    function vehicleBrandStatJson(Request $request){
         $searchfromdate = "";
         if($request->has("fromdate")){
             $searchfromdate = $request->fromdate;
@@ -169,6 +167,189 @@ class VehicleFlowController extends Controller
         
         return json_encode($arr_vehflows);
     }
+    
+
+    function vehflowStat(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        }       
+        
+        $radars = RadarDevice::orderBy("id", "asc")
+                ->select("id", "macaddrint", "devicecode")
+                ->get(); 
+        
+        $searchradar = "1";
+        $searchradars = RadarDevice::where("devicecode", "LS00110")
+                ->get();
+        
+        if(count($searchradars) > 0){
+            $searchradar = $searchradars[0]->macaddrint;
+        }
+        
+        return view("/stat/vehicleflow", [
+            "searchfromdate"=>$searchfromdate,
+            "searchtodate"=>$searchtodate,
+            "radars"=>$radars,
+            "searchradar"=>$searchradar
+        ]);
+    }
+    
+    function vehflowStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        } 
+        
+        $searchradarmac = "";
+        if($request->has("radarmac")){
+            $searchradarmac = $request->radarmac;
+        }
+        
+        if($searchfromdate != $searchtodate){
+            $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
+                    . " left join vehdetection_snap vf on create_date=d.ddate where 1=1 ";
+            
+            if($searchradarmac != ""){
+                $sqlstr .= " and vf.macaddr=" . $searchradarmac;
+            }
+            
+            $sqlstr .=  " and  d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' "
+                    . " group by d.ddate " ;
+
+            $arr = DB::select($sqlstr);
+            $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
+        } else {
+            $sqlstr = " select count(vf.id) as vehcount,vf.create_hour as vfhour from  vehdetection_snap vf where 1=1 ";
+
+            if($searchradarmac != ""){
+                $sqlstr .= " and vf.macaddr=" . $searchradarmac;
+            }            
+            
+            $sqlstr .= " and create_date='" . $searchtodate . "' and create_date='" . $searchtodate . "' "
+                    . " group by vf.create_hour " ;
+
+            $arr = DB::select($sqlstr);
+            $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr); 
+        }        
+        
+        return json_encode($arr_vehflows);
+    }
+    
+    function vehflowHourStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        } 
+        
+        $searchradarmac = "";
+        if($request->has("radarmac")){
+            $searchradarmac = $request->radarmac;
+        }        
+        
+        $sqlstr = " select count(vf.id) as vehcount, vf.create_hour as vfhour from  vehdetection_snap vf where 1=1 ";
+        
+        if($searchradarmac != ""){
+            $sqlstr .= " and vf.macaddr=" . $searchradarmac;
+        }
+
+        $sqlstr .=  " and vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
+                . " group by vf.create_hour " ;
+
+        $arr = DB::select($sqlstr);
+        $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
+     
+        return json_encode($arr_vehflows);
+    }    
+    
+    function vehflowTypeStatJson(Request $request){
+        $searchfromdate = "";
+        if($request->has("fromdate")){
+            $searchfromdate = $request->fromdate;
+        }
+
+        if($searchfromdate == ""){
+            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+        }
+
+        $searchtodate = "";
+        if($request->has("todate")){
+            $searchtodate = $request->todate ;
+        }
+        
+        if($searchtodate == ""){
+            $searchtodate = date('Y-m-d',time());
+        } 
+        
+        $searchradar = "-1";
+        if($request->has("radarmac")){
+            $searchradar = $request->radarmac;
+        }        
+        
+        $searchradarmac = "";
+        if($request->has("radarmac")){
+            $searchradarmac = $request->radarmac;
+        }        
+        
+        $sqlstr = " select count(vf.vehicletype) as vehtypecount, vf.vehicletype from  vehdetection_snap vf "
+                . " left join radardevices rd on vf.macaddr=rd.macaddrint where 1=1 ";
+        
+        if($searchradarmac != ""){
+            $sqlstr .= " and vf.macaddr=" . $searchradarmac;
+        }        
+         
+        $sqlstr .= " and vf.create_date>='" . $searchfromdate . "' and vf.create_date<='" . $searchtodate . "' ";
+                
+        if($searchradar != "-1"){
+            $sqlstr .=  " and rd.macaddrint=" . $searchradar ;
+        }        
+        
+        $sqlstr .=  " group by vf.vehicletype order by vehtypecount desc  " ;
+        
+        $arr = DB::select($sqlstr);
+        $arr_vehflows = array("retcode"=>ret_success, "vehtypes"=>$arr);                        
+            
+        return json_encode($arr_vehflows);
+    }    
     
     function radarEventStat(Request $request){
         $searchfromdate = "";

@@ -115,11 +115,16 @@ Route::any('/warningrecordcountstatjson', "WarningInfoController@warnRecordsCoun
 Route::any("/warningrecordeventtypestatjson", "WarningInfoController@warningRecordEventTypeStatJson");
 Route::any("/warningrecordeventsourcestatjson", "WarningInfoController@warningRecordEventSourceStatJson");
 
+Route::any("/vehiclestat", "VehicleFlowController@vehicleStat");
+Route::any("/vehiclestatjson", "VehicleFlowController@vehicleStatJson");
+Route::any("/vehiclehourstatjson", "VehicleFlowController@vehicleHourStatJson");
+Route::any("/vehicletypestatjson", "VehicleFlowController@vehicleTypeStatJson");
+Route::any("/vehiclebrandstatjson", "VehicleFlowController@vehicleBrandStatJson");
+
 Route::any("/vehflowstat", "VehicleFlowController@vehflowStat");
 Route::any("/vehflowstatjson", "VehicleFlowController@vehflowStatJson");
 Route::any("/vehflowhourstatjson", "VehicleFlowController@vehflowHourStatJson");
 Route::any("/vehflowtypestatjson", "VehicleFlowController@vehflowTypeStatJson");
-Route::any("/vehflowbrandstatjson", "VehicleFlowController@vehflowBrandStatJson");
 
 Route::any("/oburoute", "ObuRouteController@obuRoute");
 Route::any("/getroutevaliddates", "ObuRouteController@getRouteValidDate");

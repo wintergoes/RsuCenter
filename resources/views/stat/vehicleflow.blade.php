@@ -21,7 +21,7 @@
 	<script src="assets/plugins/raphael/raphael-min.js"></script>
 	<script src="assets/plugins/morris/js/morris.js"></script>
 
-<h5 class="card-title">车辆识别统计</h5>
+<h5 class="card-title">车流量统计</h5>
 <hr>
 
 <div class="row">
@@ -39,6 +39,15 @@
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
                     <td class="search_td"><select class="form-select" id="quickdateselector"/></td>
+                    <td class="search_td">&nbsp;&nbsp;雷视设备：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="radarmac" id="radarmac" class="form-select" >
+                            <option value="" >不限</option>
+                            @foreach ($radars as $radar)
+                            <option value="{{$radar->macaddrint}}" {{$radar->macaddrint == $searchradar ? "selected" : ""}}>{{$radar->devicecode}}</option>
+                            @endforeach
+                        </select>                        
+                    </td>                 
                     <td class="search_td">&nbsp;&nbsp;
                         <button type="button" onclick="drawAllChart();" class="btn btn-outline-secondary px-1 radius-6"><div class="spinner-border spinner-border-sm" role="status" id="loadinganimation"> <span class="visually-hidden">Loading...</span></div>查询</button>
                     </td>
@@ -61,22 +70,9 @@
 				<div class="d-flex align-items-center">
                                         <div>
 						<h6 class="mb-3">
-                                                    <b>车辆识别趋势图</b>
+                                                    <b>车流量趋势图</b>
 						</h6>
 					</div>
-
-                                        <div class="dropdown ms-auto">
-                                            <a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown">
-                                                <i class="bx bx-dots-horizontal-rounded font-22 text-option">
-                                                </i>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" onclick="showEventTrendChart();" href="javascript:;">图表</a>
-                                                    <a class="dropdown-item" onclick="showEventTrendTable();" href="javascript:;">表格</a>
-                                                </li>
-                                            </ul>
-                                        </div>
 				</div>
 				<div class="chart-container-0" id="eventtrendchartcontainer">
 					<div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
@@ -103,13 +99,13 @@
 		</div>
 	</div>
     
-	<div class="col-12 col-lg-4">
+	<div class="col-12 col-lg-6">
 		<div class="card radius-6">
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
 						<h6 class="mb-3">
-							<b>车辆识别时段统计图</b>
+							<b>车流量时段统计图</b>
 						</h6>
 					</div>
 				</div>                            
@@ -121,13 +117,13 @@
 		</div>
 	</div>
     
-	<div class="col-12 col-lg-4">
+	<div class="col-12 col-lg-6">
 		<div class="card radius-6">
 			<div class="card-body">
 				<div class="d-flex align-items-center">
 					<div>
 						<h6 class="mb-3">
-							<b>车辆类型占比图</b>
+							<b>车流量车辆类型占比图</b>
 						</h6>
 					</div>
 				</div>                            
@@ -138,27 +134,7 @@
 			</div>
 		</div>
 	</div> 
-    
-	<div class="col-12 col-lg-4">
-		<div class="card radius-6">
-			<div class="card-body">
-				<div class="d-flex align-items-center">
-					<div>
-						<h6 class="mb-3">
-							<b>车辆品牌前10名占比图</b>
-						</h6>
-					</div>
-				</div>                            
-                            
-				<div style="height:320px;">
-                                    <canvas id="veh_brand_chart" ></canvas>
-				</div>
-			</div>
-		</div>
-	</div>    
 </div>
-
-
 
 <script>
 
@@ -197,7 +173,7 @@ function showVehFlowChart(){
                     }
     };
 
-    $.getJSON("vehflowstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),function(data){
+    $.getJSON("vehflowstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val() + "&radarmac=" + $("#radarmac").val(),function(data){
         if($("#fromdate").val() !== $("#todate").val()){
             var clabels = [];
             var cvalues = [];
@@ -314,7 +290,7 @@ function drawVehFlowHourStat(){
                     }
     };    
     
-    $.getJSON("vehflowhourstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),function(data){
+    $.getJSON("vehflowhourstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val() + "&radarmac=" + $("#radarmac").val(),function(data){
         var clabels = [];
         var cvalues = [];
 
@@ -361,8 +337,8 @@ function drawVehFlowHourStat(){
            options: chartoptions
        });    
        
-            vehFlowHourStatFinished = true;
-            checkAllFinished();       
+        vehFlowHourStatFinished = true;
+        checkAllFinished();       
    });
 }
 
@@ -378,7 +354,7 @@ function drawVehTypeStat(){
     
     $.ajax({
         type: "POST",
-        url: "vehflowtypestatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
+        url: "vehflowtypestatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val() + "&radarmac=" + $("#radarmac").val(),
         dataType: "json",
         success: function (data) {
             var etdataset = [];
@@ -388,7 +364,7 @@ function drawVehTypeStat(){
             var hoverbgcolor = [];
             var summarydata = [];
             for(var i = 0; i < data.vehtypes.length; i++){
-                etlabels.push(hkVehType2Str(data.vehtypes[i].vehtype));
+                etlabels.push(hkVehType2StrForVehdetection(data.vehtypes[i].vehicletype));
                 
                 bgcolor[i] = barcolors[i];
                 hoverbgcolor[i] = barhovercolors[i];
@@ -436,79 +412,8 @@ function drawVehTypeStat(){
     });
 }
 
-var vehBrandChart;
-function drawVehBrandStat(){
-    var ctx = document.getElementById("veh_brand_chart").getContext('2d');
-    var barcolors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
-    var barhovercolors = ['#6991cc', '#c89752', '#977abd', '#6daa7e', '#c47566', '#63aecd', '#c5ad4d', '#995cb9', '#b5b3b4', '#6dc0ae'];
-
-    $.ajaxSetup({ 
-        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
-    });    
-    
-    $.ajax({
-        type: "POST",
-        url: "vehflowbrandstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val(),
-        dataType: "json",
-        success: function (data) {
-            var etdataset = [];
-            var etlabels = [];
-            
-            var bgcolor = [];
-            var hoverbgcolor = [];
-            var summarydata = [];
-            for(var i = 0; i < data.vehbrands.length; i++){
-                etlabels.push(data.vehbrands[i].vehbrand);
-                
-                bgcolor[i] = barcolors[i];
-                hoverbgcolor[i] = barhovercolors[i];
-                summarydata[i] = data.vehbrands[i].vehbrandcount;
-            }
-            
-            var etdataitem = {};
-            etdataitem["backgroundColor"] = bgcolor;
-            etdataitem["hoverBackgroundColor"] = hoverbgcolor;            
-            etdataitem["data"] = summarydata;
-            etdataset.push(etdataitem);
-            
-            if(vehBrandChart){
-                vehBrandChart.clear();
-                vehBrandChart.destroy();
-            }
-            vehBrandChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: etlabels,
-                        datasets: etdataset,
-                    },
-                    options: {
-                        maintainAspectRatio: false,
-                        cutoutPercentage: 0,
-                        legend: {
-                          position: 'left',
-                          display: true,
-                        labels: {
-                            boxWidth:8
-                            }
-                        },
-                        tooltips: {
-                            displayColors:false,
-                        },
-                    }
-                  });  
-                  
-            vehBrandStatFinished = true;
-            checkAllFinished();
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            vehBrandStatFinished = true;
-            checkAllFinished();
-        }
-    });
-}
-
 function checkAllFinished(){
-    if(vehflowFinished && vehFlowHourStatFinished && vehTypeStatFinished && vehBrandStatFinished){
+    if(vehflowFinished && vehFlowHourStatFinished && vehTypeStatFinished ){
 //    if(vehBrandStatFinished){
         document.getElementById("loadinganimation").style.visibility = 'hidden';
         document.getElementById("loadinganimation").style.display = 'none'; 
@@ -518,12 +423,10 @@ function checkAllFinished(){
 var vehflowFinished = false;
 var vehFlowHourStatFinished = false;
 var vehTypeStatFinished = false;
-var vehBrandStatFinished = false;
 function drawAllChart(){
     vehflowFinished = false;
     vehFlowHourStatFinished = false;
     vehTypeStatFinished = false;
-    vehBrandStatFinished = false;    
     
     document.getElementById("loadinganimation").style.visibility = 'visible';
     document.getElementById("loadinganimation").style.display = '';    
@@ -531,7 +434,6 @@ function drawAllChart(){
     showVehFlowChart(); 
     drawVehFlowHourStat();
     drawVehTypeStat(); 
-    drawVehBrandStat();
 }
 
 drawAllChart();
