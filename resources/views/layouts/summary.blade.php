@@ -53,7 +53,7 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            交通事件发布
+                            交通事件累计
                         </p>
                         <h4 class="my-1 text-danger" id="warncount">
                             0个
