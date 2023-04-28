@@ -129,7 +129,7 @@
 </div>
 
 @if(count($devicerequests) > 0)
-<div style="margin-top: 10px;">
+<div style="margin-top: 10px; margin-bottom: 20px;">
    
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
