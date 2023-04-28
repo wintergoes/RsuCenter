@@ -477,7 +477,7 @@ function updateHomeSummary(){
         url: "homedatasummary",
         dataType: "json",
         success: function (data) {
-            $('#vehflow').html("<a href='anprevents' target='_blank'><font color='#26d0ff'>" + data[0].vehflowcount + "</font>辆</a>");
+            $('#vehflow').html("<a href='anprevents' target='_blank'><font color='#26d0ff'>" + data[0].vehflowcount + "辆</font></a>");
             $('#aidcount').html("<a href='aidevents' target='_blank'><font color='#26d0ff'>" + data[0].aidcount + "个</font></a>");
             $('#warncount').html("<a href='warninginfo' target='_blank'><font color='#26d0ff'>" + data[0].warncount + "个</font></a>");
             $('#obuwarningcount').html("<a href='warningrecordstat' target='_blank'><font color='#26d0ff'>" + data[0].warnrecordcount + "次</font></a>");
