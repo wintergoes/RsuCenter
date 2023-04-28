@@ -4,7 +4,7 @@
 <script language="javascript" type="text/javascript" src="/js/dateutils.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 
-<h5 class="card-title">用车打卡</h5>
+<h5 class="card-title">用车打卡记录</h5>
 <hr>
 
 <div class="row mb-4">
@@ -58,7 +58,7 @@
                         <td>{{$ci->cistarttime}}</td>
                         <td>{{$ci->ciendtime == "" ? "-" : $ci->ciendtime}}</td>                   
                         <td><a href="oburoute?obudevice={{$ci->obuintid}}&fromdate={{substr($ci->cistarttime, 0, 10)}}&locationtype=1&fromtime={{substr($ci->cistarttime, 11, 5)}}&totime={{substr($ci->ciendtime, 11, 5)}}" target="_blank">运行轨迹</a></td>
-                        <td><a href="obuvideos?obudevice={{$ci->obuintid}}&fromdate={{$ci->cistarttime}}&locationtype=1&todate={{$ci->ciendtime}}" target="_blank">行车视频</a></td>
+                        <td><a href="obuvideos?obudevice={{$ci->obuintid}}&fromdate={{date('Y-m-d H:i:s', strtotime($ci->cistarttime . " -10 minute"))}}&locationtype=1&todate={{date('Y-m-d H:i:s', strtotime($ci->ciendtime . " 10 minute"))}}" target="_blank">行车视频</a></td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -24,7 +24,7 @@ class ClockInController extends Controller
         }
         
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d', time());
+            $searchfromdate = date('Y-m-d', strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -32,9 +32,9 @@ class ClockInController extends Controller
             $searchtodate = $request->todate ;
         } 
         
-        $searchobu = "";
-        if($request->has("obuid")){
-            $searchobu = $request->obuid;
+        $searchobu = "-1";
+        if($request->has("obudevice")){
+            $searchobu = $request->obudevice;
         }
         
         $clockins = ClockInFull::orderBy("clockinfull.id", "desc")
@@ -43,11 +43,11 @@ class ClockInController extends Controller
                 ->leftjoin("obudevices as od", "od.id", "=", "clockinfull.relatedid");
   
         if($searchfromdate != ""){
-            $clockins = $clockins->where("clockinfull.created_at", ">=", $searchfromdate );
+            $clockins = $clockins->where("clockinfull.cistarttime", ">=", $searchfromdate );
         }
         
         if($searchtodate != ""){
-            $clockins = $clockins->where("clockinfull.created_at", "<=", $searchtodate);
+            $clockins = $clockins->where("clockinfull.cistarttime", "<=", $searchtodate);
         }
         
         if($searchobu != "-1" && $searchobu != ""){
