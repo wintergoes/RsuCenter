@@ -193,7 +193,7 @@ class VehicleFlowController extends Controller
                 ->get(); 
         
         $searchradar = "1";
-        $searchradars = RadarDevice::where("devicecode", "LS00110")
+        $searchradars = RadarDevice::where("devicecode", "LS00119")
                 ->get();
         
         if(count($searchradars) > 0){
