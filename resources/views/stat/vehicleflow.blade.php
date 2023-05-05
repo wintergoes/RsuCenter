@@ -293,6 +293,11 @@ function drawVehFlowHourStat(){
     $.getJSON("vehflowhourstatjson?fromdate=" + $("#fromdate").val() + "&todate=" + $("#todate").val() + "&radarmac=" + $("#radarmac").val(),function(data){
         var clabels = [];
         var cvalues = [];
+        var daycount = 1;
+        if($("#fromdate").val() !== $("#todate").val()){
+            daycount = GetDateDiff($("#fromdate").val(), $("#todate").val(), "day");
+        } 
+        //alert(daycount);
 
         for(var k = 1; k < 24; k++){
             clabels.push(k + ":00");
@@ -305,7 +310,7 @@ function drawVehFlowHourStat(){
             }             
             for(var i=0;i<data["vehflow"].length;i++){
                 if(data["vehflow"][i]["vfhour"] === kstr){
-                    cvalues.push(data["vehflow"][i]["vehcount"]);
+                    cvalues.push(Math.round(data["vehflow"][i]["vehcount"]/daycount));
                     haveHour = true;
                     break;
                 }                                    

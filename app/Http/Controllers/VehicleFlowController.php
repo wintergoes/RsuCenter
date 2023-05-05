@@ -285,7 +285,7 @@ class VehicleFlowController extends Controller
         $searchradarmac = "";
         if($request->has("radarmac")){
             $searchradarmac = $request->radarmac;
-        }        
+        }
         
         $sqlstr = " select count(vf.id) as vehcount, vf.create_hour as vfhour from  vehdetection_snap vf where 1=1 ";
         
