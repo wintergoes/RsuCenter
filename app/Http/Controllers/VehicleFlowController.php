@@ -234,15 +234,16 @@ class VehicleFlowController extends Controller
         
         if($searchfromdate != $searchtodate){
             $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
-                    . " left join vehdetection_snap vf on create_date=d.ddate where 1=1 ";
+                    . " left join vehdetection_snap vf on create_date=d.ddate  ";
             
             if($searchradarmac != ""){
                 $sqlstr .= " and vf.macaddr=" . $searchradarmac;
             }
             
-            $sqlstr .=  " and  d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' "
+            $sqlstr .=  " where 1=1 and  d.ddate>='" . $searchfromdate . "' and d.ddate<='" . $searchtodate . "' "
                     . " group by d.ddate " ;
 
+//            echo $sqlstr;
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
         } else {
@@ -331,7 +332,7 @@ class VehicleFlowController extends Controller
         }        
         
         $sqlstr = " select count(vf.vehicletype) as vehtypecount, vf.vehicletype from  vehdetection_snap vf "
-                . " left join radardevices rd on vf.macaddr=rd.macaddrint where 1=1 ";
+                . " left join radardevices rd on vf.macaddr=rd.macaddrint where vf.vehicletype != 'unknown' ";
         
         if($searchradarmac != ""){
             $sqlstr .= " and vf.macaddr=" . $searchradarmac;

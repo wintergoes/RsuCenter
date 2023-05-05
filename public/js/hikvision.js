@@ -188,7 +188,13 @@ function hkVehType2StrForVehdetection(str){
             break;
         case "vehi":
             resstr = "小客车";
-            break;            
+            break; 
+        case "twoWhe":
+            resstr = "两轮车";
+            break;
+        case "threeW":
+            resstr = "三轮车";
+            break;          
         case "pickup":
             resstr = "皮卡";
             break;             
