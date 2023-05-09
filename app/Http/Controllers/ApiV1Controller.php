@@ -23,6 +23,7 @@ use App\ClockIn;
 use App\ClockInFull;
 use App\WarningRecord;
 use App\WarningInfo;
+use App\TrafficSign;
 use App\VehicleFlow;
 use App\Forecast;
 
@@ -1588,6 +1589,87 @@ class ApiV1Controller extends Controller
         $arr = array("retcode"=>ret_success, "reqjson"=>$reqJson);
         return json_encode($arr);        
     }
+    
+    function sendAllRtsToRsi(Request $request){
+        if($request->rsudevice == ""){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"雷视设备为空！");
+            return json_encode($arr);
+        }
+        
+        $selRsu = $request->rsudevice;
+        $rsus = DB::select("SELECT * FROM device_info_connect where device_id='" . $selRsu . "' order by con_datetime desc limit 1");
+        if(count($rsus) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"RSU设备不在数据库中！");
+            return json_encode($arr);
+        }
+        
+//        if($rsus[0]->Is_online != "1"){
+//            $arr = array("retcode"=>ret_error, "retmsg"=>"RSU设备不在线" . $selRsu . "！");
+//            return json_encode($arr);
+//        }
+        
+        $maxreqno = DB::select("select max(reqno) as maxReqNo from (select convert(request_no, UNSIGNED INTEGER) AS reqno FROM device_info_request) as request");
+        $reqNo = $maxreqno[0]->maxReqNo + 1;
+        
+        $signs = TrafficSign::whereraw("trafficsigns.endtime > now()")
+                ->get();
+        
+        if(count($signs) == 0){
+            $arr = array("retcode"=>ret_error, "retmsg"=>"没有有效的交通标志！");
+            return json_encode($arr);            
+        }
+        
+        $minstarttime = "2050-01-01 00:00:00";
+        $maxendtime = "2000-01-01 00:00:00";
+        
+        $rtss = array();
+        $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
+        foreach($signs as $sign){
+            $starttime = strtotime($sign->starttime);
+            $endtime = strtotime($sign->endtime);
+            
+            $startminute = round(($starttime - $yearstart) / 60);
+            $endminute = round(($endtime - $yearstart) / 60);
+            $nowminute = round((time() - $yearstart) / 60);
+            if($endminute > 527040){
+                $endminute = 527040;
+            }
+            
+            $signPos = array("offsetLL"=>array("choiceID"=>7, "position_LatLon"=>array("long"=>$sign->tslng * 1000000, "lat"=>$sign->tslat * 1000000)), "offsetV"=>null);
+            $timeDetails = array("starttime"=>$startminute, "endTime"=>$endminute, "endTimeConfidence"=>null);
+            
+            $rtsid = $sign->id % 255;
+            
+            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, 
+                "signPos"=>$signPos, "timeDetails"=>$timeDetails);
+            array_push($rtss, $winfoitem);
+        }
+        
+        $refpos = array("lat"=>floatval($rsus[0]->RSU_lat * 1000000), "long"=>floatval($rsus[0]->RSU_lng * 1000000), "elevation"=>0);
+        $rsivalue = array("tag"=>$reqNo, "msgCnt"=>0, "moy"=>$nowminute, "id"=>$request->rsudevice, "refPos"=>$refpos, "rtss"=>$rtss, "rtes"=>null);
+        $arr = array("type"=>"rts", "value"=>$rsivalue);
+        
+        $reqJson = json_encode($arr);
+//        echo $reqJson;
+        
+        $rtestarttime = strtotime($minstarttime);
+        $rteendtime = strtotime($maxendtime);
+        
+        $rtestarttime_minute = round(($rtestarttime - $yearstart) / 60);
+        $rteendtime_minute = round(($rteendtime - $yearstart) / 60);
+//        echo $rtestarttime_minute . ", " . $rteendtime_minute;
+        
+        DB::update("update device_info_request set deleted=1 where request_type='RTS' and device_id='" . $selRsu . "'");
+        
+        $insertsql = "insert into device_info_request (log_radom, device_id, request_datetime, request_type, request_no, request_JSON, " 
+            . " request_start_time, request_end_time ) values('" . $rsus[0]->log_radom . "', '"
+            . $selRsu . "', now(), 'RTS', '" . $reqNo . "', '" . $reqJson . "', " . $rtestarttime_minute . ", " . $rteendtime_minute . ")";
+        
+        DB::insert($insertsql);  
+        
+        $arr = array("retcode"=>ret_success, "reqjson"=>$reqJson);
+        return json_encode($arr);        
+    }    
     
     function updateRoadsInfo(Request $request){
         //1. 如果传递数据了，说明向服务器提交数据(post)，如果没有传递数据，认为从服务器读取资源(get)
