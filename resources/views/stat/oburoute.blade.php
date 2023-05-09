@@ -17,20 +17,23 @@
 <div class="row mb-4">
         <form id="form1" class="form-horizontal" method="get" >
             {{ csrf_field() }}
-            <table style="font-size: 12px; text-align: center;" >
+            <table style="font-size: 12px; text-align: center; margin-bottom: 10px;" >
                 <tr>
                     <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
-                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 160px">
+                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 300px">
                             <option class="form-control" value="-1" >不限</option>
                             @foreach($obus as $obu)
-                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
+                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->plateno}} - {{$obu->obuid}}</option>
                             @endforeach
                         </select>
                     </td>  
                 </tr>
+            </table>
+            
+            <table style="font-size: 12px; text-align: center;" >
                 <tr>
-                    <td class="search_td">&nbsp;&nbsp;&nbsp;&nbsp;日期&nbsp;&nbsp;</td>
+                    <td class="search_td">&nbsp;&nbsp;查询日期&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <input name="fromdate_hd" type="hidden" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="8" value="{{$searchfromdate}}"/>
                         <select name="fromdate" id="fromdate" class="form-select" style="width: 160px">

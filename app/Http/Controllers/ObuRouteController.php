@@ -53,7 +53,7 @@ class ObuRouteController extends Controller
         }
         
         $obus = ObuDevice::orderBy("id", "desc")
-                ->select("id", "obuid")
+                ->select("id", "obuid", "plateno")
                 ->get();
         
         if($searchobu == "0"){

@@ -41,6 +41,8 @@ function fillQuickDateSelector(selectid, datefromid, datetoid){
      dateselector.append(opt);
      opt = $("<option></option>").text("昨天").val("yesterday");
      dateselector.append(opt);
+     opt = $("<option></option>").text("本周").val("thisweek");
+     dateselector.append(opt);     
      opt = $("<option></option>").text("本月").val("thismonth");
      dateselector.append(opt);
      opt = $("<option></option>").text("上月").val("lastmonth");
@@ -57,6 +59,9 @@ function fillQuickDateSelector(selectid, datefromid, datetoid){
          }else if(dateselector.val() === "yesterday"){
              $("#" + datefromid).val(getYesterdayDate());
              $("#" + datetoid).val(getYesterdayDate());
+         }else if(dateselector.val() === "thisweek"){
+             $("#" + datefromid).val(getWeekStartDate());
+             $("#" + datetoid).val(getWeekEndDate());
          }else if(dateselector.val() === "thismonth"){
              $("#" + datefromid).val(getMonthStartDate());
              $("#" + datetoid).val(getMonthEndDate());
@@ -113,13 +118,13 @@ function getYesterdayDate() {
 
 //获得本周的开始日期 
 function getWeekStartDate() { 
-    var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek); 
+    var weekStartDate = new Date(nowYear, nowMonth, nowDay + 1 - nowDayOfWeek); 
     return formatDate(weekStartDate); 
 } 
 
 //获得本周的结束日期 
 function getWeekEndDate() { 
-    var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)); 
+    var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek)); 
     return formatDate(weekEndDate); 
 } 
 

@@ -40,7 +40,7 @@
         <table class="table mb-0 table-hover table-bordered" >
                 <thead>
                     <tr role="row">
-                        <th >姓名</th>
+                        <th >ID</th>
                         <th >OBU</th>
                         <th >车牌号</th>
                         <th >上车时间</th>
@@ -52,7 +52,7 @@
                 <tbody>
                     @foreach($clockins as $ci)
                     <tr>
-                        <td>{{$ci->realname == "" ? "-" : $ci->realname}}</td>
+                        <td>{{$ci->id}}</td>
                         <td >{{$ci->obuid}}</td>
                         <td >{{$ci->plateno == "" ? "-" : $ci->plateno}}</td>
                         <td>{{$ci->cistarttime}}</td>

@@ -126,7 +126,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a class="dropdown-item" href="dashboard" target="_blank">
-                                    全屏查看
+                                    智能云控平台
                                 </a>
                             </li>
                         </ul>
