@@ -274,7 +274,7 @@
                          background: url('images/dashboard/device_background.png') no-repeat;
                              background-size:100% 100%; ">
                         <div >
-                            <span>车流量统计</span>
+                            <span>车辆识别</span>
                             <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
                         </div>
                         <table height="90%">
@@ -334,7 +334,7 @@
                              background: url('images/dashboard/device_background.png') no-repeat;
                                  background-size:100% 100%; ">
                             <div>
-                                <span>车辆识别</span>
+                                <span>实时车辆</span>
                                 <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
                             </div>
                             <div >
