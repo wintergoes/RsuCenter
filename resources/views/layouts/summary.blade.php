@@ -36,7 +36,7 @@
                             今日雷视识别事件
                         </p>
                         <h4 class="my-1 text-info" id="aidcount">
-                            0
+                            0个
                         </h4>
                     </div>
                     <div class="widgets-icons-2 rounded-circle  text-white ms-auto">
@@ -53,9 +53,9 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            交通事件累计
+                            交通事件发布累计
                         </p>
-                        <h4 class="my-1 text-danger" id="warncount">
+                        <h4 class="my-1 text-info" id="warncount">
                             0个
                         </h4>
                     </div>
@@ -73,10 +73,10 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0 ">
-                            OBU预警次数
+                            OBU预警次数累计
                         </p>
-                        <h4 class="my-1 text-success" id="obuwarningcount">
-                            360次
+                        <h4 class="my-1 text-info" id="obuwarningcount">
+                            0次
                         </h4>
                     </div>
                     <div class="widgets-icons-2 rounded-circle  text-white ms-auto">

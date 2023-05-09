@@ -48,7 +48,7 @@ class HomeController extends Controller
                 . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat,"
                 . "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
                 . "(select count(id) as aidcount from aidevents where eventtime_date=date(now())) as aidstat,"
-                . "(select count(id) as warnrecordcount from warningrecords where created_at>=date(now())) as warnrecordstat");
+                . "(select count(id) as warnrecordcount from warningrecords) as warnrecordstat");
         
         return json_encode($stats);
     }
