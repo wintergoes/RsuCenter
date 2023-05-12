@@ -1818,7 +1818,7 @@ class ApiV1Controller extends Controller
         $maxid = $request->maxid;
         $clockinfull = ClockInFull::orderBy("id", "asc")
                 ->where("id", ">", $maxid)
-                ->limit(1000)
+                ->limit(10000)
                 ->get();
         
         $arr = array("retcode"=>ret_success, "clockincount"=>count($clockinfull), "clockins"=>$clockinfull);
@@ -2034,6 +2034,7 @@ class ApiV1Controller extends Controller
             DB::commit();       
         }
         
+        DB::select("truncate table clockinfull ");
         $maxClockInids = DB::select("select ifnull(max(id), 0) as maxid from clockinfull ");
         $maxClockInid = $maxClockInids[0]->maxid;
         $loopcount = 0;
