@@ -24,7 +24,7 @@
                         <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 300px">
                             <option class="form-control" value="-1" >不限</option>
                             @foreach($obus as $obu)
-                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->plateno}} - {{$obu->obuid}}</option>
+                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->plateno == "" ? "未关联车牌" : $obu->plateno}} - {{$obu->obuid}}</option>
                             @endforeach
                         </select>
                     </td>  
