@@ -18,10 +18,12 @@ class CreateForecastTable extends Migration
             $table->double("lat")->default(0)->nullable();
             $table->double("lng")->default(0)->nullable();            
             $table->string("weather")->default("")->nullable();
+            $table->float("lightintensity")->nullable();
             $table->string("weathercode", 10)->default("")->nullable(); //不是每个天气api都有这个，河南复数科技有限公司接口有这个
             $table->float("temperature")->default(0)->nullable();
             $table->float("temphigh")->default(0)->nullable();
             $table->float("templow")->default(0)->nullable();
+            $table->float("rainfall")->default(0)->nullable();
             $table->integer("humidity")->default(0)->nullable();
             $table->integer("windpower")->default(0)->nullable();
             $table->string("winddirection")->default("")->nullable();
