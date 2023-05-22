@@ -13,7 +13,9 @@ use DB;
 class VehicleFlowController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth', ['except'=>array("vehicleStatJson", 
+            "vehicleHourStatJson", "vehicleTypeStatJson", "vehicleBrandStatJson", "vehflowStatJson", 
+            "vehflowHourStatJson", "vehflowTypeStatJson", "radarEventTypeStatJson", "radarEventHourStatJson")]);
     }     
     
     function vehicleStat(Request $request){

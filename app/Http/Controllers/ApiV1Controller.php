@@ -1415,6 +1415,131 @@ class ApiV1Controller extends Controller
     }    
     
     function updateForecast(Request $request){
+//        $host = "https://iot.haloiot.com/";
+//        $path = "api/v1/device/list";
+//        $method = "POST";
+//        $appkey = env("hainayun_appkey");
+//        $appsecret = env("hainayun_appsecret");
+//        
+//        $timestamp = (int)date("YmdHis");
+//        
+//        $paramstr = "appkey=" . $appkey . "&timestamp=" . $timestamp ;
+//        $sign1 = hash_hmac('sha256', $paramstr, $appsecret, true);
+//        echo $paramstr . "<br/>";
+//        echo "appkey: " . $appkey . "<br/> appsecret: " . $appsecret. "<br/> sign: " . $sign1 . "<br/><br/>";
+//        
+//        $jsonbody = array("appkey"=>$appkey, "timestamp"=>$timestamp,"sign"=> base64_encode($sign1));
+//        $jsonstr = json_encode($jsonbody);
+//        echo $jsonstr . "<br/><br/>";
+////        array_push($headers, "Authorization:APPCODE " . $appcode);
+////        $querys = "area=%E6%9D%8E%E6%B2%A7&needday=1&city=%E9%9D%92%E5%B2%9B&prov=%E5%B1%B1%E4%B8%9C";
+////        $bodys = "";
+//        $url = $host . $path . "?" . $paramstr;
+//        
+//        $header = array(
+//                'Content-Type: application/json; charset=utf-8',
+//        );
+//
+//        $curl = curl_init();
+//        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+//        curl_setopt($curl, CURLOPT_URL, $url);
+//        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+//        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($curl, CURLOPT_HEADER, true);
+//        curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonstr);
+//        if (1 == strpos("$".$host, "https://"))
+//        {
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+//        }
+////        var_dump(curl_exec($curl));         
+//        $res = curl_exec($curl);
+//        
+//        echo $res;
+//        curl_close($curl); 
+        
+        $this->reqHnyForecast($request, "node61");
+    }
+    
+    function reqHnyForecast(Request $request, $devname){
+        $host = "https://iot.haloiot.com/";
+        $path = "api/v1/data/realtime";
+        $method = "POST";
+        $appkey = env("hainayun_appkey");
+        $appsecret = env("hainayun_appsecret");
+        
+        $timestamp = date("YmdHis");
+        
+        $paramstr = "appkey=" . $appkey . "&device_name=" . $devname . "&timestamp=" . $timestamp ;
+        $sign1 = hash_hmac('sha256', $paramstr, $appsecret, true);
+//        echo $paramstr . "<br/>";
+//        echo "appkey: " . $appkey . "<br/> appsecret: " . $appsecret. "<br/> sign: " . $sign1 . "<br/><br/>";
+        
+        $jsonbody = array("appkey"=>$appkey, "timestamp"=>$timestamp, "device_name"=>$devname, "sign"=> base64_encode($sign1));
+        $jsonstr = json_encode($jsonbody);
+//        echo $jsonstr . "<br/><br/>";
+        $url = $host . $path . "?" . $paramstr;
+        
+        $header = array('Content-Type: application/json; charset=utf-8');
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $jsonstr);
+        if (1 == strpos("$".$host, "https://"))
+        {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }        
+        $res = curl_exec($curl);        
+//        echo $res;
+        curl_close($curl);      
+        
+        $resary = explode("\r\n\r\n", $res);
+        if(count($resary) <= 1){
+            echo "返回错误！";
+            return;
+        }
+        
+//        echo $resary[1];
+        $resjson = json_decode($resary[1]);
+        if($resjson->code != 0){
+            echo "返回码不是0！";
+            return;            
+        }
+        
+        if(count($resjson->list) == 0){
+            echo "返回数据长度为0！";
+            return;
+        }
+        
+        $forecast = new Forecast();
+//        $forecast->weather = $resjson->data->now->detail->weather;
+//        $forecast->weathercode = $resjson->data->now->detail->weather_code;
+//        $forecast->lightintensity = $resjson->list[0]->lux;
+        $forecast->temperature = $resjson->list[0]->ta;
+        $forecast->pressure = $resjson->list[0]->pa;
+//        $forecast->temphigh = $resjson->data->now->city->day_air_temperature;
+//        $forecast->templow = $resjson->data->now->city->night_air_temperature;
+        $forecast->rainfall =  $resjson->list[0]->rc;
+        $forecast->humidity =  $resjson->list[0]->ua;
+//        $forecast->windpower = str_replace("级", "", $resjson->data->now->detail->wind_power);
+        $forecast->winddirection = $resjson->list[0]->dm;
+        $forecast->windspeed = $resjson->list[0]->sm;
+        $forecast->visibility = $resjson->list[0]->vim;
+//        $forecast->air_pm25 = $resjson->list[0]->pm25;
+//        $forecast->sun_begin = $resjson->data->now->detail->sun_begin;
+//        $forecast->sun_end = $resjson->data->now->detail->sun_end;
+        $forecast->created_at = $resjson->list[0]->dataTime;
+        $forecast->save();        
+    }
+    
+    function updateForecast_old(Request $request){
 //        $host = "https://iweather.market.alicloudapi.com";
 //        $path = "/gps";
 //        $method = "GET";

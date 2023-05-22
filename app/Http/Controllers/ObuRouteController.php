@@ -15,7 +15,7 @@ require_once '../app/Constant.php';
 class ObuRouteController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth', ['except'=>array("getObuRouteJson", "getRouteValidDate")]);
     }
     
     function obuRoute(Request $request){
