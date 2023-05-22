@@ -19,7 +19,8 @@ require_once '../app/Constant.php';
 class WarningInfoController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware('auth', ['except'=>array("eventTrendSummary", "eventTypeStatJson", 
+            "eventSourceStatJson", "warnRecordsCountStatJson", "warningRecordEventTypeStatJson", "warningRecordEventSourceStatJson")]);
     }    
     
     function index(Request $request){
