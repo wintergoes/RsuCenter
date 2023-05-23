@@ -25,7 +25,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -50,7 +50,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -89,7 +89,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -118,7 +118,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -147,7 +147,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -178,7 +178,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -217,7 +217,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -272,7 +272,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -311,7 +311,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -361,7 +361,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
@@ -468,7 +468,7 @@ class VehicleFlowController extends Controller
         }
 
         if($searchfromdate == ""){
-            $searchfromdate = date('Y-m-d',strtotime("-30 day"));
+            $searchfromdate = date('Y-m-d',strtotime("-7 day"));
         }
 
         $searchtodate = "";
