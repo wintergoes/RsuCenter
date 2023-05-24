@@ -1459,10 +1459,10 @@ class ApiV1Controller extends Controller
 //        echo $res;
 //        curl_close($curl); 
         
-        $this->reqHnyForecast($request, "node61");
+        $this->reqHnyForecast($request, "node61", 120.000000, 36.000000);
     }
     
-    function reqHnyForecast(Request $request, $devname){
+    function reqHnyForecast(Request $request, $devname, $lng, $lat){
         $host = "https://iot.haloiot.com/";
         $path = "api/v1/data/realtime";
         $method = "POST";
@@ -1509,7 +1509,7 @@ class ApiV1Controller extends Controller
 //        echo $resary[1];
         $resjson = json_decode($resary[1]);
         if($resjson->code != 0){
-            echo "返回码不是0！";
+            echo "返回码不是0！" . $resjson->msg;
             return;            
         }
         
@@ -1526,7 +1526,7 @@ class ApiV1Controller extends Controller
         $forecast->pressure = $resjson->list[0]->pa;
 //        $forecast->temphigh = $resjson->data->now->city->day_air_temperature;
 //        $forecast->templow = $resjson->data->now->city->night_air_temperature;
-        $forecast->rainfall =  $resjson->list[0]->rc;
+//        $forecast->rainfall =  $resjson->list[0]->rc;
         $forecast->humidity =  $resjson->list[0]->ua;
 //        $forecast->windpower = str_replace("级", "", $resjson->data->now->detail->wind_power);
         $forecast->winddirection = $resjson->list[0]->dm;
@@ -1536,7 +1536,45 @@ class ApiV1Controller extends Controller
 //        $forecast->sun_begin = $resjson->data->now->detail->sun_begin;
 //        $forecast->sun_end = $resjson->data->now->detail->sun_end;
         $forecast->created_at = $resjson->list[0]->dataTime;
-        $forecast->save();        
+        $forecast->save(); 
+        
+        $visibility = $resjson->list[0]->vim;
+        $this->processForcastVisibility($visibility, $lng, $lat);
+    }
+    
+    function processForcastVisibility($visibility, $lng, $lat){
+        if($visibility > 200){
+            return;
+        }
+        
+        $vsblevel = 0;        
+        $tsname = "雾";
+        if($visibility > 1000){
+            $vsblevel = 5;
+        } else if($visibility > 500 && $visibility <= 1000){
+            $vsblevel = 4;
+        } else if($visibility > 200 && $visibility <= 500){
+            $vsblevel = 3;
+            $tsname = "大雾";
+        } else if($visibility > 50 && $visibility <= 200){
+            $vsblevel = 2;
+            $tsname = "浓雾";
+        } else if($visibility <= 50){
+            $vsblevel = 1;
+            $tsname = "强浓雾";
+        }
+        $tscid = 300 + $vsblevel;
+        
+        if($vsblevel < 3){
+            $sign = new TrafficSign();
+            $sign->tscid = $tscid;
+            $sign->tsname = $tsname;
+            $sign->tslat = $lat;
+            $sign->tslng = $lng;
+            $sign->starttime = date("Y-m-d H:i:s", time());
+            $sign->endtime = date("Y-m-d H:i:s", time() + 60);
+            $sign->save();
+        }        
     }
     
     function updateForecast_old(Request $request){
