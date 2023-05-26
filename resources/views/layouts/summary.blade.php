@@ -13,7 +13,7 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0">
-                            今日车辆识别
+                            今日车流量
                         </p>
                         <h4 class="my-1 text-info" id="vehflow">
                             0辆

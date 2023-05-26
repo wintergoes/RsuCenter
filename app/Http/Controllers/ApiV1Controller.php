@@ -1538,6 +1538,8 @@ class ApiV1Controller extends Controller
         $forecast->created_at = $resjson->list[0]->dataTime;
         $forecast->save(); 
         
+        echo "数据时间：" .  $resjson->list[0]->dataTime . "<br/>";
+        
         $visibility = $resjson->list[0]->vim;
         $this->processForcastVisibility($visibility, $lng, $lat);
     }

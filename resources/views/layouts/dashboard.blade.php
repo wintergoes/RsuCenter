@@ -245,7 +245,7 @@
                         </div>
                         <table height="85%">
                             <tr>
-                                <td class="summary_stat_title_td">今日车辆识别</td>
+                                <td class="summary_stat_title_td">今日车流量</td>
                                 <td class="summary_stat_title_td">今日交通事件</td>
                                 <td class="summary_stat_title_td">今日预警次数</td>                     
                             </tr>

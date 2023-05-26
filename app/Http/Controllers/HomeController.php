@@ -46,7 +46,8 @@ class HomeController extends Controller
                 . "(select count(id) as rsucount from devices) as rsustat, "
                 . "(select count(id) as obucount from obudevices) as obustat,"
                 . "(select count(id) as warncount from warninginfo where wistatus=1) as warnstat,"
-                . "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
+                //. "(select count(id) as vehflowcount from vehicleflow where created_at>=date(now())) as vehflowstat,"
+                . "(select count(id) as vehflowcount from vehdetection_snap where macaddr=168161163999763 and create_date=date(now())) as vehflowstat,"
                 . "(select count(id) as aidcount from aidevents where eventtime_date=date(now())) as aidstat,"
                 . "(select count(id) as warnrecordcount from warningrecords) as warnrecordstat");
         
