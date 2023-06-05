@@ -1790,6 +1790,9 @@ class ApiV1Controller extends Controller
         $rtss = array();
         $yearstart = strtotime(date("Y") . "-01-01 00:00:00");
         foreach($signs as $sign){
+            $minstarttime = min($minstarttime, $sign->starttime);
+            $maxendtime = max($maxendtime, $sign->endtime);               
+            
             $starttime = strtotime($sign->starttime);
             $endtime = strtotime($sign->endtime);
             
