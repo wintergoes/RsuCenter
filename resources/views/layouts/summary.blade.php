@@ -13,7 +13,7 @@
                 <div class="d-flex align-items-center">
                     <div class="text-center" style="width: 90%;">
                         <p class="mb-0">
-                            今日车流量
+                            今日车流量（红岛南收费站出口）
                         </p>
                         <h4 class="my-1 text-info" id="vehflow">
                             0辆
