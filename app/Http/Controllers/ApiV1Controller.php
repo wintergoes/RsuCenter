@@ -1506,7 +1506,7 @@ class ApiV1Controller extends Controller
             return;
         }
         
-//        echo $resary[1];
+        echo $resary[1] . "<br/>";
         $resjson = json_decode($resary[1]);
         if($resjson->code != 0){
             echo "返回码不是0！" . $resjson->msg;
@@ -1541,12 +1541,31 @@ class ApiV1Controller extends Controller
         echo "数据时间：" .  $resjson->list[0]->dataTime . "<br/>";
         
         $visibility = $resjson->list[0]->vim;
-        $this->processForcastVisibility($visibility, $lng, $lat);
+        $addcount = 0;
+        $addcount = $addcount + $this->processForcastVisibility($visibility, $lng, $lat);
+        $addcount = $addcount + $this->processShiHuaXiShu($resjson->list[0]->gp, $lat, $lng);
+        
+        if($addcount > 0){
+            $curlsend = curl_init();
+            curl_setopt($curlsend, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curlsend, CURLOPT_URL, "http://localhost/api/sendallrtstorsi?rsudevice=RSU00002");
+            curl_setopt($curlsend, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curlsend, CURLOPT_FAILONERROR, false);
+            curl_setopt($curlsend, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curlsend, CURLOPT_HEADER, true);     
+            $res = curl_exec($curlsend);        
+    //        echo $res;
+            curl_close($curlsend);  
+            echo $res . "<br/>";
+            echo "sendallrtstorsi" . "<br/>";
+        }
     }
     
     function processForcastVisibility($visibility, $lng, $lat){
+        $addcount = 0;
+        
         if($visibility > 200){
-            return;
+            return $addcount;
         }
         
         $vsblevel = 0;        
@@ -1568,15 +1587,53 @@ class ApiV1Controller extends Controller
         $tscid = 300 + $vsblevel;
         
         if($vsblevel < 3){
-            $sign = new TrafficSign();
-            $sign->tscid = $tscid;
-            $sign->tsname = $tsname;
-            $sign->tslat = $lat;
-            $sign->tslng = $lng;
-            $sign->starttime = date("Y-m-d H:i:s", time());
-            $sign->endtime = date("Y-m-d H:i:s", time() + 60);
-            $sign->save();
-        }        
+            $checksigns = TrafficSign::where("tscid", $tscid)
+                    ->orderBy("id", "desc")
+                    ->limit(1)
+                    ->get();
+            $starttime = date("Y-m-d H:i:s", time());            
+            
+            if(count($checksigns) == 0 || $starttime > $checksigns[0]->endtime){
+                $sign = new TrafficSign();
+                $sign->tscid = $tscid;
+                $sign->tsname = $tsname;
+                $sign->tslat = $lat;
+                $sign->tslng = $lng;
+                $sign->starttime = date("Y-m-d H:i:s", time());
+                $sign->endtime = date("Y-m-d H:i:s", time() + 1800);
+                $sign->save();
+                $addcount = 1;
+            }
+        }
+        
+        return $addcount;
+    }
+    
+    function processShiHuaXiShu($gp, $lat, $lng){
+        $addcount = 0;
+        
+        if($gp < 0.5){
+            $checksigns = TrafficSign::where("tscid", 251)
+                    ->orderBy("id", "desc")
+                    ->limit(1)
+                    ->get();
+            $starttime = date("Y-m-d H:i:s", time());
+//            echo $starttime . "<br/>";
+//            echo $checksigns[0]->endtime . "<br/>";
+            if(count($checksigns) == 0 || $starttime > $checksigns[0]->endtime){
+                $sign = new TrafficSign();
+                $sign->tscid = 251;
+                $sign->tsname = "道路湿滑";
+                $sign->tslat = $lat;
+                $sign->tslng = $lng;
+                $sign->starttime = $starttime;
+                $sign->endtime = date("Y-m-d H:i:s", time() + 1800);
+                $sign->save(); 
+                $addcount = 1;
+            }
+        }
+        
+        return $addcount;
     }
     
     function updateForecast_old(Request $request){
