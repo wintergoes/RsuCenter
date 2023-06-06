@@ -24,7 +24,7 @@ class TrafficSignController extends Controller
                 ->select("trafficsigns.id", "trafficsigns.tscid", "trafficsigns.tsname", "trafficsigns.tslat", 
                         "trafficsigns.tslng", "trafficsigns.created_at", "trafficsigns.tsparam1", 
                         "trafficsigns.starttime", "trafficsigns.endtime",
-                        "u.realname")
+                        "u.realname", DB::raw("trafficsigns.endtime>now() as timevalid"))
                 ->leftjoin("trafficsignclasses as tsc", "trafficsigns.tscid", "=", "tsc.id")
                 ->leftjoin("users as u", "u.id", "=", "trafficsigns.tsmanager")
                 ->paginate(30);

@@ -62,8 +62,12 @@
                         <td>{{$sign->tsparam1 == "" ? "-" : $sign->tsparam1}}</td>
                         <td><button type="button" class="btn btn-transparent" data-bs-toggle="modal" onclick="showDevicePosition('{{$sign->tscid}}', '{{$sign->tsname}}', {{$sign->tslng}}, {{$sign->tslat}})" data-bs-target="#exampleWarningModal">查看</button></td>
                         <td>{{$sign->starttime}}</td>
-                        <td>{{$sign->endtime}}</td>                        
-                        <td>{{$sign->realname}}</td>
+                        @if($sign->timevalid == 0)
+                        <td><font color="red">{{$sign->endtime}}</font></td>
+                        @else
+                        <td>{{$sign->endtime}}</td>
+                        @endif                      
+                        <td>{{$sign->realname == "" ? "-" : $sign->realname}}</td>
                         <td>{{$sign->created_at}}</td>
                         <td>
                              <div class="dropdown">
