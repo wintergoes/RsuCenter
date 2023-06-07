@@ -134,7 +134,7 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
                                             <li {!! $l2_vehflowstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="vehflowstat"><i class="bx bx-right-arrow-alt" ></i>车流量统计</a></li>
                                             <li {!! $l2_vehiclestat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="vehiclestat"><i class="bx bx-right-arrow-alt" ></i>车辆识别统计</a></li>
                                             <li {!! $l2_radareventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="radareventstat"><i class="bx bx-right-arrow-alt" ></i>雷视事件统计</a></li>                                            
-                                            <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>录入事件统计</a></li>                                            
+                                            <li {!! $l2_eventstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="eventstat"><i class="bx bx-right-arrow-alt" ></i>事件发布统计</a></li>                                            
                                             <li {!! $l2_warningrecordstat ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warningrecordstat"><i class="bx bx-right-arrow-alt" ></i>预警记录统计</a></li>                                      
 					</ul>
 				</li>
