@@ -95,12 +95,16 @@ var map = new BMapGL.Map("bdmap_container", {
 @if(count($routes) > 0)
 var latlng = coordtransform.wgs84togcj02({{$routes[0]->lng}}, {{$routes[0]->lat}});
 latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
-var point = new BMapGL.Point(latlng[0], latlng[1]);  // 创建点坐标  
+var endlatlng = coordtransform.wgs84togcj02({{$routes[count($routes)-1]->lng}}, {{$routes[count($routes)-1]->lat}});
+endlatlng = coordtransform.gcj02tobd09(endlatlng[0], endlatlng[1]);
+var centerlng = (latlng[0] + endlatlng[0]) / 2;
+var centerlat = (latlng[1] + endlatlng[1]) / 2;
+var point = new BMapGL.Point(centerlng, centerlat);  // 创建点坐标  
 @else
 showAlert();                     
 var point = new BMapGL.Point({{$default_lng}}, {{$default_lat}});  // 创建点坐标      
 @endif
-map.centerAndZoom(point, 16);                 // 初始化地图，设置中心点坐标和地图级别 
+map.centerAndZoom(point, 14);                 // 初始化地图，设置中心点坐标和地图级别 
 map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
 
