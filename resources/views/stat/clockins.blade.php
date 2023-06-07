@@ -20,10 +20,10 @@
                     
                     <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
-                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 160px">
+                        <select name="obudevice" id="obudevice" onchange="showValidDates()" class="form-select"  style="width: 260px">
                             <option class="form-control" value="-1" >不限</option>
                             @foreach($obus as $obu)
-                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
+                            <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}{{$obu->plateno == "" ? "" : " - " . $obu->plateno}}</option>
                             @endforeach
                         </select>
                     </td>                      
@@ -73,6 +73,42 @@
         @endif          
     </div>
 </div>
+
+
+@if (count($clockins) > 0)
+<div class="card mt-3" id="pagelinks_container">
+    <div class="card-body">
+    <nav aria-label="Page navigation example">						
+     <div id="pagelinks">
+    {{ $clockins->appends([ "fromdate"=>$searchfromdate,
+                "todate"=>$searchtodate, "obudevice"=>$searchobu])->links() }}  
+    </div> 
+    </nav>
+    </div>
+</div>
+
+<script>
+var objs = document.getElementById("pagelinks").getElementsByTagName("a");
+if(objs.length === 0){
+    pldiv = document.getElementById("pagelinks_container");
+    pldiv.style.visibility = 'hidden';
+}
+for(var i = 0; i < objs.length; i++){
+    objs[i].className = objs[i].className + " page-link";
+}
+
+var liobjs = document.getElementById("pagelinks").getElementsByTagName("li");
+for(var i = 0; i < liobjs.length; i++){
+    liobjs[i].className = liobjs[i].className + " page-item";
+}
+
+var spanobjs = document.getElementById("pagelinks").getElementsByTagName("span");
+for(var i = 0; i < spanobjs.length; i++){
+    spanobjs[i].className = "page-link";
+}
+//alert(objs[0].innerText);
+</script>
+@endif
 
 <script>
 fillQuickDateSelector("quickdateselector", "fromdate", "todate");

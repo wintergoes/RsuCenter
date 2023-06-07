@@ -54,7 +54,7 @@ class ClockInController extends Controller
             $clockins = $clockins->where("clockinfull.relatedid", $searchobu);
         }
         
-        $clockins = $clockins->get();
+        $clockins = $clockins->paginate(20);
 
         $obus = ObuDevice::orderBy("id", "desc")
                 ->select("id", "obuid", "plateno")
