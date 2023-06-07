@@ -1612,7 +1612,8 @@ class ApiV1Controller extends Controller
     function processShiHuaXiShu($gp, $lat, $lng){
         $addcount = 0;
         
-        if($gp < 0.5){
+        //echo $gp . "___";
+        if($gp < 0.5 && $gp > 0){
             $checksigns = TrafficSign::where("tscid", 251)
                     ->orderBy("id", "desc")
                     ->limit(1)
