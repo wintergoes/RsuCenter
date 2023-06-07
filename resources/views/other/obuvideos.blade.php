@@ -20,6 +20,7 @@
                     <td class="search_td">&nbsp;&nbsp;设备编号&nbsp;&nbsp;</td>
                     <td class="search_td">
                         <select name="obudevice" class="form-select"  style="width: 200px">
+                            <option class="form-control" value="" {{$searchobu == "" ? "selected" : ""}}>不限</option>
                             @foreach($obus as $obu)
                             <option class="form-control" value="{{$obu->id}}" {{$searchobu == $obu->id ? "selected" : ""}}>{{$obu->obuid}}</option>
                             @endforeach
