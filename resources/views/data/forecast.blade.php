@@ -51,7 +51,7 @@
                     @foreach($forecast as $fcast)
                     <tr>
                         <td>{{$fcast->id}}</td>
-                        <td>{{$fcast->weather}}</td>
+                        <td>{{$fcast->weather == "" ? "-" : $fcast->weather}}</td>
                         <td>{{$fcast->temperature}}°C</td>
                         <td>{{$fcast->templow}}°C ~ {{$fcast->temphigh}}°C</td>
                         
@@ -64,8 +64,8 @@
                         
                         <td>{{$fcast->pressure}}kPa</td>
                         <td>{{$fcast->air}}</td>
-                        <td>{{$fcast->sun_begin}}</td>
-                        <td>{{$fcast->sun_end}}</td>                         
+                        <td>{{$fcast->sun_begin == "" ? "-" : $fcast->sun_begin}}</td>
+                        <td>{{$fcast->sun_end == "" ? "-" : $fcast->sun_end}}</td>                         
                         <td>{{$fcast->created_at}}</td>
                     </tr>
                     @endforeach
