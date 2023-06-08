@@ -192,6 +192,7 @@ class VehicleFlowController extends Controller
         
         $radars = RadarDevice::orderBy("id", "asc")
                 ->select("id", "macaddrint", "devicecode")
+                ->whereraw(" devicecode='LS00110' or devicecode='LS00119' ")
                 ->get(); 
         
         $searchradar = "1";
