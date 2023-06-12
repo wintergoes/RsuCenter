@@ -62,6 +62,7 @@
     var getcoordMarker;
     
     var rsmIcon = new TIcon("/images/circle_white_border.png", new TSize(8, 8));
+    var bsmIcon = new TIcon("/images/aidalert.png", new TSize(8, 8));
     var connectIcon = new TIcon("/images/route_start.png", new TSize(8, 8))
 
 var connoverlay;
@@ -104,6 +105,32 @@ function showRsm(str){
             console.log(part.ptcId + " is not exist");
         }
     }
+}
+
+var bsmoverlays = [];
+var bsmHashMap = new HashMap();
+function showBsm(str){
+//    alert($("#rsmjson").val());
+    var bsmjson = eval("(" + str + ")");
+//    for(var i = 0; i < (bsmjson.value.participants.length); i++){
+//        alert(rsmjson.value.participants[i].lat + ", " + rsmjson.value.participants[i].lng);
+        var pos = bsmjson.value.pos;
+        var oltitle = "bsm";
+//        var oltitle = "plate: " +
+//                part.plateno + "\nptcId: " + part.ptcId +
+//                "\nspeed: " + (part.speed * 0.072) + "\n__lat: " + part.lat + "\n__lng: " + part.lng;
+        var searchol = bsmHashMap.get(bsmjson.value.id);
+        if(searchol){
+            searchol.setLngLat(new TLngLat(pos.lng, pos.lat));
+            searchol.setTitle(oltitle);
+            console.log(bsmjson.value.id + " exist");
+        } else{
+            var ol = addPoint(pos.lat, pos.lng, oltitle, false, bsmIcon);
+            bsmoverlays.push(ol);        
+            bsmHashMap.put(bsmjson.value.id, ol);
+            console.log(bsmjson.value.id + " is not exist");
+        }
+//    }
 }
 
 var datalines ;
@@ -167,6 +194,10 @@ function realPlayBack(){
     
     if(linestr.indexOf("rsm") !== -1){
         showRsm(linestr);
+    }  
+    
+    if(linestr.indexOf("bsm") !== -1){
+        showBsm(linestr);
     }     
     
     playbackinterval = $("#playbackinterval").val();

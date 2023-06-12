@@ -2064,25 +2064,30 @@ class ApiV1Controller extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         curl_close($ch);
-       
-        DB::select("truncate table obudevices"); 
+        
         $obus = json_decode($result);
-        for($i = 0; $i < count($obus->obus); $i++){
-            $newobu = new ObuDevice();
-            $newobu->id = $obus->obus[$i]->id;
-            $newobu->obuid = $obus->obus[$i]->obuid;
-            $newobu->obulocalid = $obus->obus[$i]->obulocalid;
-            $newobu->obustatus = $obus->obus[$i]->obustatus;
-            $newobu->plateno = $obus->obus[$i]->plateno;
-            $newobu->obulatitude = $obus->obus[$i]->obulatitude;
-            $newobu->obulongtitude = $obus->obus[$i]->obulongtitude;
-            $newobu->obudirection = $obus->obus[$i]->obudirection;
-            $newobu->obuhardware = $obus->obus[$i]->obuhardware;
-            $newobu->positiontime = $obus->obus[$i]->positiontime;
-            $newobu->oburemark = $obus->obus[$i]->oburemark;
-            $newobu->created_at = $obus->obus[$i]->created_at;
-            $newobu->updated_at = $obus->obus[$i]->updated_at;
-            $newobu->save();
+        if(isset($obus) && $obus->retcode == 1){
+            DB::select("truncate table obudevices");             
+            for($i = 0; $i < count($obus->obus); $i++){
+                $newobu = new ObuDevice();
+                $newobu->id = $obus->obus[$i]->id;
+                $newobu->obuid = $obus->obus[$i]->obuid;
+                $newobu->obulocalid = $obus->obus[$i]->obulocalid;
+                $newobu->obustatus = $obus->obus[$i]->obustatus;
+                $newobu->plateno = $obus->obus[$i]->plateno;
+                $newobu->obulatitude = $obus->obus[$i]->obulatitude;
+                $newobu->obulongtitude = $obus->obus[$i]->obulongtitude;
+                $newobu->obudirection = $obus->obus[$i]->obudirection;
+                $newobu->obuhardware = $obus->obus[$i]->obuhardware;
+                $newobu->positiontime = $obus->obus[$i]->positiontime;
+                $newobu->oburemark = $obus->obus[$i]->oburemark;
+                $newobu->created_at = $obus->obus[$i]->created_at;
+                $newobu->updated_at = $obus->obus[$i]->updated_at;
+                $newobu->save();
+            }
+        } else {
+            echo "获取远程服务器上的obu列表失败！";
+            return;
         }
         
         echo "更新了 " . count($obus->obus) . " 个OBU!</br>";
