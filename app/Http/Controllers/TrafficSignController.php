@@ -39,8 +39,14 @@ class TrafficSignController extends Controller
         $tscs = TrafficSignClass::orderBy("id", "asc")
                 ->get();
         
+        $rsudevices = DB::select("select * from "
+                . " (select device_id as device_id1,max(con_datetime) as con_datetime1 from device_info_connect group by device_id) as connmax "
+                . " left join device_info_connect as conn "
+                . " on conn.device_id=connmax.device_id1 and conn.con_datetime=connmax.con_datetime1 ");
+        
         return view("/road/addtrafficsign", [
-            "tscs"=>$tscs
+            "tscs"=>$tscs,
+            "rsudevices"=>$rsudevices
         ]);
     }
     

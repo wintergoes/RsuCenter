@@ -48,6 +48,7 @@ function getPosition(flag){
     document.getElementById("bdmap_row").style.display = '';
     document.getElementById("bdmap_ctrl_row").style.visibility = 'visible';
     document.getElementById("bdmap_ctrl_row").style.display = '';    
+    getRsuTimer = setTimeout("showRsuOnMap()", 1000);
 }
 
 function onSelectTecRoot(){
@@ -341,6 +342,53 @@ map.addEventListener("rightclick", function(e){
         }
     });  
 });
+
+
+var rsuIcon = new BMap.Icon("/images/dashboard/rsu_device.png", new BMap.Size(24, 24));
+var getRsuTimer ;
+var rsumarkers = [];
+function showRsuOnMap(tscid, tsname, lng, lat){
+    $.ajax({
+        type: "GET",
+        url: "getrsuonline",
+        dataType: "json",
+        success: function (data) {
+            for(var i = 0; i < data.rsus.length; i++){
+                (function(i){
+                    rsuobj = data.rsus[i];
+
+                    var latlng = coordtransform.wgs84togcj02(rsuobj.RSU_lng, rsuobj.RSU_lat);
+                    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);
+                    var tmplng = latlng[0];
+                    var tmplat = latlng[1];      
+
+//                    console.log("rsu: " + rsuobj.device_id + ", lat: " + tmplat + ", lng: " + tmplng);
+                    var point = new BMap.Point(tmplng, tmplat);  // 创建点坐标  
+                    var marker = new BMap.Marker(point, {
+                        icon: rsuIcon,
+                        offset: new BMap.Size(0, -10)
+                    });
+                    
+                    var label = new BMap.Label(rsuobj.device_id, {
+                        position: point,
+                    });
+                    marker.setLabel(label);
+
+                    marker.setTitle(rsuobj.log_radom + ", " + rsuobj.device_id);
+                    rsumarkers.push(marker);                
+
+                    // 将标注添加到地图
+                    map.addOverlay(marker);
+                })(i);
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //setTimeout('updateBdMapSummary()', 10000);    
+        }
+    });
+    
+    getRsuTimer = setTimeout("showRsuOnMap()", 5000);
+}
 
 function onBdmapChange(obj){
     if($(obj).val() === "0"){
