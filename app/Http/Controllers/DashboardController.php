@@ -82,6 +82,44 @@ class DashboardController extends Controller
             }
 
             $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
+                    . " left join vehdetection_snap vf on vf.create_date between d.ddate and date_add(d.ddate, interval 1 day) "
+                    . " where  d.ddate>=date_add(current_date, interval " . $reqcount . " day) and d.ddate< date_add(current_date(), interval 1 day) "
+                    . " group by d.ddate " ;
+
+            $arr = DB::select($sqlstr);
+            $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);
+        } else {
+            $sqlstr = " select count(vf.id) as vehcount,cast(vf.create_hour as signed int)as vfhour from  vehdetection_snap vf "
+                    . " where vf.macaddr=168161163999763 and  vf.create_date=current_date() "
+                    . " group by vf.create_hour " ;
+
+            $arr = DB::select($sqlstr);
+            $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
+        }
+        return json_encode($arr_vehflows);
+    }    
+    
+    function dashboardVehFlowOld(Request $request){
+        $reqcount = $request->reqcount;
+        if($reqcount == ""){
+            $reqcount = 7;
+        }
+        
+        $searchtodate = date('Y-m-d',time());
+        
+        if($reqcount != 0){
+            $reqcount = $reqcount - 1;
+            $reqcount = 0 - $reqcount;
+            $searchfromdate = "";
+            if($request->has("fromdate")){
+                $searchfromdate = $request->fromdate;
+            }
+
+            if($searchfromdate == ""){
+                $searchfromdate = date('Y-m-d',strtotime("-" . $reqcount . " day"));
+            }
+
+            $sqlstr = " select count(vf.id) as vehcount,DATE_FORMAT(d.ddate, '%m.%d') as vfdate from tbldates d " 
                     . " left join vehicleflow vf on vf.created_at between d.ddate and date_add(d.ddate, interval 1 day) "
                     . " where  d.ddate>=date_add(current_date, interval " . $reqcount . " day) and d.ddate< date_add(current_date(), interval 1 day) "
                     . " group by d.ddate " ;
