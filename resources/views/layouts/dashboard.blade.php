@@ -1811,7 +1811,7 @@ function updateBdMapSummary(){
                 });
                 
                 if(rsuobj.score < 80){
-                    var label = new BMapGL.Label(rsuobj.devicecode + " <a href='devices' target='_blank'><font color='#d77f43'>设备异常</font></a>", {       // 创建文本标注
+                    var label = new BMapGL.Label(rsuobj.devicecode , {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
                         offset: new BMapGL.Size(-60, 0)           // 设置标注的偏移量
                     })    
