@@ -56,9 +56,9 @@
                         <td >{{$ci->obuid}}</td>
                         <td >{{$ci->plateno == "" ? "-" : $ci->plateno}}</td>
                         <td>{{$ci->cistarttime}}</td>
-                        <td>{{$ci->ciendtime == "" ? "-" : $ci->ciendtime}}</td>                   
-                        <td><a href="oburoute?obudevice={{$ci->obuintid}}&fromdate={{substr($ci->cistarttime, 0, 10)}}&locationtype=1&fromtime={{substr($ci->cistarttime, 11, 5)}}&totime={{substr($ci->ciendtime, 11, 5)}}" target="_blank">运行轨迹</a></td>
-                        <td><a href="obuvideos?obudevice={{$ci->obuintid}}&fromdate={{date('Y-m-d H:i:s', strtotime($ci->cistarttime . " -10 minute"))}}&locationtype=1&todate={{date('Y-m-d H:i:s', strtotime($ci->ciendtime . " 10 minute"))}}" target="_blank">行车视频</a></td>
+                        <td>{!! $ci->ciendtime == "" ? "<font color='gray'>" . $ci->ciendtime1 . "</font>" : $ci->ciendtime !!}</td>                   
+                        <td><a href="oburoute?obudevice={{$ci->obuintid}}&fromdate={{substr($ci->cistarttime, 0, 10)}}&locationtype=1&fromtime={{substr($ci->cistarttime, 11, 5)}}&totime={{substr(($ci->ciendtime == "" ? $ci->ciendtime1 : $ci->ciendtime), 11, 5)}}" target="_blank">运行轨迹</a></td>
+                        <td><a href="obuvideos?obudevice={{$ci->obuintid}}&fromdate={{date('Y-m-d H:i:s', strtotime($ci->cistarttime . " -10 minute"))}}&locationtype=1&todate={{date('Y-m-d H:i:s', strtotime(($ci->ciendtime == "" ? $ci->ciendtime1 : $ci->ciendtime) . " 10 minute"))}}" target="_blank">行车视频</a></td>
                     </tr>
                     @endforeach
                 </tbody>

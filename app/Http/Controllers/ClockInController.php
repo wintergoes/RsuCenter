@@ -38,7 +38,7 @@ class ClockInController extends Controller
         }
         
         $clockins = ClockInFull::orderBy("clockinfull.id", "desc")
-                ->select("clockinfull.id", "clockinfull.cistarttime", "clockinfull.ciendtime", "od.plateno",
+                ->select("clockinfull.id", "clockinfull.cistarttime", "clockinfull.ciendtime", DB::raw("ifnull(ciendtime, date_add(cistarttime, interval 30 minute)) as ciendtime1"), "od.plateno",
                         "od.obuid", "od.id as obuintid")
                 ->leftjoin("obudevices as od", "od.id", "=", "clockinfull.relatedid");
   
