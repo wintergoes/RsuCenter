@@ -223,6 +223,7 @@ Route::any("deletegps2directiondata", "test\Gps2DirctionController@deleteData");
 
 //***************************工具*****************************************
 Route::any("/dataplayback", "ToolsController@dataPlayback");
+Route::any("/exportvehflow", "ToolsController@exportVehFlow");
 
 Route::any("/mqtttest", function(){
     return view("/other/mqtttest");
