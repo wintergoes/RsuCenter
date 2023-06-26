@@ -1459,7 +1459,7 @@ class ApiV1Controller extends Controller
 //        echo $res;
 //        curl_close($curl); 
         
-        $this->reqHnyForecast($request, "node61", 120.000000, 36.000000);
+        $this->reqHnyForecast($request, "node62", 120.000000, 36.000000);
     }
     
     function reqHnyForecast(Request $request, $devname, $lng, $lat){
@@ -1518,6 +1518,32 @@ class ApiV1Controller extends Controller
             return;
         }
         
+        $windpower = 1;
+        $windspeed = $resjson->list[0]->sm;
+        if($windspeed >= 1 && $windspeed < 3){
+            $windpower = 2;
+        } else if($windspeed >= 3 && $windspeed < 5){
+            $windpower = 3;
+        }else if($windspeed >= 5 && $windspeed < 7){
+            $windpower = 4;
+        }else if($windspeed >= 7 && $windspeed < 10){
+            $windpower = 5;
+        }else if($windspeed >= 10 && $windspeed < 13){
+            $windpower = 6;
+        }else if($windspeed >= 13 && $windspeed < 17){
+            $windpower = 7;
+        }else if($windspeed >= 17 && $windspeed < 21){
+            $windpower = 8;
+        }else if($windspeed >= 21 && $windspeed < 24){
+            $windpower = 9;
+        }else if($windspeed >= 24 && $windspeed < 28){
+            $windpower = 10;
+        }else if($windspeed >= 28 && $windspeed < 33){
+            $windpower = 11;
+        }else if($windspeed >=  33){
+            $windpower = 12;
+        }
+        
         $forecast = new Forecast();
 //        $forecast->weather = $resjson->data->now->detail->weather;
 //        $forecast->weathercode = $resjson->data->now->detail->weather_code;
@@ -1526,12 +1552,13 @@ class ApiV1Controller extends Controller
         $forecast->pressure = $resjson->list[0]->pa;
 //        $forecast->temphigh = $resjson->data->now->city->day_air_temperature;
 //        $forecast->templow = $resjson->data->now->city->night_air_temperature;
-//        $forecast->rainfall =  $resjson->list[0]->rc;
+        $forecast->rainfall =  $resjson->list[0]->rc;
         $forecast->humidity =  $resjson->list[0]->ua;
-//        $forecast->windpower = str_replace("级", "", $resjson->data->now->detail->wind_power);
+        $forecast->windpower = $windpower;
         $forecast->winddirection = $resjson->list[0]->dm;
         $forecast->windspeed = $resjson->list[0]->sm;
         $forecast->visibility = $resjson->list[0]->vim;
+        $forecast->wetroad = $resjson->list[0]->gp;
 //        $forecast->air_pm25 = $resjson->list[0]->pm25;
 //        $forecast->sun_begin = $resjson->data->now->detail->sun_begin;
 //        $forecast->sun_end = $resjson->data->now->detail->sun_end;
