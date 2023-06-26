@@ -32,18 +32,15 @@
                 <thead>
                     <tr role="row">
                         <th >ID</th>
-                        <th >天气</th>
-                        <th >实时温度</th>
-                        <th >当日温度</th>
-                        <th >湿度</th>
+                        <th >温度°C</th>
+                        <th >湿度%RH</th>
                         <th >风力</th>
                         <th >风向</th>
-                        <th >风速</th>
-                        <th >能见度</th>
-                        <th >气压</th>
-                        <th >空气质量</th>
-                        <th >日出时间</th>
-                        <th >日落时间</th>
+                        <th >风速m/s</th>
+                        <th >能见度m</th>
+                        <th >大气压hPa</th>
+                        <th >降雨量mm</th>
+                        <th >湿滑系数</th>
                         <th >检测时间</th>
                     </tr>
                 </thead>            
@@ -51,9 +48,7 @@
                     @foreach($forecast as $fcast)
                     <tr>
                         <td>{{$fcast->id}}</td>
-                        <td>{{$fcast->weather == "" ? "-" : $fcast->weather}}</td>
                         <td>{{$fcast->temperature}}°C</td>
-                        <td>{{$fcast->templow}}°C ~ {{$fcast->temphigh}}°C</td>
                         
                         <td>{{$fcast->humidity}}</td>
                         <td>{{$fcast->windpower}}级</td>
@@ -62,10 +57,9 @@
                         
                         <td>{{$fcast->visibility}}</td>
                         
-                        <td>{{$fcast->pressure}}kPa</td>
-                        <td>{{$fcast->air}}</td>
-                        <td>{{$fcast->sun_begin == "" ? "-" : $fcast->sun_begin}}</td>
-                        <td>{{$fcast->sun_end == "" ? "-" : $fcast->sun_end}}</td>                         
+                        <td>{{$fcast->pressure}}</td>     
+                        <td>{{$fcast->rainfall}}</td>   
+                        <td>{{$fcast->wetroad}}</td>   
                         <td>{{$fcast->created_at}}</td>
                     </tr>
                     @endforeach

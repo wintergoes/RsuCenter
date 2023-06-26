@@ -24,12 +24,13 @@ class CreateForecastTable extends Migration
             $table->float("temphigh")->default(0)->nullable();
             $table->float("templow")->default(0)->nullable();
             $table->float("rainfall")->default(0)->nullable();
-            $table->integer("humidity")->default(0)->nullable();
+            $table->float("humidity")->default(0)->nullable();
             $table->integer("windpower")->default(0)->nullable();
             $table->string("winddirection")->default("")->nullable();
             $table->string("windspeed")->default("")->nullable();
             $table->string("visibility", 20)->default("")->nullable();
-            $table->integer("pressure")->default(0)->nullable();
+            $table->float("pressure")->default(0)->nullable();
+            $table->float("wetroad")->default(0)->nullable();
             $table->integer("air")->default(0)->nullable();
             $table->integer("air_pm25")->default(0)->nullable();
             $table->string("air_level")->default("")->nullable();
