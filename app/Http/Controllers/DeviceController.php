@@ -116,7 +116,7 @@ class DeviceController extends Controller{
     }
     
     function getRsuOnline(Request $request){
-        $rsus = DB::select("select * from device_info_connect where Is_online=1");
+        $rsus = DB::select("select * from device_info_connect where Is_online=1 order by device_id, con_datetime desc");
         
         $arr = array("retcode"=>ret_success, "rsus"=>$rsus);
         return json_encode($arr);
