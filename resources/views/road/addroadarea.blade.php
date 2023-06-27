@@ -94,6 +94,7 @@ function submitData(){
                     <option class="form-control" value="3" {{isset($area) && $area->areatype == 3 ? "selected" : ""}}>分流路口</option>
                     <option class="form-control" value="4" {{isset($area) && $area->areatype == 4 ? "selected" : ""}}>道路入口</option>
                     <option class="form-control" value="5" {{isset($area) && $area->areatype == 5 ? "selected" : ""}}>道路出口</option>
+                    <option class="form-control" value="6" {{isset($area) && $area->areatype == 6 ? "selected" : ""}}>提醒区域</option>
                 </select>
             </div>                                   
         </div>
