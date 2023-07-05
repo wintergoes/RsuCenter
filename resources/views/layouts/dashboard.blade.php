@@ -116,7 +116,15 @@
             /*background-color: #0B2F49;*/
             font-weight: lighter;  
             height: 30px;
-        }        
+        } 
+        
+        .tr_realtime_count_stat_row{
+            /*background-color: #0B2F49;*/
+            margin-left: 6dp;
+            text-align: left;
+            font-weight: lighter;  
+            height: 40px;
+        }         
         
         .tr_content{
             background-color: #0B2F49;
@@ -339,6 +347,24 @@
                             </div>
                             <div >
                                 <table id="tbl_realtime_vehicles">
+
+                                </table>
+                            </div> 
+                        </div>
+                    </div>
+                </td>     
+                
+                <td>
+                    <div style='z-index: 10; '>
+                        <div class="item_container" style="width: 360px; height: 260px; 
+                             background: url('images/dashboard/device_background.png') no-repeat;
+                                 background-size:100% 100%; ">
+                            <div>
+                                <span>收费站实时数量</span>
+                                <span class="item_title_suffix"><img width="150dp" height="21dp" src="images/dashboard/title_suffix.png"/></span>
+                            </div>
+                            <div >
+                                <table id="tbl_realtime_count_stat" style="font-size: 14px;">
 
                                 </table>
                             </div> 
@@ -2652,6 +2678,31 @@ function showVehicles(){
     }); 
 }
 
+function showVehiclesCountStat(){   
+    $.getJSON("realtimecountstat.html?t=" + Math.round(new Date()),function(data){
+        var tbl = document.getElementById("tbl_realtime_count_stat");
+        var rows = tbl.rows; //获取表格的行数
+
+        for (var i = rows.length - 1; i >= 0 ; i--) {
+            tbl.deleteRow(i);    
+        }
+
+        var tr=tbl.insertRow(i);
+        tr.className = "tr_realtime_count_stat_row";
+        var cell0=tr.insertCell(0);
+        cell0.innerHTML = "红岛南收费站出口";
+        cell0.width = 260;
+        var cell1=tr.insertCell(1);
+        cell1.innerHTML = data["LS00119"];
+        cell1.width = 80;
+              
+        setTimeout("showVehiclesCountStat()", 500);
+    }).fail( function(d,textStatus,error) {
+        setTimeout("showVehiclesCountStat()", 500);
+        console.error("getJSON Failed, showVehiclesCountStat, status: " + textStatus + ",error: "+error)
+    }); 
+}
+
 function showDataSummary(){
     $.ajaxSetup({ 
         headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
@@ -2775,7 +2826,8 @@ function refreshAll(){
     showRadarAidEvents();
     showVehFlowChart();
     getWeekDay();
-    showDate();    
+    showDate();
+    showVehiclesCountStat();
     showDataSummary();
     updateForecast();
 }
