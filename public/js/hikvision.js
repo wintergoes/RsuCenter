@@ -488,23 +488,23 @@ function fillAidEventSelect(selecterid, selectedAidEvent){
     $("#" + selecterid).append(optstr);
     optstr = "<option value='pedestrian' " + (selectedAidEvent === "pedestrian" ? "selected" : "") + ">行人检测</option>";
     $("#" + selecterid).append(optstr);
-    optstr = "<option value='smoke' " + (selectedAidEvent === "smoke" ? "selected" : "") + ">烟雾</option>";
-    $("#" + selecterid).append(optstr);
+//    optstr = "<option value='smoke' " + (selectedAidEvent === "smoke" ? "selected" : "") + ">烟雾</option>";
+//    $("#" + selecterid).append(optstr);
     optstr = "<option value='speed' " + (selectedAidEvent === "speed" ? "selected" : "") + ">车辆超速</option>";
     $("#" + selecterid).append(optstr);
     optstr = "<option value='lowSpeed' " + (selectedAidEvent === "lowSpeed" ? "selected" : "") + ">低速行驶</option>";
     $("#" + selecterid).append(optstr);     
-    optstr = "<option value='trafficAccident' " + (selectedAidEvent === "trafficAccident" ? "selected" : "") + ">交通事故</option>";
-    $("#" + selecterid).append(optstr);
+//    optstr = "<option value='trafficAccident' " + (selectedAidEvent === "trafficAccident" ? "selected" : "") + ">交通事故</option>";
+//    $("#" + selecterid).append(optstr);
     optstr = "<option value='wrongDirection' " + (selectedAidEvent === "wrongDirection" ? "selected" : "") + ">逆行</option>";
     $("#" + selecterid).append(optstr);
     optstr = "<option value='singleVehicleBreakdown' " + (selectedAidEvent === "singleVehicleBreakdown" ? "selected" : "") + ">单车抛锚</option>";
     $("#" + selecterid).append(optstr);
     
-    optstr = "<option value='lowVisibility' " + (selectedAidEvent === "lowVisibility" ? "selected" : "") + ">低能见度</option>";
-    $("#" + selecterid).append(optstr);
-    optstr = "<option value='fogDetection' " + (selectedAidEvent === "fogDetection" ? "selected" : "") + ">浓雾</option>";
-    $("#" + selecterid).append(optstr);
+//    optstr = "<option value='lowVisibility' " + (selectedAidEvent === "lowVisibility" ? "selected" : "") + ">低能见度</option>";
+//    $("#" + selecterid).append(optstr);
+//    optstr = "<option value='fogDetection' " + (selectedAidEvent === "fogDetection" ? "selected" : "") + ">浓雾</option>";
+//    $("#" + selecterid).append(optstr);
     optstr = "<option value='construction' " + (selectedAidEvent === "construction" ? "selected" : "") + ">道路施工</option>";
     $("#" + selecterid).append(optstr);        
 }
