@@ -214,7 +214,22 @@
             font-size: 30px;
             font-family: "Verdana";
             font-weight: bold;
-        }        
+        }
+        
+        #tbl_vehicles{
+            text-align: left;
+            font-size: 15px;
+        }
+        
+        .td_right{
+            text-align: right;
+        }
+        
+        .obu_vehicle_title{
+            font-size: 15px;
+            font-weight: bold;
+            font-color: #000000;
+        }
     </style>        
 </head>
 
@@ -337,6 +352,48 @@
                 </td>
                 
                 <td>
+                    <div style='z-index: 10; display: none;' id="obuVehicleTable">
+                        <div class="item_container" style="width: 430px; height: 260px; 
+                             background: url('images/dashboard/device_background.png') no-repeat;
+                                 background-size:100% 100%; ">
+                            <div>
+                                <span>车辆管理</span>
+                                <span class="item_title_suffix"><img src="images/dashboard/title_suffix.png"/></span>
+                            </div>
+                            <div >
+                                <table id="tbl_vehicles">
+                                    <tr>
+                                        <td width="250px" text-align="left">鲁B12345</td>
+                                        <td width="80px">30km/h</td>
+                                        <td width="120px" class="td_right"><button type="button" class="btn btn-transparent" style="font-size: 15px;text-decoration:underline; color:#2EA1FF;padding: 0px;" data-bs-toggle="modal" onclick="showObuVehicle();" data-bs-target="#obuVehicleInfoModal">查看</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="250px" text-align="left">鲁B12345</td>
+                                        <td width="80px">30km/h</td>
+                                        <td width="120px" class="td_right"><button type="button" class="btn btn-transparent" style="font-size: 15px;text-decoration:underline; color:#2EA1FF;padding: 0px;" data-bs-toggle="modal" onclick="showObuVehicle();" data-bs-target="#obuVehicleInfoModal">查看</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="250px" text-align="left">鲁B12345</td>
+                                        <td width="80px">30km/h</td>
+                                        <td width="120px" class="td_right"><button type="button" class="btn btn-transparent" style="font-size: 15px;text-decoration:underline; color:#2EA1FF;padding: 0px;" data-bs-toggle="modal" onclick="showObuVehicle();" data-bs-target="#obuVehicleInfoModal">查看</button></td>
+                                    </tr>             
+                                    <tr>
+                                        <td width="250px" text-align="left">鲁B12345</td>
+                                        <td width="80px">30km/h</td>
+                                        <td width="120px" class="td_right"><button type="button" class="btn btn-transparent" style="font-size: 15px;text-decoration:underline; color:#2EA1FF;padding: 0px;" data-bs-toggle="modal" onclick="showObuVehicle();" data-bs-target="#obuVehicleInfoModal">查看</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="250px" text-align="left">鲁B12345</td>
+                                        <td width="80px">30km/h</td>
+                                        <td width="120px" class="td_right"><button type="button" class="btn btn-transparent" style="font-size: 15px;text-decoration:underline; color:#2EA1FF;padding: 0px;" data-bs-toggle="modal" onclick="showObuVehicle();" data-bs-target="#obuVehicleInfoModal">查看</button></td>
+                                    </tr>                                    
+                                </table>
+                            </div> 
+                        </div>
+                    </div>
+                </td>                
+                
+                <td>
                     <div style='z-index: 10; '>
                         <div class="item_container" style="width: 430px; height: 260px; 
                              background: url('images/dashboard/device_background.png') no-repeat;
@@ -375,6 +432,63 @@
         </table>    
     </div>
 </div>
+    
+            <div class="modal fade" id="obuVehicleInfoModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered" >
+                            <div class="modal-content bg-light" >
+                                <div class="card radius-6 border-1 border-grey111111">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <h6 class="mb-0 card-title" id="map_title">
+                                                    <i class="bx bx-info-circle">
+                                                    </i>
+                                                    OBU00001 - 鲁B12345
+                                                </h6>
+                                            </div> 
+                                        </div>
+                                        <div class="col-sm-12" id="" style="height: 360px;">
+                                            <table style="color: black; text-align: left;">
+                                                <tr>
+                                                    <td class="obu_vehicle_title">实时视频</td>
+                                                    <td width="50px"></td>
+                                                    <td class="obu_vehicle_title">车辆状态</td>
+                                                </tr>                                                
+                                                <tr>
+                                                    <td width="300px">
+                                                        <video muted="muted"  id='obu_video_000' width="500px" loop="loop">
+                                                            <source src="video_230705194050.3gp" type="video/mp4" >
+                                                        </video>                                                        
+                                                    </td>
+                                                    <td ></td>
+                                                    <td style="text-align: left;  vertical-align: top;">
+                                                        <table>
+                                                            <tr>
+                                                                <td style="text-align: left;">实时车速：</td>
+                                                                <td>36km/h</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="text-align: left;">平均车速：</td>
+                                                                <td>30km/h</td>
+                                                            </tr>   
+                                                            <tr>
+                                                                <td style="text-align: left;">打卡时间：</td>
+                                                                <td>10:23:00</td>
+                                                            </tr>   
+                                                            <tr>
+                                                                <td style="text-align: left;">运行时长：</td>
+                                                                <td>1h30min</td>
+                                                            </tr>                                                               
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>    
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </div>    
     
 <script>
 var radarVideoMap = new HashMap();
@@ -2834,6 +2948,15 @@ function refreshAll(){
 refreshAll();
 showVehicles();
 updateBdMapSummary();
+
+if(getQueryVariable("showObuVehicleTable") === "1"){
+    document.getElementById("obuVehicleTable").style.visibility = "visible";
+    document.getElementById("obuVehicleTable").style.display = "";    
+}
+
+function showObuVehicle(){
+//    alert('showObuVehicle');
+}
 //showTestVehs();
 </script>
 </body>
