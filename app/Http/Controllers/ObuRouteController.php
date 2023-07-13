@@ -71,6 +71,7 @@ class ObuRouteController extends Controller
                 ->select("lat", "lng", "locationtype", "flag")
                 ->where("created_at", ">=", $searchfromdate . " " . $searchfromtime . ":00")
                 ->where("created_at", "<=", $searchfromdate . " " . $searchtotime . ":59")
+                ->where("flag", "<>", "1")
                 ->where("obuid", $searchobu);
         
         if($searchlocationtype != "-1"){
@@ -132,6 +133,7 @@ class ObuRouteController extends Controller
                 ->select("lat", "lng", "locationtype", "flag")
                 ->where("created_at", ">=", $searchfromdate . " " . $searchfromtime . ":00")
                 ->where("created_at", "<=", $searchfromdate . " " . $searchtotime . ":59")
+                ->where("flag", "<>", "1")
                 ->where("obuid", $searchobu);
         
         if($searchlocationtype != "-1"){

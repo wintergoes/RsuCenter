@@ -28,7 +28,7 @@ class CreateOburoutedetailTable extends Migration
             $table->timestamp("loctime", 3);
             $table->timestamps();
             
-            $table->index(["routeid", "obuid", "managerid", "locationtype", "loctime"]);
+            $table->index(["routeid", "obuid", "managerid", "locationtype", "loctime", "flag"]);
         });
     }
 
