@@ -306,4 +306,35 @@ class DashboardController extends Controller
         $arr = array("retcode"=>ret_success, "forecast"=>$forecasts[0]);
         return json_encode($arr);
     }
+    
+    function obuDashboard(Request $request){
+        $obus = ObuDevice::orderBy("id", "desc")
+            ->limit(6)
+            ->get();
+        
+        $radars = RadarDevice::orderBy("id", "desc")
+                ->get();
+        
+        $default_lat = env("dashboard_default_lat", 36.183753);
+        $default_lng = env("dashboard_default_lng", 120.339217);
+        $default_zoom = env("dashboard_map_defaultzoom", 15); 
+        
+        if($default_lat == ""){
+            $default_lat = env("home_default_lat", 36.183753);
+        }
+        if($default_lng == ""){
+            $default_lng = env("home_default_lng", 120.339217);
+        }
+        if($default_zoom == ""){
+            $default_zoom = env("home_map_defaultzoom", 15);
+        }
+        
+        return view("/layouts/obudashboard", [
+            'obus'=>$obus,
+            'radars'=>$radars,
+            "default_lat"=>$default_lat,
+            "default_lng"=>$default_lng,
+            "default_zoom"=>$default_zoom,            
+        ]);
+    }    
 }

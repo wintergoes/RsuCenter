@@ -210,6 +210,8 @@ Route::any("/dashboardgetnewobuvideo", "DashboardController@getObuNewVideo");
 Route::any('/dashboardbdmapsummary', 'DashboardController@bdmapSummary');
 Route::any('/dashboardforecast', 'DashboardController@getForecast');
 
+Route::get('/obudashboard', 'DashboardController@obuDashboard');
+
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
 Route::any("/getroadsbycoord", "ManagerApiController@getRoadsByCoord");
