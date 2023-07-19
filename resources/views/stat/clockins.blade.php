@@ -45,6 +45,8 @@
                         <th >车牌号</th>
                         <th >上车时间</th>
                         <th >下车时间</th>
+                        <th >时长</th>
+                        <!--<th >距离</th>-->
                         <th >运行轨迹</th>
                         <th >行车视频</th>
                     </tr>
@@ -57,6 +59,11 @@
                         <td >{{$ci->plateno == "" ? "-" : $ci->plateno}}</td>
                         <td>{{$ci->cistarttime}}</td>
                         <td>{!! $ci->ciendtime == "" ? "<font color='gray'>" . $ci->ciendtime1 . "</font>" : $ci->ciendtime !!}</td>                   
+                        <td id="citimesecond{{$ci->id}}"></td>
+                        <!--<td >{{$ci->cidistance > 1000 ? number_format($ci->cidistance / 1000, 2) . "km" : $ci->cidistance . "m"}}</td>-->
+                        <script>
+                            $("#citimesecond{{$ci->id}}").text(secondsToHMS({{$ci->citimeseconds}}));
+                        </script>
                         <td><a href="oburoute?obudevice={{$ci->obuintid}}&fromdate={{substr($ci->cistarttime, 0, 10)}}&locationtype=1&fromtime={{substr($ci->cistarttime, 11, 5)}}&totime={{substr(($ci->ciendtime == "" ? $ci->ciendtime1 : $ci->ciendtime), 11, 5)}}" target="_blank">运行轨迹</a></td>
                         <td><a href="obuvideos?obudevice={{$ci->obuintid}}&fromdate={{date('Y-m-d H:i:s', strtotime($ci->cistarttime . " -10 minute"))}}&locationtype=1&todate={{date('Y-m-d H:i:s', strtotime(($ci->ciendtime == "" ? $ci->ciendtime1 : $ci->ciendtime) . " 10 minute"))}}" target="_blank">行车视频</a></td>
                     </tr>

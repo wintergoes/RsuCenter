@@ -25,7 +25,8 @@ class CreateClockinFullTbl extends Migration
             $table->timestamp("ciendtime")->nullable();
             $table->double("ciendlat")->default(0);
             $table->double("ciendlng")->default(0);
-            $table->double("ciendalt")->default(0);            
+            $table->double("ciendalt")->default(0); 
+            $table->integer("cidistance")->default(0);
             $table->timestamps();
             
             $table->index(["userid", "cisource"]);
