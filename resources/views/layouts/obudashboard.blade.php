@@ -2544,6 +2544,7 @@ var rsuIcon = new BMapGL.Icon("/images/dashboard/rsu_device.png", new BMapGL.Siz
 var rsuErrorIcon = new BMapGL.Icon("/images/dashboard/rsu_device_error.png", new BMapGL.Size(24, 24));
 var obuIcon = new BMapGL.Icon("/images/caricon_red.png", new BMapGL.Size(24, 24));
 var radarIcon = new BMapGL.Icon("/images/dashboard/radarvision.png", new BMapGL.Size(24, 24));
+var radarRightIcon = new BMapGL.Icon("/images/dashboard/radarvision_right.png", new BMapGL.Size(24, 24));
 var alertStartIcon = new BMapGL.Icon("/images/obu_alertstart.png", new BMapGL.Size(24, 24));
 var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
 var maxspeedIcon = new BMapGL.Icon("/images/dashboard/maxspeed.png", new BMapGL.Size(32, 32));
@@ -2679,17 +2680,24 @@ function updateBdMapSummary(){
                 }
                 
                 var radarYoffset = -10;
+                var radarXoffset = 0;
                 var labelYoffset = -110;
-                if(radarobj.devicecode === 'LS00114' || radarobj.devicecode === 'LS00111'){
-                    radarYoffset = 90;
-                    labelYoffset = 100;
+                if(radarobj.devicecode === 'LS00115' || radarobj.devicecode === 'LS00112'){
+                    radarXoffset = 100;
                 }
                 var marker = radarDeviceMap.get(radarobj.id);
                 if(marker === null){
-                    marker = new BMapGL.Marker(pt, {
-                        icon: radarIcon,
-                        offset: new BMapGL.Size(0, radarYoffset)
-                    });                     
+                    if(radarobj.devicecode === 'LS00112' || radarobj.devicecode === 'LS00115'){
+                        marker = new BMapGL.Marker(pt, {
+                            icon: radarRightIcon,
+                            offset: new BMapGL.Size(radarXoffset, radarYoffset)
+                        });                         
+                    } else {
+                        marker = new BMapGL.Marker(pt, {
+                            icon: radarIcon,
+                            offset: new BMapGL.Size(radarXoffset, radarYoffset)
+                        }); 
+                    }
                 }
                 
                 marker.setTitle(radarobj.devicecode);
