@@ -188,7 +188,7 @@
             font-size: 36px; 
             color: white; 
             /*text-align: center;*/ 
-            background: url('images/dashboard/title_background.png') repeat-x center; 
+            background: url('images/dashboard/obu_title_background.png') repeat-x center; 
     
             padding-left: 10px;
             padding-top: 6px;
@@ -327,462 +327,65 @@ var stylejson = [{
     "featureType": "land",
     "elementType": "geometry",
     "stylers": {
-        "visibility": "on",
-        "color": "#091220ff"
+        "color": "#f5f6f7ff"
     }
 }, {
     "featureType": "water",
     "elementType": "geometry",
     "stylers": {
-        "visibility": "on",
-        "color": "#113549ff"
+        "color": "#c4d7f5ff"
     }
 }, {
     "featureType": "green",
     "elementType": "geometry",
     "stylers": {
-        "visibility": "on",
-        "color": "#0e1b30ff"
-    }
-}, {
-    "featureType": "building",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "building",
-    "elementType": "geometry.topfill",
-    "stylers": {
-        "color": "#113549ff"
-    }
-}, {
-    "featureType": "building",
-    "elementType": "geometry.sidefill",
-    "stylers": {
-        "color": "#143e56ff"
-    }
-}, {
-    "featureType": "building",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#dadada00"
-    }
-}, {
-    "featureType": "subwaystation",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "color": "#113549B2"
-    }
-}, {
-    "featureType": "education",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "medical",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "scenicspots",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "color": "#12223dff"
+        "color": "#dcf2d5ff"
     }
 }, {
     "featureType": "highway",
     "elementType": "geometry",
     "stylers": {
+        "visibility": "on",
+        "weight": 40,
+        "color": "#ffe59eff"
+    }
+}, {
+    "featureType": "highway",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#ffe59eff"
+    }
+}, {
+    "featureType": "highway",
+    "elementType": "geometry.stroke",
+    "stylers": {
+        "color": "#f5d48cff"
+    }
+}, {
+    "featureType": "nationalway",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#fff6ccff"
+    }
+}, {
+    "featureType": "provincialway",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#fff6ccff"
+    }
+}, {
+    "featureType": "cityhighway",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#fff6ccff"
+    }
+}, {
+    "featureType": "arterial",
+    "elementType": "geometry.fill",
+    "stylers": {
+        "color": "#fff6ccff",
         "visibility": "on",
         "weight": 40
-    }
-}, {
-    "featureType": "highway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "highway",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#fed66900"
-    }
-}, {
-    "featureType": "highway",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "highway",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "highway",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "highway",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "arterial",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "weight": 40
-    }
-}, {
-    "featureType": "arterial",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "arterial",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffeebb00"
-    }
-}, {
-    "featureType": "arterial",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "arterial",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "arterial",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "local",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "weight": "1"
-    }
-}, {
-    "featureType": "local",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "local",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "local",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "local",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#979c9aff"
-    }
-}, {
-    "featureType": "local",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffffff"
-    }
-}, {
-    "featureType": "railway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "subway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off",
-        "weight": "1"
-    }
-}, {
-    "featureType": "subway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#d8d8d8ff"
-    }
-}, {
-    "featureType": "subway",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "subway",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "subway",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#979c9aff"
-    }
-}, {
-    "featureType": "subway",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffffff"
-    }
-}, {
-    "featureType": "continent",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "continent",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "continent",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "continent",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "city",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "city",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "city",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "city",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "town",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "town",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "town",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#454d50ff"
-    }
-}, {
-    "featureType": "town",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffffff"
-    }
-}, {
-    "featureType": "road",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "poilabel",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "districtlabel",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "on",
-        "weight": "5"
-    }
-}, {
-    "featureType": "road",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "road",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "district",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "on"
-    }
-}, {
-    "featureType": "poilabel",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "poilabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "poilabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "manmade",
-    "elementType": "geometry",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "districtlabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffffff"
-    }
-}, {
-    "featureType": "entertainment",
-    "elementType": "geometry",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "shopping",
-    "elementType": "geometry",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "nationalway",
-    "stylers": {
-        "level": "6",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "stylers": {
-        "level": "7",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "stylers": {
-        "level": "8",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "stylers": {
-        "level": "9",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "stylers": {
-        "level": "10",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off",
-        "level": "6",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off",
-        "level": "7",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off",
-        "level": "8",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off",
-        "level": "9",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
     }
 }, {
     "featureType": "nationalway",
@@ -796,313 +399,144 @@ var stylejson = [{
     }
 }, {
     "featureType": "nationalway",
-    "elementType": "labels",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off",
-        "level": "6",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
+        "color": "#f2dc9dff"
     }
 }, {
-    "featureType": "nationalway",
-    "elementType": "labels",
+    "featureType": "provincialway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off",
-        "level": "7",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off",
-        "level": "8",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off",
-        "level": "9",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off",
-        "level": "10",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-10"
+        "color": "#f2dc9dff"
     }
 }, {
     "featureType": "cityhighway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "level": "6",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#f2dc9dff"
     }
 }, {
-    "featureType": "cityhighway",
+    "featureType": "arterial",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "level": "7",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#f2dc9dff"
     }
 }, {
-    "featureType": "cityhighway",
+    "featureType": "building",
+    "elementType": "geometry.sidefill",
     "stylers": {
-        "level": "8",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#e6ebf0ff"
     }
 }, {
-    "featureType": "cityhighway",
+    "featureType": "building",
+    "elementType": "geometry.topfill",
     "stylers": {
-        "level": "9",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#e6ebf0ff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "geometry",
+    "featureType": "building",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off",
-        "level": "6",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#d8e2ebff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "geometry",
+    "featureType": "tertiaryway",
+    "elementType": "geometry.fill",
     "stylers": {
-        "visibility": "off",
-        "level": "7",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "geometry",
+    "featureType": "tertiaryway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off",
-        "level": "8",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#dfe4ebff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "geometry",
+    "featureType": "fourlevelway",
+    "elementType": "geometry.fill",
     "stylers": {
-        "visibility": "off",
-        "level": "9",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "labels",
+    "featureType": "fourlevelway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off",
-        "level": "6",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#dfe4ebff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "labels",
+    "featureType": "local",
+    "elementType": "geometry.fill",
     "stylers": {
-        "visibility": "off",
-        "level": "7",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "labels",
+    "featureType": "local",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off",
-        "level": "8",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#dfe4ebff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "labels",
+    "featureType": "scenicspotsway",
+    "elementType": "geometry.fill",
     "stylers": {
-        "visibility": "off",
-        "level": "9",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "6-9"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "subwaylabel",
-    "elementType": "labels",
+    "featureType": "scenicspotsway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off"
+        "color": "#dfe4ebff"
     }
 }, {
-    "featureType": "subwaylabel",
-    "elementType": "labels.icon",
+    "featureType": "universityway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off"
+        "color": "#dfe4ebff"
     }
 }, {
-    "featureType": "tertiarywaysign",
-    "elementType": "labels",
+    "featureType": "universityway",
+    "elementType": "geometry.fill",
     "stylers": {
-        "visibility": "off"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "tertiarywaysign",
-    "elementType": "labels.icon",
+    "featureType": "vacationway",
+    "elementType": "geometry.stroke",
     "stylers": {
-        "visibility": "off"
+        "color": "#dfe4ebff"
     }
 }, {
-    "featureType": "provincialwaysign",
-    "elementType": "labels",
+    "featureType": "vacationway",
+    "elementType": "geometry.fill",
     "stylers": {
-        "visibility": "off"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "provincialwaysign",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "nationalwaysign",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "nationalwaysign",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "highwaysign",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "highwaysign",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "village",
-    "elementType": "labels",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "district",
+    "featureType": "town",
     "elementType": "labels.text",
     "stylers": {
-        "fontsize": "20"
+        "fontsize": 18
     }
 }, {
-    "featureType": "district",
+    "featureType": "town",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#9ca0a3ff"
     }
 }, {
-    "featureType": "district",
+    "featureType": "town",
     "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "country",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "country",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "water",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "cityhighway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "cityhighway",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "tertiaryway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "tertiaryway",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff10"
-    }
-}, {
-    "featureType": "provincialway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "provincialway",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "nationalway",
-    "elementType": "geometry.stroke",
     "stylers": {
         "color": "#ffffff00"
     }
 }, {
     "featureType": "highway",
-    "elementType": "labels.text",
+    "elementType": "labels.text.fill",
     "stylers": {
-        "fontsize": "20"
+        "color": "#c0792dff"
     }
 }, {
-    "featureType": "nationalway",
+    "featureType": "highway",
     "elementType": "labels.text.stroke",
     "stylers": {
         "color": "#ffffff00"
@@ -1111,61 +545,355 @@ var stylejson = [{
     "featureType": "nationalway",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#12223dff"
+        "color": "#c0792dff"
+    }
+}, {
+    "featureType": "nationalway",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff60"
+    }
+}, {
+    "featureType": "provincialway",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#c0792dff"
+    }
+}, {
+    "featureType": "provincialway",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "cityhighway",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#c0792dff"
+    }
+}, {
+    "featureType": "cityhighway",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "arterial",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "arterial",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#c0792dff"
+    }
+}, {
+    "featureType": "arterial",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 24
+    }
+}, {
+    "featureType": "cityhighway",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 24
+    }
+}, {
+    "featureType": "provincialway",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 24
     }
 }, {
     "featureType": "nationalway",
     "elementType": "labels.text",
     "stylers": {
-        "fontsize": "20"
+        "fontsize": 24
     }
 }, {
-    "featureType": "provincialway",
+    "featureType": "highway",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 24
+    }
+}, {
+    "featureType": "scenicspotslabel",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#12223dff"
+        "color": "#9ca0a3ff"
     }
 }, {
-    "featureType": "provincialway",
+    "featureType": "scenicspotslabel",
     "elementType": "labels.text.stroke",
     "stylers": {
         "color": "#ffffff00"
     }
 }, {
-    "featureType": "provincialway",
-    "elementType": "labels.text",
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
     "stylers": {
-        "fontsize": "20"
+        "visibility": "off"
     }
 }, {
-    "featureType": "cityhighway",
+    "featureType": "educationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "on"
+    }
+}, {
+    "featureType": "educationlabel",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#12223dff"
+        "color": "#9ca0a3ff"
     }
 }, {
-    "featureType": "cityhighway",
-    "elementType": "labels.text",
-    "stylers": {
-        "fontsize": "20"
-    }
-}, {
-    "featureType": "cityhighway",
+    "featureType": "educationlabel",
     "elementType": "labels.text.stroke",
     "stylers": {
         "color": "#ffffff00"
     }
 }, {
-    "featureType": "estate",
-    "elementType": "geometry",
+    "featureType": "medicallabel",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#12223dff"
+        "visibility": "on"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "companylabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "companylabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "companylabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "on"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "on"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "lifeservicelabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "lifeservicelabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "lifeservicelabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "carservicelabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "carservicelabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "carservicelabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "on"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "financelabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "financelabel",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffff00"
+    }
+}, {
+    "featureType": "financelabel",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
     }
 }, {
     "featureType": "tertiaryway",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#9ca0a3ff"
     }
 }, {
     "featureType": "tertiaryway",
@@ -1174,10 +902,22 @@ var stylejson = [{
         "color": "#ffffff00"
     }
 }, {
+    "featureType": "tertiaryway",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
+    "featureType": "fourlevelway",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off"
+    }
+}, {
     "featureType": "fourlevelway",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#9ca0a3ff"
     }
 }, {
     "featureType": "fourlevelway",
@@ -1186,442 +926,1603 @@ var stylejson = [{
         "color": "#ffffff00"
     }
 }, {
-    "featureType": "scenicspotsway",
-    "elementType": "geometry.fill",
+    "featureType": "local",
+    "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#12223dff"
+        "color": "#9ca0a3ff"
     }
 }, {
-    "featureType": "scenicspotsway",
-    "elementType": "geometry.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "universityway",
-    "elementType": "geometry.fill",
-    "stylers": {
-        "color": "#12223dff"
-    }
-}, {
-    "featureType": "universityway",
-    "elementType": "geometry.stroke",
+    "featureType": "local",
+    "elementType": "labels.text.stroke",
     "stylers": {
         "color": "#ffffff00"
     }
 }, {
-    "featureType": "vacationway",
-    "elementType": "geometry.fill",
+    "featureType": "local",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#12223dff"
+        "visibility": "off"
     }
 }, {
-    "featureType": "vacationway",
-    "elementType": "geometry.stroke",
+    "featureType": "companylabel",
+    "elementType": "labels",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off"
     }
 }, {
-    "featureType": "fourlevelway",
-    "elementType": "geometry",
+    "featureType": "lifeservicelabel",
+    "elementType": "labels",
     "stylers": {
-        "visibility": "on"
+        "visibility": "off"
     }
 }, {
-    "featureType": "fourlevelway",
-    "elementType": "geometry.fill",
+    "featureType": "carservicelabel",
+    "elementType": "labels",
     "stylers": {
-        "color": "#12223dff"
+        "visibility": "off"
     }
 }, {
-    "featureType": "fourlevelway",
-    "elementType": "geometry.stroke",
+    "featureType": "financelabel",
+    "elementType": "labels",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off"
     }
 }, {
-    "featureType": "transportationlabel",
+    "featureType": "scenicspotslabel",
     "elementType": "labels",
     "stylers": {
         "visibility": "on"
     }
 }, {
-    "featureType": "transportationlabel",
+    "featureType": "manmade",
+    "elementType": "geometry",
+    "stylers": {
+        "color": "#f5f6f7ff"
+    }
+}, {
+    "featureType": "subway",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "12"
+    }
+}, {
+    "featureType": "subway",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "subway",
+    "elementType": "geometry",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "12"
+    }
+}, {
+    "featureType": "subway",
+    "elementType": "geometry",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "subwaylabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "subwaylabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "subwaylabel",
     "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "railway",
+    "elementType": "geometry",
     "stylers": {
         "visibility": "off"
     }
 }, {
-    "featureType": "transportationlabel",
+    "featureType": "scenicspotslabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "10"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "11"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "12"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "13"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "14"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "15"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "10"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "11"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "12"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "13"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "14"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "15"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "10"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "11"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "12"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "13"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "14"
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "10,15",
+        "level": "15"
+    }
+}, {
+    "featureType": "district",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#9ca0a3ff"
     }
 }, {
-    "featureType": "transportationlabel",
+    "featureType": "district",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "educationlabel",
-    "elementType": "labels",
+    "featureType": "city",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "city",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffffff"
+    }
+}, {
+    "featureType": "city",
+    "elementType": "labels.icon",
     "stylers": {
         "visibility": "on"
     }
 }, {
-    "featureType": "educationlabel",
-    "elementType": "labels.icon",
-    "stylers": {
-        "visibility": "off"
-    }
-}, {
-    "featureType": "educationlabel",
+    "featureType": "country",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#9ca0a3ff"
     }
 }, {
-    "featureType": "educationlabel",
+    "featureType": "country",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
+        "color": "#ffffffff"
     }
 }, {
-    "featureType": "transportation",
-    "elementType": "geometry",
-    "stylers": {
-        "color": "#113549ff"
-    }
-}, {
-    "featureType": "airportlabel",
+    "featureType": "continent",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#a77726ff"
     }
 }, {
-    "featureType": "airportlabel",
+    "featureType": "continent",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "scenicspotslabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "scenicspotslabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
+        "color": "#ffffffff"
     }
 }, {
     "featureType": "medicallabel",
-    "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "13"
     }
 }, {
     "featureType": "medicallabel",
-    "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "medicallabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "medicallabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "16"
     }
 }, {
     "featureType": "medicallabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "13"
     }
 }, {
-    "featureType": "scenicspotslabel",
+    "featureType": "medicallabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "14"
     }
 }, {
-    "featureType": "airportlabel",
+    "featureType": "medicallabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "12"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "13"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "14"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "15"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "16"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "17"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "12"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "13"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "14"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "15"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "16"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "17"
     }
 }, {
     "featureType": "entertainmentlabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "12"
     }
 }, {
     "featureType": "entertainmentlabel",
-    "elementType": "labels.text.fill",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#2dc4bbff"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "13"
     }
 }, {
     "featureType": "entertainmentlabel",
-    "elementType": "labels.text.stroke",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "14"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "15"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "16"
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,17",
+        "level": "17"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "estatelabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "estatelabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "estatelabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "estatelabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "16"
     }
 }, {
     "featureType": "estatelabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "13"
     }
 }, {
     "featureType": "estatelabel",
-    "elementType": "labels.text.fill",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#2dc4bbff"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "14"
     }
 }, {
     "featureType": "estatelabel",
-    "elementType": "labels.text.stroke",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "estatelabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,16",
+        "level": "16"
     }
 }, {
     "featureType": "businesstowerlabel",
-    "elementType": "labels.text.fill",
+    "elementType": "labels.text",
     "stylers": {
-        "color": "#2dc4bbff"
+        "fontsize": 23
     }
 }, {
     "featureType": "businesstowerlabel",
-    "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "12"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "12"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "16"
     }
 }, {
     "featureType": "businesstowerlabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "12"
     }
 }, {
-    "featureType": "companylabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "companylabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "companylabel",
+    "featureType": "businesstowerlabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "businesstowerlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "13"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "14"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "15"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "16"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "17"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "13"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "14"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "15"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "16"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "17"
     }
 }, {
     "featureType": "governmentlabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "13"
     }
 }, {
     "featureType": "governmentlabel",
-    "elementType": "labels.text.fill",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#2dc4bbff"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "14"
     }
 }, {
     "featureType": "governmentlabel",
-    "elementType": "labels.text.stroke",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "15"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "16"
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,17",
+        "level": "17"
     }
 }, {
     "featureType": "restaurantlabel",
-    "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "13"
     }
 }, {
     "featureType": "restaurantlabel",
-    "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "14"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "15"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "16"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "17"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "18"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "13"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "14"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "15"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "16"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "17"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "18"
     }
 }, {
     "featureType": "restaurantlabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "13"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "14"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "15"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "16"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "17"
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "13,18",
+        "level": "18"
+    }
+}, {
+    "featureType": "hotellabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "hotellabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "hotellabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 22,
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 22,
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 22,
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "16"
     }
 }, {
     "featureType": "hotellabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "14"
     }
 }, {
     "featureType": "hotellabel",
-    "elementType": "labels.text.fill",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#2dc4bbff"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "15"
     }
 }, {
     "featureType": "hotellabel",
-    "elementType": "labels.text.stroke",
+    "elementType": "labels.icon",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "14,16",
+        "level": "16"
     }
 }, {
     "featureType": "shoppinglabel",
-    "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "11"
     }
 }, {
     "featureType": "shoppinglabel",
-    "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff00"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "12"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "11"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "12"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "13"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "14"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "16"
     }
 }, {
     "featureType": "shoppinglabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "11"
     }
 }, {
-    "featureType": "lifeservicelabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "lifeservicelabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "lifeservicelabel",
+    "featureType": "shoppinglabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "12"
     }
 }, {
-    "featureType": "carservicelabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "carservicelabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "carservicelabel",
+    "featureType": "shoppinglabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "13"
     }
 }, {
-    "featureType": "financelabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "financelabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "financelabel",
+    "featureType": "shoppinglabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "14"
     }
 }, {
-    "featureType": "otherlabel",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "otherlabel",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "otherlabel",
+    "featureType": "shoppinglabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "15"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,16",
+        "level": "16"
+    }
+}, {
+    "featureType": "shoppinglabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "hotellabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "restaurantlabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "governmentlabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "companylabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 24
+    }
+}, {
+    "featureType": "entertainmentlabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "medicallabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "scenicspotslabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "airportlabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": {
+        "color": "#9ca0a3ff"
+    }
+}, {
+    "featureType": "water",
+    "elementType": "labels.text.stroke",
+    "stylers": {
+        "color": "#ffffffff"
     }
 }, {
     "featureType": "manmade",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#9ca0a3ff"
     }
 }, {
     "featureType": "manmade",
-    "elementType": "labels.text.stroke",
-    "stylers": {
-        "color": "#ffffff00"
-    }
-}, {
-    "featureType": "transportation",
-    "elementType": "labels.text.fill",
-    "stylers": {
-        "color": "#2dc4bbff"
-    }
-}, {
-    "featureType": "transportation",
     "elementType": "labels.text.stroke",
     "stylers": {
         "color": "#ffffff00"
     }
 }, {
     "featureType": "education",
-    "elementType": "labels.text.fill",
+    "elementType": "labels",
     "stylers": {
-        "color": "#2dc4bbff"
+        "visibility": "on"
     }
 }, {
-    "featureType": "education",
-    "elementType": "labels.text.stroke",
+    "featureType": "transportationlabel",
     "stylers": {
-        "color": "#ffffff00"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "12"
     }
 }, {
-    "featureType": "medical",
-    "elementType": "labels.text.fill",
+    "featureType": "transportationlabel",
     "stylers": {
-        "color": "#2dc4bbff"
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "13"
     }
 }, {
-    "featureType": "medical",
-    "elementType": "labels.text.stroke",
+    "featureType": "transportationlabel",
+    "elementType": "labels",
     "stylers": {
-        "color": "#ffffff00"
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "12"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "12"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "12,13",
+        "level": "13"
+    }
+}, {
+    "featureType": "educationlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "11"
+    }
+}, {
+    "featureType": "educationlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "12"
+    }
+}, {
+    "featureType": "educationlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "13"
+    }
+}, {
+    "featureType": "educationlabel",
+    "stylers": {
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "14"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "11"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "12"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "13"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "14"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "11"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "12"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "13"
+    }
+}, {
+    "featureType": "educationlabel",
+    "elementType": "labels.icon",
+    "stylers": {
+        "visibility": "off",
+        "curZoomRegionId": "0",
+        "curZoomRegion": "11,14",
+        "level": "14"
+    }
+}, {
+    "featureType": "transportationlabel",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
+    }
+}, {
+    "featureType": "manmade",
+    "elementType": "labels.text",
+    "stylers": {
+        "fontsize": 23
     }
 }, {
     "featureType": "scenicspots",
     "elementType": "labels.text.fill",
     "stylers": {
-        "color": "#2dc4bbff"
+        "color": "#ab76b6ff"
     }
 }, {
     "featureType": "scenicspots",
-    "elementType": "labels.text.stroke",
+    "elementType": "labels.text",
     "stylers": {
-        "color": "#ffffff00"
+        "fontsize": 23
     }
 }]
 
@@ -1636,19 +2537,21 @@ map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 //map.setMapType(BMAP_EARTH_MAP);      // 设置地图类型为地球模式
 
 map.setMapStyleV2({     
-  //styleJson: stylejson
+  styleJson: stylejson
 });
     
 var rsuIcon = new BMapGL.Icon("/images/dashboard/rsu_device.png", new BMapGL.Size(24, 24));
 var rsuErrorIcon = new BMapGL.Icon("/images/dashboard/rsu_device_error.png", new BMapGL.Size(24, 24));
-var obuIcon = new BMapGL.Icon("/images/obu_vehicle.png", new BMapGL.Size(15, 31));
+var obuIcon = new BMapGL.Icon("/images/caricon_red.png", new BMapGL.Size(24, 24));
 var radarIcon = new BMapGL.Icon("/images/dashboard/radarvision.png", new BMapGL.Size(24, 24));
-var alertStartIcon = new BMapGL.Icon("/images/alertstart.png", new BMapGL.Size(24, 24));
+var alertStartIcon = new BMapGL.Icon("/images/obu_alertstart.png", new BMapGL.Size(24, 24));
 var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
+var maxspeedIcon = new BMapGL.Icon("/images/dashboard/maxspeed.png", new BMapGL.Size(32, 32));
 
 var rsumarkers = [];
 var obumarkers = [];
 var warningmarkers = []
+var rotatemarkers = []
 var radarmarkers = [];
 var radarLabels = [];
 var radarDeviceMap = new HashMap();
@@ -1701,7 +2604,7 @@ function updateBdMapSummary(){
                 if(rsuobj.score < 80){
                     var label = new BMapGL.Label(rsuobj.devicecode , {       // 创建文本标注
                         position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, 0)           // 设置标注的偏移量
+                        offset: new BMapGL.Size(-40, 0)           // 设置标注的偏移量
                     })    
                     label.setStyle({border: "1px solid rgb(75 139 88)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
                     marker.setLabel(label); 
@@ -1774,10 +2677,6 @@ function updateBdMapSummary(){
                 } else {
                     lanestatestr = "畅通";
                 }
-                lanestatestr =  "<font color='" + lanestatecolor + "'>" + lanestatestr + "</font>";  
-                var labelstr = "平均车速：" + Math.round(radarobj.avgspeed) + "km/h<br/>"
-                            + "车头间距：" + radarobj.spaceheadway + " 米<br/>车头时距：" 
-                            + radarobj.timeheadway + " 秒<br/>车道状态：" + lanestatestr;
                 
                 var radarYoffset = -10;
                 var labelYoffset = -110;
@@ -1790,19 +2689,7 @@ function updateBdMapSummary(){
                     marker = new BMapGL.Marker(pt, {
                         icon: radarIcon,
                         offset: new BMapGL.Size(0, radarYoffset)
-                    });
-                    
-                    var label = new BMapGL.Label(labelstr, {       // 创建文本标注
-                        position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, labelYoffset)           // 设置标注的偏移量
-                    })    
-                    label.setStyle({border: "1px dotted rgb(171 158 158)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px", color: "#c3c2c0"});
-                    label.enableMassClear();
-//                    radarLabels.push(label);
-                    marker.setLabel(label);                      
-                } else {
-//                    alert(labelstr);
-                    marker.getLabel().setContent(labelstr);
+                    });                     
                 }
                 
                 marker.setTitle(radarobj.devicecode);
@@ -1871,8 +2758,11 @@ function updateBdMapSummary(){
 function rotateMarker(){
     for(var i = 0; i < warningmarkers.length; i++){
         warningmarkers[i].setRotation(warningmarkers[i].getRotation() + 15);
-//        $("#testtext").html(warningmarkers[i].getRotation());
     }
+    
+    for(var i = 0; i < rotatemarkers.length; i++){
+        rotatemarkers[i].setRotation(rotatemarkers[i].getRotation() + 15);
+    }    
     
     setTimeout("rotateMarker()", 200);
 }
@@ -2200,6 +3090,34 @@ function  getNowTime() {
     return currentTime;
 };
 
+var obulatlngs = "36.170948,120.334255;36.170966,120.334137;36.170988,120.33399;36.171011,120.333847;36.171044,120.333671;36.171064,120.333543;36.171088,120.333394;36.171111,120.333234;36.171134,120.333082;36.171158,120.332914;36.171182,120.332749;36.171202,120.332615;36.171224,120.332479;36.171244,120.332345;36.171268,120.332206;36.171289,120.332069;36.171316,120.331901;36.171337,120.331763;36.171363,120.331594;36.171389,120.331427;36.171414,120.331256;36.171431,120.331144;36.171458,120.33094;36.171487,120.330774;36.171508,120.330635;36.171536,120.330472;36.171553,120.330361;36.171579,120.330198;36.171605,120.330032;36.17163,120.32987;36.171651,120.329734;36.171677,120.329569;36.1717,120.329404;36.171721,120.329267;36.171747,120.329104;36.171768,120.328967;36.171794,120.328806;36.171815,120.328671;36.171841,120.328508;36.171866,120.328347;36.171891,120.328185;36.171916,120.328025;36.171937,120.327891;36.171955,120.327758;36.17198,120.327597;36.172004,120.327438;36.172024,120.327304;36.172048,120.327144;36.172068,120.327011;36.172088,120.326877;36.172117,120.326691;36.172141,120.326531;36.172166,120.326373;36.172191,120.326214;36.172212,120.326081;36.172234,120.325922;36.172254,120.325789;36.172275,120.325629;36.172298,120.325469;36.172317,120.325308;36.17233,120.325175;36.172349,120.325014;36.172364,120.324882;36.172382,120.324722;36.172396,120.324589;36.172411,120.324456;36.172424,120.324326;36.172442,120.324167;36.172453,120.324034;36.172469,120.323875;36.172477,120.323743;36.172488,120.323586;36.172501,120.323427;36.172509,120.323299;36.17252,120.323141;36.172531,120.322985;36.172543,120.322828;36.172549,120.322725;36.172559,120.322544;36.172568,120.322388;36.172573,120.322258;36.172581,120.322103;36.172584,120.321974;36.172591,120.321819;36.172595,120.321693;36.172601,120.32154;36.172604,120.321415;36.172603,120.321268;36.172606,120.321141;36.172609,120.32099;36.172612,120.32084;36.172615,120.320694;36.172617,120.32057;36.172619,120.320427;36.17262,120.320305;36.172619,120.320159;36.172619,120.32004;36.172619,120.319895;36.172618,120.319759;36.172617,120.319618;36.172619,120.319521;36.172619,120.319388;36.172627,120.31931;36.172631,120.319228;36.172634,120.319126;36.172636,120.319089;36.172638,120.319023;36.172637,120.31901;36.172638,120.318954;36.172635,120.318964;36.172635,120.318936;36.172636,120.318964;36.172638,120.318972;36.172638,120.318971;36.172638,120.318967;36.172638,120.318967;36.172638,120.31897;36.172638,120.318969;36.172638,120.318971;36.172638,120.318971;36.172638,120.318971;36.172638,120.318971;36.172638,120.31897;36.172638,120.31897;36.172638,120.31897;36.172638,120.31897;36.172638,120.318972;36.172638,120.318971;36.172637,120.318971;36.172637,120.318971;36.172637,120.318971;36.172637,120.318971;36.172637,120.318971;36.172636,120.318971;36.172636,120.318971;36.172636,120.318971;36.172636,120.318971;36.172637,120.318971;36.172637,120.318971;36.172636,120.318972;36.172636,120.318971;36.172637,120.318972;36.172637,120.318972;36.172637,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972;36.172636,120.318972";
+var obulatlngAry = obulatlngs.split(";");
+
+var videohtml = "<table><tr><td>";
+videohtml += '<video muted="muted"  id="obu_video_000" width="260px" controls loop="loop" autoplay><source src="video_230705194050.3gp" type="video/mp4" ></video>';
+videohtml += "</td><td width='30px'></td><td style='font-size: 15px;text-align: left; vertical-align: top;'>";
+videohtml += "<div>鲁B69656 - OBU00365</div><div id='obu1speed'>实时速度： 30km/h</div><div>平均速度：28km/h</div><div>最高速度：38km/h</div><div>打卡时间：10;20:51</div>";
+videohtml += "</td></tr></table>"
+
+var optslabel = {
+    position: map.getCenter(), // 指定文本标注所在的地理位置
+    offset: new BMapGL.Size(-200, -250) // 设置文本偏移量
+};
+// 创建文本标注对象
+var label = new BMapGL.Label(videohtml, optslabel);
+// 自定义文本标注样式
+label.setStyle({
+    color: '#4169e1',
+    borderRadius: '5px',
+    borderColor: '#ccc',
+    padding: '10px',
+    fontSize: '16px',
+    width: '500px',
+    height: '200px',
+    lineHeight: '30px',
+    fontFamily: '微软雅黑'
+});
+map.addOverlay(label);
 function refreshAll(){
     setTimeout('refreshAll()', 5000);
     
@@ -2210,8 +3128,213 @@ function refreshAll(){
     updateForecast();
 }
 refreshAll();
-showVehicles();
+//showVehicles();
 updateBdMapSummary();
+
+var obulatlngIndex = 0;
+var obumarker ;
+var linePoints = [];
+var obuRoutePolyline;
+var maxSpeedWindow ;
+function showObuRoute(){
+    setTimeout('showObuRoute()', 1000);
+    if(obulatlngIndex >= obulatlngAry.length){
+        console.log("obulatlngIndex is too large.");
+        return;
+    }
+    
+    var tmpary = obulatlngAry[obulatlngIndex].split(",");    
+    var rsulatlng = coordtransform.wgs84togcj02(tmpary[1], tmpary[0] - 0.0001);
+    rsulatlng = coordtransform.gcj02tobd09(rsulatlng[0], rsulatlng[1]);    
+    var pt = new BMapGL.Point(rsulatlng[0], rsulatlng[1]);
+    label.setPosition(pt);  
+    linePoints.push(pt);
+    label.setOffset(new BMapGL.Size(-200, -250));
+    
+    if(!obumarker){
+        obumarker = new BMapGL.Marker(pt, {
+            icon: obuIcon
+        });
+        obumarker.setRotation(285);
+        // 将标注添加到地图
+        map.addOverlay(obumarker);  
+    } else {
+        obumarker.setPosition(pt);
+        if(pt.lng < 120.345){
+            obumarker.setRotation(280);
+        }
+        if(pt.lng < 120.336){
+            obumarker.setRotation(275);
+        }    
+        if(pt.lng < 120.333){
+            obumarker.setRotation(270);
+        }        
+    }
+    
+    map.removeOverlay(obuRoutePolyline);
+    obuRoutePolyline = new BMapGL.Polyline(linePoints, {
+        strokeColor: 'blue',
+        strokeWeight: 2,
+        strokeOpacity: 1
+    });
+    map.addOverlay(obuRoutePolyline);    
+    
+    if(obulatlngIndex === 20){
+        var maxspeedMarker = new BMapGL.Marker(pt, {
+            icon: maxspeedIcon,
+            offset: new BMapGL.Size(0, 0)
+        });
+        map.addOverlay(maxspeedMarker);
+        rotatemarkers.push(maxspeedMarker);
+                
+        var optslabel2 = {
+            position: pt, // 指定文本标注所在的地理位置
+            offset: new BMapGL.Size(-100, -100) // 设置文本偏移量
+        };
+        // 创建文本标注对象
+        var maxspeedlabel = new BMapGL.Label("最大时速：40km/h<br/>发生时间：10:30:22", optslabel2);
+        // 自定义文本标注样式
+        maxspeedlabel.setStyle({
+            color: '#d2691e',
+            borderRadius: '5px',
+            borderColor: '#ccc',
+            padding: '10px',
+            fontSize: '14px',
+            width: '180px',
+            height: '80px',
+            lineHeight: '30px',
+            fontFamily: '微软雅黑'
+        });
+        map.addOverlay(maxspeedlabel);
+    }
+    
+    $("#obu1speed").text("实时速度：" + Math.floor(Math.random() * 10 + 30) + "km/h");
+    
+    obulatlngIndex++;
+}
+showObuRoute();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var obulatlngs2 = "36.154892,120.364531;36.154894,120.364531;36.154895,120.364531;36.154895,120.364531;36.154895,120.364531;36.154895,120.364531;36.154896,120.364531;36.154896,120.364531;36.154895,120.364531;36.154895,120.364531;36.154896,120.36453;36.154896,120.36453;36.154896,120.364529;36.154896,120.364529;36.154896,120.364529;36.154897,120.364529;36.154896,120.364529;36.154896,120.364527;36.154896,120.364527;36.154896,120.364527;36.154896,120.364527;36.154897,120.364527;36.154897,120.364527;36.154897,120.364526;36.154897,120.364526;36.154897,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154898,120.364526;36.154899,120.364526;36.154899,120.364526;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364525;36.154899,120.364524;36.154899,120.364524;36.154899,120.364523;36.154899,120.364523;36.154899,120.364524;36.154899,120.364523;36.154899,120.364523;36.1549,120.364523;36.154899,120.364523;36.1549,120.364523;36.1549,120.364522;36.154899,120.364523;36.154899,120.364523;36.154899,120.364523;36.154899,120.364523;36.154899,120.364523;36.154899,120.364523;36.154899,120.364522;36.154899,120.364522;36.154899,120.364521;36.154899,120.364521;36.154899,120.364521;36.154899,120.364521;36.154899,120.364521;36.154899,120.36452;36.154899,120.36452;36.1549,120.36452;36.1549,120.36452;36.1549,120.36452;36.1549,120.36452;36.154899,120.364519;36.1549,120.36452;36.1549,120.364519;36.154898,120.364525;36.154897,120.364527;36.154893,120.364544;36.154892,120.364551;36.154896,120.364562;36.154907,120.364586;36.154922,120.364591;36.154929,120.364598;36.154948,120.364592;36.154961,120.364594;36.154975,120.364575;36.154988,120.364552;36.155001,120.364539;36.155015,120.364514;36.155027,120.364498;36.155059,120.364455;36.155077,120.36443;36.155104,120.364394;36.15513,120.364352;36.155148,120.364325;36.155169,120.364289;36.155192,120.364253;36.155229,120.364201;36.155258,120.364161;36.15529,120.364117;36.155327,120.364065;36.155364,120.364012;36.155395,120.363967;36.155434,120.36391;36.155467,120.363862;36.155508,120.363803;36.155552,120.363744;36.155594,120.363683;36.155634,120.363631;36.15567,120.363581;36.155718,120.363513;36.155763,120.363448;36.155809,120.363386;36.155865,120.363311;36.155908,120.363252;36.155955,120.363188;36.156,120.363127;36.15605,120.363062;36.156096,120.363;36.156157,120.362918;36.156215,120.36284;36.156276,120.362757;36.156335,120.362677;36.156397,120.36259;36.156461,120.362502;36.156522,120.362417;36.156586,120.362323;36.156649,120.362235;36.156717,120.362141;36.156786,120.362046;36.156842,120.36197;36.156912,120.361875;36.156979,120.361782;36.157039,120.361702;36.157096,120.361623;36.157155,120.361541;36.157225,120.361445;36.157298,120.361347;36.157356,120.361263;36.157415,120.361181;36.157476,120.361096;36.157547,120.360996;36.157609,120.36091;36.157681,120.360809;36.157755,120.360708;36.157828,120.360607;36.15789,120.360519;36.157966,120.360416;36.15804,120.360312;36.158103,120.360225;36.158178,120.36012;36.158254,120.360014;36.15833,120.359908;36.158407,120.359799;36.15847,120.359707;36.158547,120.3596;36.158613,120.359513;36.158678,120.359424;36.158757,120.359316;36.158822,120.359226;36.158901,120.359117;36.158967,120.359026;36.159047,120.358915;36.159113,120.358824;36.15919,120.358711;36.159269,120.3586;36.159348,120.358489;36.159416,120.358396;36.159496,120.358285;36.159565,120.358192;36.159645,120.358081;36.159726,120.357968;36.159807,120.357853;36.159875,120.357759;36.159942,120.357665;36.160023,120.357551;36.160096,120.357458;36.160178,120.357344;36.160253,120.357247;36.160322,120.357152;36.160406,120.357036;36.160476,120.35694;36.160562,120.356824;36.160631,120.356724;36.160702,120.356625;36.160788,120.356503;36.160859,120.356404;36.160916,120.356321;36.161016,120.35618;36.16109,120.356075;36.161176,120.355952;36.161253,120.35585;36.161327,120.355747;36.161417,120.355622;36.161508,120.355495;36.161598,120.35537;36.16169,120.355243;36.161766,120.355138;36.161857,120.355007;36.161948,120.35488;36.16204,120.354747;36.162131,120.354616;36.162223,120.354488;36.162321,120.354358;36.162414,120.354229;36.162493,120.35412;36.162571,120.354012;36.162665,120.353882;36.162742,120.353774;36.162835,120.353643;36.162913,120.353533;36.16299,120.353424;36.163083,120.353294;36.163176,120.353163;36.16327,120.353033;36.163348,120.352924;36.163443,120.352795;36.163537,120.352666;36.163631,120.352536;36.163709,120.352429;36.163802,120.352298;36.163893,120.352169;36.163971,120.35206;36.164066,120.351937;36.164139,120.351831;36.164232,120.351702;36.164324,120.351571;36.164416,120.351441;36.164508,120.35131;36.164601,120.35118;36.164679,120.351072;36.164771,120.350945;36.164848,120.350838;36.164939,120.350712;36.165016,120.350605;36.165089,120.350501;36.165179,120.350374;36.165267,120.350247;36.165355,120.350121;36.165444,120.349994;36.165516,120.349888;36.165604,120.34976;36.165688,120.349633;36.165775,120.349506;36.16584,120.349397;36.165925,120.349272;36.165993,120.349164;36.166067,120.349025;36.166148,120.348895;36.166225,120.348765;36.166305,120.348635;36.166368,120.348525;36.166432,120.348417;36.166506,120.348288;36.166582,120.348159;36.166658,120.34803;36.166717,120.347923;36.166791,120.347794;36.166848,120.347687;36.16692,120.347558;36.166989,120.347427;36.167047,120.347322;36.167117,120.347193;36.167176,120.347086;36.167235,120.346979;36.167302,120.346849;36.167371,120.34672;36.167423,120.346607;36.167491,120.346476;36.167549,120.346364;36.167605,120.346253;36.167677,120.346119;36.167746,120.345984;36.167815,120.34585;36.167884,120.345714;36.167941,120.345602;36.168008,120.345465;36.168072,120.345327;36.168138,120.34519;36.168187,120.345075;36.16824,120.344961;36.168287,120.344849;36.168347,120.344713;36.168404,120.344578;36.168453,120.344465;36.168495,120.344351;36.168542,120.344238;36.168595,120.344105;36.168642,120.343992;36.168695,120.343859;36.168737,120.343746;36.168781,120.343634;36.168822,120.343519;36.168865,120.343406;36.168913,120.343267;36.168963,120.343131;36.169002,120.343018;36.169051,120.342882;36.169089,120.342768;36.169129,120.342655;36.169173,120.342519;36.169217,120.342383;36.169255,120.342269;36.169291,120.342157;36.169336,120.342021;36.169372,120.341909;36.169416,120.341773;36.16945,120.341661;36.169486,120.341549;36.169526,120.341415;36.169561,120.341302;36.169598,120.341168;36.169634,120.341033";
+var obulatlngAry2 = obulatlngs2.split(";");
+
+//
+var videohtml2 = "<table><tr><td>";
+videohtml2 += '<video muted="muted"  id="obu_video_000" width="260px" controls loop="loop" autoplay><source src="video_230704173316.3gp" type="video/mp4" ></video>';
+videohtml2 += "</td><td width='30px'></td><td style='font-size: 15px;text-align: left; vertical-align: top;'>";
+videohtml2 += "<div>鲁B11163 - OBU0065</div><div id='obu1speed2'>实时速度： 30km/h</div><div>平均速度：28km/h</div><div>最高速度：38km/h</div><div>打卡时间：10;20:51</div>";
+videohtml2 += "</td></tr></table>"
+
+var optslabel2 = {
+    position: map.getCenter(), // 指定文本标注所在的地理位置
+    offset: new BMapGL.Size(-200, 250) // 设置文本偏移量
+};
+// 创建文本标注对象
+var label2 = new BMapGL.Label(videohtml2, optslabel2);
+// 自定义文本标注样式
+label2.setStyle({
+    color: '#d2691e',
+    borderRadius: '5px',
+    borderColor: '#ccc',
+    padding: '10px',
+    fontSize: '16px',
+    width: '500px',
+    height: '200px',
+    lineHeight: '30px',
+    fontFamily: '微软雅黑'
+});
+map.addOverlay(label2);
+
+var obulatlngIndex2 = 280;
+var obumarker2 ;
+var linePoints2 = [];
+var obuRoutePolyline2;
+var maxSpeedWindow2 ;
+function initObuRoute2(){
+    for(var i = 0; i < obulatlngIndex2; i++){
+        var tmpary = obulatlngAry2[i].split(",");    
+        var rsulatlng = coordtransform.wgs84togcj02(tmpary[1], tmpary[0] - 0.0001);
+        rsulatlng = coordtransform.gcj02tobd09(rsulatlng[0], rsulatlng[1]);    
+        var pt = new BMapGL.Point(rsulatlng[0], rsulatlng[1]);
+        linePoints2.push(pt);        
+    }
+}
+
+function showObuRoute2(){
+    setTimeout('showObuRoute2()', 2000);
+    if(obulatlngIndex2 >= obulatlngAry2.length){
+        console.log("obulatlngIndex is too large.");
+        return;
+    }
+    
+    var tmpary = obulatlngAry2[obulatlngIndex2].split(",");    
+    var rsulatlng = coordtransform.wgs84togcj02(tmpary[1], tmpary[0] - 0.0001);
+    rsulatlng = coordtransform.gcj02tobd09(rsulatlng[0], rsulatlng[1]);    
+    var pt = new BMapGL.Point(rsulatlng[0], rsulatlng[1]);
+    label2.setPosition(pt);  
+    linePoints2.push(pt);
+    label2.setOffset(new BMapGL.Size(-200, 20));
+    
+    if(!obumarker2){
+        obumarker2 = new BMapGL.Marker(pt, {
+            icon: obuIcon
+        });
+        obumarker2.setRotation(295);
+        // 将标注添加到地图
+        map.addOverlay(obumarker2);  
+    } else {
+        obumarker2.setPosition(pt);
+        if(pt.lng < 120.345){
+            obumarker2.setRotation(280);
+        }
+        if(pt.lng < 120.336){
+            obumarker2.setRotation(275);
+        }    
+        if(pt.lng < 120.333){
+            obumarker2.setRotation(270);
+        }        
+    }
+    
+    map.removeOverlay(obuRoutePolyline2);
+    obuRoutePolyline2 = new BMapGL.Polyline(linePoints2, {
+        strokeColor: 'red',
+        strokeWeight: 2,
+        strokeOpacity: 1
+    });
+    map.addOverlay(obuRoutePolyline2);    
+    
+    if(obulatlngIndex2 === 20){
+        
+    }
+    
+    $("#obu1speed2").text("实时速度：" + Math.floor(Math.random() * 10 + 30) + "km/h");
+    
+    obulatlngIndex2++;
+}
+initObuRoute2();
+showObuRoute2();
+
+
+
+
+
+
+
+
+
+
 
 if(getQueryVariable("showObuVehicleTable") === "1"){
     document.getElementById("obuVehicleTable").style.visibility = "visible";
@@ -2221,7 +3344,8 @@ if(getQueryVariable("showObuVehicleTable") === "1"){
 function showObuVehicle(){
 //    alert('showObuVehicle');
 }
-//showTestVehs();
+
+
 </script>
 </body>
 
