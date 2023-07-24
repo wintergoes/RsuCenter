@@ -237,7 +237,7 @@
 <div id='dashboard_left' style="position:relative;width: 100%; height: 100%; ">
     <div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
     <div id="dashboard_title" style="z-index: 100;">
-        <div style="float: left;"><img src="images/dashboard/dashboard_title.png"></div>
+        <div style="float: left;"><img src="images/dashboard/obu_dashboard_title.png"></div>
         <div>
                              <table class="forecast_tbl">
                                  <tr>
@@ -327,19 +327,20 @@ var stylejson = [{
     "featureType": "land",
     "elementType": "geometry",
     "stylers": {
-        "color": "#f5f6f7ff"
+        "color": "#2b2d2fff"
     }
 }, {
     "featureType": "water",
     "elementType": "geometry",
     "stylers": {
-        "color": "#c4d7f5ff"
+        "color": "#374464ff"
     }
 }, {
     "featureType": "green",
     "elementType": "geometry",
     "stylers": {
-        "color": "#dcf2d5ff"
+        "visibility": "on",
+        "color": "#283637ff"
     }
 }, {
     "featureType": "highway",
@@ -347,43 +348,43 @@ var stylejson = [{
     "stylers": {
         "visibility": "on",
         "weight": 40,
-        "color": "#ffe59eff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "highway",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#ffe59eff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "highway",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#f5d48cff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "nationalway",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#fff6ccff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "provincialway",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#fff6ccff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "cityhighway",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#fff6ccff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "arterial",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#fff6ccff",
+        "color": "#3d3f48ff",
         "visibility": "on",
         "weight": 40
     }
@@ -401,19 +402,19 @@ var stylejson = [{
     "featureType": "nationalway",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#f2dc9dff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "provincialway",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#f2dc9dff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "cityhighway",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#f2dc9dff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "arterial",
@@ -421,47 +422,54 @@ var stylejson = [{
     "stylers": {
         "color": "#f2dc9dff"
     }
-}, {
+},  {
+    "featureType": "building",
+    "elementType": "geometry",
+    "stylers": {
+        "visibility": "on",
+        "color": "#3d3f48ff"
+    }
+},{
     "featureType": "building",
     "elementType": "geometry.sidefill",
     "stylers": {
-        "color": "#e6ebf0ff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "building",
     "elementType": "geometry.topfill",
     "stylers": {
-        "color": "#e6ebf0ff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "building",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#d8e2ebff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "tertiaryway",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "tertiaryway",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#dfe4ebff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "fourlevelway",
     "elementType": "geometry.fill",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "fourlevelway",
     "elementType": "geometry.stroke",
     "stylers": {
-        "color": "#dfe4ebff"
+        "color": "#3d3f48ff"
     }
 }, {
     "featureType": "local",
@@ -551,7 +559,7 @@ var stylejson = [{
     "featureType": "nationalway",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffff60"
+        "color": "#ffffff00"
     }
 }, {
     "featureType": "provincialway",
@@ -977,64 +985,25 @@ var stylejson = [{
     "featureType": "manmade",
     "elementType": "geometry",
     "stylers": {
-        "color": "#f5f6f7ff"
-    }
-}, {
-    "featureType": "subway",
-    "stylers": {
-        "curZoomRegionId": "0",
-        "curZoomRegion": "12,13",
-        "level": "12"
-    }
-}, {
-    "featureType": "subway",
-    "stylers": {
-        "curZoomRegionId": "0",
-        "curZoomRegion": "12,13",
-        "level": "13"
+        "color": "#283637ff"
     }
 }, {
     "featureType": "subway",
     "elementType": "geometry",
     "stylers": {
-        "visibility": "off",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "12,13",
-        "level": "12"
+        "visibility": "off"
     }
-}, {
-    "featureType": "subway",
-    "elementType": "geometry",
-    "stylers": {
-        "visibility": "off",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "12,13",
-        "level": "13"
-    }
-}, {
-    "featureType": "subwaylabel",
-    "stylers": {
-        "curZoomRegionId": "0",
-        "curZoomRegion": "13,13",
-        "level": "13"
-    }
-}, {
+},{
     "featureType": "subwaylabel",
     "elementType": "labels",
     "stylers": {
-        "visibility": "off",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "13,13",
-        "level": "13"
+        "visibility": "off"
     }
 }, {
     "featureType": "subwaylabel",
     "elementType": "labels.icon",
     "stylers": {
-        "visibility": "off",
-        "curZoomRegionId": "0",
-        "curZoomRegion": "13,13",
-        "level": "13"
+        "visibility": "off"
     }
 }, {
     "featureType": "railway",
@@ -1202,7 +1171,7 @@ var stylejson = [{
     "featureType": "district",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#ffffff00"
     }
 }, {
     "featureType": "city",
@@ -1214,7 +1183,7 @@ var stylejson = [{
     "featureType": "city",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#ffffff00"
     }
 }, {
     "featureType": "city",
@@ -1232,7 +1201,7 @@ var stylejson = [{
     "featureType": "country",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#ffffff00"
     }
 }, {
     "featureType": "continent",
@@ -1244,7 +1213,7 @@ var stylejson = [{
     "featureType": "continent",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#ffffff00"
     }
 }, {
     "featureType": "medicallabel",
@@ -2330,7 +2299,7 @@ var stylejson = [{
     "featureType": "water",
     "elementType": "labels.text.stroke",
     "stylers": {
-        "color": "#ffffffff"
+        "color": "#ffffff00"
     }
 }, {
     "featureType": "manmade",
@@ -2683,7 +2652,7 @@ function updateBdMapSummary(){
                 var radarXoffset = 0;
                 var labelYoffset = -110;
                 if(radarobj.devicecode === 'LS00115' || radarobj.devicecode === 'LS00112'){
-                    radarXoffset = 100;
+                    radarXoffset = 30;
                 }
                 var marker = radarDeviceMap.get(radarobj.id);
                 if(marker === null){
@@ -3115,10 +3084,11 @@ var optslabel = {
 var label = new BMapGL.Label(videohtml, optslabel);
 // 自定义文本标注样式
 label.setStyle({
-    color: '#4169e1',
+    color: '#ffffff',
+    background: '#3c6ccedd',
     borderRadius: '5px',
-    borderColor: '#ccc',
-    padding: '10px',
+    borderColor: '#3c6ccedd',
+    padding: '6px',
     fontSize: '16px',
     width: '500px',
     height: '200px',
@@ -3241,7 +3211,7 @@ var obulatlngAry2 = obulatlngs2.split(";");
 //
 var videohtml2 = "<table><tr><td>";
 videohtml2 += '<video muted="muted"  id="obu_video_000" width="260px" controls loop="loop" autoplay><source src="video_230704173316.3gp" type="video/mp4" ></video>';
-videohtml2 += "</td><td width='30px'></td><td style='font-size: 15px;text-align: left; vertical-align: top;'>";
+videohtml2 += "</td><td width='20px'></td><td style='font-size: 15px;text-align: left; vertical-align: top;'>";
 videohtml2 += "<div>鲁B11163 - OBU0065</div><div id='obu1speed2'>实时速度： 30km/h</div><div>平均速度：28km/h</div><div>最高速度：38km/h</div><div>打卡时间：10;20:51</div>";
 videohtml2 += "</td></tr></table>"
 
@@ -3253,10 +3223,11 @@ var optslabel2 = {
 var label2 = new BMapGL.Label(videohtml2, optslabel2);
 // 自定义文本标注样式
 label2.setStyle({
-    color: '#d2691e',
+    color: '#ffffff',
+    background: '#3c6ccedd',
     borderRadius: '5px',
-    borderColor: '#ccc',
-    padding: '10px',
+    borderColor: '#3c6ccedd',
+    padding: '6px',
     fontSize: '16px',
     width: '500px',
     height: '200px',

@@ -18,8 +18,8 @@ class ToolsController extends Controller
     }
     
     function exportVehFlow(Request $request){
-        $timestamp=strtotime('2023-05-10 00:00:00');
-        for($i = 0; $i < 30240; $i++){ // 30240
+        $timestamp=strtotime('2023-06-01 00:00:00');
+        for($i = 0; $i < 87840; $i++){ // 30240
             $small_timestamp=$timestamp+ 60 * $i;
             $large_timestamp=$timestamp+ 60 * ($i+1);
             $small_time=date('Y-m-d H:i:s',$small_timestamp);
