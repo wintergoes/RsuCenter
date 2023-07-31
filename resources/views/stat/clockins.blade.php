@@ -46,7 +46,7 @@
                         <th >上车时间</th>
                         <th >下车时间</th>
                         <th >时长</th>
-                        <!--<th >距离</th>-->
+                        <th >距离</th>
                         <th >运行轨迹</th>
                         <th >行车视频</th>
                     </tr>
@@ -60,7 +60,7 @@
                         <td>{{$ci->cistarttime}}</td>
                         <td>{!! $ci->ciendtime == "" ? "<font color='gray'>" . $ci->ciendtime1 . "</font>" : $ci->ciendtime !!}</td>                   
                         <td id="citimesecond{{$ci->id}}"></td>
-                        <!--<td >{{$ci->cidistance > 1000 ? number_format($ci->cidistance / 1000, 2) . "km" : $ci->cidistance . "m"}}</td>-->
+                        <td >{{$ci->cidistance > 1000 ? number_format($ci->cidistance / 1000, 2) . "km" : $ci->cidistance . "m"}}</td>
                         <script>
                             $("#citimesecond{{$ci->id}}").text(secondsToHMS({{$ci->citimeseconds}}));
                         </script>
