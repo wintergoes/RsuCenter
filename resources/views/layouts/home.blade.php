@@ -71,7 +71,8 @@ $l1_stat = $l2_eventstat | $l2_radareventstat  | $l2_vehiclestat | $l2_warningre
 $l2_trafficsign = in_array($currentpath, array("trafficsigns", "addtrafficsign", "edittrafficsign", "sendrts2rsu"));
 $l2_warninginfo = in_array($currentpath, array("warninginfo", "addwarninginfo", "editwarninginfo", "sendrte2rsu"));
 $l2_road = in_array($currentpath, array("roads", "addroad", "addroadsave", "editroad", "editroadsave", "showroadcoordinate"));
-$l1_road = $l2_warninginfo | $l2_road | $l2_trafficsign;
+$l2_roadcontrolsetup = in_array($currentpath, array("roadcontrolsetup"));
+$l1_road = $l2_warninginfo | $l2_road | $l2_trafficsign | $l2_roadcontrolsetup;
 
 $l2_obuvideos = in_array($currentpath, array("obuvideos"));
 $l2_radarvideos = in_array($currentpath, array("radarvideos"));
@@ -152,6 +153,7 @@ $l1_settings = $l2_users | $l2_devices | $l2_obudevices | $l2_radardevices | $l2
                                             @endif
                                             <li {!! $l2_warninginfo ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="warninginfo"><i class="bx bx-right-arrow-alt" ></i>交通事件管理</a></li>
                                             <li {!! $l2_trafficsign ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="trafficsigns"><i class="bx bx-right-arrow-alt" ></i>交通标志管理</a></li>
+                                            <li {!! $l2_roadcontrolsetup ? "class='mm-active secondlevel'" : "class='secondlevel'" !!}> <a href="roadcontrolsetup"><i class="bx bx-right-arrow-alt" ></i>管控参数设置</a></li>
 					</ul>
 				</li>
                                 

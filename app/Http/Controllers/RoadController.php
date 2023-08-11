@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Road;
 use App\RoadLink;
 use App\RoadCoordinate;
+use App\RoadControlRule;
 
 use DB;
 
@@ -129,5 +130,43 @@ class RoadController extends Controller
         DB::update("update roads set published=1 where id=" . $request->roadid);
         
         return "发布成功！";
-    }    
+    }
+    
+    function roadControlSetup(Request $request){
+        return view("/road/roadcontrolsetup");
+    }
+    
+    function getRoadControlData(Request $request){
+        $rcfactor = 1;
+        if($request->has("rcfactor")){
+            $rcfactor = $request->rcfactor;
+        }
+        
+        $rules = RoadControlRule::where("rcfactor", $rcfactor)
+                ->orderBy("rcstartvalue")
+                ->get();
+        
+        $arr = array("retcode"=>"1", "rules"=>$rules);
+        return json_encode($arr);
+    }
+    
+    function addRoadControlRule(Request $request){
+        $newrule = new RoadControlRule();
+        $newrule->rcfactor = $request->rcfactor;
+        $newrule->rcstartvalue = $request->rcstartvalue;
+        $newrule->rcendvalue = $request->rcendvalue;
+        $newrule->rcsuggestspeed = $request->rcsuggestspeed;
+        $newrule->save();
+        
+        $arr = array("retcode"=>1);
+        return json_encode($arr);
+    }
+    
+    function deleteRoadControlRule(Request $request){\
+//        echo ("delete from roadcontrolrule where id=" . $request->ruleid);
+        DB::delete("delete from roadcontrolrule where id=" . $request->ruleid);
+        
+        $arr = array("retcode"=>1);
+        return json_encode($arr);        
+    }
 }

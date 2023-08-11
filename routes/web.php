@@ -140,6 +140,11 @@ Route::any("/deleteroad", "RoadController@deleteRoad");
 Route::any("/publishroad", "RoadController@publishRoad");
 Route::any("/unpublishroad", "RoadController@unpublishRoad");
 
+Route::any("/roadcontrolsetup", "RoadController@roadControlSetup");
+Route::any("/getroadcontroldata", "RoadController@getRoadControlData");
+Route::any("/addroadcontrolrule", "RoadController@addRoadControlRule");
+Route::any("/deleteroadcontrolrule", "RoadController@deleteRoadControlRule");
+
 //*******************************道路坐标***************************************
 Route::any("/roadcoordinates", "RoadCoordinateController@index");
 Route::any("/addroadcoordinate", "RoadCoordinateController@addRoadCoordinate");
@@ -211,6 +216,7 @@ Route::any('/dashboardbdmapsummary', 'DashboardController@bdmapSummary');
 Route::any('/dashboardforecast', 'DashboardController@getForecast');
 
 Route::get('/obudashboard', 'DashboardController@obuDashboard');
+Route::get('/oburoutereplay', 'DashboardController@obuRouteReplay');
 
 //***************************ManagerApi相关*****************************************
 Route::any("/getnewobuvideo", "ManagerApiController@getObuNewVideo");
