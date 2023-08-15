@@ -1544,6 +1544,9 @@ class ApiV1Controller extends Controller
             $windpower = 12;
         }
         
+        $snowheight = $resjson->list[0]->sh;
+        $minuterainfall = 0;
+        
         $forecast = new Forecast();
 //        $forecast->weather = $resjson->data->now->detail->weather;
 //        $forecast->weathercode = $resjson->data->now->detail->weather_code;
@@ -1572,6 +1575,28 @@ class ApiV1Controller extends Controller
         $addcount = $addcount + $this->processForcastVisibility($visibility, $lng, $lat);
         $addcount = $addcount + $this->processShiHuaXiShu($resjson->list[0]->gp, $lat, $lng);
         
+        $speedlimitchecksql = "select * from roadcontrolrule where "
+                . " (rcfactor = 1 and rcstartvalue < " . $visibility . " and rcendvalue >= " . $visibility . ") "
+                . " or (rcfactor = 2 and rcstartvalue < " . $minuterainfall . " and rcendvalue >= " . $minuterainfall . ") "
+                . " or (rcfactor = 3 and rcstartvalue < " . $snowheight . " and rcendvalue >= " . $snowheight . ") "
+                . " or (rcfactor = 4 and rcstartvalue < " . $windpower . " and rcendvalue >= " . $windpower . ")  "
+                . " order by rcsuggestspeed;";        
+        
+        $speedlimitcheck = DB::select($speedlimitchecksql);
+        if(count($speedlimitcheck) > 0){
+            $addcount = $addcount + 1;              
+            
+            $sign = new TrafficSign();
+            $sign->tscid = 350;
+            $sign->tsname = "车速管控";
+            $sign->tslat = $lat;
+            $sign->tslng = $lng;
+            $sign->tsparam1 = $speedlimitcheck[0]->rcfactor;
+            $sign->starttime = date("Y-m-d H:i:s", time());
+            $sign->endtime = date("Y-m-d H:i:s", time() + 1800);
+            $sign->save();
+        }
+        
         if($addcount > 0){
             $curlsend = curl_init();
             curl_setopt($curlsend, CURLOPT_CUSTOMREQUEST, "GET");
@@ -1585,7 +1610,7 @@ class ApiV1Controller extends Controller
             curl_close($curlsend);  
             echo $res . "<br/>";
             echo "sendallrtstorsi" . "<br/>";
-        }
+        }       
     }
     
     function processForcastVisibility($visibility, $lng, $lat){
@@ -1893,7 +1918,7 @@ class ApiV1Controller extends Controller
             
             $rtsid = $sign->id % 255;
             
-            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, 
+            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, "signparam1"=>$sign->tsparam1,
                 "signPos"=>$signPos, "timeDetails"=>$timeDetails);
             array_push($rtss, $winfoitem);
         }
