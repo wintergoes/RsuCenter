@@ -385,7 +385,7 @@ class ApiV1Controller extends Controller
     
     function checkUpdate(Request $request){
         if($request->appKey == "cn.chibc.v2xapp"){
-            $newapkfile = "update/v2xapp/v2x_release_1.0.0_vc1.apk";
+            $newapkfile = "update/v2xapp/v2x_release_1.0.1_vc2.apk";
             $newversionname = "1.0.1";
             $newversioncode = 2;
             $modifycontent = "1. Bug修复；";
@@ -1592,6 +1592,7 @@ class ApiV1Controller extends Controller
             $sign->tslat = $lat;
             $sign->tslng = $lng;
             $sign->tsparam1 = $speedlimitcheck[0]->rcfactor;
+            $sign->tsparam2 = $speedlimitcheck[0]->rcsuggestspeed;
             $sign->starttime = date("Y-m-d H:i:s", time());
             $sign->endtime = date("Y-m-d H:i:s", time() + 1800);
             $sign->save();
@@ -1918,7 +1919,7 @@ class ApiV1Controller extends Controller
             
             $rtsid = $sign->id % 255;
             
-            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, "signparam1"=>$sign->tsparam1,
+            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, "signparam1"=>$sign->tsparam1, "signparam2"=>$sign->tsparam2,
                 "signPos"=>$signPos, "timeDetails"=>$timeDetails);
             array_push($rtss, $winfoitem);
         }

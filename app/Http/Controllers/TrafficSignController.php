@@ -232,7 +232,7 @@ class TrafficSignController extends Controller
             
             $rtsid = $sign->id % 255;
             
-            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, "signparam1"=>$sign->tsparam1,
+            $winfoitem = array("rtsId"=>$rtsid, "signType"=>$sign->tscid, "signparam1"=>$sign->tsparam1,  "signparam2"=>$sign->tsparam2,
                 "signPos"=>$signPos, "timeDetails"=>$timeDetails);
             array_push($rtes, $winfoitem);
         }
