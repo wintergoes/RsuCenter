@@ -145,7 +145,7 @@ function onSelectTecChild(){
                 @if(isset($radardevice))
                 <input type="number" class="form-control" id="emergency_laneno" max="10" min="0" name="emergency_laneno" value="{{$radardevice->emergency_laneno}}" placeholder="">
                 @else
-                <input type="number" class="form-control" id="emergency_laneno" max="10" min="0" name="emergency_laneno" placeholder="">
+                <input type="number" class="form-control" id="emergency_laneno" max="10" min="0" name="emergency_laneno" placeholder="" value="0">
                 @endif
             </div>
         </div>         
