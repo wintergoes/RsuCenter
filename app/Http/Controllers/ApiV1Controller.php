@@ -1142,9 +1142,7 @@ class ApiV1Controller extends Controller
             $aid->macaddr = $row->macaddr;
             $aid->chanelid = $row->chanelid;
             $aid->eventtime = $row->eventtime;
-            $aid->eventtype = $row->eventtype;
             $aid->eventsatate = $row->eventsatate;
-            $aid->eventdescription = $row->eventdescription;
             $aid->deviceid = $row->deviceid;
             $aid->aidevent = $row->aidevent;
             $aid->vehspeed = $row->vehspeed;
@@ -1213,9 +1211,7 @@ class ApiV1Controller extends Controller
             $anpr->macaddr = $row->macaddr;
             $anpr->chanelid = $row->chanelid;
             $anpr->activepostcount = $row->activepostcount;
-            $anpr->eventtype = $row->eventtype;
             $anpr->eventsatate = $row->eventsatate;
-            $anpr->eventdescription = $row->eventdescription;
             $anpr->eventtime = $row->eventtime;
             $anpr->licenseplate = $row->licenseplate;
             $anpr->lineno = $row->lineno;
