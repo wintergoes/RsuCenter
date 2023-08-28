@@ -58,7 +58,13 @@ class DashboardController extends Controller
                 . "(select count(id) as lowspeedcount from aidevents where aidevent='lowSpeed' and eventtime_date=date(now())) as lowspeedstat,"
                 . "(select count(id) as abandonedobjectcount from aidevents where aidevent='abandonedObject' and eventtime_date=date(now())) as abandonedobjectstat");
         
-        return json_encode($stats);        
+        $jsonstr = json_encode($stats);
+        
+        $file = fopen("dashboardsummary.html", "w"); // 打开文件，如果文件不存在则创建新文件，如果文件已存在则清空文件内容
+        fwrite($file, $jsonstr); // 写入内容到文件
+        fclose($file); // 关闭文件      
+        
+        return $jsonstr;
     }
     
     function dashboardVehFlow(Request $request){
