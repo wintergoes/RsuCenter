@@ -43,6 +43,7 @@ class DashboardController extends Controller
         return view("/layouts/dashboard", [
             'obus'=>$obus,
             'radars'=>$radars,
+            'show_radar_video'=>$request->show_radar_video,
             "default_lat"=>$default_lat,
             "default_lng"=>$default_lng,
             "default_zoom"=>$default_zoom,            
@@ -102,7 +103,14 @@ class DashboardController extends Controller
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
         }
-        return json_encode($arr_vehflows);
+        
+        $jsonstr = json_encode($arr_vehflows);
+        
+        $file = fopen("dashboardvehicleflow.html", "w"); // 打开文件，如果文件不存在则创建新文件，如果文件已存在则清空文件内容
+        fwrite($file, $jsonstr); // 写入内容到文件
+        fclose($file); // 关闭文件           
+        
+        return $jsonstr;
     }    
     
     function dashboardVehFlowOld(Request $request){
@@ -140,7 +148,9 @@ class DashboardController extends Controller
             $arr = DB::select($sqlstr);
             $arr_vehflows = array("retcode"=>ret_success, "vehflow"=>$arr);                        
         }
-        return json_encode($arr_vehflows);
+        
+        $jsonstr = json_encode($arr_vehflows);
+        return $jsonstr;
     }
     
     function dashboardDevices(Request $request){
@@ -301,7 +311,13 @@ class DashboardController extends Controller
         
         $arr = array("retcode"=>ret_success, "rsudevices"=>$rdevices, "obudevices"=>$odevices,
             "warnings"=>$warnings, "radars"=>$radars);
-        return json_encode($arr);
+        $jsonstr = json_encode($arr);
+        
+        $file = fopen("dashboardbdmapsummary.html", "w"); // 打开文件，如果文件不存在则创建新文件，如果文件已存在则清空文件内容
+        fwrite($file, $jsonstr); // 写入内容到文件
+        fclose($file); // 关闭文件       
+        
+        return $jsonstr;
     }
     
     function getForecast(Request $request){

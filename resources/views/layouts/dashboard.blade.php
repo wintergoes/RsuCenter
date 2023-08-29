@@ -494,6 +494,7 @@
 var radarVideoMap = new HashMap();
 </script>
     
+
 @if(env("dashboard_video_type") == "obu")    
 <div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
      background-color: rgba(100, 0, 0, 0);  font-size: 12px; overflow-x: auto; overflow-y: hidden; ">
@@ -522,7 +523,7 @@ var radarVideoMap = new HashMap();
                 ?>
                 @endforeach        
 </div>
-@else
+@elseif(env("dashboard_video_type") == "radar")
 <div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
      background-color: rgba(100, 0, 0, 0);  font-size: 12px; z-index: 10; overflow-x: auto; overflow-y: hidden; display: inline-block; height: 230px; width: {{count($radars) * 275}}px;"> <!-- -->
                 <?php
@@ -556,6 +557,7 @@ var radarVideoMap = new HashMap();
                 @endforeach 
 </div>
 @endif
+
 <script>
 var stylejson = [{
     "featureType": "land",
@@ -1890,7 +1892,7 @@ var radarDeviceMap = new HashMap();
 function updateBdMapSummary(){
     $.ajax({
         type: "GET",
-        url: "dashboardbdmapsummary",
+        url: "<?php echo env('dashboardbdmapsummary_url') ?>", 
         dataType: "json",
         success: function (data) {
             setTimeout('updateBdMapSummary()', 60000); 
@@ -2418,84 +2420,102 @@ function showVehFlowChart(){
             }]
         }
     };
+    
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
+    $.ajax({
+        type: "GET",
+        url: "<?php echo env('dashboardvehflow_url') ?>?t=" + Math.round(new Date()),
+        dataType: "json",
+        success: function (data) {
+            if(vehflowReqCount !== 0){
+                alert(data["vehflow"].length);
+                var clabels = [];
+                var cvalues = [];
 
-    $.getJSON("dashboardvehflow?reqcount=" + vehflowReqCount,function(data){
-        if(vehflowReqCount !== 0){
-            var clabels = [];
-            var cvalues = [];
-
-            for(var i=0;i<data["vehflow"].length;i++){
-               clabels.push(data["vehflow"][i]["vfdate"]);
-               cvalues.push(data["vehflow"][i]["vehcount"]);
-            }
-
-            const data1 = {
-                labels: clabels,
-                datasets: [{
-                   data: cvalues,
-                   backgroundColor: gradientStroke1,
-                   borderColor: gradientStroke2, 
-                   pointRadius :"0",
-                   pointHoverRadius:"0",
-                   borderWidth: 3                            
-               }]
-            };
-
-            if(vehflowChart){
-                vehflowChart.clear();
-                vehflowChart.destroy();
-            }
-            vehflowChart = new Chart(ctx, {
-               type: "line",
-               data: data1,
-               options: chartoptions
-           });
-        } else {
-            var clabels = [];
-            var cvalues = [];
-            
-            var d = new Date();
-            var loophour = Math.max(8, d.getHours());
-
-            for(var k = 1; k <= loophour; k++){
-                clabels.push(k);
-                var haveHour = false;
                 for(var i=0;i<data["vehflow"].length;i++){
-                    if(data["vehflow"][i]["vfhour"] === k){
-                        cvalues.push(data["vehflow"][i]["vehcount"]);
-                        haveHour = true;
-                        break;
-                    }                                    
+                   clabels.push(data["vehflow"][i]["vfdate"]);
+                   cvalues.push(data["vehflow"][i]["vehcount"]);
                 }
-                
-                if(!haveHour){
-                    cvalues.push(0);
+
+                const data1 = {
+                    labels: clabels,
+                    datasets: [{
+                       data: cvalues,
+                       backgroundColor: gradientStroke1,
+                       borderColor: gradientStroke2, 
+                       pointRadius :"0",
+                       pointHoverRadius:"0",
+                       borderWidth: 3                            
+                   }]
+                };
+
+                if(vehflowChart){
+                    vehflowChart.clear();
+                    vehflowChart.destroy();
                 }
-            }
+                vehflowChart = new Chart(ctx, {
+                   type: "line",
+                   data: data1,
+                   options: chartoptions
+               });
+            } else {
+                var clabels = [];
+                var cvalues = [];
 
-            const data1 = {
-                labels: clabels,
-                datasets: [{
-                   data: cvalues,
-                   backgroundColor: gradientStroke1,
-                   borderColor: gradientStroke2, 
-                   pointRadius :"0",
-                   pointHoverRadius:"0",
-                   borderWidth: 3                            
-               }]
-            };
+                var d = new Date();
+                var loophour = Math.max(8, d.getHours());
 
-            if(vehflowChart){
-                vehflowChart.clear();
-                vehflowChart.destroy();
-            }
-            vehflowChart = new Chart(ctx, {
-               type: "line",
-               data: data1,
-               options: chartoptions
-           });            
+                for(var k = 1; k <= loophour; k++){
+                    clabels.push(k);
+                    var haveHour = false;
+                    for(var i=0;i<data["vehflow"].length;i++){
+                        if(data["vehflow"][i]["vfhour"] === k){
+                            cvalues.push(data["vehflow"][i]["vehcount"]);
+                            haveHour = true;
+                            break;
+                        }                                    
+                    }
+
+                    if(!haveHour){
+                        cvalues.push(0);
+                    }
+                }
+
+                const data1 = {
+                    labels: clabels,
+                    datasets: [{
+                       data: cvalues,
+                       backgroundColor: gradientStroke1,
+                       borderColor: gradientStroke2, 
+                       pointRadius :"0",
+                       pointHoverRadius:"0",
+                       borderWidth: 3                            
+                   }]
+                };
+
+                if(vehflowChart){
+                    vehflowChart.clear();
+                    vehflowChart.destroy();
+                }
+                vehflowChart = new Chart(ctx, {
+                   type: "line",
+                   data: data1,
+                   options: chartoptions
+               });            
+            }                       
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.error("get showVehFlowChart error, " + textStatus);
+//            setTimeout("showVehiclesCountStat()", 500);
         }
-   });
+    });      
+
+//    $.getJSON("dashboardvehflow?reqcount=" + vehflowReqCount,function(data){
+//
+//   });
 }
 
 $(window).on('resize',function(){
@@ -2646,175 +2666,223 @@ var vehMap = new HashMap();
 var radarMacMap = new HashMap();
 var borderColors = ['#6aa3fa', '#f2ae49', '#ac83e3', '#71ca88', '#ef7d65', '#62cffa', '#f1cc47', '#b359df', '#d9d7d8', '#70e7cb'];
 function showVehicles(){   
-    $.getJSON("realtimevehicles.html?t=" + Math.round(new Date()),function(data){
-        var tbl = document.getElementById("tbl_realtime_vehicles");
-        var rows = tbl.rows; //获取表格的行数
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
+    $.ajax({
+        type: "GET",
+        url: "realtimevehicles.html?t=" + Math.round(new Date()),
+        dataType: "json",
+        success: function (data) {
+            var tbl = document.getElementById("tbl_realtime_vehicles");
+            var rows = tbl.rows; //获取表格的行数
 
-        for (var i = rows.length - 1; i >= 0 ; i--) {
-            tbl.deleteRow(i);    
-        }
+            for (var i = rows.length - 1; i >= 0 ; i--) {
+                tbl.deleteRow(i);    
+            }
 
-        var maxid = Math.min(6, data["vehicles"].length);
-        for(var i=0;i<maxid;i++){
-            var tr=tbl.insertRow(i);
-            tr.className = "tr_realtime_vehicle";
-                        //添加单元格
-            var cell0=tr.insertCell(0);
-            cell0.innerHTML = data["vehicles"][i]["devicecode"];
-            cell0.width = 80;
-            var cell1=tr.insertCell(1);
-            cell1.innerHTML = data["vehicles"][i]["targetid"];
-            cell1.width = 80;
-            var cell2=tr.insertCell(2);
-            cell2.innerHTML=data["vehicles"][i]["plateno"] === "" ? "-" : data["vehicles"][i]["plateno"];
-            var cell3=tr.insertCell(3);
-            cell3.innerHTML=hkVehType2Str(data["vehicles"][i]["vehicletype"]);
-            cell3.width = 80;
-        }        
-        
-        for(var i = 0; i < data["vehicles"].length; i++){
-            var radarMac = radarMacMap.get(data["vehicles"][i]["macaddr"]);
-            if(radarMac === null){
-                radarMac = new RadarMacObj(data["vehicles"][i]["macaddr"]);
-                radarMacMap.put(data["vehicles"][i]["macaddr"], radarMac);
-                
-                if(radarMacMap.size() <= borderColors.length){
-                    radarMac.setBorderColor(borderColors[radarMacMap.size() - 1]);
-//                    radarMac.setBorderColor(" rgb(255 255 255)");
+            var maxid = Math.min(6, data["vehicles"].length);
+            for(var i=0;i<maxid;i++){
+                var tr=tbl.insertRow(i);
+                tr.className = "tr_realtime_vehicle";
+                            //添加单元格
+                var cell0=tr.insertCell(0);
+                cell0.innerHTML = data["vehicles"][i]["devicecode"];
+                cell0.width = 80;
+                var cell1=tr.insertCell(1);
+                cell1.innerHTML = data["vehicles"][i]["targetid"];
+                cell1.width = 80;
+                var cell2=tr.insertCell(2);
+                cell2.innerHTML=data["vehicles"][i]["plateno"] === "" ? "-" : data["vehicles"][i]["plateno"];
+                var cell3=tr.insertCell(3);
+                cell3.innerHTML=hkVehType2Str(data["vehicles"][i]["vehicletype"]);
+                cell3.width = 80;
+            }        
+
+            for(var i = 0; i < data["vehicles"].length; i++){
+                var radarMac = radarMacMap.get(data["vehicles"][i]["macaddr"]);
+                if(radarMac === null){
+                    radarMac = new RadarMacObj(data["vehicles"][i]["macaddr"]);
+                    radarMacMap.put(data["vehicles"][i]["macaddr"], radarMac);
+
+                    if(radarMacMap.size() <= borderColors.length){
+                        radarMac.setBorderColor(borderColors[radarMacMap.size() - 1]);
+    //                    radarMac.setBorderColor(" rgb(255 255 255)");
+                    } else {
+                        radarMac.setBorderColor(" rgb(255 255 255)");
+                    }
+                }
+
+                var vehuuid = data["vehicles"][i]["uuid"];
+                var vehrotation = data["vehicles"][i]["vehrotation"];
+                //alert(vehuuid);
+                var veh = vehMap.get(vehuuid);
+                //alert(veh);
+                if(veh === null){
+                    //alert("a");
+                    var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
+                        data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
+                        data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
+                        data["vehicles"][i]["positiony"], data["vehicles"][i]["id"], data["vehicles"][i]["devicecode"]);                 
+
+                    vehMap.put(vehuuid, veh);
+                    //alert(veh.lng + "  " + veh.lat);
+                    var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
+                    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+                    var pt = new BMapGL.Point(latlng[0], latlng[1]); 
+                    //$("#test").html(data["vehicles"][i]["longitude"] + "  "  + data["vehicles"][i]["latitude"]);
+
+                    var icon ;
+                    if(veh.targettype === "vehicle"){
+                        mkicon = carIcon;
+                    } else {
+                        mkicon = humanIcon;
+                    }
+                    var carmaker = new BMapGL.Marker(pt, {
+                        icon: mkicon
+                    });  
+                    carmaker.setRotation(vehrotation);
+                    carmaker.setTitle(veh.targetid);
+                    veh.setMarker(carmaker);
+
+                    var labeltext = "";
+
+                    if(getQueryVariable("showpositiony") === "1"){    
+                        labeltext = "positionY: " + veh.positiony;                    
+                    } 
+
+                    if(getQueryVariable("showvehiclelabel") === "1"){
+                        labeltext = veh.plateno + " id: " + veh.targetid
+                            + " speed:" + veh.speed + " lane: " + veh.laneno 
+                            + " lat:" + veh.lat + " lng: " + veh.lng + " positionY: " + veh.positiony
+                            + " id: " + veh.dbid;
+                    }
+
+                    if(getQueryVariable("showpositiony") === "1" || getQueryVariable("showvehiclelabel") === "1") {
+                        var label = new BMapGL.Label(labeltext, {       // 创建文本标注
+                            position: pt,                          // 设置标注的地理位置
+                            offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
+                        })    
+                        label.setStyle({border: "1px solid " + radarMac.borderColor, backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
+                        carmaker.setLabel(label);                    
+                    }
+
+                    map.addOverlay(carmaker); 
+    //                vehmarkers.push(carmaker); 
                 } else {
-                    radarMac.setBorderColor(" rgb(255 255 255)");
+                    //alert(veh.lng + "  " + veh.lat);
+                    veh.updateData(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
+                        data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
+                        data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
+                        data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);
+
+                    var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
+                    latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
+                    var pt = new BMapGL.Point(latlng[0], latlng[1]);
+
+                    if(getQueryVariable("showvehiclelabel") === "1"){
+                        var labeltext = veh.plateno + " id: " + veh.targetid
+                            + " speed:" + veh.speed + " lane: " + veh.laneno 
+                            + " lat:" + veh.lat + " lng: " + veh.lng + ", positionY: " + veh.positiony
+                            + " id: " + veh.dbid;
+                        veh.marker.getLabel().setContent(labeltext);
+                    }
+
+                    if(getQueryVariable("showpositiony") === "1"){
+                        var labeltext = "positionY: " + veh.positiony;
+                        veh.marker.getLabel().setContent(labeltext);                    
+                    }
+
+                    veh.marker.setPosition(pt);
+                    veh.marker.setTitle(data["vehicles"][i]["targetid"]);
+                    veh.marker.setRotation(vehrotation);
                 }
             }
-            
-            var vehuuid = data["vehicles"][i]["uuid"];
-            var vehrotation = data["vehicles"][i]["vehrotation"];
-            //alert(vehuuid);
-            var veh = vehMap.get(vehuuid);
-            //alert(veh);
-            if(veh === null){
-                //alert("a");
-                var veh = new Vehicle(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
-                    data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
-                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
-                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"], data["vehicles"][i]["devicecode"]);                 
-                
-                vehMap.put(vehuuid, veh);
-                //alert(veh.lng + "  " + veh.lat);
-                var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
-                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
-                var pt = new BMapGL.Point(latlng[0], latlng[1]); 
-                //$("#test").html(data["vehicles"][i]["longitude"] + "  "  + data["vehicles"][i]["latitude"]);
 
-                var icon ;
-                if(veh.targettype === "vehicle"){
-                    mkicon = carIcon;
-                } else {
-                    mkicon = humanIcon;
-                }
-                var carmaker = new BMapGL.Marker(pt, {
-                    icon: mkicon
-                });  
-                carmaker.setRotation(vehrotation);
-                carmaker.setTitle(veh.targetid);
-                veh.setMarker(carmaker);
-                
-                var labeltext = "";
-                
-                if(getQueryVariable("showpositiony") === "1"){    
-                    labeltext = "positionY: " + veh.positiony;                    
-                } 
-
-                if(getQueryVariable("showvehiclelabel") === "1"){
-                    labeltext = veh.plateno + " id: " + veh.targetid
-                        + " speed:" + veh.speed + " lane: " + veh.laneno 
-                        + " lat:" + veh.lat + " lng: " + veh.lng + " positionY: " + veh.positiony
-                        + " id: " + veh.dbid;
+            var nowdate = new Date();
+            for(var i = vehMap.values().length - 1; i >= 0 ; i--){
+                if(vehMap.values()[i].radarcode === "LS00110"){
+    //               console.log(vehMap.values()[i].uuid + "," + vehMap.values()[i].detecttime + ", " + nowdate);
                 }
 
-                if(getQueryVariable("showpositiony") === "1" || getQueryVariable("showvehiclelabel") === "1") {
-                    var label = new BMapGL.Label(labeltext, {       // 创建文本标注
-                        position: pt,                          // 设置标注的地理位置
-                        offset: new BMapGL.Size(-60, -60)           // 设置标注的偏移量
-                    })    
-                    label.setStyle({border: "1px solid " + radarMac.borderColor, backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
-                    carmaker.setLabel(label);                    
+                var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
+                if(timecha > 3  * 1000){
+                    map.removeOverlay(vehMap.values()[i].marker);
+                    vehMap.remove(vehMap.values()[i].uuid);
                 }
-
-                map.addOverlay(carmaker); 
-//                vehmarkers.push(carmaker); 
-            } else {
-                //alert(veh.lng + "  " + veh.lat);
-                veh.updateData(data["vehicles"][i]["uuid"], data["vehicles"][i]["plateno"], data["vehicles"][i]["targetid"], 
-                    data["vehicles"][i]["targettype"], data["vehicles"][i]["speed"], data["vehicles"][i]["laneno"],
-                    data["vehicles"][i]["longitude"], data["vehicles"][i]["latitude"], data["vehicles"][i]["detecttime"],
-                    data["vehicles"][i]["positiony"], data["vehicles"][i]["id"]);
-                
-                var latlng = coordtransform.wgs84togcj02(veh.lng, veh.lat);
-                latlng = coordtransform.gcj02tobd09(latlng[0], latlng[1]);                 
-                var pt = new BMapGL.Point(latlng[0], latlng[1]);
-                
-                if(getQueryVariable("showvehiclelabel") === "1"){
-                    var labeltext = veh.plateno + " id: " + veh.targetid
-                        + " speed:" + veh.speed + " lane: " + veh.laneno 
-                        + " lat:" + veh.lat + " lng: " + veh.lng + ", positionY: " + veh.positiony
-                        + " id: " + veh.dbid;
-                    veh.marker.getLabel().setContent(labeltext);
-                }
-                
-                if(getQueryVariable("showpositiony") === "1"){
-                    var labeltext = "positionY: " + veh.positiony;
-                    veh.marker.getLabel().setContent(labeltext);                    
-                }
-                
-                veh.marker.setPosition(pt);
-                veh.marker.setTitle(data["vehicles"][i]["targetid"]);
-                veh.marker.setRotation(vehrotation);
+                $("#test").html(nowdate);
             }
+            setTimeout("showVehicles()", 500);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            setTimeout("showVehicles()", 500);
+            console.error("get showVehicles error");
         }
-        
-        var nowdate = new Date();
-        for(var i = vehMap.values().length - 1; i >= 0 ; i--){
-            if(vehMap.values()[i].radarcode === "LS00110"){
-//               console.log(vehMap.values()[i].uuid + "," + vehMap.values()[i].detecttime + ", " + nowdate);
-            }
-            
-            var timecha = nowdate.getTime() - new Date(vehMap.values()[i].detecttime).getTime();
-            if(timecha > 3  * 1000){
-                map.removeOverlay(vehMap.values()[i].marker);
-                vehMap.remove(vehMap.values()[i].uuid);
-            }
-            $("#test").html(nowdate);
-        }
-        setTimeout("showVehicles()", 500);
-    }).fail( function(d,textStatus,error) {
-        setTimeout("showVehicles()", 500);
-        console.error("getJSON Failed,status: " + textStatus + ",error: "+error)
-    }); 
+    });      
+    
+    
+//    $.getJSON("realtimevehicles.html?t=" + Math.round(new Date()),function(data){
+//
+//    }).fail( function(d,textStatus,error) {
+//        setTimeout("showVehicles()", 500);
+//        console.error("getJSON Failed, showVehicles, status: " + textStatus + ",error: "+error)
+//    }); 
 }
 
-function showVehiclesCountStat(){   
-    $.getJSON("realtimecountstat.html?t=" + Math.round(new Date()),function(data){
-        var tbl = document.getElementById("tbl_realtime_count_stat");
-        var rows = tbl.rows; //获取表格的行数
+function showVehiclesCountStat(){
+    $.ajaxSetup({ 
+        headers: { 'X-CSRF-TOKEN' : '{{ csrf_token() }}' } 
+    });    
+    
+    $.ajax({
+        type: "GET",
+        url: "realtimecountstat.html?t=" + Math.round(new Date()),
+        dataType: "json",
+        success: function (data) {
+            var tbl = document.getElementById("tbl_realtime_count_stat");
+            var rows = tbl.rows; //获取表格的行数
 
-        for (var i = rows.length - 1; i >= 0 ; i--) {
-            tbl.deleteRow(i);    
+            for (var i = rows.length - 1; i >= 0 ; i--) {
+                tbl.deleteRow(i);    
+            }
+
+            var tr=tbl.insertRow(i);
+            tr.className = "tr_realtime_count_stat_row";
+            var cell0=tr.insertCell(0);
+            cell0.innerHTML = "红岛南收费站出口";
+            cell0.width = 260;
+            var cell1=tr.insertCell(1);
+            cell1.innerHTML = data["LS00119"];
+            cell1.width = 80;  
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.error("get showVehiclesCountStat error, " + textStatus);
         }
-
-        var tr=tbl.insertRow(i);
-        tr.className = "tr_realtime_count_stat_row";
-        var cell0=tr.insertCell(0);
-        cell0.innerHTML = "红岛南收费站出口";
-        cell0.width = 260;
-        var cell1=tr.insertCell(1);
-        cell1.innerHTML = data["LS00119"];
-        cell1.width = 80;
-              
-        setTimeout("showVehiclesCountStat()", 500);
-    }).fail( function(d,textStatus,error) {
-        setTimeout("showVehiclesCountStat()", 500);
-        console.error("getJSON Failed, showVehiclesCountStat, status: " + textStatus + ",error: "+error)
-    }); 
+    });  
+    
+//    $.getJSON("realtimecountstat.html?t=" + Math.round(new Date()),function(data){
+//        var tbl = document.getElementById("tbl_realtime_count_stat");
+//        var rows = tbl.rows; //获取表格的行数
+//
+//        for (var i = rows.length - 1; i >= 0 ; i--) {
+//            tbl.deleteRow(i);    
+//        }
+//
+//        var tr=tbl.insertRow(i);
+//        tr.className = "tr_realtime_count_stat_row";
+//        var cell0=tr.insertCell(0);
+//        cell0.innerHTML = "红岛南收费站出口";
+//        cell0.width = 260;
+//        var cell1=tr.insertCell(1);
+//        cell1.innerHTML = data["LS00119"];
+//        cell1.width = 80;
+//              
+//        setTimeout("showVehiclesCountStat()", 500);
+//    }).fail( function(d,textStatus,error) {
+//        setTimeout("showVehiclesCountStat()", 500);
+//        console.error("getJSON Failed, showVehiclesCountStat, status: " + textStatus + ",error: "+error)
+//    }); 
 }
 
 function showDataSummary(){
@@ -2824,7 +2892,7 @@ function showDataSummary(){
     
     $.ajax({
         type: "GET",
-        url: "dashboardsummary",
+        url: "<?php echo env('dashboardsummary_url') ?>",
         dataType: "json",
         success: function (data) {
             $('#vehflow').html("<a href='anprevents' target='_blank' style='color: #16F7FB;'>" + data[0].vehflowcount + "</a>");
@@ -2850,7 +2918,9 @@ function updateForecast(){
         url: "dashboardforecast",
         dataType: "json",
         success: function (data) {
-            $('#weathericon').attr("src", "images/fushutianqi/" + data.forecast.weathercode + ".png");
+            if(data.forecast.weathercode !== ""){
+                $('#weathericon').attr("src", "images/fushutianqi/" + data.forecast.weathercode + ".png");
+            }
             $('#forecast_temperature').html("<span title = '" + data.forecast.created_at + "'>温度 " + data.forecast.temperature + "°C</span>"); 
             $('#forecast_humidity').text("湿度 " + data.forecast.humidity + "%");  
             $('#forecast_windpower').text("风力 " + data.forecast.windpower + "级");  
@@ -2904,6 +2974,9 @@ function checkVideoPlay(){
     videoctrls = document.getElementsByTagName("video");
     for(var i = 0; i < videoctrls.length; i++){
         id = videoctrls[i].id;
+        if (id === "obu_video_000"){
+            continue;
+        }
         idstr = id.replace("radarvideo", "");
         console.debug(id + ": " + videoctrls[i].networkState + ", " + videoctrls[i].paused + ", " + radarVideoMap.get(idstr));
         if(videoctrls[i].networkState !== 2  && videoctrls[i].paused === true){            
