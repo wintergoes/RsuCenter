@@ -1542,6 +1542,28 @@ class ApiV1Controller extends Controller
         
         $snowheight = $resjson->list[0]->sh;
         $minuterainfall = 0;
+        $tqtimestr = $resjson->list[0]->dataTime;
+        $tqtime = strtotime($tqtimestr);
+        $tqtimeminute = date("YmdHi", $tqtime);
+        $rainfall = $resjson->list[0]->rc;
+        
+        $storedrainfall = env("storedrainfall");
+        $storedrainfalltime = env("storedrainfalltime");
+        
+        if($tqtimeminute - $storedrainfalltime == 1){
+            $minuterainfall = $rainfall - $storedrainfall;
+        }
+        env("storedrainfall", $rainfall);
+        env("storedrainfalltime", $tqtimeminute);
+        
+        $forecastcheck = Forecast::where("created_at", $tqtimestr)
+                ->select("id")
+                ->get();
+        
+        if(count($forecastcheck) > 0){
+            echo "该时间的天气数据已存在！";
+            return;
+        }
         
         $forecast = new Forecast();
 //        $forecast->weather = $resjson->data->now->detail->weather;
