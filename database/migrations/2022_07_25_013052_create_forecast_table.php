@@ -37,6 +37,8 @@ class CreateForecastTable extends Migration
             $table->string("sun_begin", 10)->default("")->nullable();
             $table->string("sun_end", 10)->default("")->nullable();
             $table->timestamps();
+            
+            $table->index(["created_at"]);
         });
     }
 
