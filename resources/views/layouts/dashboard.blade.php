@@ -236,7 +236,7 @@
 <body style="width: 100%; height: 100%">
 <div id='dashboard_left' style="position:relative;width: 100%; height: 100%; ">
     <div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
-    <div id="dashboard_title" style="z-index: 100;">
+    <div id="dashboard_title" style="z-index: 100; display: none;">
         <div style="float: left;"><img src="images/dashboard/dashboard_title.png"></div>
         <div>
                              <table class="forecast_tbl">
