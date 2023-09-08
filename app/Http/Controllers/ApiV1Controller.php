@@ -385,9 +385,9 @@ class ApiV1Controller extends Controller
     
     function checkUpdate(Request $request){
         if($request->appKey == "cn.chibc.v2xapp"){
-            $newapkfile = "update/v2xapp/v2x_release_1.0.1_vc2.apk";
-            $newversionname = "1.0.1";
-            $newversioncode = 2;
+            $newapkfile = "update/v2xapp/v2x_release_1.0.2_vc3.apk";
+            $newversionname = "1.0.2";
+            $newversioncode = 3;
             $modifycontent = "1. Bug修复；";
         } else {
             $newapkfile = "update/rsu_rc_release_1.0.7_vc9.apk";
