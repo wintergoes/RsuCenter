@@ -236,7 +236,7 @@
 <body style="width: 100%; height: 100%">
 <div id='dashboard_left' style="position:relative;width: 100%; height: 100%; ">
     <div id="bdmap_container" style="width: 100%; height: 100% ;position: absolute;">dmg</div>
-    <div id="dashboard_title" style="z-index: 100; display: none;">
+    <div id="dashboard_title" style="z-index: 100; ">
         <div style="float: left;"><img src="images/dashboard/dashboard_title.png"></div>
         <div>
                              <table class="forecast_tbl">
@@ -255,7 +255,7 @@
         <!--<img style="width: 100%; height: 100%; object-fit: fill;" src="images/dashboard/background.png"/>-->
     </div>
 
-    <div style='z-index: 10; position: absolute; left: 0px; bottom: 0px; '>
+    <div style='z-index: 10; position: absolute; left: 0px; bottom: 0px; transform-origin: 2% 100%;' id="bottomtables">
         <table style="margin-bottom: 10px; ">
             <tr>
                 <td>
@@ -496,7 +496,7 @@ var radarVideoMap = new HashMap();
     
 
 @if(env("dashboard_video_type") == "obu")    
-<div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
+<div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px; transform-origin: 100% 0%;
      background-color: rgba(100, 0, 0, 0);  font-size: 12px; overflow-x: auto; overflow-y: hidden; ">
                 <?php
                 $videocount = 0;
@@ -524,7 +524,7 @@ var radarVideoMap = new HashMap();
                 @endforeach        
 </div>
 @elseif(env("dashboard_video_type") == "radar")
-<div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px;
+<div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px; transform-origin: 100% 0%;
      background-color: rgba(100, 0, 0, 0);  font-size: 12px; z-index: 10; overflow-x: auto; overflow-y: hidden; display: inline-block; height: 230px; width: {{count($radars) * 275}}px;"> <!-- -->
                 <?php
                 $videocount = 0;
@@ -2525,6 +2525,19 @@ $(window).on('resize',function(){
 
 function resizePage(){
     $("#dashboard_left").width(window.innerWidth);
+    
+    var divbottomtables = document.getElementById("bottomtables");
+    divbottomtables.style.transform = "scale(0.66)  ";
+    
+    var divobuvideos = document.getElementById("obu_videos");
+    
+    if(window.innerWidth < 2000){
+        divobuvideos.style.transform = "scale("  + window.innerWidth / 2150 + ")  "; 
+    }
+    
+    if(getQueryVariable("showdashboardtitle") === "0"){
+        $("#dashboard_title").css('display', 'none');
+    }
     
     if(window.innerWidth < 1400){
         //$("#obu_videos").css('display', 'none');
