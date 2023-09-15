@@ -2527,11 +2527,15 @@ function resizePage(){
     $("#dashboard_left").width(window.innerWidth);
     
     var divbottomtables = document.getElementById("bottomtables");
-    divbottomtables.style.transform = "scale(0.66)  ";
-    
+    console.log("Window Width: " + window.innerWidth);
+    if(window.innerWidth < 1200){
+        divbottomtables.style.transform = "scale("  + (1200) / 2150 + ")  ";
+    } else {
+        divbottomtables.style.transform = "scale("  + (window.innerWidth - 20) / 2150 + ")  ";
+    }
     var divobuvideos = document.getElementById("obu_videos");
     
-    if(window.innerWidth < 2000){
+    if(divobuvideos !== null && window.innerWidth < 2000){
         divobuvideos.style.transform = "scale("  + window.innerWidth / 2150 + ")  "; 
     }
     
