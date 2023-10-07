@@ -102,7 +102,7 @@ class VehicleFlowController extends Controller
         } 
         
         $sqlstr = " select count(vf.id) as vehcount, vf.create_hour as vfhour from  vehicleflow vf "
-                . " where vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
+                . " where vf.create_date>='" . $searchfromdate . "' and vf.create_date<='" . $searchtodate . "' "
                 . " group by vf.create_hour " ;
 
         $arr = DB::select($sqlstr);
@@ -296,7 +296,7 @@ class VehicleFlowController extends Controller
             $sqlstr .= " and vf.macaddr=" . $searchradarmac;
         }
 
-        $sqlstr .=  " and vf.created_at>='" . $searchfromdate . " 00:00:00' and vf.created_at<='" . $searchtodate . " 23:59:59' "
+        $sqlstr .=  " and vf.create_date>='" . $searchfromdate . "' and vf.create_date<='" . $searchtodate . "' "
                 . " group by vf.create_hour " ;
 
         $arr = DB::select($sqlstr);
