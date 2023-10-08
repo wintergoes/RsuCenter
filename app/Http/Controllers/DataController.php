@@ -9,6 +9,8 @@ use App\AidEvent;
 use App\RadarDevice;
 use App\Forecast;
 
+use DB;
+
 class DataController extends Controller
 {
     public function __construct(){
@@ -264,6 +266,11 @@ class DataController extends Controller
             $searchtodate = date('Y-m-d',time());
         }
         
+        $searchdevname = "";
+        if($request->has("devname")){
+            $searchdevname = $request->devname;
+        }
+        
         $forecast = Forecast::orderBy("id", "desc");
         
         if($searchfromdate != ""){
@@ -274,12 +281,20 @@ class DataController extends Controller
             $forecast = $forecast->where("created_at", "<", $searchtodate . " 23:59:59");
         }
         
+        if($searchdevname != "" && $searchdevname != "-1"){
+            $forecast = $forecast->where("devname", $searchdevname);
+        }
+        
         $forecast = $forecast->paginate(30);
+        
+        $devnames = DB::select("select distinct devname from forecast where devname <> ''");
         
         return view("/data/forecast", [
             "forecast"=>$forecast,
             "searchfromdate"=>$searchfromdate,
-            "searchtodate"=>$searchtodate
+            "searchtodate"=>$searchtodate,
+            "searchdevname"=>$searchdevname,
+            "devnames"=>$devnames
         ]);
     }
 }

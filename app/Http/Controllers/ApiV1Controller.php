@@ -1455,7 +1455,8 @@ class ApiV1Controller extends Controller
 //        echo $res;
 //        curl_close($curl); 
         
-        $this->reqHnyForecast($request, "node62", 120.000000, 36.000000);
+        $this->reqHnyForecast($request, "node62", 120.337880,36.170380);
+        $this->reqHnyForecast($request, "node61", 120.337880,36.170380);
     }
     
     function reqHnyForecast(Request $request, $devname, $lng, $lat){
@@ -1545,16 +1546,22 @@ class ApiV1Controller extends Controller
         $tqtimestr = $resjson->list[0]->dataTime;
         $tqtime = strtotime($tqtimestr);
         $tqtimeminute = date("YmdHi", $tqtime);
-        $rainfall = $resjson->list[0]->rc;
+        $rainfall = $resjson->list[0]->rc;        
         
-        $storedrainfall = env("storedrainfall");
-        $storedrainfalltime = env("storedrainfalltime");
-        
-        if($tqtimeminute - $storedrainfalltime == 1){
-            $minuterainfall = $rainfall - $storedrainfall;
+        if($devname == "node61"){
+            $forecastcalc = Forecast::where("devname", $devname)
+                    ->orderBy("id", "desc")
+                    ->select("rainfall", "created_at")
+                    ->limit(1)
+                    ->get();
+            
+            $dbtime = strtotime($forecastcalc[0]->created_at);
+            echo ($tqtime . "-----". $dbtime . "<br/>");          
+            
+            if($tqtime - $dbtime < 70){
+                $minuterainfall = $rainfall - $forecastcalc[0]->rainfall;
+            }
         }
-        env("storedrainfall", $rainfall);
-        env("storedrainfalltime", $tqtimeminute);
         
         $forecastcheck = Forecast::where("created_at", $tqtimestr)
                 ->select("id")
@@ -1571,9 +1578,11 @@ class ApiV1Controller extends Controller
 //        $forecast->lightintensity = $resjson->list[0]->lux;
         $forecast->temperature = $resjson->list[0]->ta;
         $forecast->pressure = $resjson->list[0]->pa;
+        $forecast->devname = $devname;
 //        $forecast->temphigh = $resjson->data->now->city->day_air_temperature;
 //        $forecast->templow = $resjson->data->now->city->night_air_temperature;
         $forecast->rainfall =  $resjson->list[0]->rc;
+        $forecast->minuterainfall =  $minuterainfall;
         $forecast->humidity =  $resjson->list[0]->ua;
         $forecast->windpower = $windpower;
         $forecast->winddirection = $resjson->list[0]->dm;

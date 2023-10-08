@@ -16,7 +16,8 @@ class CreateForecastTable extends Migration
         Schema::create('forecast', function (Blueprint $table) {
             $table->increments('id');
             $table->double("lat")->default(0)->nullable();
-            $table->double("lng")->default(0)->nullable();            
+            $table->double("lng")->default(0)->nullable();   
+            $table->string("devname", 30)->default("");
             $table->string("weather")->default("")->nullable();
             $table->float("lightintensity")->nullable();
             $table->string("weathercode", 10)->default("")->nullable(); //不是每个天气api都有这个，河南复数科技有限公司接口有这个
@@ -24,6 +25,7 @@ class CreateForecastTable extends Migration
             $table->float("temphigh")->default(0)->nullable();
             $table->float("templow")->default(0)->nullable();
             $table->float("rainfall")->default(0)->nullable();
+            $table->float("minuterainfall")->default(0)->nullable();
             $table->float("humidity")->default(0)->nullable();
             $table->integer("windpower")->default(0)->nullable();
             $table->string("winddirection")->default("")->nullable();

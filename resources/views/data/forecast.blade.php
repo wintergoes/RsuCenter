@@ -18,7 +18,17 @@
                     <td class="search_td"><input name="fromdate" id="fromdate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchfromdate}}"/></td>
                     <td class="search_td">&nbsp;&nbsp;至&nbsp;&nbsp;</td>
                     <td class="search_td"><input name="todate" id="todate" class="form-control" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" autocomplete="off" size="10" value="{{$searchtodate}}"/></td>
-                    <td class="search_td"><select class="form-select" id="quickdateselector"/></td>     
+                    <td class="search_td"><select class="form-select" id="quickdateselector"/></td> 
+                    
+                    <td class="search_td">&nbsp;&nbsp;气象设备：&nbsp;&nbsp;</td>
+                    <td class="search_td">
+                        <select name="devname" id="devname" class="form-select" >
+                            <option value="-1"  {{"-1" == $searchdevname ? "selected" : ""}}>不限</option>
+                            @foreach ($devnames as $dev)
+                            <option value="{{$dev->devname}}" {{$dev->devname == $searchdevname ? "selected" : ""}}>{{$dev->devname}}</option>
+                            @endforeach
+                        </select>                        
+                    </td>                     
                     <td class="search_td"><button type="submit" class="btn btn-outline-secondary radius-6" style="padding: 2px;">查询</button></td>
                 </tr>                
             </table>
@@ -32,6 +42,7 @@
                 <thead>
                     <tr role="row">
                         <th >ID</th>
+                        <th >设备</th>
                         <th >温度°C</th>
                         <th >湿度%RH</th>
                         <th >风力</th>
@@ -40,6 +51,7 @@
                         <th >能见度m</th>
                         <th >大气压hPa</th>
                         <th >降雨量mm</th>
+                        <th >分钟降雨量</th>
                         <th >湿滑系数</th>
                         <th >检测时间</th>
                     </tr>
@@ -48,6 +60,7 @@
                     @foreach($forecast as $fcast)
                     <tr>
                         <td>{{$fcast->id}}</td>
+                        <td>{{$fcast->devname}}</td>
                         <td>{{$fcast->temperature}}°C</td>
                         
                         <td>{{$fcast->humidity}}</td>
@@ -59,6 +72,7 @@
                         
                         <td>{{$fcast->pressure}}</td>     
                         <td>{{$fcast->rainfall}}</td>   
+                        <td>{{$fcast->minuterainfall}}</td>   
                         <td>{{$fcast->wetroad}}</td>   
                         <td>{{$fcast->created_at}}</td>
                     </tr>
