@@ -322,6 +322,7 @@ class DashboardController extends Controller
     
     function getForecast(Request $request){
         $forecasts = Forecast::orderBy("id", "desc")
+                ->where("devname", "node61")
                 ->limit(1)
                 ->get();
         

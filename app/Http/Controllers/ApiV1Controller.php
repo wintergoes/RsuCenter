@@ -1410,6 +1410,43 @@ class ApiV1Controller extends Controller
         return json_encode($arr);
     }    
     
+    function uploadForecast(Request $request){
+        $jsondata = $request->jsondata;
+        
+        $datarows = json_decode($jsondata);
+        foreach($datarows as $row){
+            $forecast = new Forecast();
+            $forecast->lat = $row->lat;
+            $forecast->lng = $row->lng;
+            $forecast->devname = $row->devname;
+            $forecast->weather = $row->weather;
+            $forecast->weathercode = $row->weathercode;
+            $forecast->temperature = $row->temperature;
+            $forecast->temphigh = $row->temphigh;
+            $forecast->templow = $row->templow;
+            $forecast->humidity = $row->humidity;
+            $forecast->windpower = $row->windpower;
+            $forecast->winddirection = $row->winddirection;
+            $forecast->windspeed = $row->windspeed;
+            $forecast->visibility = $row->visibility;
+            $forecast->pressure = $row->pressure;
+            $forecast->air = $row->air;
+            $forecast->air_pm25 = $row->air_pm25;
+            $forecast->air_level = $row->air_level;
+            $forecast->sun_begin = $row->sun_begin;
+            $forecast->sun_end = $row->sun_end;
+            $forecast->created_at = $row->created_at;
+            $forecast->updated_at = $row->updated_at;
+            $forecast->rainfall = $row->rainfall;
+            $forecast->wetroad = $row->wetroad;
+                        
+            $forecast->save();
+        }
+        
+        $arr = array("retcode"=>ret_success);
+        return json_encode($arr);
+    }    
+    
     function updateForecast(Request $request){
 //        $host = "https://iot.haloiot.com/";
 //        $path = "api/v1/device/list";
