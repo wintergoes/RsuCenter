@@ -70,3 +70,4 @@ Route::any("/uploadtpsevents", "ApiV1Controller@uploadTpsEvents");
 Route::any("/uploadtpslaneevents", "ApiV1Controller@uploadTpsLaneEvents");
 Route::any("/uploadtpsrealtimeevents", "ApiV1Controller@uploadTpsRealtimeEvents");
 Route::any("/uploadvehdetectionevents", "ApiV1Controller@uploadVehDetectionEvents");
+Route::any("/uploadforecast", "ApiV1Controller@uploadForecast");
