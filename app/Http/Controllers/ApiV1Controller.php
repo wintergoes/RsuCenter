@@ -1438,6 +1438,7 @@ class ApiV1Controller extends Controller
             $forecast->created_at = $row->created_at;
             $forecast->updated_at = $row->updated_at;
             $forecast->rainfall = $row->rainfall;
+            $forecast->minuterainfall = $row->minuterainfall;
             $forecast->wetroad = $row->wetroad;
                         
             $forecast->save();
