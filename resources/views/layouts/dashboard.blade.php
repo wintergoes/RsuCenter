@@ -2940,8 +2940,28 @@ function updateForecast(){
             }
             $('#forecast_temperature').html("<span title = '" + data.forecast.created_at + "'>温度 " + data.forecast.temperature + "°C</span>"); 
             $('#forecast_humidity').text("湿度 " + data.forecast.humidity + "%");  
-            $('#forecast_windpower').text("风力 " + data.forecast.windpower + "级");  
-            $('#forecast_winddirection').text("风向 " + data.forecast.winddirection);  
+            $('#forecast_windpower').text("风力 " + data.forecast.windpower + "级");
+            
+            var winddirectionstr = "";
+            if(data.forecast.winddirection == 0){
+                winddirectionstr = "北风";
+            } else if(data.forecast.winddirection >= 0 && data.forecast.winddirection < 90){
+                winddirectionstr = "东北风";
+            } else if(data.forecast.winddirection == 90){
+                winddirectionstr = "东风";
+            } else if(data.forecast.winddirection > 90 && data.forecast.winddirection < 180){
+                winddirectionstr = "东南风";
+            } else if(data.forecast.winddirection == 180){
+                winddirectionstr = "南风";
+            } else if(data.forecast.winddirection > 180 && data.forecast.winddirection < 270){
+                winddirectionstr = "西南风";
+            } else if(data.forecast.winddirection == 270){
+                winddirectionstr = "西风";
+            } else if(data.forecast.winddirection > 270 && data.forecast.winddirection < 360){
+                winddirectionstr = "西北风";
+            }
+            $('#forecast_winddirection').text("风向 " + winddirectionstr);  
+            $('#forecast_winddirection').attr("title", data.forecast.winddirection);  
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             
