@@ -117,7 +117,7 @@
     <nav aria-label="Page navigation example">						
      <div id="pagelinks">
     {{ $forecast->appends([ "fromdate"=>$searchfromdate,
-                "todate"=>$searchtodate])->links() }}  
+                "todate"=>$searchtodate, "devname"=>$searchdevname])->links() }}  
     </div> 
     </nav>
     </div>
