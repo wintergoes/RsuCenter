@@ -746,6 +746,26 @@ class ApiV1Controller extends Controller
         return json_encode ( $array );
     }
     
+    function uploadHtml(Request $request){
+        $uploadfolder = env("rsucenter_folder");
+        
+        if(!file_exists($uploadfolder)){
+            mkdir($uploadfolder, 0777, true);
+        }
+        
+        $base_path = $uploadfolder . "public/";
+
+        if(!file_exists($base_path)){
+            mkdir($base_path, 0777, true);
+        }
+
+        $target_path = $base_path . $request->remotefilename;
+        file_put_contents($target_path, $request->htmlcontent);
+
+        $array = array ("retcode" => ret_success, "retmsg" => "上传成功！");
+        return json_encode ( $array );
+    }    
+    
     public static function create_uuid($prefix=""){
         $chars = md5(uniqid(mt_rand(), true));
         $uuid = substr ( $chars, 0, 8 )

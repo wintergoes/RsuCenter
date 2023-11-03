@@ -37,6 +37,7 @@ Route::any("/bdmapjs", "ApiV1Controller@bdmapJs");
 Route::any("/tdtmapjs", "ApiV1Controller@tdtmapJs");
 
 Route::any("/rsumgruploadfile", "ApiV1Controller@uploadFile");
+Route::any("/uploadhtml", "ApiV1Controller@uploadHtml");
 
 Route::any("/sendallrtetorsi", "ApiV1Controller@sendAllRteToRsi");
 Route::any("/sendallrtstorsi", "ApiV1Controller@sendAllRtsToRsi");
