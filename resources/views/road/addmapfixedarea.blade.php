@@ -39,9 +39,9 @@ function submitData(){
 }
 </script>
 @if(isset($area))
-<h5 class="card-title">道理管理 > 编辑其他区域 </h5>
+<h5 class="card-title">道路管理 > 编辑其他区域 </h5>
 @else
-<h5 class="card-title">道理管理 > 新增其他区域 </h5>
+<h5 class="card-title">道路管理 > 新增其他区域 </h5>
 @endif
 <hr>
 

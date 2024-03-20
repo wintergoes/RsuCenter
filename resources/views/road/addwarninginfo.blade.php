@@ -61,9 +61,9 @@ function onSelectTecChild(){
 </script>
 
 @if(isset($winfo))
-<h5 class="card-title">道理管理 > 编辑事件</h5>
+<h5 class="card-title">道路管理 > 编辑事件</h5>
 @else
-<h5 class="card-title">道理管理 > 新增事件</h5>
+<h5 class="card-title">道路管理 > 新增事件</h5>
 @endif
 <hr>
 

@@ -6,7 +6,7 @@
 <script language="javascript" type="text/javascript" src="/js/hikvision.js"></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="js/coordtransform.js"></script>
-<h5 class="card-title">雷视事件检测查询</h5>
+<h5 class="card-title">气象数据查询</h5>
 <hr>
 
 <div class="row mb-4">
