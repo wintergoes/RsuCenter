@@ -427,7 +427,7 @@ class ApiV1Controller extends Controller
         }else{
             $arr = array ('retcode'=>ret_invalid_auth);
             return json_encode($arr);
-        }        
+        } 
     }
 
     function logs(Request $request){
@@ -1667,6 +1667,20 @@ class ApiV1Controller extends Controller
                 . " or (rcfactor = 4 and rcstartvalue < " . $windpower . " and rcendvalue >= " . $windpower . ")  "
                 . " order by rcsuggestspeed;";        
         
+        $speedlimittime = 60;
+        switch ($speedlimitcheck[0]->rcfactor){
+            case 1:
+                $speedlimittime = 300;
+                break;
+            case 2:
+                $speedlimittime = 300;
+                break;
+            case 3:
+                $speedlimittime = 600;
+                break;
+                
+        }
+        
         $speedlimitcheck = DB::select($speedlimitchecksql);
         if(count($speedlimitcheck) > 0){
             $addcount = $addcount + 1;              
@@ -1679,7 +1693,7 @@ class ApiV1Controller extends Controller
             $sign->tsparam1 = $speedlimitcheck[0]->rcfactor;
             $sign->tsparam2 = $speedlimitcheck[0]->rcsuggestspeed;
             $sign->starttime = date("Y-m-d H:i:s", time());
-            $sign->endtime = date("Y-m-d H:i:s", time() + 1800);
+            $sign->endtime = date("Y-m-d H:i:s", time() + $speedlimittime);
             $sign->save();
         }
         
