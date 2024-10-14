@@ -482,6 +482,8 @@ function fillAidEventSelect(selecterid, selectedAidEvent){
     $("#" + selecterid).append(optstr);
     optstr = "<option value='congestion' " + (selectedAidEvent === "congestion" ? "selected" : "") + ">拥堵</option>";
     $("#" + selecterid).append(optstr);
+    optstr = "<option value='laneChange' " + (selectedAidEvent === "laneChange" ? "selected" : "") + ">变道</option>";
+    $("#" + selecterid).append(optstr);    
     optstr = "<option value='crossLane' " + (selectedAidEvent === "crossLane" ? "selected" : "") + ">压线</option>";
     $("#" + selecterid).append(optstr);
     optstr = "<option value='illegalParking' " + (selectedAidEvent === "illegalParking" ? "selected" : "") + ">违停</option>";
