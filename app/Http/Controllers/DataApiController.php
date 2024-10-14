@@ -142,7 +142,7 @@ class DataApiController extends Controller
             $wherestr = " and anpr.licenseplate like '%" . $searchplateno . "%' ";
         }
         
-        $sqlstr = "select anpr.id, anpr.licenseplate, anpr.lineno, "
+        $sqlstr = "select anpr.id, anpr.localid, anpr.macaddr, anpr.licenseplate, anpr.lineno, "
                 . "anpr.platecolor, anpr.vehicleType, anpr.vehtype1, anpr.vehspeed, anpr.vehlogoname,"
                 . "anpr.eventtime, anpr.vehpicnum, rd.devicecode from anprevents anpr "
                 . " left join radardevices rd on anpr.macaddr=rd.macaddrint "
@@ -192,7 +192,10 @@ class DataApiController extends Controller
         $searchaidevent = "-1";
         if($request->has("searchaidevent")){
             $searchaidevent = $request->searchaidevent;
-        }        
+        }
+        
+        $searchplateno = $request->searchplateno;
+        
         
         $pageno = $request->reqpage;
         if($pageno == ""){
@@ -207,7 +210,12 @@ class DataApiController extends Controller
             $wherestr = " and aid.aidevent='" . $searchaidevent . "' ";
         }
         
-        $sqlstr = "select * from aidevents aid "
+        if($searchplateno != ""){
+            $wherestr = " and aid.plate like '%" . $searchplateno . "%' ";
+        }        
+        
+        $sqlstr = "select aid.id, rd.devicecode, aid.aidevent, aid.plate, "
+                . " aid.laneno, aid.platecolor, aid.vehtype, aid.vehspeed, aid.eventtime from aidevents aid "
                 . " left join radardevices rd on aid.macaddr=rd.macaddrint "
                 . " where aid.eventtime > '" . $searchfromdate . "' and aid.eventtime < '" . $searchtodate . "' " 
                 . $wherestr 
@@ -648,8 +656,8 @@ class DataApiController extends Controller
         
         $wherestr = "";
         
-        $sqlstr = "select rd.id, rd.devicecode, rd.ipaddress, rd.httpstreamport, rd.videostreamaddress,"
-                . " rd.lanenumber, rd.status, rd.validYPosSmall, rd.validYPosLarge, rd.roadangle from radardevices rd "
+        $sqlstr = "select rd.id, rd.devicecode, rd.macaddress, rd.macaddrint, rd.ipaddress, rd.httpstreamport, rd.videostreamaddress,"
+                . " rd.lanenumber, rd.status, rd.validYPosSmall, rd.validYPosLarge, rd.roadangle, rd.created_at from radardevices rd "
                 . " where 1=1 " 
                 . $wherestr 
                 . " order by rd.id desc limit 30 "
@@ -739,27 +747,38 @@ class DataApiController extends Controller
         }        
         $searchtodate = $searchtodate . " 23:59:59";
         
+        $searchradardevice = $request->searchradardevice;
+        
         $pageno = $request->reqpage;
         if($pageno == ""){
             $pageno = 0;
         } else {
             $pageno = $pageno - 1;
         }
-        $offsetval = $pageno * 30;
+        $offsetval = $pageno * 21;
         
         $wherestr = " and rv.created_at>='" . $searchfromdate . "' and rv.created_at<='" . $searchtodate . "' ";
         
-        $sqlstr = "select * from radarvideos rv "
+        if($searchradardevice != ""){
+            $wherestr = $wherestr . " and rd.devicecode like '%" . $searchradardevice . "%' ";
+        }
+        
+        $sqlstr = "select rv.id, rv.filename, rv.duration, rv.filename, rv.filesize,"
+                . " rv.radarid from radarvideos rv "
                 . " left join radardevices rd on rd.id=rv.radarid "
+                . " where 1=1 "
                 . $wherestr 
                 . " order by rv.id desc limit 21 "
                 . " offset " . $offsetval;
 //        echo $sqlstr;
         $radarvideos = DB::select($sqlstr);
         
-        $stats = DB::select("select count(rv.id) as rvcount from radarvideos rv "
+        $statsql = "select count(rv.id) as rvcount from radarvideos rv "
+                . " left join radardevices rd on rd.id=rv.radarid "
                 . " where 1=1 "
-                . $wherestr);
+                . $wherestr;
+//        echo $statsql;
+        $stats = DB::select($statsql);
         $pagecount = intval($stats[0]->rvcount / 21) + 1;
         
         $statary = array("pagecount"=>$pagecount, "rvcount"=>$stats[0]->rvcount);

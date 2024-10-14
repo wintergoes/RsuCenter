@@ -212,6 +212,15 @@ class DashboardController extends Controller
         return json_encode($arr);          
     }
     
+    function dashboardAidAlertJson(Request $request){
+        $sqlstr = "select id, aidevent, eventtime, longitude,latitude,localid from aidevents where eventtime>=date_add(now(), interval -20 minute)"
+                . " and aidevent='abandonedObject' ";//laneChange
+        
+        $aidalerts = DB::select($sqlstr);
+        $arr = array("retcode"=>ret_success, "aidalerts"=>$aidalerts, "picrootpath"=>env("radar_video_root_path"));
+        return json_encode($arr);
+    }
+    
     function dashboardTestLatlng(Request $request){
         $coords = RoadCoordinate::where("roadid", 14)
                 ->select("lat", "lng")

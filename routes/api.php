@@ -53,6 +53,8 @@ Route::any("/getwarningrecords", "ApiV1Controller@getWarningRecords");
 Route::any("/getuploadfiles", "ApiV1Controller@getUploadFiles");
 Route::any("/updateobuandroutefromremote", "ApiV1Controller@updateObuAndRouteFromRemote");
 
+Route::any("/renameaidpciturefiles", "ApiV1Controller@renameAidPictureFiles");
+
 Route::any("/clientclockin", 'ApiV1Controller@clientClockIn');
 Route::any("/clientclockinV2", 'ApiV1Controller@clientClockInV2');
 Route::any("/getclockinhistory", 'ApiV1Controller@getClockInHistory');
@@ -71,4 +73,5 @@ Route::any("/uploadtpsevents", "ApiV1Controller@uploadTpsEvents");
 Route::any("/uploadtpslaneevents", "ApiV1Controller@uploadTpsLaneEvents");
 Route::any("/uploadtpsrealtimeevents", "ApiV1Controller@uploadTpsRealtimeEvents");
 Route::any("/uploadvehdetectionevents", "ApiV1Controller@uploadVehDetectionEvents");
+Route::any("/uploadvehdetectionsnapevents", "ApiV1Controller@uploadVehDetectionSnapEvents");
 Route::any("/uploadforecast", "ApiV1Controller@uploadForecast");

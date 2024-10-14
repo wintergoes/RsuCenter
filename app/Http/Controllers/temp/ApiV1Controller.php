@@ -2518,21 +2518,4 @@ class ApiV1Controller extends Controller
         }        
         echo "更新了 " . $udpclockcount . " 个打卡记录!</br>";         
     }
-    
-    function renameAidPictureFiles(Request $request){
-        if($request->localid == ""){
-            $arr = array("retcode"=>-1, "retmsg"=>"no localid");
-            return json_encode($arr);
-        }
-        
-        $aidevents = DB::select("select id, localid, detectionpicnumber, eventtime from aidevents where localid=" . $request->localid);
-        foreach ($aidevents as $event){
-            for($i = 1; $i <= $event->detectionpicnumber; $i++){
-                $oldname = "/mnt/disk2/radarpictures/" . date("Ymd", strtotime($event->eventtime)) . "/aid_" . $event->localid . "_" . $i . ".jpg";
-                $newname = "/mnt/disk2/radarpictures/" . date("Ymd", strtotime($event->eventtime)) . "/aid_" . $event->id . "_" . $i . ".jpg";
-                rename($oldname, $newname);
-            }
-        }
-        
-    }
 }

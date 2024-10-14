@@ -558,6 +558,17 @@ var radarVideoMap = new HashMap();
 </div>
 @endif
 
+<div id="obu_videos" style="right: 0px;  position: absolute;  top: 70px; padding: 16px; transform-origin: 100% 0%;
+     background-color: rgba(100, 0, 0, 0);  font-size: 12px; z-index: 10; overflow-x: auto; overflow-y: hidden; display: inline-block; height: 230px; "> 
+    <div style="float: right; margin-right: 10px; display: inline-block;">
+        <table id="aidalert_table">
+            <tr>
+                <td id="aid_20360"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
 <script>
 var stylejson = [{
     "featureType": "land",
@@ -1882,9 +1893,14 @@ var radarIcon = new BMapGL.Icon("/images/dashboard/radarvision.png", new BMapGL.
 var alertStartIcon = new BMapGL.Icon("/images/alertstart.png", new BMapGL.Size(24, 24));
 var alertStopIcon = new BMapGL.Icon("/images/alertstop.png", new BMapGL.Size(24, 24));
 
+var abandonObjectIcon = new BMapGL.Icon("/images/aidevent/paosawu_icon.png", new BMapGL.Size(32, 32));
+
 var rsumarkers = [];
 var obumarkers = [];
+
 var warningmarkers = []
+//雷视识别事件图标抛洒物
+var aidalertmarkers = [];
 var radarmarkers = [];
 var radarLabels = [];
 var radarDeviceMap = new HashMap();
@@ -2350,6 +2366,94 @@ function showRadarAidEvents(){
                     }
             });        
         }        
+    });
+}
+
+var storedAidIds = [];
+
+function showAidAlertEvents(){
+    $.ajax({
+        type: "GET",
+        url: "dashboardaidalertjson", 
+        dataType: "json",
+        success: function (data) {
+            console.debug("showAidAlertEvents");
+            setTimeout('showAidAlertEvents()', 10000);   
+            
+            while(aidalertmarkers.length > 0){
+                tmpWarnMaker = aidalertmarkers.pop();
+                map.removeOverlay(tmpWarnMaker);
+            }
+            
+            var aidalerttable = document.getElementById("aidalert_table");
+            var tblrow = aidalerttable.rows[0];
+            
+            var getcell = document.getElementById("aidcell2");
+            if(getcell !== null){
+                tblrow.removeChild(getcell);
+            }
+//            alert(getcell.innerHTML);
+            var newaidIds = [];
+            
+            for(var i = 0; i < data.aidalerts.length; i++){
+                aidalert = data.aidalerts[i];
+                newaidIds.push(aidalert.id);
+            }
+            
+            for(var i = storedAidIds.length - 1; i >= 0 ; i--){
+//                console.log("test remove " + storedAidIds[i] + " in storedAidIds ... " + i);
+                if(newaidIds.indexOf(storedAidIds[i]) < 0){
+                    console.log("remove " + storedAidIds[i] + " in storedAidIds");
+                    var removingTd = document.getElementById("aidcell_" + storedAidIds[i]);
+                    if(removingTd === null){
+                        console.log("removingTd is null");
+                    } else {
+                        console.log("removingTd is not null");
+                    }
+                    removingTd.innerHTML = "";
+                    storedAidIds.splice(i, 1);
+                }
+            }            
+
+            var haveNewAidEvent = false;
+            for(var i = 0; i < data.aidalerts.length; i++){
+                aidalert = data.aidalerts[i];  
+                if(storedAidIds.indexOf(aidalert.id) < 0){
+                    storedAidIds.push(aidalert.id);
+                    haveNewAidEvent = true;
+                }
+                               
+                var testcell = document.getElementById("aidcell_" + aidalert.id);
+                if(testcell === null) {
+                    var aidcell = tblrow.insertCell();
+                    aidcell.setAttribute("id", "aidcell_" + aidalert.id);
+                    aidcell.style.width = "180px";
+                    var imgpath = data.picrootpath +  "/radarpictures/" +
+                            aidalert.eventtime.substr(0, 4) +
+                            aidalert.eventtime.substr(5, 2) +
+                            aidalert.eventtime.substr(8, 2) + "/aid_" + aidalert.id + "_1.jpg' ";
+                    aidcell.innerHTML = "<a href='" + imgpath + "' target='_blank'><img id='img_aid_" + aidalert.id + "' src='"  + imgpath +
+                            " onmouseover='showAidOnmap(" + aidalert.longitude + "," + aidalert.latitude + ")' onmouseout='hideAidOnMap()' width=150 height=80 alt='" + aidalert.eventtime + "'></a>"; 
+                }                
+            } 
+            
+            if(haveNewAidEvent){
+                playAidAlert();
+            }
+            
+            for(var i = storedAidIds.length - 1; i >= 0 ; i--){
+                var getimg = document.getElementById("img_aid_" + storedAidIds[i]);
+                console.log(getimg.width + " " + storedAidIds[i] );
+                if(getimg.width !== 150){
+                    var tmpsrc = getimg.src.split("?")[0];
+                    getimg.src = tmpsrc + "?rnd=" + Math.floor(Math.random() * 10000);
+                }
+                
+            }
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            setTimeout('showAidAlertEvents()', 10000);    
+        }
     });
 }
 
@@ -3058,6 +3162,7 @@ function refreshAll(){
 refreshAll();
 showVehicles();
 updateBdMapSummary();
+showAidAlertEvents();
 
 if(getQueryVariable("showObuVehicleTable") === "1"){
     document.getElementById("obuVehicleTable").style.visibility = "visible";
@@ -3068,6 +3173,66 @@ function showObuVehicle(){
 //    alert('showObuVehicle');
 }
 //showTestVehs();
+
+var abandonObjMaker ;
+function showAidOnmap(lng, lat){
+    var rsulatlng = coordtransform.wgs84togcj02(lng, lat);
+    rsulatlng = coordtransform.gcj02tobd09(rsulatlng[0], rsulatlng[1]);                 
+    let pt = new BMapGL.Point(rsulatlng[0], rsulatlng[1]);
+//    console.log("showAidOnmap+++" + abandonObjMaker);
+    if(typeof abandonObjMaker === 'undefined'){
+//        console.log("create abandonObjMaker");
+        abandonObjMaker = new BMapGL.Marker(pt, {
+            icon: abandonObjectIcon,
+            offset: new BMapGL.Size(0, -0)
+        });
+    }
+
+//    var label = new BMapGL.Label(hkEvent2Str(aidalert.aidevent), {       // 创建文本标注
+//        position: pt,                          // 设置标注的地理位置
+//        offset: new BMapGL.Size(-30, 0)           // 设置标注的偏移量
+//    })    
+//    label.setStyle({border: "1px solid rgb(75 139 88)", backgroundColor: "#aa000000", borderRadius: "3px", padding: "6px"});
+//    abandonObjMaker.setLabel(label);                    
+
+//    abandonObjMaker.setTitle(aidalert.abandonedObject);
+
+    // 创建信息窗口
+    var opts = {
+        width: 200,
+        height: 30,
+        title: 'RSU'
+    };
+    let infoWindow = new BMapGL.InfoWindow(aidalert.abandonedObject, opts);                  
+
+    abandonObjMaker.addEventListener('click', function () {
+        map.openInfoWindow(infoWindow, pt); // 开启信息窗口  
+    });
+    // 将标注添加到地图
+    map.addOverlay(abandonObjMaker);    
+//    console.log("showAidOnMap: " + lng + ", " + lat);
+}
+
+function hideAidOnMap(){
+    console.log("hideAidOnMap___" + abandonObjMaker);
+    if(typeof abandonObjMaker !== 'undefined'){
+//        console.log("abandonObjMaker is not undefined");
+        map.removeOverlay(abandonObjMaker);
+    }
+}
+
+function playAidAlert(){
+    // 创建一个新的Audio对象
+    var audio = new Audio('sound/paosawu.mp3');
+
+    // 播放音频
+    audio.play();
+
+    // 监听音频播放结束事件
+    audio.addEventListener('ended', function() {
+        console.log('音频播放结束');
+    });    
+}    
 </script>
 </body>
 

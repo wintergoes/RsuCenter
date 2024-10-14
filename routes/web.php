@@ -208,6 +208,7 @@ Route::any('/dashboardvehflow', 'DashboardController@dashboardVehFlow');
 Route::any('/dashboarddevices', 'DashboardController@dashboardDevices');
 Route::any('/dashboardeventjson', 'DashboardController@dashboardEventJson');
 Route::any('/dashboardaideventjson', 'DashboardController@dashboardAidEventJson');
+Route::any('/dashboardaidalertjson', "DashboardController@dashboardAidAlertJson");
 Route::any("/dashboardtestlatlng", "DashboardController@dashboardTestLatlng");
 Route::any("/dashboardvehicles", "DashboardController@dashboardVehicles");
 Route::any("/dashboardradarvision", "DashboardController@dashboardRadarVision");
