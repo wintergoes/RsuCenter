@@ -1354,9 +1354,12 @@ class ApiV1Controller extends Controller
         return json_encode($arr);
     }     
     
+    
     function uploadTpsRealTimeEvents(Request $request){
-        $jsondata = $request->jsondata;
+        $jsondata = $request->jsondata;        
         
+        $tpsrealtimeid = 0;
+        $macaddr = 0;
         $datarows = json_decode($jsondata);
         foreach($datarows as $row){
             $tpsrealtime = new TpsRealtimeEvent();
@@ -1385,7 +1388,12 @@ class ApiV1Controller extends Controller
             $tpsrealtime->contentuuid = $row->contentuuid;
             
             $tpsrealtime->save();
+            
+            $tpsrealtimeid = $tpsrealtime->id;
+            $macaddr = $row->macaddr;
         }
+        
+        DB::update("update radardevices set maxtpsrealtimeid=" . $tpsrealtimeid . " where macaddrint=" . $macaddr);
         
         $arr = array("retcode"=>ret_success);
         return json_encode($arr);
